@@ -32,7 +32,8 @@ function adaptTask (o) {
             completed: o.completed(),
             sequential: o.sequential(),
             next: o.next(),
-            blocked: o.blocked()
+            blocked: o.blocked(),
+            flagged: o.flagged()
     };
 }
 
@@ -47,6 +48,7 @@ function adaptProject (o) {
         completionDate: o.completionDate(),
         completed: o.completed(),
         sequential: o.sequential(),
+        flagged: o.flagged()
     }
 }
 

@@ -22,6 +22,7 @@ public abstract class Common extends Node {
     private Date completionDate;
     private boolean completed;
     private boolean sequential;
+    private boolean flagged;
     
     public String getContext() {
         return context;
@@ -91,6 +92,14 @@ public abstract class Common extends Node {
     
     public boolean getSequential () {
         return sequential;
+    }
+    
+    public void setFlagged(boolean flagged) {
+        this.flagged = flagged;
+    }
+    
+    public boolean getFlagged () {
+        return flagged;
     }
     
     public void setSequential (boolean sequential) {

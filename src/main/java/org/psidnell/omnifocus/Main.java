@@ -20,18 +20,21 @@ public class Main {
         Group root = new Group ();
         root.setName("");
         
+        String filter = null; //"{flagged: true}";
+        Availability availability = Availability.Remaining;
+        
         for (String arg : args) {
             if (arg.startsWith("p:")) {
                 String projectName = arg.substring(2);
                 for (Project p : of.getProjectsByName(projectName)) {
-                    of.loadTasks(p, Availability.Remaining);
+                    of.loadTasks(p, availability, filter);
                     root.addChild(p);
                 }
             }
             else if (arg.startsWith("c:")) {
                 String contextName = arg.substring(2);
                 for (Context c : of.getContextsByName(contextName)) {
-                    of.loadTasks(c, Availability.Remaining);
+                    of.loadTasks(c, availability, filter);
                     root.addChild(c);
                 }
             }

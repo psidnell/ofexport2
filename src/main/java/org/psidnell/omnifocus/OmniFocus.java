@@ -14,6 +14,7 @@ import javax.script.ScriptEngineFactory;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
+import org.psidnell.omnifocus.filter.Filter;
 import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.Node;
 import org.psidnell.omnifocus.model.Project;
@@ -127,42 +128,42 @@ public class OmniFocus {
         context.setTasks(tasks);
     }
     
-    public void loadTasks (Context context, Availability availability) throws IOException, ScriptException {
+    public void loadTasks (Context context, Availability availability, String filter) throws IOException, ScriptException {
         switch (availability) {
             case All:
-                loadAllTasks(context, null);
+                loadAllTasks(context, filter);
                 break;
             case Available:
-                loadAvailableTasks(context, null);
+                loadAvailableTasks(context, filter);
                 break;
             case Remaining:
-                loadRemainingTasks(context, null);
+                loadRemainingTasks(context, filter);
                 break;
             case FirstAvailable:
-                loadAvailableTasks(context, "{next: true}");
+                loadAvailableTasks(context, Filter.and("{next: true}", filter));
                 break;
             case Completed:
-                loadAllTasks(context, "{completed: true}");
+                loadAllTasks(context, Filter.and("{completed: true}", filter));
                 break;
         }
     }
     
-    public void loadTasks (Project project, Availability availability) throws IOException, ScriptException {
+    public void loadTasks (Project project, Availability availability, String filter) throws IOException, ScriptException {
         switch (availability) {
             case All:
-                loadAllTasks(project, null);
+                loadAllTasks(project, filter);
                 break;
             case Available:
-                loadAllTasks(project, "{_and:[{completed: false},{blocked:false}]}");
+                loadAllTasks(project, Filter.and("{completed: false}","{blocked:false}", filter));
                 break;
             case Remaining:
-                loadAllTasks(project, "{completed: false}");
+                loadAllTasks(project, Filter.and("{completed: false}", filter));
                 break;
             case FirstAvailable:
-                loadAllTasks(project, "{next: true}");
+                loadAllTasks(project, Filter.and("{next: true}", filter));
                 break;
             case Completed:
-                loadAllTasks(project, "{completed: true}");
+                loadAllTasks(project, Filter.and("{completed: true}", filter));
                 break;
         }
     }
