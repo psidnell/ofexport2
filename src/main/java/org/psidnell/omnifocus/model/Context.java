@@ -8,19 +8,19 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class Context extends Node {
 
     public static final String TYPE = "Context";
-    
+
     private List<Task> tasks = new LinkedList<>();
 
-    public void setTasks (List<Task> tasks) {
+    public void setTasks(List<Task> tasks) {
         this.tasks = tasks;
     }
-    
+
     @JsonIgnore
     public List<Task> getTasks() {
-        return tasks ;
+        return tasks;
     }
-    
-    public String getType () {
+
+    public String getType() {
         return TYPE;
     }
 }

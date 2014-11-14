@@ -5,13 +5,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Filter {
-    
-    public static String and (String... exprs) {
-        List<String> nonNullExprs = Arrays.asList(exprs).stream().filter((x)->x!=null).collect (Collectors.toList());
+
+    public static String and(String... exprs) {
+        List<String> nonNullExprs = Arrays.asList(exprs)
+                .stream()
+                .filter((x) -> x != null)
+                .collect(Collectors.toList());
+        
         if (nonNullExprs.size() == 1) {
             return nonNullExprs.get(0);
         }
-        
+
         StringBuilder result = new StringBuilder();
         result.append("{_and:[");
         boolean first = true;
@@ -20,7 +24,7 @@ public class Filter {
             result.append(expr);
             first = false;
         }
-        result.append ("]}");
+        result.append("]}");
         return result.toString();
     }
 }

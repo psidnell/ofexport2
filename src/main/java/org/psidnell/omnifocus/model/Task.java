@@ -1,10 +1,9 @@
 package org.psidnell.omnifocus.model;
 
-
 public class Task extends Common {
-    
+
     public static final String TYPE = "Task";
-    
+
     private String containingProject;
     private boolean next;
     private boolean blocked;
@@ -17,23 +16,23 @@ public class Task extends Common {
         this.containingProject = containingProject;
     }
 
-    public String getType () {
+    public String getType() {
         return TYPE;
     }
-    
-    public boolean getNext () {
+
+    public boolean getNext() {
         return next;
     }
-    
-    public void setNext (boolean next) {
+
+    public void setNext(boolean next) {
         this.next = next;
     }
-    
-    public boolean getBlocked () {
+
+    public boolean getBlocked() {
         return blocked;
     }
-    
-    public void setBlocked (boolean blocked) {
+
+    public void setBlocked(boolean blocked) {
         this.blocked = blocked;
     }
 }

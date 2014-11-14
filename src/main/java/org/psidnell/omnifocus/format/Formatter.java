@@ -6,6 +6,6 @@ import java.io.Writer;
 import org.psidnell.omnifocus.model.Node;
 
 public interface Formatter {
-    public void format (Node root, Writer out) throws IOException;
-  
+    public void format(Node root, Writer out) throws IOException;
+
 }

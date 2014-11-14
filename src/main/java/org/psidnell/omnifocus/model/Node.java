@@ -2,11 +2,10 @@ package org.psidnell.omnifocus.model;
 
 import java.util.UUID;
 
-
 public abstract class Node {
-        
+
     private String name;
-    
+
     private String id = UUID.randomUUID().toString();
 
     public String getName() {
@@ -16,7 +15,7 @@ public abstract class Node {
     public void setName(String name) {
         this.name = name;
     }
-    
+
     public String getId() {
         return id;
     }
@@ -24,9 +23,9 @@ public abstract class Node {
     public void setId(String id) {
         this.id = id;
     }
-    
-    public abstract String getType ();
-    
+
+    public abstract String getType();
+
     @Override
     public int hashCode() {
         final int prime = 31;
