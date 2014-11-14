@@ -48,6 +48,10 @@ public class Main {
         OPTIONS.addOption(new ActiveOption<Main> (
                 "e", "expr", true, "expression",
                 (m,o)->m.processExpression (o)));
+        
+        OPTIONS.addOption(new ActiveOption<Main> (
+                "f", "format", true, "format",
+                (m,o)->m.processFormat (o)));
     }
 
     public static final String PROG = "ofexport2";
@@ -67,6 +71,10 @@ public class Main {
         root.setName("");
 
         filter = null;
+    }
+
+    private void processFormat(ActiveOption<Main> o) {
+        format = o.nextValue();
     }
 
     private void processAvailability(ActiveOption<Main> o) {

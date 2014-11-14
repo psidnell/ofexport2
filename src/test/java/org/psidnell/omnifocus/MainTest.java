@@ -10,7 +10,7 @@ public class MainTest {
     
     @Test
     public void test2() throws Exception {
-        Main.main(new String[] {"-p", "ofexport2"});
+        Main.main(new String[] {"-a", "All", "-p", "ofexport2", "-f", "TaskPaper"});
     }
 
     @Test
