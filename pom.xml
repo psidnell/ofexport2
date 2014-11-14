@@ -57,6 +57,30 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>appassembler-maven-plugin</artifactId>
+				<version>1.8.1</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>assemble</goal>
+						</goals>
+						<phase>package</phase>
+					</execution>
+				</executions>
+				<configuration>
+					<programs>
+						<program>
+							<mainClass>org.psidnell.omnifocus.Main</mainClass>
+							<id>ofexport2</id>
+						</program>
+					</programs>
+					<platforms>
+						<platform>unix</platform>
+					</platforms>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 </project>
