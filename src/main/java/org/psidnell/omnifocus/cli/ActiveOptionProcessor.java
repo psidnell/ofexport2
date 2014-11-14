@@ -51,7 +51,7 @@ public class ActiveOptionProcessor<P> {
     public void printHelp() {
         HelpFormatter formatter = new HelpFormatter();
         // Output in the order I specify
-        formatter.setOptionComparator((x,y)->0);
+        formatter.setOptionComparator((x,y)->((ActiveOption<P>)x).getOrder() - ((ActiveOption<P>)y).getOrder());
         formatter.printHelp(progName,options);
     }
 }

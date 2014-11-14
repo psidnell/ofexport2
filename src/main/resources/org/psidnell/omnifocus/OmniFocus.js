@@ -172,12 +172,11 @@ function getNextTaskFromProject(id) {
 }
 
 function getAllTasksFromInbox (filter) {
-    var tasks = doc.inboxTasks();
     if(typeof(filter)==='undefined') {
-        return adaptTasks(tasks);
+        return adaptTasks(doc.inboxTasks);
     }
     else {
-        return adaptTasks(tasks.whose(filer));
+        return adaptTasks(doc.inboxTasks.whose(filter));
     }
 }
 

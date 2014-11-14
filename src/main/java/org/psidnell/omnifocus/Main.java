@@ -6,12 +6,14 @@ import java.io.Writer;
 
 import javax.script.ScriptException;
 
-import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.psidnell.omnifocus.cli.ActiveOption;
 import org.psidnell.omnifocus.cli.ActiveOptionProcessor;
+import org.psidnell.omnifocus.filter.Filter;
 import org.psidnell.omnifocus.format.Formatter;
+import org.psidnell.omnifocus.format.JSONFormatter;
 import org.psidnell.omnifocus.format.SimpleTextListFormatter;
+import org.psidnell.omnifocus.format.XMLFormatter;
 import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.Group;
 import org.psidnell.omnifocus.model.Project;
@@ -21,21 +23,29 @@ public class Main {
     
     final static Options OPTIONS = new Options();
     static {
+        OPTIONS.addOption(new ActiveOption<Main> (
+                "h", "help", false, "print help",
+                (m,o)->m.printHelp ()));
+        
         OPTIONS.addOption(new ActiveOption<Main>(
-                "c", true, "Load tasks from context specified by name",
+                "c", "contextname", true, "Load tasks from context specified by name",
                 (m,o)->m.processContextName(o)));
         
         OPTIONS.addOption(new ActiveOption<Main>(
-                "p", true, "Load tasks from project specified by name",
+                "p", "projectname", true, "Load tasks from project specified by name",
                 (m,o)->m.processProjectName(o)));
         
         OPTIONS.addOption(new ActiveOption<Main>(
-                "i", false, "Load tasks from the inbox",
+                "i", "inbox", false, "Load tasks from the inbox",
                 (m,o)->m.processInbox()));
         
         OPTIONS.addOption(new ActiveOption<Main> (
-                "h", false, "print help",
-                (m,o)->m.printHelp ()));
+                "f", "flagged", true, "flagged (true|false)",
+                (m,o)->m.processFlagged (o)));
+        
+        OPTIONS.addOption(new ActiveOption<Main> (
+                "e", "expr", true, "expression",
+                (m,o)->m.processExpression (o)));
     }
 
     public static final String PROG = "ofexport2";
@@ -54,6 +64,10 @@ public class Main {
         root.setName("");
 
         filter = null;
+    }
+
+    private void processExpression(ActiveOption<Main> o) {
+        filter = Filter.and(o.nextValue());
     }
 
     private void printHelp() {
@@ -88,9 +102,16 @@ public class Main {
     private void run () throws IOException {
 
         Formatter formatter = new SimpleTextListFormatter();
+        //Formatter formatter = new JSONFormatter();
         Writer out = new OutputStreamWriter(System.out);
         formatter.format(root, out);
         out.close();
+    }
+    
+    private void processFlagged(ActiveOption<Main> o) {
+        Boolean flagged = Boolean.parseBoolean(o.nextValue().trim().toLowerCase());
+        String flaggedFilter = "{flagged:" + flagged + "}";
+        filter = Filter.and(filter, flaggedFilter);
     }
     
     public static void main(String args[]) throws Exception {
