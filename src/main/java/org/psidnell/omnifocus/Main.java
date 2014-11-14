@@ -3,6 +3,7 @@ package org.psidnell.omnifocus;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.Arrays;
 
 import javax.script.ScriptException;
 
@@ -11,9 +12,6 @@ import org.psidnell.omnifocus.cli.ActiveOption;
 import org.psidnell.omnifocus.cli.ActiveOptionProcessor;
 import org.psidnell.omnifocus.filter.Filter;
 import org.psidnell.omnifocus.format.Formatter;
-import org.psidnell.omnifocus.format.JSONFormatter;
-import org.psidnell.omnifocus.format.SimpleTextListFormatter;
-import org.psidnell.omnifocus.format.XMLFormatter;
 import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.Group;
 import org.psidnell.omnifocus.model.Project;
@@ -44,6 +42,10 @@ public class Main {
                 (m,o)->m.processFlagged (o)));
         
         OPTIONS.addOption(new ActiveOption<Main> (
+                "a", "availability", true, "availability (" + Arrays.asList(Availability.values()) + ")".replaceAll(",", "|"),
+                (m,o)->m.processAvailability (o)));
+        
+        OPTIONS.addOption(new ActiveOption<Main> (
                 "e", "expr", true, "expression",
                 (m,o)->m.processExpression (o)));
     }
@@ -53,8 +55,9 @@ public class Main {
     private final OmniFocus of;
     private final Group root;
     private String filter = null;
-    private Availability availability = Availability.Remaining;
+    private Availability availability = Availability.Available;
     private ActiveOptionProcessor<Main> processor;
+    private String format = "SimpleTextList";
         
     public Main(ActiveOptionProcessor<Main> processor) throws IOException {
         this.processor = processor;
@@ -64,6 +67,10 @@ public class Main {
         root.setName("");
 
         filter = null;
+    }
+
+    private void processAvailability(ActiveOption<Main> o) {
+        availability = Availability.valueOf(o.nextValue());
     }
 
     private void processExpression(ActiveOption<Main> o) {
@@ -99,10 +106,10 @@ public class Main {
         root.addChild(inbox);
     }
     
-    private void run () throws IOException {
+    private void run () throws IOException, InstantiationException, IllegalAccessException, ClassNotFoundException {
 
-        Formatter formatter = new SimpleTextListFormatter();
-        //Formatter formatter = new JSONFormatter();
+        String formatterClassName = "org.psidnell.omnifocus.format." + format + "Formatter";
+        Formatter formatter = (Formatter) Class.forName(formatterClassName).newInstance();
         Writer out = new OutputStreamWriter(System.out);
         formatter.format(root, out);
         out.close();
