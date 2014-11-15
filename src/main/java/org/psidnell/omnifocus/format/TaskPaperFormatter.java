@@ -10,6 +10,8 @@ import org.psidnell.omnifocus.model.Group;
 import org.psidnell.omnifocus.model.Node;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
+import org.psidnell.omnifocus.visitor.Traverser;
+import org.psidnell.omnifocus.visitor.Visitor;
 
 public class TaskPaperFormatter implements Formatter {
 
@@ -17,100 +19,113 @@ public class TaskPaperFormatter implements Formatter {
 
     @Override
     public void format(Node root, Writer out) throws IOException {
+        
+        FormattingVisitor visitor = new FormattingVisitor(out);
+        
         // The root node may not be interesting interesting
         if (root.getType().equals(Group.TYPE) && root.getName().equals("")) {
             Group group = (Group) root;
             for (Node child : group.getChildren()) {
-                doFormat(child, out, 0);
+                Traverser.traverse(visitor, child);
             }
         } else {
-            doFormat(root, out, 0);
+            Traverser.traverse(visitor, root);
         }
     }
 
-    private void doFormat(Node node, Writer out, int depth) throws IOException {
-        switch (node.getType()) {
-        case Group.TYPE:
-            doFormat((Group) node, out, depth);
-            break;
-        case Project.TYPE:
-            doFormat((Project) node, out, depth);
-            break;
-        case Context.TYPE:
-            doFormat((Context) node, out, depth);
-            break;
-        case Task.TYPE:
-            doFormat((Task) node, out, depth);
-            break;
+    private static class FormattingVisitor implements Visitor {
+        
+        private int depth = 0;
+        private final Writer out;
+        
+        private FormattingVisitor (Writer out) {
+            this.out = out;
         }
-    }
 
-    private void doFormat(Group node, Writer out, int depth) throws IOException {
-        out.write(indent(depth));
-        out.write(tpProject(node.getName()));
-        out.write("\n");
-        for (Node child : node.getChildren()) {
-            doFormat(child, out, depth + 1);
-        }
-    }
-
-    private void doFormat(Project node, Writer out, int depth)
-            throws IOException {
-        out.write(indent(depth));
-        out.write(tpProject(node.getName()));
-        out.write("\n");
-        for (Task child : node.getTasks()) {
-            doFormat(child, out, depth + 1);
-        }
-    }
-
-    private void doFormat(Context node, Writer out, int depth)
-            throws IOException {
-        out.write(indent(depth));
-        out.write(tpProject(node.getName()));
-        out.write("\n");
-        for (Task child : node.getTasks()) {
-            doFormat(child, out, depth + 1);
-        }
-    }
-
-    private void doFormat(Task node, Writer out, int depth) throws IOException {
-        out.write(indent(depth));
-        out.write("- ");
-        out.write(tpTask(node.getName()));
-        if (node.getCompletionDate() != null) {
-            out.write (" ");
-            out.write (format (node.getCompletionDateAsDate()));
+        @Override
+        public void enter(Group node) throws IOException {
+            out.write(indent(depth));
+            out.write(tpProject(node.getName()));
+            out.write("\n");
+            depth++;
         }
         
-        out.write("\n");
-    }
-
-    private String format(Date date) {
-        //@2014-10-07-Tue
-        return new SimpleDateFormat ("'@'yyyy'-'mm'-'dd'-'EEE").format(date);
-    }
-
-    String indent(int depth) {
-        StringBuilder indent = new StringBuilder();
-        for (int i = 0; i < depth; i++) {
-            indent.append(INDENT);
+        @Override
+        public void exit (Group node) {
+            depth--;
         }
-        return indent.toString();
-    }
     
-    private String tpTask(String name) {
-        while (name.endsWith(":")) {
-            name = name.substring(0, name.length() - 1);
+        @Override
+        public void enter(Project node)
+                throws IOException {
+            out.write(indent(depth));
+            out.write(tpProject(node.getName()));
+            out.write("\n");
+            depth++;
         }
-        return name;
-    }
+        
+        @Override
+        public void exit (Project node) {
+            depth--;
+        }
     
-    private String tpProject(String name) {
-        if (!name.endsWith(":")) {
-            name = name + ":";
+        @Override
+        public void enter(Context node)
+                throws IOException {
+            out.write(indent(depth));
+            out.write(tpProject(node.getName()));
+            out.write("\n");
+            depth++;
         }
-        return name;
+        
+        @Override
+        public void exit (Context node) {
+            depth--;
+        }
+    
+        @Override
+        public void enter(Task node) throws IOException {
+            out.write(indent(depth));
+            out.write("- ");
+            out.write(tpTask(node.getName()));
+            if (node.getCompletionDate() != null) {
+                out.write(' ');
+                out.write(format(node.getCompletionDateAsDate()));
+            }
+            out.write("\n");
+            depth++;
+        }
+        
+        @Override
+        public void exit (Task node) {
+            depth--;
+        }
+    
+        private String format(Date date) {
+            // Produces a tag @2014-10-07-Tue
+            return new SimpleDateFormat ("'@'yyyy'-'mm'-'dd'-'EEE").format(date);
+        }
+    
+        String indent(int depth) {
+            StringBuilder indent = new StringBuilder();
+            for (int i = 0; i < depth; i++) {
+                indent.append(INDENT);
+            }
+            return indent.toString();
+        }
+        
+        private String tpTask(String name) {
+            while (name.endsWith(":")) {
+                name = name.substring(0, name.length() - 1);
+            }
+            return name;
+        }
+        
+        private String tpProject(String name) {
+            if (!name.endsWith(":")) {
+                name = name + ":";
+            }
+            return name;
+        }
     }
-
 }

@@ -16,6 +16,7 @@ import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.Group;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
+import org.psidnell.omnifocus.organise.TaskSorter;
 
 public class Main {
     
@@ -118,6 +119,10 @@ public class Main {
 
         String formatterClassName = "org.psidnell.omnifocus.format." + format + "Formatter";
         Formatter formatter = (Formatter) Class.forName(formatterClassName).newInstance();
+        
+        TaskSorter sorter = new TaskSorter();
+        sorter.organise(root);
+        
         Writer out = new OutputStreamWriter(System.out);
         formatter.format(root, out);
         out.close();

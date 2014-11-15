@@ -8,8 +8,14 @@ public class MainTest {
         Main.main(new String[] {"-e", "{name: 'Hello'}", "-p", "Home", "-c", "Home", "-i"});
     }
     
+    
     @Test
     public void test2() throws Exception {
+        Main.main(new String[] {"-a", "All", "-p", "ofexport2", "-f", "SimpleTextList"});
+    }
+    
+    @Test
+    public void test3() throws Exception {
         Main.main(new String[] {"-a", "All", "-p", "ofexport2", "-f", "TaskPaper"});
     }
 
