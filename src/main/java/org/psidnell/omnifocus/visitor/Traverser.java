@@ -44,6 +44,9 @@ public class Traverser {
 
     private static void doTraverse(Visitor visitor, Task node) throws Exception {
         visitor.enter (node);
+        for (Task child : node.getTasks()) {
+            doTraverse (visitor, child);
+        }
         visitor.exit (node);
     }
 

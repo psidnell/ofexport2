@@ -248,7 +248,7 @@ public class OmniFocus {
             }
             return cachedFolders;
         } catch (Exception e) {
-            throw new IOException(json, e);
+            throw new IOException("jsonBlock=" + json, e);
         }
     }
 

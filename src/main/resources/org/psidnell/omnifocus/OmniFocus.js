@@ -31,12 +31,6 @@ function applyFilter(x, filter) {
 /*
  * ADAPTATION
  */
-function adaptFolder (o) {
-    return {
-        name: o.name(),
-        id: o.id(),
-    }
-}
 
 function adaptProject (o) {
     return {
@@ -49,7 +43,8 @@ function adaptProject (o) {
         completionDate: o.completionDate(),
         completed: o.completed(),
         sequential: o.sequential(),
-        flagged: o.flagged()
+        flagged: o.flagged(),
+        tasks: adaptTasks(o.tasks)
     }
 }
 
@@ -67,7 +62,8 @@ function adaptTask (o) {
             sequential: o.sequential(),
             next: o.next(),
             blocked: o.blocked(),
-            flagged: o.flagged()
+            flagged: o.flagged(),
+            tasks: adaptTasks(o.tasks)
     };
 }
 
@@ -75,19 +71,14 @@ function adaptContext (o) {
     return {
         name: o.name(),
         id: o.id(),
+        tasks: adaptTasks(o.tasks)
     }
 }
 
-function adaptFolders (folders) {
-    result = [];
-    for (i in folders) {
-        result.push (adaptFolder(folders[i]));
-    }
-    return result;
-}
+
 
 function adaptContexts (contexts) {
-    result = [];
+    var result = [];
     for (i in contexts) {
         result.push (adaptContext(contexts[i]));
     }
@@ -95,7 +86,7 @@ function adaptContexts (contexts) {
 }
 
 function adaptProjects (projects) {
-    result = [];
+    var result = [];
     for (i in projects) {
         result.push (adaptProject(projects[i]));
     }
@@ -103,9 +94,26 @@ function adaptProjects (projects) {
 }
 
 function adaptTasks (tasks) {
-    result = [];
+    var result = [];
     for (i in tasks) {
         result.push (adaptTask(tasks[i]));
+    }
+    return result;
+}
+
+function adaptFolder (o) {
+    return {
+        name: o.name(),
+        id: o.id(),
+        projects: adaptProjects(o.projects),
+        folders: adaptFolders(o.folders)
+    }
+}
+
+function adaptFolders (folders) {
+    var result = [];
+    for (i in folders) {
+        result.push (adaptFolder(folders[i]));
     }
     return result;
 }

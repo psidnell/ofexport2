@@ -9,6 +9,8 @@ public class Folder extends Node {
 
     private List<Project> projects = new LinkedList<>();
 
+    private List<Folder> folders;
+
     public void setProjects(List<Project> projects) {
         this.projects = projects;
     }
@@ -17,6 +19,13 @@ public class Folder extends Node {
         return projects;
     }
 
+    public void setFolders(List<Folder> folders) {
+        this.folders = folders;
+    }
+
+    public List<Folder> getFolders() {
+        return folders;
+    }
     public String getType() {
         return TYPE;
     }

@@ -1,6 +1,8 @@
 package org.psidnell.omnifocus.model;
 
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
@@ -23,7 +25,16 @@ public abstract class Common extends Node {
     private boolean completed;
     private boolean sequential;
     private boolean flagged;
+    private List<Task> tasks = new LinkedList<>();
 
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
+    }
+
+    public List<Task> getTasks() {
+        return tasks;
+    }
+    
     public String getContext() {
         return context;
     }

@@ -98,10 +98,10 @@ public class Main {
     private void processFolderName(ActiveOption<Main> o) throws IOException, ScriptException {
         String folderName = o.nextValue();
         for (Folder f : of.getFoldersByName(folderName)) {
-            of.loadAllProjects(f, null);
-            for (Project p : f.getProjects()) {
-                of.loadTasks(p, availability, taskFilter);
-            }
+            //of.loadAllProjects(f, null);
+            //for (Project p : f.getProjects()) {
+            //    of.loadTasks(p, availability, taskFilter);
+            //}
             root.addChild(f);
         }
     }
@@ -109,7 +109,7 @@ public class Main {
     private void processProjectName(ActiveOption<Main> o) throws IOException, ScriptException {
         String projectName = o.nextValue();
         for (Project p : of.getProjectsByName(projectName)) {
-            of.loadTasks(p, availability, taskFilter);
+            //of.loadTasks(p, availability, taskFilter);
             root.addChild(p);
         }
     }
@@ -117,7 +117,7 @@ public class Main {
     private void processContextName(ActiveOption<Main> o) throws IOException, ScriptException {
         String contextName = o.nextValue();
         for (Context c : of.getContextsByName(contextName)) {
-            of.loadTasks(c, availability, taskFilter);
+            //of.loadTasks(c, availability, taskFilter);
             root.addChild(c);
         }
     }
