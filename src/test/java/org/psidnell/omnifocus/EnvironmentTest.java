@@ -3,6 +3,7 @@ package org.psidnell.omnifocus;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.script.ScriptException;
 
@@ -25,7 +26,7 @@ public class EnvironmentTest {
     @Test
     public void testNON_EMPTY_FOLDER () throws IOException, ScriptException {
         OmniFocus of = new OmniFocus();
-        Folder folder = of.getFoldersByName(NON_EMPTY_FOLDER).get(0);
+        Folder folder = of.getFoldersByName(NON_EMPTY_FOLDER, null, null).get(0);
         assertNotNull (folder);
         assertEquals (NON_EMPTY_FOLDER, folder.getName());
         
@@ -35,7 +36,7 @@ public class EnvironmentTest {
     @Test
     public void testNON_EMPTY_SEQ_PROJECT () throws IOException, ScriptException {
         OmniFocus of = new OmniFocus();
-        Project project = of.getProjectsByName(NON_EMPTY_SEQ_PROJECT).get(0);
+        Project project = of.getProjectsByName(NON_EMPTY_SEQ_PROJECT, null).get(0);
         assertNotNull (project);
         assertEquals (NON_EMPTY_SEQ_PROJECT, project.getName());
         assertTrue (project.getSequential());
@@ -51,7 +52,7 @@ public class EnvironmentTest {
     @Test
     public void testEMPTY_SEQ_PROJECT () throws IOException, ScriptException {
         OmniFocus of = new OmniFocus();
-        Project project = of.getProjectsByName(EMPTY_SEQ_PROJECT).get(0);
+        Project project = of.getProjectsByName(EMPTY_SEQ_PROJECT, null).get(0);
         assertNotNull (project);
         assertEquals (EMPTY_SEQ_PROJECT, project.getName());
         assertTrue (project.getSequential());
@@ -64,9 +65,17 @@ public class EnvironmentTest {
     @Test
     public void testNON_EMPTY_CONTEXT () throws IOException, ScriptException {
         OmniFocus of = new OmniFocus();
-        Context context = of.getContextsByName(NON_EMPTY_CONTEXT).get(0);
+        Context context = of.getContextsByName(NON_EMPTY_CONTEXT, null).get(0);
         assertNotNull (context);
         assertEquals (NON_EMPTY_CONTEXT, context.getName());
         System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(context));
+    }
+    
+    @Test
+    public void testExperiment () throws IOException, ScriptException {
+        OmniFocus of = new OmniFocus();
+        List<Folder> folders = of.getFolders ("{name:'TestFolder'}", "{name:'TestProject'}", "{name:'ToDo'}");
+        
+        System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(folders));
     }
 }

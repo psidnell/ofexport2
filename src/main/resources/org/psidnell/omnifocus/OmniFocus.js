@@ -20,7 +20,7 @@ function nameOf (o) {
 }
 
 function applyFilter(x, filter) {
-    if(typeof(filter)==='undefined') {
+    if(filter == null || typeof(filter)==='undefined') {
         return x;
     }
     else {
@@ -30,9 +30,12 @@ function applyFilter(x, filter) {
 
 /*
  * ADAPTATION
+ * 
+ * The raw objects that come back over the OSA interface ton't serialise to json
  */
 
-function adaptProject (o) {
+function adaptProject (o, taskFilter) {
+    var tasks = applyFilter(o.tasks, taskFilter);
     return {
         name: o.name(),
         context: nameOf(o.context()),
@@ -44,11 +47,11 @@ function adaptProject (o) {
         completed: o.completed(),
         sequential: o.sequential(),
         flagged: o.flagged(),
-        tasks: adaptTasks(o.tasks)
+        tasks: adaptTasks(tasks)
     }
 }
 
-function adaptTask (o) {
+function adaptTask (o){
     return {
             name: o.name(),
             containingProject: nameOf(o.containingProject()),
@@ -67,28 +70,27 @@ function adaptTask (o) {
     };
 }
 
-function adaptContext (o) {
+function adaptContext (o, taskFilter) {
+    var tasks = applyFilter(o.tasks, taskFilter);
     return {
         name: o.name(),
         id: o.id(),
-        tasks: adaptTasks(o.tasks)
+        tasks: adaptTasks(tasks)
     }
 }
 
-
-
-function adaptContexts (contexts) {
+function adaptContexts (contexts, taskFilter) {
     var result = [];
     for (i in contexts) {
-        result.push (adaptContext(contexts[i]));
+        result.push (adaptContext(contexts[i], taskFilter));
     }
     return result;
 }
 
-function adaptProjects (projects) {
+function adaptProjects (projects, taskFilter) {
     var result = [];
     for (i in projects) {
-        result.push (adaptProject(projects[i]));
+        result.push (adaptProject(projects[i], taskFilter));
     }
     return result;
 }
@@ -101,19 +103,19 @@ function adaptTasks (tasks) {
     return result;
 }
 
-function adaptFolder (o) {
+function adaptFolder (o, projectFilter, taskFilter) {
     return {
         name: o.name(),
         id: o.id(),
-        projects: adaptProjects(o.projects),
-        folders: adaptFolders(o.folders)
+        projects: adaptProjects(applyFilter(o.projects, projectFilter), taskFilter),
+        folders: adaptFolders(o.folders, projectFilter, taskFilter)
     }
 }
 
-function adaptFolders (folders) {
+function adaptFolders (folders, projectFilter, taskFilter) {
     var result = [];
     for (i in folders) {
-        result.push (adaptFolder(folders[i]));
+        result.push (adaptFolder(folders[i], projectFilter, taskFilter));
     }
     return result;
 }
@@ -134,16 +136,16 @@ function _getProjects(filter) {
     return applyFilter(doc.flattenedProjects, filter);
 }
 
-function getFolders(filter) {
-    return adaptFolders(_getFolders(filter));
+function getFolders(folderFilter, projectFilter, taskFilter) {
+    return adaptFolders(_getFolders(folderFilter), projectFilter, taskFilter);
 }
 
-function getContexts(filter) {
-    return adaptContexts(_getContexts(filter));
+function getContexts(contextFilter, taskFilter) {
+    return adaptContexts(_getContexts(contextFilter), taskFilter);
 }
 
-function getProjects(filter) {
-    return adaptProjects(_getProjects(filter));
+function getProjects(projectFilter, taskFilter) {
+    return adaptProjects(_getProjects(projectFilter), taskFilter);
 }
 
 function getAllTasksFromContext(id, filter) {

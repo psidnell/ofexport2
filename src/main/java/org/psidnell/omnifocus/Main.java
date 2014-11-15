@@ -52,8 +52,20 @@ public class Main {
                 (m,o)->m.processAvailability (o)));
         
         OPTIONS.addOption(new ActiveOption<Main> (
-                "e", "expr", true, "expression",
-                (m,o)->m.processExpression (o)));
+                "F", "folderexpr", true, "expression",
+                (m,o)->m.processFolderExpression (o)));
+        
+        OPTIONS.addOption(new ActiveOption<Main> (
+                "P", "projectexpr", true, "expression",
+                (m,o)->m.processProjectExpression (o)));
+        
+        OPTIONS.addOption(new ActiveOption<Main> (
+                "T", "taskexpr", true, "expression",
+                (m,o)->m.processTaskExpression (o)));
+        
+        OPTIONS.addOption(new ActiveOption<Main> (
+                "C", "contextexpr", true, "expression",
+                (m,o)->m.processContextExpression (o)));
         
         OPTIONS.addOption(new ActiveOption<Main> (
                 "format", true, "format",
@@ -64,7 +76,10 @@ public class Main {
     
     private final OmniFocus of;
     private final Group root;
-    private String taskFilter = null;
+    private String taskExpr = null;
+    private String projectExpr = null;
+    private String contextExpr = null;
+    private String folderExpr = null;
     private Availability availability = Availability.Available;
     private ActiveOptionProcessor<Main> processor;
     private String format = "SimpleTextList";
@@ -76,7 +91,7 @@ public class Main {
         root = new Group();
         root.setName("");
 
-        taskFilter = null;
+        taskExpr = null;
     }
 
     private void processFormat(ActiveOption<Main> o) {
@@ -87,8 +102,20 @@ public class Main {
         availability = Availability.valueOf(o.nextValue());
     }
 
-    private void processExpression(ActiveOption<Main> o) {
-        taskFilter = Filter.and(o.nextValue());
+    private void processFolderExpression(ActiveOption<Main> o) {
+        folderExpr = Filter.and(folderExpr, o.nextValue());
+    }
+    
+    private void processProjectExpression(ActiveOption<Main> o) {
+        projectExpr = Filter.and(projectExpr, o.nextValue());
+    }
+    
+    private void processTaskExpression(ActiveOption<Main> o) {
+        taskExpr = Filter.and(taskExpr, o.nextValue());
+    }
+    
+    private void processContextExpression(ActiveOption<Main> o) {
+        contextExpr = Filter.and(contextExpr, o.nextValue());
     }
 
     private void printHelp() {
@@ -97,27 +124,21 @@ public class Main {
 
     private void processFolderName(ActiveOption<Main> o) throws IOException, ScriptException {
         String folderName = o.nextValue();
-        for (Folder f : of.getFoldersByName(folderName)) {
-            //of.loadAllProjects(f, null);
-            //for (Project p : f.getProjects()) {
-            //    of.loadTasks(p, availability, taskFilter);
-            //}
+        for (Folder f : of.getFoldersByName(folderName, projectExpr, taskExpr)) {
             root.addChild(f);
         }
     }
     
     private void processProjectName(ActiveOption<Main> o) throws IOException, ScriptException {
         String projectName = o.nextValue();
-        for (Project p : of.getProjectsByName(projectName)) {
-            //of.loadTasks(p, availability, taskFilter);
+        for (Project p : of.getProjectsByName(projectName, taskExpr)) {
             root.addChild(p);
         }
     }
 
     private void processContextName(ActiveOption<Main> o) throws IOException, ScriptException {
         String contextName = o.nextValue();
-        for (Context c : of.getContextsByName(contextName)) {
-            //of.loadTasks(c, availability, taskFilter);
+        for (Context c : of.getContextsByName(contextName, taskExpr)) {
             root.addChild(c);
         }
     }
@@ -125,7 +146,7 @@ public class Main {
     private void processInbox() throws IOException, ScriptException {
         Group inbox = new Group();
         inbox.setName("Inbox");
-        for (Task t : of.loadAllInboxTasks(taskFilter)) {
+        for (Task t : of.loadAllInboxTasks(taskExpr)) {
             inbox.addChild(t);
         }
         root.addChild(inbox);
@@ -147,7 +168,7 @@ public class Main {
     private void processFlagged(ActiveOption<Main> o) {
         Boolean flagged = Boolean.parseBoolean(o.nextValue().trim().toLowerCase());
         String flaggedFilter = "{flagged:" + flagged + "}";
-        taskFilter = Filter.and(taskFilter, flaggedFilter);
+        taskExpr = Filter.and(taskExpr, flaggedFilter);
     }
     
     public static void main(String args[]) throws Exception {

@@ -22,16 +22,16 @@ public class OmniFocusTest extends EnvironmentTest {
     @Test
     public void testGetProjects () throws IOException, ScriptException {
         OmniFocus of = new OmniFocus();
-        Project project = of.getProjectsByName(NON_EMPTY_SEQ_PROJECT).get(0);
+        Project project = of.getProjectsByName(NON_EMPTY_SEQ_PROJECT, null).get(0);
         assertNotNull (project);
         assertEquals (NON_EMPTY_SEQ_PROJECT, project.getName());
         System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(project));
     }
     
     @Test
-    public void testGetContexts () throws IOException, ScriptException {
+    public void testGetContextsByName () throws IOException, ScriptException {
         OmniFocus of = new OmniFocus();
-        Context context = of.getContextsByName(NON_EMPTY_CONTEXT).get(0);
+        Context context = of.getContextsByName(NON_EMPTY_CONTEXT, null).get(0);
         assertNotNull (context);
         assertEquals (NON_EMPTY_CONTEXT, context.getName());
         System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(context));
@@ -47,7 +47,7 @@ public class OmniFocusTest extends EnvironmentTest {
     @Test
     public void testLoadAllProjectTasks () throws IOException, ScriptException {
         OmniFocus of = new OmniFocus();
-        Project project = of.getProjectsByName(NON_EMPTY_SEQ_PROJECT).get(0);
+        Project project = of.getProjectsByName(NON_EMPTY_SEQ_PROJECT, null).get(0);
         of.loadAllTasks(project, null);
         List<Task> tasks = project.getTasks ();
         assertFalse (tasks.isEmpty());
@@ -56,7 +56,7 @@ public class OmniFocusTest extends EnvironmentTest {
     @Test
     public void testLoadNextProjectTask () throws IOException, ScriptException {
         OmniFocus of = new OmniFocus();
-        Project project = of.getProjectsByName(NON_EMPTY_SEQ_PROJECT).get(0);
+        Project project = of.getProjectsByName(NON_EMPTY_SEQ_PROJECT, null).get(0);
         of.loadNextTask(project, null);
         List<Task> tasks = project.getTasks ();
         assertFalse (tasks.isEmpty());
@@ -67,7 +67,7 @@ public class OmniFocusTest extends EnvironmentTest {
     @Test
     public void testLoadNextProjectTask_empty() throws IOException, ScriptException {
         OmniFocus of = new OmniFocus();
-        Project project = of.getProjectsByName(EMPTY_SEQ_PROJECT).get(0);
+        Project project = of.getProjectsByName(EMPTY_SEQ_PROJECT, null).get(0);
         of.loadNextTask(project, null);
         List<Task> tasks = project.getTasks ();
         assertEquals (1, tasks.size());
@@ -78,7 +78,7 @@ public class OmniFocusTest extends EnvironmentTest {
     @Test
     public void testLoadAllContextTasks () throws IOException, ScriptException {
         OmniFocus of = new OmniFocus();
-        Context context = of.getContextsByName(NON_EMPTY_CONTEXT).get(0);
+        Context context = of.getContextsByName(NON_EMPTY_CONTEXT, null).get(0);
         of.loadAllTasks(context, null);
         List<Task> tasks = context.getTasks ();
         assertFalse (tasks.isEmpty());
@@ -87,7 +87,7 @@ public class OmniFocusTest extends EnvironmentTest {
     @Test
     public void testLoadRemainingContextTasks () throws IOException, ScriptException {
         OmniFocus of = new OmniFocus();
-        Context context = of.getContextsByName(NON_EMPTY_CONTEXT).get(0);
+        Context context = of.getContextsByName(NON_EMPTY_CONTEXT, null).get(0);
         of.loadRemainingTasks(context, null);
         List<Task> tasks = context.getTasks ();
         assertFalse (tasks.isEmpty());
@@ -96,7 +96,7 @@ public class OmniFocusTest extends EnvironmentTest {
     @Test
     public void testLoadAvailableContextTasks () throws IOException, ScriptException {
         OmniFocus of = new OmniFocus();
-        Context context = of.getContextsByName(NON_EMPTY_CONTEXT).get(0);
+        Context context = of.getContextsByName(NON_EMPTY_CONTEXT, null).get(0);
         of.loadAvailableTasks(context, null);
         List<Task> tasks = context.getTasks ();
         assertFalse (tasks.isEmpty());

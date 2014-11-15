@@ -21,6 +21,8 @@ import org.psidnell.omnifocus.model.Node;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
 import org.psidnell.osascript.OSAScriptEngineFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -28,6 +30,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class OmniFocus {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(OmniFocus.class);
+    
     private static final String LIBRARY_RESOURCE = "/org/psidnell/omnifocus/OmniFocus.js";
 
     private static final String EOL = System.getProperty("line.separator");
@@ -48,6 +52,9 @@ public class OmniFocus {
     }
 
     protected String execute(String script) throws IOException, ScriptException {
+        
+        LOGGER.debug("Executing: {}", script);
+        
         StringBuilder combinedScript = new StringBuilder();
         combinedScript.append(library);
         combinedScript.append(script);
@@ -57,36 +64,39 @@ public class OmniFocus {
         engineManager.registerEngineName(factory.getEngineName(), factory);
         ScriptEngine engine = engineManager.getEngineByName(factory.getEngineName());
         String json = (String) engine.eval(combinedScript.toString());
+        
+        LOGGER.debug("Response: {}", json);
+        
         return json;
     }
 
-    public List<Folder> getFoldersByName(String folderName) throws IOException, ScriptException {
-        String filter = "{name : " + constant(folderName) + "}";
-        return getFolders(filter);
+    public List<Folder> getFoldersByName(String folderName, String projectFilter, String taskFilter) throws IOException, ScriptException {
+        String folderFilter = "{name : " + constant(folderName) + "}";
+        return getFolders(folderFilter, projectFilter, taskFilter);
     }
     
-    public List<Folder> getFolders(String filter) throws IOException, ScriptException {
-        String json = execute("console.log(JSON.stringify(getFolders (" + nullToEmpty(filter) + ")));");
+    public List<Folder> getFolders(String fFilter, String pFilter, String tFilter) throws IOException, ScriptException {
+        String json = execute("console.log(JSON.stringify(getFolders (" + fFilter + "," + pFilter + "," + tFilter + ")));");
         return asFolders(json);
     }
     
-    public List<Project> getProjectsByName(String projectName) throws IOException, ScriptException {
-        String filter = "{name : " + constant(projectName) + "}";
-        return getProjects(filter);
+    public List<Project> getProjectsByName(String projectName, String taskFilter) throws IOException, ScriptException {
+        String projectFilter = "{name : " + constant(projectName) + "}";
+        return getProjects(projectFilter, taskFilter);
     }
 
-    public List<Project> getProjects(String filter) throws IOException, ScriptException {
-        String json = execute("console.log(JSON.stringify(getProjects (" + nullToEmpty(filter) + ")));");
+    public List<Project> getProjects(String projectFilter, String taskFilter) throws IOException, ScriptException {
+        String json = execute("console.log(JSON.stringify(getProjects (" + projectFilter + "," + taskFilter + ")));");
         return asProjects(json);
     }
 
-    public List<Context> getContextsByName(String contextName) throws IOException, ScriptException {
-        String filter = "{name : " + constant(contextName) + "}";
-        return getContexts(filter);
+    public List<Context> getContextsByName(String contextName, String taskFilter) throws IOException, ScriptException {
+        String contextFilter = "{name : " + constant(contextName) + "}";
+        return getContexts(contextFilter, taskFilter);
     }
 
-    private List<Context> getContexts(String filter) throws IOException, ScriptException {
-        String json = execute("console.log(JSON.stringify(getContexts (" + nullToEmpty(filter) + ")));");
+    private List<Context> getContexts(String contextFilter, String taskFilter) throws IOException, ScriptException {
+        String json = execute("console.log(JSON.stringify(getContexts (" + contextFilter + "," + taskFilter + ")));");
         return asContexts(json);
     }
     
