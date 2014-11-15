@@ -19,6 +19,40 @@ function nameOf (o) {
     }
 }
 
+function applyFilter(x, filter) {
+    if(typeof(filter)==='undefined') {
+        return x;
+    }
+    else {
+        return x.whose(filter);
+    }
+}
+
+/*
+ * ADAPTATION
+ */
+function adaptFolder (o) {
+    return {
+        name: o.name(),
+        id: o.id(),
+    }
+}
+
+function adaptProject (o) {
+    return {
+        name: o.name(),
+        context: nameOf(o.context()),
+        id: o.id(),
+        note: o.note(),
+        deferDate: o.deferDate(),
+        dueDate: o.dueDate(),
+        completionDate: o.completionDate(),
+        completed: o.completed(),
+        sequential: o.sequential(),
+        flagged: o.flagged()
+    }
+}
+
 function adaptTask (o) {
     return {
             name: o.name(),
@@ -37,26 +71,19 @@ function adaptTask (o) {
     };
 }
 
-function adaptProject (o) {
-    return {
-        name: o.name(),
-        context: nameOf(o.context()),
-        id: o.id(),
-        note: o.note(),
-        deferDate: o.deferDate(),
-        dueDate: o.dueDate(),
-        completionDate: o.completionDate(),
-        completed: o.completed(),
-        sequential: o.sequential(),
-        flagged: o.flagged()
-    }
-}
-
 function adaptContext (o) {
     return {
         name: o.name(),
         id: o.id(),
     }
+}
+
+function adaptFolders (folders) {
+    result = [];
+    for (i in folders) {
+        result.push (adaptFolder(folders[i]));
+    }
+    return result;
 }
 
 function adaptContexts (contexts) {
@@ -83,101 +110,77 @@ function adaptTasks (tasks) {
     return result;
 }
 
-function _getContext(filter) {
-    if(typeof(filter)==='undefined') {
-        return doc.flattenedContexts();
-    }
-    else {
-        return doc.flattenedContexts.whose(filter);
-    }
+/*
+ * LOADING
+ */
+
+function _getFolders(filter) {
+    return applyFilter(doc.flattenedFolders, filter);
 }
 
-function _getProject(filter) {
-    if(typeof(filter)==='undefined') {
-        return doc.flattenedProjects();
-    }
-    else {
-        return doc.flattenedProjects.whose(filter);
-    }
+function _getContexts(filter) {
+    return applyFilter(doc.flattenedContexts, filter);
+}
+
+function _getProjects(filter) {
+    return applyFilter(doc.flattenedProjects, filter);
+}
+
+function getFolders(filter) {
+    return adaptFolders(_getFolders(filter));
 }
 
 function getContexts(filter) {
-    if(typeof(filter)==='undefined') {
-        return adaptContexts(doc.flattenedContexts);
-    }
-    else {
-        return adaptContexts(doc.flattenedContexts.whose(filter));
-    }
+    return adaptContexts(_getContexts(filter));
 }
 
 function getProjects(filter) {
-    if(typeof(filter)==='undefined') {
-        return adaptProjects(doc.flattenedProjects());
-    }
-    else {
-        return adaptProjects(doc.flattenedProjects.whose(filter));
-    }
+    return adaptProjects(_getProjects(filter));
 }
 
 function getAllTasksFromContext(id, filter) {
-    var context = _getContext({id : id})[0];
-    if(typeof(filter)==='undefined') {
-        return adaptTasks(context.tasks());
-    }
-    else {
-        return adaptTasks(context.tasks.whose(filter));
-    }
+    var context = _getContexts({id : id})[0];
+    return adaptTasks(applyFilter(context.tasks, filter));
 }
 
 function getRemainingTasksFromContext(id, filter) {
-    var context = _getContext({id : id})[0];
-    if(typeof(filter)==='undefined') {
-        return adaptTasks(context.remainingTasks());
-    }
-    else {
-        return adaptTasks(context.remainingTasks.whose(filter));
-    }
+    var context = _getContexts({id : id})[0];
+    return adaptTasks(applyFilter(context.remainingTasks, filter));
 }
 
 function getAvailableTasksFromContext(id, filter) {
-    var context = _getContext({id : id})[0];
-    if(typeof(filter)==='undefined') {
-        return adaptTasks(context.availableTasks());
-    }
-    else {
-        return adaptTasks(context.availableTasks.whose(filter));
-    }
+    var context = _getContexts({id : id})[0];
+    return adaptTasks(applyFilter(context.availableTasks, filter));
 }
 
 function getAllTasksFromProject(id, filter) {
-    var project = _getProject({id : id})[0];
+    var project = _getProjects({id : id})[0];
     var rootTask = project.rootTask();
-    if(typeof(filter)==='undefined') {
-        return adaptTasks(rootTask.flattenedTasks());
-    }
-    else {
-        return adaptTasks(rootTask.flattenedTasks.whose(filter));
-    }
+    return adaptTasks(applyFilter(rootTask.flattenedTasks, filter));
 }
 
-function getNextTaskFromProject(id) {
-    var project = _getProject({id : id})[0];
+function getAllProjectsFromFolder(id, filter) {
+    var folder = _getFolders({id : id})[0];
+    return adaptProjects(applyFilter(folder.flattenedProjects, filter));
+}
+
+function getNextTaskFromProject(id, filter) {
+    var project = _getProjects({id : id})[0];
     var nextTask = project.nextTask();
     if (nextTask == null) {
         return null;
     }
     else {
-        return adaptTask (nextTask);
+        tasks = applyFilter([nextTask], filter);
+        if (tasks.length == 0) {
+            return null;
+        }
+        return adaptTask (tasks[0]);
     }
 }
 
 function getAllTasksFromInbox (filter) {
-    if(typeof(filter)==='undefined') {
-        return adaptTasks(doc.inboxTasks);
-    }
-    else {
-        return adaptTasks(doc.inboxTasks.whose(filter));
-    }
+    return adaptTasks(applyFilter(doc.inboxTasks, filter));
 }
 
 /*
@@ -193,7 +196,7 @@ function completedTodayFilter (tasks) {
 }
 
 function getCompletedTodayTasksFromContext(name) {
-    var context = _getContext(name);
+    var context = _getContexts(name);
     return adaptTasks(context.tasks.whose(completedTodayFilter ()));
 }
 function createInboxItem(name) {

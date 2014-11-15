@@ -18,6 +18,12 @@ public class ActiveOption<P> extends Option {
     private static int count = 0;
     private int order;
 
+    public ActiveOption(String opt, String description, ActiveOptionProcess<P> processor) throws IllegalArgumentException {
+        super(opt, description);
+        this.processor = processor;
+        setOrder();
+    }
+    
     public ActiveOption(String opt, boolean hasArg, String description, ActiveOptionProcess<P> processor) throws IllegalArgumentException {
         super(opt, hasArg, description);
         this.processor = processor;

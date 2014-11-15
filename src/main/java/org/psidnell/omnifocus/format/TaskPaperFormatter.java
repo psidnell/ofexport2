@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.psidnell.omnifocus.model.Context;
+import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Group;
 import org.psidnell.omnifocus.model.Node;
 import org.psidnell.omnifocus.model.Project;
@@ -42,6 +43,19 @@ public class TaskPaperFormatter implements Formatter {
             this.out = out;
         }
 
+        @Override
+        public void enter(Folder node) throws IOException {
+            out.write(indent(depth));
+            out.write(tpProject(node.getName()));
+            out.write("\n");
+            depth++;
+        }
+        
+        @Override
+        public void exit (Folder node) {
+            depth--;
+        }
+        
         @Override
         public void enter(Group node) throws IOException {
             out.write(indent(depth));

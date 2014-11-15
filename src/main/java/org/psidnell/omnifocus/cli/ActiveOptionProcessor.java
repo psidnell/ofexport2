@@ -48,6 +48,7 @@ public class ActiveOptionProcessor<P> {
         return true;
     }
     
+    @SuppressWarnings("unchecked")
     public void printHelp() {
         HelpFormatter formatter = new HelpFormatter();
         // Output in the order I specify

@@ -3,8 +3,6 @@ package org.psidnell.omnifocus.model;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 public class Context extends Node {
 
     public static final String TYPE = "Context";
@@ -15,7 +13,6 @@ public class Context extends Node {
         this.tasks = tasks;
     }
 
-    @JsonIgnore
     public List<Task> getTasks() {
         return tasks;
     }

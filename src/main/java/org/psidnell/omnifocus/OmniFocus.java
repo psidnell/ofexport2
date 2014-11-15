@@ -16,6 +16,7 @@ import javax.script.ScriptException;
 
 import org.psidnell.omnifocus.filter.Filter;
 import org.psidnell.omnifocus.model.Context;
+import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Node;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
@@ -38,6 +39,7 @@ public class OmniFocus {
     private HashMap<String, Task> taskCache = new HashMap<>();
     private HashMap<String, Project> projectCache = new HashMap<>();
     private HashMap<String, Context> contextCache = new HashMap<>();
+    private HashMap<String, Folder> folderCache = new HashMap<>();
 
     public OmniFocus() throws IOException {
         try (Reader src = new InputStreamReader(OmniFocus.class.getResourceAsStream(LIBRARY_RESOURCE))) {
@@ -46,7 +48,6 @@ public class OmniFocus {
     }
 
     protected String execute(String script) throws IOException, ScriptException {
-
         StringBuilder combinedScript = new StringBuilder();
         combinedScript.append(library);
         combinedScript.append(script);
@@ -59,6 +60,16 @@ public class OmniFocus {
         return json;
     }
 
+    public List<Folder> getFoldersByName(String folderName) throws IOException, ScriptException {
+        String filter = "{name : " + constant(folderName) + "}";
+        return getFolders(filter);
+    }
+    
+    public List<Folder> getFolders(String filter) throws IOException, ScriptException {
+        String json = execute("console.log(JSON.stringify(getFolders (" + nullToEmpty(filter) + ")));");
+        return asFolders(json);
+    }
+    
     public List<Project> getProjectsByName(String projectName) throws IOException, ScriptException {
         String filter = "{name : " + constant(projectName) + "}";
         return getProjects(filter);
@@ -78,23 +89,31 @@ public class OmniFocus {
         String json = execute("console.log(JSON.stringify(getContexts (" + nullToEmpty(filter) + ")));");
         return asContexts(json);
     }
-
+    
     public List<Task> loadAllInboxTasks(String filter) throws IOException, ScriptException {
+        // TODO load into group to make more like other loadXXX methods?
         String json = execute("console.log(JSON.stringify(getAllTasksFromInbox (" + nullToEmpty(filter) + ")));");
         List<Task> tasks = asTasks(json);
         return tasks;
     }
-
+    
+    public void loadAllProjects(Folder folder, String filter) throws IOException, ScriptException {
+        String id = constant(folder.getId());
+        String json = execute("console.log(JSON.stringify(getAllProjectsFromFolder (" + id + trailingOptArg(filter) + ")));");
+        List<Project> projects = asProjects(json);
+        folder.setProjects (projects);
+    }
+    
     public void loadAllTasks(Project project, String filter) throws IOException, ScriptException {
         String id = constant(project.getId());
-        String json = execute("console.log(JSON.stringify(getAllTasksFromProject (" + id + trailingOpt(filter) + ")));");
+        String json = execute("console.log(JSON.stringify(getAllTasksFromProject (" + id + trailingOptArg(filter) + ")));");
         List<Task> tasks = asTasks(json);
         project.setTasks(tasks);
     }
 
-    public void loadNextTask(Project project) throws IOException, ScriptException {
+    public void loadNextTask(Project project, String filter) throws IOException, ScriptException {
         String id = constant(project.getId());
-        String json = execute("console.log(JSON.stringify(getNextTaskFromProject (" + id + ")));");
+        String json = execute("console.log(JSON.stringify(getNextTaskFromProject (" + id + trailingOptArg(filter) + ")));");
         List<Task> tasks;
         if (json.trim().equals("null")) {
             tasks = new LinkedList<>();
@@ -106,14 +125,14 @@ public class OmniFocus {
 
     public void loadAllTasks(Context context, String filter) throws IOException, ScriptException {
         String id = constant(context.getId());
-        String json = execute("console.log(JSON.stringify(getAllTasksFromContext (" + id + trailingOpt(filter) + ")));");
+        String json = execute("console.log(JSON.stringify(getAllTasksFromContext (" + id + trailingOptArg(filter) + ")));");
         List<Task> tasks = asTasks(json);
         context.setTasks(tasks);
     }
 
     public void loadRemainingTasks(Context context, String filter) throws IOException, ScriptException {
         String id = constant(context.getId());
-        String json = execute("console.log(JSON.stringify(getRemainingTasksFromContext (" + id + trailingOpt(filter)
+        String json = execute("console.log(JSON.stringify(getRemainingTasksFromContext (" + id + trailingOptArg(filter)
                 + ")));");
         List<Task> tasks = asTasks(json);
         context.setTasks(tasks);
@@ -121,7 +140,7 @@ public class OmniFocus {
 
     public void loadAvailableTasks(Context context, String filter) throws IOException, ScriptException {
         String id = constant(context.getId());
-        String json = execute("console.log(JSON.stringify(getAvailableTasksFromContext (" + id + trailingOpt(filter)
+        String json = execute("console.log(JSON.stringify(getAvailableTasksFromContext (" + id + trailingOptArg(filter)
                 + ")));");
         List<Task> tasks = asTasks(json);
         context.setTasks(tasks);
@@ -219,6 +238,19 @@ public class OmniFocus {
             throw new IOException(json, e);
         }
     }
+    
+    protected List<Folder> asFolders(String json) throws IOException {
+        try {
+            List<Folder> contexts = MAPPER.readValue(json, new TypeReference<List<Folder>>() {});
+            LinkedList<Folder> cachedFolders = new LinkedList<>();
+            for (Folder folder : contexts) {
+                cachedFolders.add(cache(folder, folderCache));
+            }
+            return cachedFolders;
+        } catch (Exception e) {
+            throw new IOException(json, e);
+        }
+    }
 
     protected String load(Reader src) throws IOException {
         StringBuilder builder = new StringBuilder();
@@ -241,7 +273,7 @@ public class OmniFocus {
         return val == null ? "" : val;
     }
 
-    private String trailingOpt(String val) {
+    private String trailingOptArg(String val) {
         return val == null ? "" : ", " + val;
     }
 }

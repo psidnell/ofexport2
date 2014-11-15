@@ -8,18 +8,30 @@ import javax.script.ScriptException;
 
 import org.junit.Test;
 import org.psidnell.omnifocus.model.Context;
+import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Project;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class EnvironmentTest {
     
+    protected static final String NON_EMPTY_FOLDER = "TestFolder";
     protected static final String NON_EMPTY_CONTEXT = "TestContext";
     protected static final String NON_EMPTY_SEQ_PROJECT = "TestProject";
     protected static final String EMPTY_SEQ_PROJECT = "TestProjectEmpty";
     
     protected ObjectMapper mapper = new ObjectMapper();
 
+    @Test
+    public void testNON_EMPTY_FOLDER () throws IOException, ScriptException {
+        OmniFocus of = new OmniFocus();
+        Folder folder = of.getFoldersByName(NON_EMPTY_FOLDER).get(0);
+        assertNotNull (folder);
+        assertEquals (NON_EMPTY_FOLDER, folder.getName());
+        
+        System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(folder));
+    }
+    
     @Test
     public void testNON_EMPTY_SEQ_PROJECT () throws IOException, ScriptException {
         OmniFocus of = new OmniFocus();

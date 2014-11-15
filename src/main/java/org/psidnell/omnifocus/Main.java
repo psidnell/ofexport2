@@ -13,6 +13,7 @@ import org.psidnell.omnifocus.cli.ActiveOptionProcessor;
 import org.psidnell.omnifocus.filter.Filter;
 import org.psidnell.omnifocus.format.Formatter;
 import org.psidnell.omnifocus.model.Context;
+import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Group;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
@@ -27,6 +28,10 @@ public class Main {
                 (m,o)->m.printHelp ()));
         
         OPTIONS.addOption(new ActiveOption<Main>(
+                "f", "foldername", true, "Load projects and tasks from folder specified by name",
+                (m,o)->m.processFolderName(o)));
+        
+        OPTIONS.addOption(new ActiveOption<Main>(
                 "c", "contextname", true, "Load tasks from context specified by name",
                 (m,o)->m.processContextName(o)));
         
@@ -39,7 +44,7 @@ public class Main {
                 (m,o)->m.processInbox()));
         
         OPTIONS.addOption(new ActiveOption<Main> (
-                "f", "flagged", true, "flagged (true|false)",
+                "flagged", true, "flagged (true|false)",
                 (m,o)->m.processFlagged (o)));
         
         OPTIONS.addOption(new ActiveOption<Main> (
@@ -51,7 +56,7 @@ public class Main {
                 (m,o)->m.processExpression (o)));
         
         OPTIONS.addOption(new ActiveOption<Main> (
-                "f", "format", true, "format",
+                "format", true, "format",
                 (m,o)->m.processFormat (o)));
     }
 
@@ -59,7 +64,7 @@ public class Main {
     
     private final OmniFocus of;
     private final Group root;
-    private String filter = null;
+    private String taskFilter = null;
     private Availability availability = Availability.Available;
     private ActiveOptionProcessor<Main> processor;
     private String format = "SimpleTextList";
@@ -71,7 +76,7 @@ public class Main {
         root = new Group();
         root.setName("");
 
-        filter = null;
+        taskFilter = null;
     }
 
     private void processFormat(ActiveOption<Main> o) {
@@ -83,17 +88,28 @@ public class Main {
     }
 
     private void processExpression(ActiveOption<Main> o) {
-        filter = Filter.and(o.nextValue());
+        taskFilter = Filter.and(o.nextValue());
     }
 
     private void printHelp() {
        processor.printHelp ();
     }
 
+    private void processFolderName(ActiveOption<Main> o) throws IOException, ScriptException {
+        String folderName = o.nextValue();
+        for (Folder f : of.getFoldersByName(folderName)) {
+            of.loadAllProjects(f, null);
+            for (Project p : f.getProjects()) {
+                of.loadTasks(p, availability, taskFilter);
+            }
+            root.addChild(f);
+        }
+    }
+    
     private void processProjectName(ActiveOption<Main> o) throws IOException, ScriptException {
         String projectName = o.nextValue();
         for (Project p : of.getProjectsByName(projectName)) {
-            of.loadTasks(p, availability, filter);
+            of.loadTasks(p, availability, taskFilter);
             root.addChild(p);
         }
     }
@@ -101,7 +117,7 @@ public class Main {
     private void processContextName(ActiveOption<Main> o) throws IOException, ScriptException {
         String contextName = o.nextValue();
         for (Context c : of.getContextsByName(contextName)) {
-            of.loadTasks(c, availability, filter);
+            of.loadTasks(c, availability, taskFilter);
             root.addChild(c);
         }
     }
@@ -109,7 +125,7 @@ public class Main {
     private void processInbox() throws IOException, ScriptException {
         Group inbox = new Group();
         inbox.setName("Inbox");
-        for (Task t : of.loadAllInboxTasks(filter)) {
+        for (Task t : of.loadAllInboxTasks(taskFilter)) {
             inbox.addChild(t);
         }
         root.addChild(inbox);
@@ -131,7 +147,7 @@ public class Main {
     private void processFlagged(ActiveOption<Main> o) {
         Boolean flagged = Boolean.parseBoolean(o.nextValue().trim().toLowerCase());
         String flaggedFilter = "{flagged:" + flagged + "}";
-        filter = Filter.and(filter, flaggedFilter);
+        taskFilter = Filter.and(taskFilter, flaggedFilter);
     }
     
     public static void main(String args[]) throws Exception {

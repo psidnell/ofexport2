@@ -57,7 +57,7 @@ public class OmniFocusTest extends EnvironmentTest {
     public void testLoadNextProjectTask () throws IOException, ScriptException {
         OmniFocus of = new OmniFocus();
         Project project = of.getProjectsByName(NON_EMPTY_SEQ_PROJECT).get(0);
-        of.loadNextTask(project);
+        of.loadNextTask(project, null);
         List<Task> tasks = project.getTasks ();
         assertFalse (tasks.isEmpty());
         // Make sure we're not getting the "project task"
@@ -68,7 +68,7 @@ public class OmniFocusTest extends EnvironmentTest {
     public void testLoadNextProjectTask_empty() throws IOException, ScriptException {
         OmniFocus of = new OmniFocus();
         Project project = of.getProjectsByName(EMPTY_SEQ_PROJECT).get(0);
-        of.loadNextTask(project);
+        of.loadNextTask(project, null);
         List<Task> tasks = project.getTasks ();
         assertEquals (1, tasks.size());
         // A task representing the project is returned:
