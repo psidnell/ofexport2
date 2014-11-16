@@ -3,6 +3,11 @@ package org.psidnell.omnifocus.model;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.psidnell.omnifocus.osa.OSACollection;
+import org.psidnell.omnifocus.osa.OSAIgnore;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Folder extends Node {
 
     public static final String TYPE = "Folder";
@@ -15,6 +20,7 @@ public class Folder extends Node {
         this.projects = projects;
     }
 
+    @OSACollection(type=Project.class)
     public List<Project> getProjects() {
         return projects;
     }
@@ -23,9 +29,14 @@ public class Folder extends Node {
         this.folders = folders;
     }
 
+    @OSACollection(type=Folder.class)
     public List<Folder> getFolders() {
         return folders;
     }
+    
+    @Override
+    @JsonIgnore
+    @OSAIgnore
     public String getType() {
         return TYPE;
     }

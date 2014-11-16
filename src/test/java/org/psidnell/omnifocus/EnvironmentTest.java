@@ -24,7 +24,7 @@ public class EnvironmentTest {
     protected ObjectMapper mapper = new ObjectMapper();
 
     @Test
-    public void testNON_EMPTY_FOLDER () throws IOException, ScriptException {
+    public void testNON_EMPTY_FOLDER () throws IOException, ScriptException, ClassNotFoundException {
         OmniFocus of = new OmniFocus();
         Folder folder = of.getFoldersByName(NON_EMPTY_FOLDER, null, null).get(0);
         assertNotNull (folder);
@@ -34,7 +34,7 @@ public class EnvironmentTest {
     }
     
     @Test
-    public void testNON_EMPTY_SEQ_PROJECT () throws IOException, ScriptException {
+    public void testNON_EMPTY_SEQ_PROJECT () throws IOException, ScriptException, ClassNotFoundException {
         OmniFocus of = new OmniFocus();
         Project project = of.getProjectsByName(NON_EMPTY_SEQ_PROJECT, null).get(0);
         assertNotNull (project);
@@ -50,7 +50,7 @@ public class EnvironmentTest {
     }
     
     @Test
-    public void testEMPTY_SEQ_PROJECT () throws IOException, ScriptException {
+    public void testEMPTY_SEQ_PROJECT () throws IOException, ScriptException, ClassNotFoundException {
         OmniFocus of = new OmniFocus();
         Project project = of.getProjectsByName(EMPTY_SEQ_PROJECT, null).get(0);
         assertNotNull (project);
@@ -63,19 +63,11 @@ public class EnvironmentTest {
     }
     
     @Test
-    public void testNON_EMPTY_CONTEXT () throws IOException, ScriptException {
+    public void testNON_EMPTY_CONTEXT () throws IOException, ScriptException, ClassNotFoundException {
         OmniFocus of = new OmniFocus();
         Context context = of.getContextsByName(NON_EMPTY_CONTEXT, null).get(0);
         assertNotNull (context);
         assertEquals (NON_EMPTY_CONTEXT, context.getName());
         System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(context));
-    }
-    
-    @Test
-    public void testExperiment () throws IOException, ScriptException {
-        OmniFocus of = new OmniFocus();
-        List<Folder> folders = of.getFolders ("{name:'TestFolder'}", "{name:'TestProject'}", "{name:'ToDo'}");
-        
-        System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(folders));
     }
 }

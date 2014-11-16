@@ -1,5 +1,10 @@
 package org.psidnell.omnifocus.model;
 
+import org.psidnell.omnifocus.osa.OSAAdaptation;
+import org.psidnell.omnifocus.osa.OSAIgnore;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Task extends Common {
 
     public static final String TYPE = "Task";
@@ -8,6 +13,7 @@ public class Task extends Common {
     private boolean next;
     private boolean blocked;
 
+    @OSAAdaptation(pattern="nameOf(o.%s())")
     public String getContainingProject() {
         return containingProject;
     }
@@ -16,6 +22,9 @@ public class Task extends Common {
         this.containingProject = containingProject;
     }
 
+    @Override
+    @JsonIgnore
+    @OSAIgnore
     public String getType() {
         return TYPE;
     }

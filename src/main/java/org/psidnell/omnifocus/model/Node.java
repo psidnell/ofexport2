@@ -2,9 +2,13 @@ package org.psidnell.omnifocus.model;
 
 import java.util.UUID;
 
+import org.psidnell.omnifocus.osa.OSAIgnore;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public abstract class Node {
 
-    private String name;
+    protected String name;
 
     private String id = UUID.randomUUID().toString();
 
@@ -24,6 +28,8 @@ public abstract class Node {
         this.id = id;
     }
 
+    @JsonIgnore
+    @OSAIgnore
     public abstract String getType();
 
     @Override

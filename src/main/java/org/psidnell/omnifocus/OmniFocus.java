@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineFactory;
@@ -16,10 +17,13 @@ import javax.script.ScriptException;
 
 import org.psidnell.omnifocus.filter.Filter;
 import org.psidnell.omnifocus.model.Context;
+import org.psidnell.omnifocus.model.Document;
 import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Node;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
+import org.psidnell.omnifocus.osa.OSA;
+import org.psidnell.omnifocus.osa.OSAClassDescriptor;
 import org.psidnell.osascript.OSAScriptEngineFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +36,7 @@ public class OmniFocus {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OmniFocus.class);
     
-    private static final String LIBRARY_RESOURCE = "/org/psidnell/omnifocus/OmniFocus.js";
+    private static final String HEADER_RESOURCE = "/org/psidnell/omnifocus/OmniFocus.js";
 
     private static final String EOL = System.getProperty("line.separator");
 
@@ -45,9 +49,45 @@ public class OmniFocus {
     private HashMap<String, Context> contextCache = new HashMap<>();
     private HashMap<String, Folder> folderCache = new HashMap<>();
 
-    public OmniFocus() throws IOException {
-        try (Reader src = new InputStreamReader(OmniFocus.class.getResourceAsStream(LIBRARY_RESOURCE))) {
-            library = load(src);
+    public OmniFocus() throws IOException, ClassNotFoundException {
+        this (new LinkedList<String>());
+    }
+    
+    public OmniFocus(List<String> expressions) throws IOException, ClassNotFoundException {
+        try (Reader src = new InputStreamReader(OmniFocus.class.getResourceAsStream(HEADER_RESOURCE))) {
+            // Load in the javascript header functions
+            String header = load(src);
+            StringBuilder buf = new StringBuilder (header);
+            
+            TreeMap<String, OSAClassDescriptor> descriptors = new TreeMap<>();
+            OSAClassDescriptor task = OSA.analyse(Task.class);
+            descriptors.put("Task", task);
+            OSAClassDescriptor folder = OSA.analyse(Folder.class);
+            descriptors.put("Folder", folder);
+            OSAClassDescriptor context = OSA.analyse(Context.class);
+            descriptors.put("Context", context);
+            OSAClassDescriptor project = OSA.analyse(Project.class);
+            descriptors.put("Project", project);
+            OSAClassDescriptor document = OSA.analyse(Document.class);
+            descriptors.put("Document", document);
+            
+            // Set root document trees to empty values by default
+            document.override("folders", null);
+            document.override("tasks", null);
+            document.override("projects", null);
+            document.override("contexts", null);
+                        
+            // Override any property accessors from the command line
+            OSA.parse(descriptors, expressions);
+            
+            // Add the mapper functions - functions that map between
+            // the OSA objects (that can't be converted to JSON) to
+            // ones that can. Called mapX where x is the object name
+            for (OSAClassDescriptor desc : descriptors.values()) {
+                buf.append (desc.createMapperFunctions());
+            }
+            
+            library = buf.toString();            
         }
     }
 
@@ -63,20 +103,41 @@ public class OmniFocus {
         ScriptEngineFactory factory = new OSAScriptEngineFactory(OSAScriptEngineFactory.JS);
         engineManager.registerEngineName(factory.getEngineName(), factory);
         ScriptEngine engine = engineManager.getEngineByName(factory.getEngineName());
-        String json = (String) engine.eval(combinedScript.toString());
+        String javascript = combinedScript.toString();
+        
+        LOGGER.debug ("Full javascript: {}", javascript);
+        
+        String json = (String) engine.eval(javascript);
         
         LOGGER.debug("Response: {}", json);
         
         return json;
     }
 
+    protected static String buildAccessor (String adaptMethod, String getMethod, String baseFilter, String... adaptFilters) {
+        StringBuilder accessor = new StringBuilder ();
+        accessor.append("console.log(JSON.stringify(");
+        
+        accessor.append(adaptMethod  + "(applyFilter(doc." + getMethod + "," + baseFilter + ")");
+        
+        for (String adaptFilter : adaptFilters) {
+            accessor.append(",");
+            accessor.append(adaptFilter);
+        }
+        
+        accessor.append(")));");
+        
+        return accessor.toString();
+    }
+    
     public List<Folder> getFoldersByName(String folderName, String projectFilter, String taskFilter) throws IOException, ScriptException {
         String folderFilter = "{name : " + constant(folderName) + "}";
         return getFolders(folderFilter, projectFilter, taskFilter);
     }
     
-    public List<Folder> getFolders(String fFilter, String pFilter, String tFilter) throws IOException, ScriptException {
-        String json = execute("console.log(JSON.stringify(getFolders (" + fFilter + "," + pFilter + "," + tFilter + ")));");
+    public List<Folder> getFolders(String folderFilter, String projectFilter, String taskFilter) throws IOException, ScriptException {
+        String accessor = buildAccessor("adaptFolders", "folders", folderFilter, projectFilter, taskFilter);
+        String json = execute (accessor);
         return asFolders(json);
     }
     
@@ -86,7 +147,8 @@ public class OmniFocus {
     }
 
     public List<Project> getProjects(String projectFilter, String taskFilter) throws IOException, ScriptException {
-        String json = execute("console.log(JSON.stringify(getProjects (" + projectFilter + "," + taskFilter + ")));");
+        String accessor = buildAccessor("adaptProjects", "flattenedProjects", projectFilter, taskFilter);
+        String json = execute (accessor);
         return asProjects(json);
     }
 
@@ -96,22 +158,17 @@ public class OmniFocus {
     }
 
     private List<Context> getContexts(String contextFilter, String taskFilter) throws IOException, ScriptException {
-        String json = execute("console.log(JSON.stringify(getContexts (" + contextFilter + "," + taskFilter + ")));");
+        String accessor = buildAccessor("adaptContexts", "flattenedContexts", contextFilter, taskFilter);
+        String json = execute (accessor);
         return asContexts(json);
     }
     
-    public List<Task> loadAllInboxTasks(String filter) throws IOException, ScriptException {
+    public List<Task> loadAllInboxTasks(String taskFilter) throws IOException, ScriptException {
         // TODO load into group to make more like other loadXXX methods?
-        String json = execute("console.log(JSON.stringify(getAllTasksFromInbox (" + nullToEmpty(filter) + ")));");
+        String accessor = buildAccessor("adaptTasks", "inboxTasks", taskFilter);
+        String json = execute (accessor);        
         List<Task> tasks = asTasks(json);
         return tasks;
-    }
-    
-    public void loadAllProjects(Folder folder, String filter) throws IOException, ScriptException {
-        String id = constant(folder.getId());
-        String json = execute("console.log(JSON.stringify(getAllProjectsFromFolder (" + id + trailingOptArg(filter) + ")));");
-        List<Project> projects = asProjects(json);
-        folder.setProjects (projects);
     }
     
     public void loadAllTasks(Project project, String filter) throws IOException, ScriptException {
@@ -259,6 +316,14 @@ public class OmniFocus {
             return cachedFolders;
         } catch (Exception e) {
             throw new IOException("jsonBlock=" + json, e);
+        }
+    }
+    
+    protected Document asDocument(String json) throws IOException {
+        try {
+            return MAPPER.readValue(json, Document.class);
+        } catch (Exception e) {
+            throw new IOException(json, e);
         }
     }
 

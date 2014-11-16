@@ -125,15 +125,15 @@ function adaptFolders (folders, projectFilter, taskFilter) {
  */
 
 function _getFolders(filter) {
-    return applyFilter(doc.flattenedFolders, filter);
+    return applyFilter(doc["folders"], filter);
 }
 
 function _getContexts(filter) {
-    return applyFilter(doc.flattenedContexts, filter);
+    return applyFilter(doc["flattenedContexts"], filter);
 }
 
 function _getProjects(filter) {
-    return applyFilter(doc.flattenedProjects, filter);
+    return applyFilter(doc["flattenedProjects"], filter);
 }
 
 function getFolders(folderFilter, projectFilter, taskFilter) {
@@ -217,19 +217,6 @@ function createInboxItem(name) {
 
 function bringToForeground() {
     app.activate();
-}
-
-function log(message) {
-    var date = new Date();
-    console.log(date + ': ' + message);
-}
-
-function logInboxTaskNames() {
-    var tasks = app.defaultDocument.inboxTasks();
-    for (i in tasks) {
-        var task = tasks[i];
-        log(task.name());
-    }
 }
 
 function allTasks() {

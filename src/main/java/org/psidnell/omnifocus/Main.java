@@ -23,6 +23,11 @@ public class Main {
     
     final static Options OPTIONS = new Options();
     static {
+        
+        OPTIONS.addOption(new ActiveOption<Main>(
+                "allfolders", false, "Load projects and tasks from all folders",
+                (m,o)->m.processAllFolders(o)));
+        
         OPTIONS.addOption(new ActiveOption<Main> (
                 "h", "help", false, "print help",
                 (m,o)->m.printHelp ()));
@@ -84,7 +89,7 @@ public class Main {
     private ActiveOptionProcessor<Main> processor;
     private String format = "SimpleTextList";
         
-    public Main(ActiveOptionProcessor<Main> processor) throws IOException {
+    public Main(ActiveOptionProcessor<Main> processor) throws IOException, ClassNotFoundException {
         this.processor = processor;
         of = new OmniFocus();
 
@@ -122,6 +127,12 @@ public class Main {
        processor.printHelp ();
     }
 
+    private void processAllFolders(ActiveOption<Main> o) throws IOException, ScriptException {
+        for (Folder f : of.getFolders(folderExpr, projectExpr, taskExpr)) {
+            root.addChild(f);
+        }
+    }
+    
     private void processFolderName(ActiveOption<Main> o) throws IOException, ScriptException {
         String folderName = o.nextValue();
         for (Folder f : of.getFoldersByName(folderName, projectExpr, taskExpr)) {

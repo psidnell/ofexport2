@@ -3,6 +3,10 @@ package org.psidnell.omnifocus.model;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.psidnell.omnifocus.osa.OSAIgnore;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Group extends Node {
 
     public static final String TYPE = "Group";
@@ -17,6 +21,9 @@ public class Group extends Node {
         children.add(node);
     }
 
+    @Override
+    @JsonIgnore
+    @OSAIgnore
     public String getType() {
         return TYPE;
     }
