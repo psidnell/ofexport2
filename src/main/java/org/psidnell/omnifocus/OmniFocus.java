@@ -1,14 +1,29 @@
+/*
+Copyright 2014 Paul Sidnell
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
 package org.psidnell.omnifocus;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineFactory;
@@ -22,7 +37,6 @@ import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Node;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
-import org.psidnell.omnifocus.osa.OSA;
 import org.psidnell.omnifocus.osa.OSAClassDescriptor;
 import org.psidnell.osascript.OSAScriptEngineFactory;
 import org.slf4j.Logger;
@@ -49,48 +63,41 @@ public class OmniFocus {
     private HashMap<String, Context> contextCache = new HashMap<>();
     private HashMap<String, Folder> folderCache = new HashMap<>();
 
-    public OmniFocus() throws IOException, ClassNotFoundException {
-        this (new LinkedList<String>());
-    }
-    
-    public OmniFocus(List<String> expressions) throws IOException, ClassNotFoundException {
+    public OmniFocus() throws IOException {
         try (Reader src = new InputStreamReader(OmniFocus.class.getResourceAsStream(HEADER_RESOURCE))) {
             // Load in the javascript header functions
-            String header = load(src);
-            StringBuilder buf = new StringBuilder (header);
-            
-            TreeMap<String, OSAClassDescriptor> descriptors = new TreeMap<>();
-            OSAClassDescriptor task = OSA.analyse(Task.class);
-            descriptors.put("Task", task);
-            OSAClassDescriptor folder = OSA.analyse(Folder.class);
-            descriptors.put("Folder", folder);
-            OSAClassDescriptor context = OSA.analyse(Context.class);
-            descriptors.put("Context", context);
-            OSAClassDescriptor project = OSA.analyse(Project.class);
-            descriptors.put("Project", project);
-            OSAClassDescriptor document = OSA.analyse(Document.class);
-            descriptors.put("Document", document);
-            
-            // Set root document trees to empty values by default
-            document.override("folders", null);
-            document.override("tasks", null);
-            document.override("projects", null);
-            document.override("contexts", null);
-                        
-            // Override any property accessors from the command line
-            OSA.parse(descriptors, expressions);
-            
-            // Add the mapper functions - functions that map between
-            // the OSA objects (that can't be converted to JSON) to
-            // ones that can. Called mapX where x is the object name
-            for (OSAClassDescriptor desc : descriptors.values()) {
-                buf.append (desc.createMapperFunctions());
-            }
-            
-            library = buf.toString();            
+            library = load(src);      
         }
     }
+    
+    protected String execute(Collection<OSAClassDescriptor> pathExpr) throws IOException, ScriptException, ClassNotFoundException {
+         
+        StringBuilder buf = new StringBuilder ();
 
+        // Set up defaults
+        HashMap<String, OSAClassDescriptor> descriptors = new HashMap<>();
+        descriptors.put("Document", new OSAClassDescriptor(Document.class));
+        descriptors.put("Folder", new OSAClassDescriptor(Folder.class));
+        descriptors.put("Project", new OSAClassDescriptor(Project.class));
+        descriptors.put("Task", new OSAClassDescriptor(Task.class));
+        descriptors.put("Context", new OSAClassDescriptor(Context.class));
+        
+        // Override with descriptors in the path expression
+        for (OSAClassDescriptor desc : pathExpr) {
+            descriptors.put(desc.getObjectName(), desc);
+        }
+        
+        // Create mapping functions
+        for (OSAClassDescriptor desc : descriptors.values()) {
+            buf.append (desc.createMapperFunctions());
+        }
+        
+        // Add command to translate root document
+        buf.append("console.log(JSON.stringify(mapDocument(doc)))");
+        
+        return execute (buf.toString());
+    }
+    
     protected String execute(String script) throws IOException, ScriptException {
         
         LOGGER.debug("Executing: {}", script);

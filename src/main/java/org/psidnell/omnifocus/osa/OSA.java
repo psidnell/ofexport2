@@ -1,12 +1,23 @@
+/*
+Copyright 2014 Paul Sidnell
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
 package org.psidnell.omnifocus.osa;
 
-import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 public class OSA {
@@ -21,10 +32,15 @@ public class OSA {
             OSAClassDescriptor desc = descriptors.get(nodeName);
             
             String remainder = node.substring(colon + 1);
-            for (String attribVal : splitOnCommas (remainder)) {
+            for (String attribVal : splitOn (remainder, ',')) {
                 String bits[] = attribVal.split("=");
                 String attrib = bits[0];
                 String val = bits[1];
+                
+                if (val.contains("{")) {
+                    val = val.replaceFirst("\\{", ".whose({");
+                    val = val + ")";
+                }
                 
                 desc.override (attrib, val);
             }
@@ -34,46 +50,7 @@ public class OSA {
         return mapFunctions.toString();
     }
     
-    public static OSAClassDescriptor analyse(Class<?> clazz) {
-        TreeMap<String, OSAPropertyDescriptor> properties = new TreeMap<>();
-        for (Method m : clazz.getMethods()) {
-            String methodName = m.getName();
-            
-            if (m.getAnnotation(OSAIgnore.class) == null &&
-                methodName.startsWith("get") && methodName.length() > 3 &&
-                !methodName.equals("getClass") &&
-                m.getParameters().length == 0) {
-                
-                char firstChar = Character.toLowerCase(methodName.charAt(3));
-                String remainder = methodName.length() == 4 ? "" : methodName.substring(4);
-                String propName = firstChar + remainder;
-                
-                String nullGetter;
-                String adaptation;
-                
-                OSACollection collAnnot = m.getAnnotation(OSACollection.class);
-                if (collAnnot != null) {
-                    nullGetter = "[]";
-                    adaptation = "map" + collAnnot.type().getSimpleName() + "Array(o.%s)";
-                }
-                else {
-                    nullGetter = "null";
-                    adaptation = "o.%s()";
-                }
-                
-                OSAAdaptation wrapAnnot = m.getAnnotation(OSAAdaptation.class);
-                if (wrapAnnot != null) {
-                    adaptation = wrapAnnot.pattern();
-                }
-                
-                OSAPropertyDescriptor pd = new OSAPropertyDescriptor(propName, nullGetter, adaptation);
-                properties.put(propName, pd);
-            }
-        }
-        return new OSAClassDescriptor(clazz.getSimpleName(), properties);
-    }
-    
-    protected static List<String> splitOnCommas (String str) {
+    protected static List<String> splitOn (String str, char splitChar) {
         boolean inString = false;
         boolean escaped = false;
         StringBuilder value = new StringBuilder();
@@ -90,6 +67,10 @@ public class OSA {
                     inString = false;
                 }
             }
+            else if (c == splitChar) {
+                result.add(value.toString());
+                value = new StringBuilder();
+            }
             else {
                 switch (c) {
                     case '\\':
@@ -99,10 +80,6 @@ public class OSA {
                     case '\'' :
                         inString = true;
                         value.append(c);
-                        break;
-                    case ',':
-                        result.add(value.toString());
-                        value = new StringBuilder();
                         break;
                     default:
                        value.append(c);

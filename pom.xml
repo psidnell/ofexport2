@@ -7,6 +7,8 @@
 
 	<properties>
 		<jacksonVersion>2.4.3</jacksonVersion>
+		<antlr-version>4.3</antlr-version>
+		<antlr-generated-code-package>org.psidnell.omnifocus.expr</antlr-generated-code-package>
 	</properties>
 
 	<dependencies>
@@ -51,6 +53,11 @@
 			<version>1.7.7</version>
 		</dependency>
 		<dependency>
+			<groupId>org.antlr</groupId>
+			<artifactId>antlr4-runtime</artifactId>
+			<version>${antlr-version}</version>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.11</version>
@@ -91,6 +98,151 @@
 					</platforms>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.antlr</groupId>
+				<artifactId>antlr4-maven-plugin</artifactId>
+				<version>${antlr-version}</version>
+				<executions>
+					<execution>
+						<id>antlr</id>
+						<goals>
+							<goal>antlr4</goal>
+						</goals>
+						<phase>generate-sources</phase>
+					</execution>
+				</executions>
+				<configuration>
+					<!-- The Antlr plugin can't seem to generate source with the requested 
+						package AND put it in a directory that matches that package. The plugin does 
+						have an option to specify the directory you want the files generated to - 
+						but it then adds that as a source path to maven - which won't be the package 
+						root. It will build and test OK but if you build an eclipse project from 
+						the pom it will give errors for all the misplaced files. I resolve this with 
+						other plugins below -->
+					<arguments>
+						<argument>-package</argument>
+						<argument>${antlr-generated-code-package}</argument>
+					</arguments>
+				</configuration>
+			</plugin>
+			<plugin>
+				<!-- Derive the antlr path from the antlr package variable. -->
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>1.8</version>
+				<executions>
+					<execution>
+						<id>regex-property</id>
+						<goals>
+							<goal>regex-property</goal>
+						</goals>
+						<configuration>
+							<name>antlr-generated-code-path</name>
+							<value>${antlr-generated-code-package}</value>
+							<regex>\.</regex>
+							<replacement>\/</replacement>
+							<failIfNoMatch>true</failIfNoMatch>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<!-- Move the generated antlr files to the directory that matches their 
+					package. -->
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.7</version>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<configuration>
+							<target>
+								<echo
+									message="package: ${antlr-generated-code-package} path:${antlr-generated-code-path}" />
+								<move
+									todir="${project.build.directory}/generated-sources/antlr4/${antlr-generated-code-path}">
+									<fileset dir="${project.build.directory}/generated-sources/antlr4">
+										<include name="*.java" />
+										<include name="*.tokens" />
+									</fileset>
+								</move>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>2.6.1</version>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>${project.build.directory}/generated-sources/antlr4</directory>
+							<includes>
+								<include>**/*.java</include>
+								<include>**/*.tokens</include>
+							</includes>
+						</fileset>
+					</filesets>
+				</configuration>
+			</plugin>
 		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.apache.maven.plugins
+										</groupId>
+										<artifactId>
+											maven-antrun-plugin
+										</artifactId>
+										<versionRange>
+											[1.7,)
+										</versionRange>
+										<goals>
+											<goal>run</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.codehaus.mojo
+										</groupId>
+										<artifactId>
+											build-helper-maven-plugin
+										</artifactId>
+										<versionRange>
+											[1.8,)
+										</versionRange>
+										<goals>
+											<goal>regex-property</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 </project>
