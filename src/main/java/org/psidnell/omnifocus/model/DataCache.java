@@ -25,6 +25,7 @@ public class DataCache {
     private HashMap<String, ProjectInfo> projInfos;
     private HashMap<String, Task> tasks;
     private HashMap<String, Context> contexts;
+    private HashMap<String, Project> projects;
 
     public DataCache (
             Collection<Folder> folders,
@@ -51,7 +52,55 @@ public class DataCache {
         for (Context context : contexts) {
             this.contexts.put(context.getId(), context);
         }
+        this.projects = new HashMap<>();
+        build();
+    }
+    
+    private final void build() {
         
+        // Create Projects from their root tasks
+        for (ProjectInfo projInfo : projInfos.values()) {
+            Task rootTask = tasks.get(projInfo.getRootTaskId());
+            Project project = new Project (rootTask);
+            projects.put (project.getId (), project);
+        }
+        
+        // Build Folder Hierarchy
+        for (Folder folder : folders.values()) {
+            String parentId = folder.getParentFolderId();
+            if (parentId != null) {
+                Folder parent = folders.get(parentId);
+                parent.getFolders().add(folder);
+            }
+        }
+        
+        // Build Task Hierarchy
+        for (Task task : tasks.values()) {
+            String parentId = task.getParentTaskId();
+            if (parentId != null) {
+                Task parent = tasks.get(parentId);
+                parent.getTasks().add(task);
+            }
+        }
+        
+        // Build Context Hierarchy
+        for (Context context : contexts.values()) {
+            String parentId = context.getParentContextId();
+            if (parentId != null) {
+                Context parent = contexts.get(parentId);
+                System.out.println ("Knitting " + context.getName() + " and " + parent.getName());
+                parent.getContexts().add(context);
+            }
+        }
+       
+        // Add tasks to contexts
+        for (Task task : tasks.values()) {
+            String contextId = task.getContextId();
+            if (contextId != null) {
+                Context context = contexts.get(contextId);
+                context.getTasks().add(task);
+            }
+        }
     }
 
     public HashMap<String, Folder> getFolders() {
@@ -70,11 +119,5 @@ public class DataCache {
         return contexts;
     }
 
-    public void build() {
-        for (ProjectInfo projInfo : projInfos.values()) {
-            Task rootTask = tasks.get(projInfo.getRootTaskId());
-            System.out.println(rootTask.getName());
-        }
-        
-    }
+   
 }

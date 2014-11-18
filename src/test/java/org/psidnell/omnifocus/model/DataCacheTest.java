@@ -15,17 +15,25 @@ limitations under the License.
 */
 package org.psidnell.omnifocus.model;
 
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 
 import org.junit.Test;
+import org.psidnell.omnifocus.format.SimpleTextListFormatter;
 import org.psidnell.omnifocus.sqlite.SQLiteDAO;
 
 public class DataCacheTest {
 
     @Test
-    public void testBuild () throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, SQLException {
+    public void testBuild () throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, SQLException, IOException {
+        OutputStreamWriter out = new OutputStreamWriter(System.out);
+        
         DataCache cache = SQLiteDAO.load();
-        cache.build();
+        for (Context c : cache.getContexts().values()) {
+            new SimpleTextListFormatter ().format(c, out);
+        }
+        out.flush();
     }
 }

@@ -39,11 +39,10 @@ import org.psidnell.omnifocus.expr.OFExprParser.NodeTypeContext;
 import org.psidnell.omnifocus.expr.OFExprParser.PropertyContext;
 import org.psidnell.omnifocus.expr.OFExprParser.PropertyNameContext;
 import org.psidnell.omnifocus.expr.OFExprParser.PropertyValueContext;
-import org.psidnell.omnifocus.osa.OSAClassDescriptor;
 
 public class ExprParser {
 
-    public static void parse (String input, Map<String, OSAClassDescriptor> descriptors) {
+    public static void parse (String input) {
         OFExprLexer lexer = new OFExprLexer(new ANTLRInputStream(input));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         
@@ -55,34 +54,18 @@ public class ExprParser {
         
         ExprContext OFExprSentenceContext = parser.expr();
         ParseTreeWalker walker = new ParseTreeWalker();
-        Listener listener = new Listener(descriptors);
+        Listener listener = new Listener();
         walker.walk(listener, OFExprSentenceContext);
     }
     
     static class Listener extends OFExprBaseListener {
         private String propertyName;
         private String propertyValue;
-        private OSAClassDescriptor desc;
-        private Map<String, OSAClassDescriptor> descriptors;
        
-       public Listener(Map<String, OSAClassDescriptor> descriptors) {
-           this.descriptors = descriptors;
-       }
-
     @Override
         public void exitNodeType(NodeTypeContext ctx) {
             String nodeType = ctx.getText();
-            try {
-                desc = descriptors.get(nodeType);
-                if (desc == null) {
-                    desc = new OSAClassDescriptor(nodeType);
-                    descriptors.put(nodeType, desc);
-                }
-                
-                System.out.println (desc.getObjectName());
-            } catch (ClassNotFoundException e) {
-                throw new IllegalStateException(e);
-            }
+           
         }
        
        @Override
@@ -100,7 +83,6 @@ public class ExprParser {
        @Override
         public void exitProperty(PropertyContext ctx) {
             System.out.println("overriding " + propertyName + ":"+ propertyValue);
-            desc.override(propertyName, propertyValue);
         }
     }
     

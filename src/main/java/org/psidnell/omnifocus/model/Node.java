@@ -17,7 +17,6 @@ package org.psidnell.omnifocus.model;
 
 import java.util.UUID;
 
-import org.psidnell.omnifocus.osa.OSAIgnore;
 import org.psidnell.omnifocus.sqlite.SQLiteProperty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -47,7 +46,6 @@ public abstract class Node {
     }
 
     @JsonIgnore
-    @OSAIgnore
     public abstract String getType();
 
     @Override

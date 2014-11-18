@@ -73,6 +73,9 @@ public class Traverser {
     
     private static void doTraverse(Visitor visitor, Folder node) throws Exception {
         visitor.enter (node);
+        for (Folder child : node.getFolders()) {
+            doTraverse (visitor, child);
+        }
         for (Project child : node.getProjects()) {
             doTraverse (visitor, child);
         }
@@ -90,6 +93,9 @@ public class Traverser {
     private static void doTraverse(Visitor visitor, Context node) throws Exception {
         visitor.enter (node);
         for (Task child : node.getTasks()) {
+            doTraverse (visitor, child);
+        }
+        for (Context child : node.getContexts()) {
             doTraverse (visitor, child);
         }
         visitor.exit(node);

@@ -18,8 +18,6 @@ package org.psidnell.omnifocus.model;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.psidnell.omnifocus.osa.OSAIgnore;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class Group extends Node {
@@ -38,7 +36,6 @@ public class Group extends Node {
 
     @Override
     @JsonIgnore
-    @OSAIgnore
     public String getType() {
         return TYPE;
     }

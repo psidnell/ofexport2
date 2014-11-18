@@ -18,8 +18,7 @@ package org.psidnell.omnifocus.model;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.psidnell.omnifocus.osa.OSACollection;
-import org.psidnell.omnifocus.osa.OSAIgnore;
+import org.psidnell.omnifocus.sqlite.SQLiteProperty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -28,19 +27,38 @@ public class Context extends Node {
     public static final String TYPE = "Context";
 
     private List<Task> tasks = new LinkedList<>();
+    
+    private List<Context> contexts = new LinkedList<>();
+    
+    private String parentContextId;
+    
+    @SQLiteProperty (name="parent")
+    public String getParentContextId () {
+        return parentContextId;
+    }
+    
+    public void setParentContextId (String parentContextId) {
+        this.parentContextId = parentContextId;
+    }
 
     public void setTasks(List<Task> tasks) {
         this.tasks = tasks;
     }
 
-    @OSACollection(type=Task.class)
     public List<Task> getTasks() {
         return tasks;
+    }
+    
+    public List<Context> getContexts() {
+        return contexts;
+    }
+    
+    public void setContexts (List<Context> contexts) {
+        this.contexts = contexts;
     }
 
     @Override
     @JsonIgnore
-    @OSAIgnore
     public String getType() {
         return TYPE;
     }

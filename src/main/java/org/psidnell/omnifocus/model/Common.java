@@ -21,10 +21,6 @@ import java.util.List;
 
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
-import org.psidnell.omnifocus.osa.OSACollection;
-import org.psidnell.omnifocus.osa.OSADefaultValue;
-import org.psidnell.omnifocus.osa.OSAIgnore;
-import org.psidnell.omnifocus.osa.OSAAdaptation;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -50,12 +46,10 @@ public abstract class Common extends Node {
         this.tasks = tasks;
     }
 
-    @OSACollection(type=Task.class)
     public List<Task> getTasks() {
         return tasks;
     }
     
-    @OSAAdaptation(pattern="nameOf(o.%s())")
     public String getContext() {
         return context;
     }
@@ -68,7 +62,6 @@ public abstract class Common extends Node {
         return note;
     }
 
-    @OSADefaultValue(value="")
     public void setNote(String note) {
         this.note = note;
     }
@@ -78,7 +71,6 @@ public abstract class Common extends Node {
     }
 
     @JsonIgnore
-    @OSAIgnore
     public Date getDeferDateAsDate() {
         return deferDate;
     }
@@ -93,7 +85,6 @@ public abstract class Common extends Node {
     }
 
     @JsonIgnore
-    @OSAIgnore
     public Date getDueDateAsDate() {
         return dueDate;
     }
@@ -108,7 +99,6 @@ public abstract class Common extends Node {
     }
 
     @JsonIgnore
-    @OSAIgnore
     public Date getCompletionDateAsDate() {
         return completionDate;
     }

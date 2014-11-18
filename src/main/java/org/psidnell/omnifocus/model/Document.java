@@ -17,10 +17,6 @@ package org.psidnell.omnifocus.model;
 
 import java.util.List;
 
-import org.psidnell.omnifocus.osa.OSACollection;
-import org.psidnell.omnifocus.osa.OSADefaultValue;
-import org.psidnell.omnifocus.osa.OSAIgnore;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class Document extends Node {
@@ -35,8 +31,6 @@ public class Document extends Node {
         name = "Document";
     }
     
-    @OSACollection(type=Project.class)
-    @OSADefaultValue(value="[]")
     public List<Project> getProjects () {
         return projects;
     }
@@ -45,8 +39,6 @@ public class Document extends Node {
         this.projects = projects;
     }
     
-    @OSACollection(type=Folder.class)
-    @OSADefaultValue(value="[]")
     public List<Folder> getFolders () {
         return folders;
     }
@@ -55,8 +47,6 @@ public class Document extends Node {
         this.folders = folders;
     }
     
-    @OSACollection(type=Context.class)
-    @OSADefaultValue(value="[]")
     public List<Context> getContexts () {
         return contexts;
     }
@@ -65,8 +55,6 @@ public class Document extends Node {
         this.contexts = contexts;
     }
     
-    @OSACollection(type=Task.class)
-    @OSADefaultValue(value="[]")
     public List<Task> getTasks () {
         return tasks;
     }
@@ -77,7 +65,6 @@ public class Document extends Node {
     
     @Override
     @JsonIgnore
-    @OSAIgnore
     public String getType() {
         return TYPE;
     }

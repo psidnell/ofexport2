@@ -81,14 +81,4 @@ public class SQLiteDAOTest {
             System.out.println(context.getId() + ":" + context.getName());
         }
     }
-    
-    @Test
-    public void testLoadDataCache () throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, SQLException {
-        DataCache dataCache = SQLiteDAO.load();
-        assertFalse (dataCache.getFolders().isEmpty());
-        assertFalse (dataCache.getProjInfos().isEmpty());
-        assertFalse (dataCache.getTasks().isEmpty());
-        assertFalse (dataCache.getContexts().isEmpty());
-    }
-
 }

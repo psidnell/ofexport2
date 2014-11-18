@@ -15,8 +15,9 @@ limitations under the License.
 */
 package org.psidnell.omnifocus.model;
 
-import org.psidnell.omnifocus.osa.OSAAdaptation;
-import org.psidnell.omnifocus.osa.OSAIgnore;
+import java.util.Collection;
+
+import org.psidnell.omnifocus.sqlite.SQLiteProperty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -27,8 +28,29 @@ public class Task extends Common {
     private String containingProject;
     private boolean next;
     private boolean blocked;
+    
+    private String parentTaskId;
 
-    @OSAAdaptation(pattern="nameOf(o.%s())")
+    private String contextId;
+    
+    @SQLiteProperty (name="context")
+    public String getContextId () {
+        return contextId;
+    }
+    
+    public void setContextId (String contextId) {
+        this.contextId = contextId;
+    }
+    
+    @SQLiteProperty (name="parent")
+    public String getParentTaskId () {
+        return parentTaskId;
+    }
+    
+    public void setParentTaskId (String parentFolderId) {
+        this.parentTaskId = parentFolderId;
+    }
+
     public String getContainingProject() {
         return containingProject;
     }
@@ -39,7 +61,6 @@ public class Task extends Common {
 
     @Override
     @JsonIgnore
-    @OSAIgnore
     public String getType() {
         return TYPE;
     }

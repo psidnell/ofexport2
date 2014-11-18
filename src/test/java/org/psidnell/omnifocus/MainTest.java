@@ -18,21 +18,21 @@ package org.psidnell.omnifocus;
 import org.junit.Test;
 
 public class MainTest {
-    @Test
-    public void test() throws Exception {
-        Main.main(new String[] {
-                "-f", "TestFolder",
-                "-format", "SimpleTextList"});
-    }
+    //@Test
+    //public void test() throws Exception {
+    //    Main.main(new String[] {
+    //            "-f", "TestFolder",
+    //            "-format", "SimpleTextList"});
+    //}
     
-    @Test
-    public void test2() throws Exception {
-        // TODO I AM HERE
-        Main.main(new String[] {
-                "-e",
-                "Document.tasks:inboxTasks",
-                "-format", "SimpleTextList"});
-    }
+    //@Test
+    //public void test2() throws Exception {
+    //    // TODO I AM HERE
+    //    Main.main(new String[] {
+    //            "-e",
+    //            "Document.tasks:inboxTasks",
+    //            "-format", "SimpleTextList"});
+    //}
     
     //@Test
     //public void test3() throws Exception {
@@ -44,15 +44,15 @@ public class MainTest {
     //            "-format", "SimpleTextFormat"});
     //}
     
-    @Test
-    public void test4() throws Exception {
-        // TODO I AM HERE
-        Main.main(new String[] {
-                "-e", "Document.contexts:flattenedContexts.whose({name:'Home'})",
-                "-e", "Context.tasks:tasks.whose({_and:[{completed:true},{ completionDate: { \">=\": new Date(2014, 10, 10, 0, 0, 0, 0) } }]})",
-                "-e", "Task.tasks:tasks.whose({_and:[{completed:true},{ completionDate: { \">=\": new Date(2014, 10, 10, 0, 0, 0, 0) } }]})",
-                "-format", "JSON"});
-    }
+    //@Test
+    //public void test4() throws Exception {
+    //    // TODO I AM HERE
+    //    Main.main(new String[] {
+    //            "-e", "Document.contexts:flattenedContexts.whose({name:'Home'})",
+    //            "-e", "Context.tasks:tasks.whose({_and:[{completed:true},{ completionDate: { \">=\": new Date(2014, 10, 10, 0, 0, 0, 0) } }]})",
+    //            "-e", "Task.tasks:tasks.whose({_and:[{completed:true},{ completionDate: { \">=\": new Date(2014, 10, 10, 0, 0, 0, 0) } }]})",
+    //            "-format", "JSON"});
+   // }
     
     //@Test
     //public void test2() throws Exception {
@@ -69,8 +69,8 @@ public class MainTest {
     //    Main.main(new String[] {"-a", "All", "-f", "TestFolder", "-format", "TaskPaper"});
     //}
 
-    //@Test
-    //public void testHelp() throws Exception {
-    //    Main.main(new String[] { "-h" });
-   //}
+    @Test
+    public void testHelp() throws Exception {
+        Main.main(new String[] { "-h" });
+   }
 }
