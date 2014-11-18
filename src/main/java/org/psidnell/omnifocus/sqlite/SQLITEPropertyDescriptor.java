@@ -13,23 +13,28 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-package org.psidnell.omnifocus.format;
+package org.psidnell.omnifocus.sqlite;
 
-import java.io.IOException;
-import java.io.Writer;
+import java.lang.reflect.Method;
 
-import org.psidnell.omnifocus.model.Node;
+public class SQLITEPropertyDescriptor {
 
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+    private String name;
+    private Class type;
+    private Method setter;
 
-public class XMLFormatter implements Formatter {
-
-    private static XmlMapper MAPPER = new XmlMapper();
-
-    @Override
-    public void format(Node node, Writer out) throws IOException {
-        MAPPER.enable(SerializationFeature.INDENT_OUTPUT);
-        MAPPER.writeValue(out, node);
+    public SQLITEPropertyDescriptor(String name, Method setter, Class type) {
+        this.name = name;
+        this.setter = setter;
+        this.type = type;
     }
+
+    public Method getSetter() {
+        return setter;
+    }
+
+    public String getName() {
+        return name;
+    }
+    
 }

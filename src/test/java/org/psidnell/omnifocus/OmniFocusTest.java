@@ -56,7 +56,6 @@ public class OmniFocusTest extends EnvironmentTest {
     }
     
     @Test
-    // TODO I AM HERE
     public void testLoadRootDocument_withRootProjects () throws IOException, ClassNotFoundException, ScriptException {
         String value = "Document.projects:flattenedProjects.whose({name:'TestProject'})";
         HashMap<String, OSAClassDescriptor> descs = new HashMap<>();

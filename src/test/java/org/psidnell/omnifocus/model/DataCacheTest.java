@@ -13,23 +13,19 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-package org.psidnell.omnifocus.format;
+package org.psidnell.omnifocus.model;
 
-import java.io.IOException;
-import java.io.Writer;
+import java.lang.reflect.InvocationTargetException;
+import java.sql.SQLException;
 
-import org.psidnell.omnifocus.model.Node;
+import org.junit.Test;
+import org.psidnell.omnifocus.sqlite.SQLiteDAO;
 
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+public class DataCacheTest {
 
-public class XMLFormatter implements Formatter {
-
-    private static XmlMapper MAPPER = new XmlMapper();
-
-    @Override
-    public void format(Node node, Writer out) throws IOException {
-        MAPPER.enable(SerializationFeature.INDENT_OUTPUT);
-        MAPPER.writeValue(out, node);
+    @Test
+    public void testBuild () throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, SQLException {
+        DataCache cache = SQLiteDAO.load();
+        cache.build();
     }
 }

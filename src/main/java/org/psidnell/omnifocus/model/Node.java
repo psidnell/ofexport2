@@ -18,6 +18,7 @@ package org.psidnell.omnifocus.model;
 import java.util.UUID;
 
 import org.psidnell.omnifocus.osa.OSAIgnore;
+import org.psidnell.omnifocus.sqlite.SQLiteProperty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -27,6 +28,7 @@ public abstract class Node {
 
     private String id = UUID.randomUUID().toString();
 
+    @SQLiteProperty
     public String getName() {
         return name;
     }
@@ -35,6 +37,7 @@ public abstract class Node {
         this.name = name;
     }
 
+    @SQLiteProperty (name="persistentIdentifier")
     public String getId() {
         return id;
     }

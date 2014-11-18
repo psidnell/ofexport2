@@ -69,7 +69,7 @@ public class ActiveOption<P> extends Option {
         }
     }
 
-    void process (P program) throws IOException, ScriptException, ParseException {
+    void process (P program) throws Exception {
         processor.process(program, this);
     }
     

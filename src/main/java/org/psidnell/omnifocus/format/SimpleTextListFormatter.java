@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.psidnell.omnifocus.model.Context;
+import org.psidnell.omnifocus.model.Document;
 import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Group;
 import org.psidnell.omnifocus.model.Node;
@@ -56,6 +57,18 @@ public class SimpleTextListFormatter implements Formatter {
             this.out = out;
         }
     
+        @Override
+        public void enter(Document node) throws IOException {
+            out.write(indent(depth));
+            out.write(node.getName());
+            out.write("\n");
+            depth++;
+        }
+        
+        @Override
+        public void exit (Document node) {
+            depth--;
+        }
         
         @Override
         public void enter(Folder node) throws IOException {
@@ -86,6 +99,7 @@ public class SimpleTextListFormatter implements Formatter {
         public void enter(Project node)
                 throws IOException {
             out.write(indent(depth));
+            printTickBox(node);
             out.write(node.getName());
             out.write("\n");
             depth++;
@@ -111,7 +125,12 @@ public class SimpleTextListFormatter implements Formatter {
     
         public void enter(Task node) throws IOException {
             out.write(indent(depth));
-            out.write("- ");
+            if (node.isCompleted()) {
+                out.write("[X] ");
+            }
+            else {
+                out.write("[ ] ");
+            }
             out.write(node.getName());
             out.write("\n");
             depth++;
@@ -128,6 +147,15 @@ public class SimpleTextListFormatter implements Formatter {
                 indent.append(INDENT);
             }
             return indent.toString();
+        }
+        
+        private void printTickBox(Project node) throws IOException {
+            if (node.isCompleted()) {
+                out.write("[X] ");
+            }
+            else {
+                out.write("[ ] ");
+            }
         }
     }
 }

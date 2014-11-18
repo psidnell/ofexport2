@@ -16,12 +16,19 @@ limitations under the License.
 package org.psidnell.omnifocus.visitor;
 
 import org.psidnell.omnifocus.model.Context;
+import org.psidnell.omnifocus.model.Document;
 import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Group;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
 
 public interface Visitor {
+    
+    default void enter(Document node) throws Exception {
+    }
+
+    default void exit(Document node) throws Exception {
+    }
     
     default void enter(Folder node) throws Exception {
     }

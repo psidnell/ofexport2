@@ -13,23 +13,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-package org.psidnell.omnifocus.format;
+package org.psidnell.omnifocus.sqlite;
 
-import java.io.IOException;
-import java.io.Writer;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-import org.psidnell.omnifocus.model.Node;
-
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-
-public class XMLFormatter implements Formatter {
-
-    private static XmlMapper MAPPER = new XmlMapper();
-
-    @Override
-    public void format(Node node, Writer out) throws IOException {
-        MAPPER.enable(SerializationFeature.INDENT_OUTPUT);
-        MAPPER.writeValue(out, node);
-    }
+@Retention(RetentionPolicy.RUNTIME)
+public @interface SQLiteProperty {
+    String name() default "";
 }

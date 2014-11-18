@@ -19,29 +19,36 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
 
 import javax.script.ScriptException;
 
 import org.apache.commons.cli.Options;
 import org.psidnell.omnifocus.cli.ActiveOption;
 import org.psidnell.omnifocus.cli.ActiveOptionProcessor;
+import org.psidnell.omnifocus.expr.ExprParser;
 import org.psidnell.omnifocus.filter.Filter;
 import org.psidnell.omnifocus.format.Formatter;
 import org.psidnell.omnifocus.model.Context;
+import org.psidnell.omnifocus.model.Document;
 import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Group;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
 import org.psidnell.omnifocus.organise.TaskSorter;
+import org.psidnell.omnifocus.osa.OSAClassDescriptor;
 
 public class Main {
     
     final static Options OPTIONS = new Options();
     static {
         
-        OPTIONS.addOption(new ActiveOption<Main>(
-                "allfolders", false, "Load projects and tasks from all folders",
-                (m,o)->m.processAllFolders(o)));
+
+        //OPTIONS.addOption(new ActiveOption<Main>(
+        //        "allfolders", false, "Load projects and tasks from all folders",
+        //        (m,o)->m.processAllFolders(o)));
         
         OPTIONS.addOption(new ActiveOption<Main> (
                 "h", "help", false, "print help",
@@ -52,40 +59,44 @@ public class Main {
                 (m,o)->m.processFolderName(o)));
         
         OPTIONS.addOption(new ActiveOption<Main>(
-                "c", "contextname", true, "Load tasks from context specified by name",
-                (m,o)->m.processContextName(o)));
+                "e", "documentexpr", true, "???????",
+                (m,o)->m.processExpr(o)));
         
-        OPTIONS.addOption(new ActiveOption<Main>(
-                "p", "projectname", true, "Load tasks from project specified by name",
-                (m,o)->m.processProjectName(o)));
+        //OPTIONS.addOption(new ActiveOption<Main>(
+        //        "c", "contextname", true, "Load tasks from context specified by name",
+        //        (m,o)->m.processContextName(o)));
         
-        OPTIONS.addOption(new ActiveOption<Main>(
-                "i", "inbox", false, "Load tasks from the inbox",
-                (m,o)->m.processInbox()));
+        //OPTIONS.addOption(new ActiveOption<Main>(
+        //        "p", "projectname", true, "Load tasks from project specified by name",
+        //        (m,o)->m.processProjectName(o)));
         
-        OPTIONS.addOption(new ActiveOption<Main> (
-                "flagged", true, "flagged (true|false)",
-                (m,o)->m.processFlagged (o)));
+        //OPTIONS.addOption(new ActiveOption<Main>(
+        //        "i", "inbox", false, "Load tasks from the inbox",
+        //        (m,o)->m.processInbox()));
         
-        OPTIONS.addOption(new ActiveOption<Main> (
-                "a", "availability", true, "availability (" + Arrays.asList(Availability.values()) + ")".replaceAll(",", "|"),
-                (m,o)->m.processAvailability (o)));
+        //OPTIONS.addOption(new ActiveOption<Main> (
+        //        "flagged", true, "flagged (true|false)",
+        //        (m,o)->m.processFlagged (o)));
         
-        OPTIONS.addOption(new ActiveOption<Main> (
-                "F", "folderexpr", true, "expression",
-                (m,o)->m.processFolderExpression (o)));
+        //OPTIONS.addOption(new ActiveOption<Main> (
+        //        "a", "availability", true, "availability (" + Arrays.asList(Availability.values()) + ")".replaceAll(",", "|"),
+        //        (m,o)->m.processAvailability (o)));
         
-        OPTIONS.addOption(new ActiveOption<Main> (
-                "P", "projectexpr", true, "expression",
-                (m,o)->m.processProjectExpression (o)));
+        //OPTIONS.addOption(new ActiveOption<Main> (
+        //        "F", "folderexpr", true, "expression",
+        //        (m,o)->m.processFolderExpression (o)));
         
-        OPTIONS.addOption(new ActiveOption<Main> (
-                "T", "taskexpr", true, "expression",
-                (m,o)->m.processTaskExpression (o)));
+        //OPTIONS.addOption(new ActiveOption<Main> (
+        //        "P", "projectexpr", true, "expression",
+        //        (m,o)->m.processProjectExpression (o)));
         
-        OPTIONS.addOption(new ActiveOption<Main> (
-                "C", "contextexpr", true, "expression",
-                (m,o)->m.processContextExpression (o)));
+        //OPTIONS.addOption(new ActiveOption<Main> (
+        //        "T", "taskexpr", true, "expression",
+        //        (m,o)->m.processTaskExpression (o)));
+        
+        //OPTIONS.addOption(new ActiveOption<Main> (
+        //        "C", "contextexpr", true, "expression",
+        //        (m,o)->m.processContextExpression (o)));
         
         OPTIONS.addOption(new ActiveOption<Main> (
                 "format", true, "format",
@@ -148,11 +159,19 @@ public class Main {
         }
     }
     
-    private void processFolderName(ActiveOption<Main> o) throws IOException, ScriptException {
+    private void processFolderName(ActiveOption<Main> o) throws IOException, ScriptException, ClassNotFoundException {        
+        HashMap<String, OSAClassDescriptor> descriptors = of.getDescriptors ();
         String folderName = o.nextValue();
-        for (Folder f : of.getFoldersByName(folderName, projectExpr, taskExpr)) {
-            root.addChild(f);
-        }
+        String exprStr = "Document.folders:flattenedFolders.where({name:'" + escape(folderName) + "'})";
+        ExprParser.parse(exprStr, descriptors);
+        
+    }
+    
+    private void processExpr(ActiveOption<Main> o) throws IOException, ScriptException, ClassNotFoundException {        
+        HashMap<String, OSAClassDescriptor> descriptors = of.getDescriptors ();
+        String exprStr = o.nextValue();
+        ExprParser.parse(exprStr, descriptors);
+        
     }
     
     private void processProjectName(ActiveOption<Main> o) throws IOException, ScriptException {
@@ -178,10 +197,15 @@ public class Main {
         root.addChild(inbox);
     }
     
-    private void run () throws IOException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+    private void run () throws IOException, InstantiationException, IllegalAccessException, ClassNotFoundException, ScriptException {
 
+        String json = of.execute(of.getDescriptors().values());
+        Document d = of.asDocument(json);
+        root.addChild(d);
+        
         String formatterClassName = "org.psidnell.omnifocus.format." + format + "Formatter";
         Formatter formatter = (Formatter) Class.forName(formatterClassName).newInstance();
+        
         
         TaskSorter sorter = new TaskSorter();
         sorter.organise(root);
@@ -210,5 +234,7 @@ public class Main {
         main.run ();
     }
     
-
+    private static final String escape(String str) {
+        return str.replaceAll("'", "\\'");
+    }
 }

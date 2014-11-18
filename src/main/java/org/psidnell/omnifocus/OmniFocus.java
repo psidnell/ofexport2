@@ -55,6 +55,8 @@ public class OmniFocus {
     private static final String EOL = System.getProperty("line.separator");
 
     private final String library;
+    
+    private HashMap<String, OSAClassDescriptor> descriptors = new HashMap<>();
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -63,25 +65,26 @@ public class OmniFocus {
     private HashMap<String, Context> contextCache = new HashMap<>();
     private HashMap<String, Folder> folderCache = new HashMap<>();
 
-    public OmniFocus() throws IOException {
+    public OmniFocus() throws IOException, ClassNotFoundException {
         try (Reader src = new InputStreamReader(OmniFocus.class.getResourceAsStream(HEADER_RESOURCE))) {
             // Load in the javascript header functions
             library = load(src);      
         }
-    }
-    
-    protected String execute(Collection<OSAClassDescriptor> pathExpr) throws IOException, ScriptException, ClassNotFoundException {
-         
-        StringBuilder buf = new StringBuilder ();
-
+        
         // Set up defaults
-        HashMap<String, OSAClassDescriptor> descriptors = new HashMap<>();
         descriptors.put("Document", new OSAClassDescriptor(Document.class));
         descriptors.put("Folder", new OSAClassDescriptor(Folder.class));
         descriptors.put("Project", new OSAClassDescriptor(Project.class));
         descriptors.put("Task", new OSAClassDescriptor(Task.class));
         descriptors.put("Context", new OSAClassDescriptor(Context.class));
         
+    }
+    
+    protected String execute(Collection<OSAClassDescriptor> pathExpr) throws IOException, ScriptException, ClassNotFoundException {
+         
+        StringBuilder buf = new StringBuilder ();
+
+       
         // Override with descriptors in the path expression
         for (OSAClassDescriptor desc : pathExpr) {
             descriptors.put(desc.getObjectName(), desc);
@@ -93,7 +96,7 @@ public class OmniFocus {
         }
         
         // Add command to translate root document
-        buf.append("console.log(JSON.stringify(mapDocument(doc)))");
+        buf.append("console.log(JSON.stringify(mapDocument(doc)));");
         
         return execute (buf.toString());
     }
@@ -357,5 +360,9 @@ public class OmniFocus {
 
     private String trailingOptArg(String val) {
         return val == null ? "" : ", " + val;
+    }
+
+    public HashMap<String, OSAClassDescriptor> getDescriptors() {
+        return descriptors;
     }
 }

@@ -22,6 +22,7 @@ import java.util.List;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 import org.psidnell.omnifocus.osa.OSACollection;
+import org.psidnell.omnifocus.osa.OSADefaultValue;
 import org.psidnell.omnifocus.osa.OSAIgnore;
 import org.psidnell.omnifocus.osa.OSAAdaptation;
 
@@ -67,6 +68,7 @@ public abstract class Common extends Node {
         return note;
     }
 
+    @OSADefaultValue(value="")
     public void setNote(String note) {
         this.note = note;
     }

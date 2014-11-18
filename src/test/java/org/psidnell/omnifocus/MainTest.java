@@ -20,26 +20,57 @@ import org.junit.Test;
 public class MainTest {
     @Test
     public void test() throws Exception {
-       // Main.main(new String[] {"-e", "{name: 'Hello'}", "-p", "Home", "-c", "Home", "-i"});
+        Main.main(new String[] {
+                "-f", "TestFolder",
+                "-format", "SimpleTextList"});
     }
     
     @Test
     public void test2() throws Exception {
-        Main.main(new String[] {"-a", "All", "-T", "{name: 'README'}", "-p", "ofexport2", "-flagged", "false", "-format", "SimpleTextList"});
+        // TODO I AM HERE
+        Main.main(new String[] {
+                "-e",
+                "Document.tasks:inboxTasks",
+                "-format", "SimpleTextList"});
     }
     
-    @Test
-    public void test3() throws Exception {
-        Main.main(new String[] {"-a", "All", "-p", "ofexport2", "-format", "TaskPaper"});
-    }
+    //@Test
+    //public void test3() throws Exception {
+    //    // TODO I AM HERE
+    //    Main.main(new String[] {
+    //            "-e", "Document.contexts:flattenedContexts.whose({name:'Home'})",
+    //            "-e", "Context.tasks:remainingTasks",
+    //            "-e", "Task.tasks:tasks.whose({_and:[{completed:false},{blocked:false}]})",
+    //            "-format", "SimpleTextFormat"});
+    //}
     
     @Test
     public void test4() throws Exception {
-        Main.main(new String[] {"-a", "All", "-f", "TestFolder", "-format", "TaskPaper"});
+        // TODO I AM HERE
+        Main.main(new String[] {
+                "-e", "Document.contexts:flattenedContexts.whose({name:'Home'})",
+                "-e", "Context.tasks:tasks.whose({_and:[{completed:true},{ completionDate: { \">=\": new Date(2014, 10, 10, 0, 0, 0, 0) } }]})",
+                "-e", "Task.tasks:tasks.whose({_and:[{completed:true},{ completionDate: { \">=\": new Date(2014, 10, 10, 0, 0, 0, 0) } }]})",
+                "-format", "JSON"});
     }
+    
+    //@Test
+    //public void test2() throws Exception {
+    //    Main.main(new String[] {"-a", "All", "-T", "{name: 'README'}", "-p", "ofexport2", "-flagged", "false", "-format", "SimpleTextList"});
+    //}
+    
+    //@Test
+    //public void test3() throws Exception {
+    //    Main.main(new String[] {"-a", "All", "-p", "ofexport2", "-format", "TaskPaper"});
+    //}
+    
+    //@Test
+    //public void test4() throws Exception {
+    //    Main.main(new String[] {"-a", "All", "-f", "TestFolder", "-format", "TaskPaper"});
+    //}
 
-    @Test
-    public void testHelp() throws Exception {
-        Main.main(new String[] { "-h" });
-    }
+    //@Test
+    //public void testHelp() throws Exception {
+    //    Main.main(new String[] { "-h" });
+   //}
 }
