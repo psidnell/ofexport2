@@ -15,10 +15,13 @@ limitations under the License.
 */
 package org.psidnell.omnifocus.visitor;
 
+import java.util.List;
+
 import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.Document;
 import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Group;
+import org.psidnell.omnifocus.model.Node;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
 
@@ -58,5 +61,25 @@ public interface Visitor {
     }
 
     default void exit(Group node) throws Exception {
+    }
+
+    default List<Folder> filterFolders(List<Folder> folders) {
+        return folders;
+    }
+
+    default List<Project> filterProjects(List<Project> projects) {
+        return projects;
+    }
+
+    default List<Context> filterContexts(List<Context> contexts) {
+        return contexts;
+    }
+
+    default List<Task> filterTasks(List<Task> tasks) {
+        return tasks;
+    }
+
+    default List<Node> filterChildren(List<Node> children) {
+        return children;
     }
 }

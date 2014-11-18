@@ -19,11 +19,13 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import org.psidnell.omnifocus.Availability;
+
 public class DataCache {
     
     private HashMap<String, Folder> folders;
     private HashMap<String, ProjectInfo> projInfos;
-    private HashMap<String, Task> tasks;
+    private HashMap<String, Task> tasks;    
     private HashMap<String, Context> contexts;
     private HashMap<String, Project> projects;
 
@@ -57,14 +59,7 @@ public class DataCache {
     }
     
     private final void build() {
-        
-        // Create Projects from their root tasks
-        for (ProjectInfo projInfo : projInfos.values()) {
-            Task rootTask = tasks.get(projInfo.getRootTaskId());
-            Project project = new Project (rootTask);
-            projects.put (project.getId (), project);
-        }
-        
+
         // Build Folder Hierarchy
         for (Folder folder : folders.values()) {
             String parentId = folder.getParentFolderId();
@@ -88,7 +83,6 @@ public class DataCache {
             String parentId = context.getParentContextId();
             if (parentId != null) {
                 Context parent = contexts.get(parentId);
-                System.out.println ("Knitting " + context.getName() + " and " + parent.getName());
                 parent.getContexts().add(context);
             }
         }
@@ -100,6 +94,15 @@ public class DataCache {
                 Context context = contexts.get(contextId);
                 context.getTasks().add(task);
             }
+        }
+        
+        // Create Projects from their root tasks
+        // Must do this after task hierarchy is woven
+        // since a copy of the root tasks subtasks is taken
+        for (ProjectInfo projInfo : projInfos.values()) {
+            Task rootTask = tasks.get(projInfo.getRootTaskId());
+            Project project = new Project (rootTask);
+            projects.put (project.getId (), project);
         }
     }
 
@@ -119,5 +122,7 @@ public class DataCache {
         return contexts;
     }
 
-   
+    public HashMap<String,Project> getProjects() {
+        return projects;
+    }
 }

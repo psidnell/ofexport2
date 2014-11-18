@@ -15,6 +15,7 @@ limitations under the License.
 */
 package org.psidnell.omnifocus.model;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class Group extends Node {
 
     private List<Node> children = new LinkedList<>();
 
-    public List<? extends Node> getChildren() {
+    public List<Node> getChildren() {
         return children;
     }
 
@@ -38,5 +39,13 @@ public class Group extends Node {
     @JsonIgnore
     public String getType() {
         return TYPE;
+    }
+
+    public void setChildren(List<Node> children) {
+        this.children = children;
+    }
+
+    public void addChildildren(Collection<Node> children) {
+        children.addAll(children);
     }
 }

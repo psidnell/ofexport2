@@ -22,8 +22,6 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import org.psidnell.omnifocus.model.Task;
-
 public class SQLiteClassDescriptor<T> {
     private String columnsForSelect;
     private LinkedList<SQLITEPropertyDescriptor> properties = new LinkedList<>();
@@ -62,13 +60,29 @@ public class SQLiteClassDescriptor<T> {
         while (rs.next()) {
             T instance = clazz.newInstance();
             for (SQLITEPropertyDescriptor desc : properties) {
-                Object rawValue = rs.getObject(desc.getName());
-                // TODO type conversion
+                Object rawValue;
+                rawValue = getValue(rs, desc);
                 desc.getSetter().invoke(instance, rawValue);
             }
             tasks.add (instance);
         }
         return tasks;
+    }
+
+    private Object getValue(ResultSet rs, SQLITEPropertyDescriptor desc) throws SQLException {
+        Object rawValue;
+        switch (desc.getType().getSimpleName()) {
+            case "String":
+                rawValue = rs.getString(desc.getName());
+                break;
+            case "Date":
+                rawValue = rs.getDate(desc.getName());
+                break;
+            default:
+                rawValue = rs.getObject(desc.getName());
+                break;
+        }
+        return rawValue;
     }
 
     

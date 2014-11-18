@@ -30,7 +30,7 @@ public class TaskSorter implements Organiser {
     @Override
     public Node organise(Node root) {
         
-        Traverser.traverse(new SortingVisitor(), root);
+        Traverser.traverse(new SortingVisitor(), root, false);
         
         return root;
     }
@@ -52,11 +52,11 @@ public class TaskSorter implements Organiser {
 
         @Override
         public int compare(Task o1, Task o2) {
-            int result = cmp (o1.getCompletionDateAsDate(), o2.getCompletionDateAsDate());
+            int result = cmp (o1.getCompletionDate(), o2.getCompletionDate());
             if (result != 0) {
                 return result;
             }
-            result = cmp (o1.getDeferDateAsDate(), o2.getCompletionDateAsDate());
+            result = cmp (o1.getDeferDate(), o2.getCompletionDate());
             
             return 0;
         }

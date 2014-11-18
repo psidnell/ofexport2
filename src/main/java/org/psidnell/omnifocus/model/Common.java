@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
+import org.psidnell.omnifocus.sqlite.SQLiteProperty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -31,11 +32,8 @@ public abstract class Common extends Node {
 
     private String context;
     private String note;
-    private String deferDateString;
     private Date deferDate;
-    private String dueDateString;
     private Date dueDate;
-    private String completionDateString;
     private Date completionDate;
     private boolean completed;
     private boolean sequential;
@@ -66,46 +64,31 @@ public abstract class Common extends Node {
         this.note = note;
     }
 
-    public String getDeferDate() {
-        return deferDateString;
-    }
-
-    @JsonIgnore
-    public Date getDeferDateAsDate() {
+    @SQLiteProperty(name="dateToStart")
+    public Date getDeferDate() {
         return deferDate;
     }
 
-    public void setDeferDate(String deferDate) {
-        this.deferDateString = deferDate;
-        this.deferDate = parseDate(deferDate);
+    public void setDeferDate(Date deferDate) {
+        this.deferDate = deferDate;
     }
 
-    public String getDueDate() {
-        return dueDateString;
-    }
-
-    @JsonIgnore
-    public Date getDueDateAsDate() {
+    @SQLiteProperty(name="dateDue")
+    public Date getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(String dueDateString) {
-        this.dueDateString = dueDateString;
-        this.dueDate = parseDate(dueDateString);
+    public void setDueDate(Date dueDate) {
+        this.dueDate = dueDate;
     }
 
-    public String getCompletionDate() {
-        return completionDateString;
-    }
-
-    @JsonIgnore
-    public Date getCompletionDateAsDate() {
+    @SQLiteProperty(name="dateCompleted")
+    public Date getCompletionDate() {
         return completionDate;
     }
 
-    public void setCompletionDate(String completionDateString) {
-        this.completionDateString = completionDateString;
-        this.completionDate = parseDate(completionDateString);
+    public void setCompletionDate(Date completionDate) {
+        this.completionDate = completionDate;
     }
 
     public boolean isCompleted() {

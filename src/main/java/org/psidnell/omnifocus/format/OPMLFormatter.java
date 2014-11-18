@@ -48,10 +48,10 @@ public class OPMLFormatter implements Formatter {
         if (root.getType().equals(Group.TYPE) && root.getName().equals("")) {
             Group group = (Group) root;
             for (Node child : group.getChildren()) {
-                Traverser.traverse(visitor, child);
+                Traverser.traverse(visitor, child, false);
             }
         } else {
-            Traverser.traverse(visitor, root);
+            Traverser.traverse(visitor, root, false);
         }
         out.write("</body>");
     }

@@ -18,6 +18,10 @@ package org.psidnell.omnifocus;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.lang.reflect.InvocationTargetException;
+import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.script.ScriptException;
 
@@ -26,8 +30,17 @@ import org.psidnell.omnifocus.cli.ActiveOption;
 import org.psidnell.omnifocus.cli.ActiveOptionProcessor;
 import org.psidnell.omnifocus.filter.Filter;
 import org.psidnell.omnifocus.format.Formatter;
+import org.psidnell.omnifocus.model.Context;
+import org.psidnell.omnifocus.model.DataCache;
+import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Group;
+import org.psidnell.omnifocus.model.Node;
+import org.psidnell.omnifocus.model.Project;
+import org.psidnell.omnifocus.model.Task;
 import org.psidnell.omnifocus.organise.TaskSorter;
+import org.psidnell.omnifocus.sqlite.SQLiteDAO;
+import org.psidnell.omnifocus.visitor.Traverser;
+import org.psidnell.omnifocus.visitor.Visitor;
 
 public class Main {
     
@@ -55,9 +68,9 @@ public class Main {
         //        "c", "contextname", true, "Load tasks from context specified by name",
         //        (m,o)->m.processContextName(o)));
         
-        //OPTIONS.addOption(new ActiveOption<Main>(
-        //        "p", "projectname", true, "Load tasks from project specified by name",
-        //        (m,o)->m.processProjectName(o)));
+        OPTIONS.addOption(new ActiveOption<Main>(
+                "p", "projectname", true, "Load tasks from project specified by name",
+                (m,o)->m.processProjectName(o)));
         
         //OPTIONS.addOption(new ActiveOption<Main>(
         //        "i", "inbox", false, "Load tasks from the inbox",
@@ -94,7 +107,6 @@ public class Main {
 
     public static final String PROG = "ofexport2";
     
-    private final Group root;
     private String taskExpr = null;
     private String projectExpr = null;
     private String contextExpr = null;
@@ -102,14 +114,49 @@ public class Main {
     private Availability availability = Availability.Available;
     private ActiveOptionProcessor<Main> processor;
     private String format = "SimpleTextList";
+
+    private Visitor filter;
         
     public Main(ActiveOptionProcessor<Main> processor) throws IOException, ClassNotFoundException {
         this.processor = processor;
-
-        root = new Group();
-        root.setName("");
-
         taskExpr = null;
+    }
+
+    private void processProjectName(ActiveOption<Main> o) {
+        String projectName = o.nextValue();
+        filter = new Visitor () {
+            @Override
+            public List<Context> filterContexts(List<Context> contexts) {
+                return new LinkedList<Context> ();
+            }
+            @Override
+            public List<Folder> filterFolders(List<Folder> folders) {
+                return new LinkedList<Folder> ();
+            }
+            @Override
+            public List<Node> filterChildren(List<Node> children) {
+                LinkedList<Node> result = new LinkedList<>();
+                for (Node n : children) {
+                    if (n instanceof Project) {
+                        Project p = (Project) n;
+                        if (p.getName().equals(projectName)) {
+                            result.add (p);
+                        }
+                    }
+                }
+                return result;
+            }
+            @Override
+            public List<Project> filterProjects(List<Project> projects) {
+                LinkedList<Project> result = new LinkedList<>();
+                for (Project p : projects) {
+                    if (p.getName().equals(projectName)) {
+                        result.add (p);
+                    }
+                }
+                return result;
+            }
+        };
     }
 
     private void processFormat(ActiveOption<Main> o) {
@@ -121,7 +168,28 @@ public class Main {
     }
 
     
-    private void run () throws IOException, InstantiationException, IllegalAccessException, ClassNotFoundException, ScriptException {
+    private void run () throws Exception {
+        
+        DataCache data = SQLiteDAO.load();
+        
+        Group root = new Group();
+        root.setName("");
+        for (Context child : data.getContexts().values()){
+            root.addChild(child);
+        }
+        for (Folder child : data.getFolders().values()){
+            root.addChild(child);
+        }
+        //for (Task child : data.getTasks().values()){
+        //    root.addChild(child);
+        //}
+        for (Project child : data.getProjects().values()){
+            root.addChild(child);
+        }
+        
+        if (filter != null) {
+            Traverser.doTraverse(filter, root, true);
+        }
         
         String formatterClassName = "org.psidnell.omnifocus.format." + format + "Formatter";
         Formatter formatter = (Formatter) Class.forName(formatterClassName).newInstance();
@@ -130,7 +198,12 @@ public class Main {
         TaskSorter sorter = new TaskSorter();
         sorter.organise(root);
         
-        Writer out = new OutputStreamWriter(System.out);
+        Writer out = new OutputStreamWriter(System.out) {
+            @Override
+            public void close() throws IOException {
+                // Don't want to close System.out
+            }
+        };
         formatter.format(root, out);
         out.flush();
         out.close();

@@ -20,10 +20,10 @@ import java.lang.reflect.Method;
 public class SQLITEPropertyDescriptor {
 
     private String name;
-    private Class type;
+    private Class<?> type;
     private Method setter;
 
-    public SQLITEPropertyDescriptor(String name, Method setter, Class type) {
+    public SQLITEPropertyDescriptor(String name, Method setter, Class<?> type) {
         this.name = name;
         this.setter = setter;
         this.type = type;
@@ -36,5 +36,8 @@ public class SQLITEPropertyDescriptor {
     public String getName() {
         return name;
     }
-    
+
+    public Class<?> getType() {
+        return type;
+    }
 }
