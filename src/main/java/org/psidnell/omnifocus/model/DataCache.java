@@ -17,9 +17,6 @@ package org.psidnell.omnifocus.model;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
-
-import org.psidnell.omnifocus.Availability;
 
 public class DataCache {
     
@@ -107,6 +104,7 @@ public class DataCache {
             Task rootTask = tasks.get(projInfo.getRootTaskId());
             Project project = new Project (rootTask);
             
+            // Set containing Folder for project
             String folderId = projInfo.getFolderId();
             if (folderId != null) {
                 Folder folder = folders.get(folderId);
@@ -129,10 +127,6 @@ public class DataCache {
 
     public HashMap<String, Folder> getFolders() {
         return folders;
-    }
-
-    public HashMap<String, ProjectInfo> getProjInfos() {
-        return projInfos;
     }
 
     public HashMap<String, Task> getTasks() {

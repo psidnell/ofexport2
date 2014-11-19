@@ -31,10 +31,6 @@ public class ProjectInfo {
         this.folderId = folderId;
     }
     
-    public void setFolderName (String folderId) {
-        this.folderId = folderId;
-    }
-    
     @SQLiteProperty(name="task")
     public String getRootTaskId () {
         return task;
