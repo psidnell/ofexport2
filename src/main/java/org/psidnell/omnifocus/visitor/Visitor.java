@@ -20,7 +20,6 @@ import java.util.List;
 import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.Document;
 import org.psidnell.omnifocus.model.Folder;
-import org.psidnell.omnifocus.model.Group;
 import org.psidnell.omnifocus.model.Node;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
@@ -55,12 +54,6 @@ public interface Visitor {
     }
 
     default void exit(Project node) throws Exception {
-    }
-
-    default void enter(Group node) throws Exception {
-    }
-
-    default void exit(Group node) throws Exception {
     }
 
     default List<Folder> filterFolders(List<Folder> folders) {

@@ -18,25 +18,18 @@ package org.psidnell.omnifocus;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.lang.reflect.InvocationTargetException;
-import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
-
-import javax.script.ScriptException;
 
 import org.apache.commons.cli.Options;
 import org.psidnell.omnifocus.cli.ActiveOption;
 import org.psidnell.omnifocus.cli.ActiveOptionProcessor;
-import org.psidnell.omnifocus.filter.Filter;
 import org.psidnell.omnifocus.format.Formatter;
 import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.DataCache;
 import org.psidnell.omnifocus.model.Folder;
-import org.psidnell.omnifocus.model.Group;
 import org.psidnell.omnifocus.model.Node;
 import org.psidnell.omnifocus.model.Project;
-import org.psidnell.omnifocus.model.Task;
 import org.psidnell.omnifocus.organise.TaskSorter;
 import org.psidnell.omnifocus.sqlite.SQLiteDAO;
 import org.psidnell.omnifocus.visitor.Traverser;
@@ -71,6 +64,14 @@ public class Main {
         OPTIONS.addOption(new ActiveOption<Main>(
                 "p", "projectname", true, "Load tasks from project specified by name",
                 (m,o)->m.processProjectName(o)));
+        
+        OPTIONS.addOption(new ActiveOption<Main> (
+                "projectMode", false, "this is the default mode)",
+                (m,o)->m.projectMode = true));
+        
+        OPTIONS.addOption(new ActiveOption<Main> (
+                "contextMode", false, "inverse of project mode)",
+                (m,o)->m.projectMode = false));
         
         //OPTIONS.addOption(new ActiveOption<Main>(
         //        "i", "inbox", false, "Load tasks from the inbox",
@@ -114,6 +115,7 @@ public class Main {
     private Availability availability = Availability.Available;
     private ActiveOptionProcessor<Main> processor;
     private String format = "SimpleTextList";
+    private boolean projectMode = true;
 
     private Visitor filter;
         
@@ -123,6 +125,9 @@ public class Main {
     }
 
     private void processProjectName(ActiveOption<Main> o) {
+        if (!projectMode) {
+            throw new IllegalArgumentException ("project filters only valid in project mode");
+        }
         String projectName = o.nextValue();
         filter = new Visitor () {
             @Override
@@ -172,31 +177,38 @@ public class Main {
         
         DataCache data = SQLiteDAO.load();
         
-        Group root = new Group();
-        root.setName("");
-        for (Context child : data.getContexts().values()){
-            root.addChild(child);
-        }
-        for (Folder child : data.getFolders().values()){
-            root.addChild(child);
-        }
-        //for (Task child : data.getTasks().values()){
-        //    root.addChild(child);
-        //}
-        for (Project child : data.getProjects().values()){
-            root.addChild(child);
-        }
+        Folder projectRoot = new Folder();
+        projectRoot.setName("RootFolder");
         
-        if (filter != null) {
-            Traverser.doTraverse(filter, root, true);
-        }
+        Context contextRoot = new Context();
+        contextRoot.setName("RootContext");
         
+        if (projectMode) {
+            for (Folder child : data.getFolders().values()){
+                projectRoot.getFolders().add(child);
+            }
+            for (Project child : data.getProjects().values()){
+                projectRoot.getProjects().add(child);
+            }
+            if (filter != null) {
+                Traverser.doTraverse(filter, projectRoot, true);
+            }
+        }
+        else {
+            for (Context child : data.getContexts().values()){
+                contextRoot.getContexts().add(child);
+            }
+            if (filter != null) {
+                Traverser.doTraverse(filter, contextRoot, true);
+            }
+        }
+
         String formatterClassName = "org.psidnell.omnifocus.format." + format + "Formatter";
         Formatter formatter = (Formatter) Class.forName(formatterClassName).newInstance();
         
-        
         TaskSorter sorter = new TaskSorter();
-        sorter.organise(root);
+        sorter.organise(projectRoot);
+        sorter.organise(contextRoot);
         
         Writer out = new OutputStreamWriter(System.out) {
             @Override
@@ -204,7 +216,14 @@ public class Main {
                 // Don't want to close System.out
             }
         };
-        formatter.format(root, out);
+        
+        if (projectMode) {
+            formatter.format(projectRoot, out);
+        }
+        else {
+            formatter.format(contextRoot, out);
+        }
+        
         out.flush();
         out.close();
     }

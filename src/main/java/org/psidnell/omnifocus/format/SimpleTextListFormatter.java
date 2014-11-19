@@ -21,7 +21,6 @@ import java.io.Writer;
 import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.Document;
 import org.psidnell.omnifocus.model.Folder;
-import org.psidnell.omnifocus.model.Group;
 import org.psidnell.omnifocus.model.Node;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
@@ -37,15 +36,7 @@ public class SimpleTextListFormatter implements Formatter {
         
         FormattingVisitor visitor = new FormattingVisitor(out);
         
-        // The root node may not be interesting interesting
-        if (root.getType().equals(Group.TYPE) && root.getName().equals("")) {
-            Group group = (Group) root;
-            for (Node child : group.getChildren()) {
-                Traverser.traverse(visitor, child, false);
-            }
-        } else {
-            Traverser.traverse(visitor, root, false);
-        }
+        Traverser.traverse(visitor, root, false);
     }
 
     private static class FormattingVisitor implements Visitor {
@@ -80,19 +71,6 @@ public class SimpleTextListFormatter implements Formatter {
         
         @Override
         public void exit (Folder node) {
-            depth--;
-        }
-        
-        @Override
-        public void enter(Group node) throws IOException {
-            out.write(indent(depth));
-            out.write(node.getName());
-            out.write("\n");
-            depth++;
-        }
-        
-        @Override
-        public void exit (Group node) {
             depth--;
         }
     

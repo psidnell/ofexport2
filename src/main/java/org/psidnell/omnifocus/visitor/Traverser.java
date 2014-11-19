@@ -18,7 +18,6 @@ package org.psidnell.omnifocus.visitor;
 import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.Document;
 import org.psidnell.omnifocus.model.Folder;
-import org.psidnell.omnifocus.model.Group;
 import org.psidnell.omnifocus.model.Node;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
@@ -40,9 +39,6 @@ public class Traverser {
                 break;
             case Folder.TYPE:
                 doTraverse(visitor, (Folder) node, filter);
-                break;
-            case Group.TYPE:
-                doTraverse(visitor, (Group) node, filter);
                 break;
             case Project.TYPE:
                 doTraverse(visitor, (Project) node, filter);
@@ -138,17 +134,6 @@ public class Traverser {
         }
         for (Task child : node.getTasks()) {
             doTraverse (visitor, child, filter);
-        }
-        visitor.exit(node);
-    }
-
-    private static void doTraverse(Visitor visitor, Group node, boolean filter) throws Exception {
-        visitor.enter(node);
-        if (filter) {
-            node.setChildren(visitor.filterChildren(node.getChildren()));
-        }
-        for (Node child : node.getChildren()) {
-            traverse (visitor, child, filter);
         }
         visitor.exit(node);
     }
