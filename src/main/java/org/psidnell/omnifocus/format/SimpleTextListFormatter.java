@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.psidnell.omnifocus.model.Context;
-import org.psidnell.omnifocus.model.Document;
 import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Node;
 import org.psidnell.omnifocus.model.Project;
@@ -36,7 +35,7 @@ public class SimpleTextListFormatter implements Formatter {
         
         FormattingVisitor visitor = new FormattingVisitor(out);
         
-        Traverser.traverse(visitor, root, false);
+        Traverser.traverse(visitor, root);
     }
 
     private static class FormattingVisitor implements Visitor {
@@ -46,19 +45,6 @@ public class SimpleTextListFormatter implements Formatter {
         
         private FormattingVisitor (Writer out) {
             this.out = out;
-        }
-    
-        @Override
-        public void enter(Document node) throws IOException {
-            out.write(indent(depth));
-            out.write(node.getName());
-            out.write("\n");
-            depth++;
-        }
-        
-        @Override
-        public void exit (Document node) {
-            depth--;
         }
         
         @Override

@@ -15,6 +15,8 @@ limitations under the License.
 */
 package org.psidnell.omnifocus.model;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.UUID;
 
 import org.psidnell.omnifocus.sqlite.SQLiteProperty;
@@ -54,6 +56,37 @@ public abstract class Node {
         int result = 1;
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         return result;
+    }
+    
+    public abstract List<Node> getProjectPath ();
+    
+    public abstract List<Node> getContextPath ();
+    
+    
+    protected List<Node> getProjectPath (Node parent){
+        List<Node> path;
+        if (parent != null)
+        {
+            path = parent.getProjectPath();
+        }
+        else {
+            path = new LinkedList<> ();
+        }
+        path.add(this);
+        return path;
+    }
+    
+    protected List<Node> getContextPath (Node parent){
+        List<Node> path;
+        if (parent != null)
+        {
+            path = parent.getContextPath();
+        }
+        else {
+            path = new LinkedList<> ();
+        }
+        path.add(this);
+        return path;
     }
 
     @Override

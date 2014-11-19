@@ -66,6 +66,7 @@ public class DataCache {
             if (parentId != null) {
                 Folder parent = folders.get(parentId);
                 parent.getFolders().add(folder);
+                folder.setParent(parent);
             }
         }
         
@@ -75,6 +76,7 @@ public class DataCache {
             if (parentId != null) {
                 Task parent = tasks.get(parentId);
                 parent.getTasks().add(task);
+                task.setParent(parent);
             }
         }
         
@@ -84,6 +86,7 @@ public class DataCache {
             if (parentId != null) {
                 Context parent = contexts.get(parentId);
                 parent.getContexts().add(context);
+                context.setParent(parent);
             }
         }
        
@@ -93,6 +96,7 @@ public class DataCache {
             if (contextId != null) {
                 Context context = contexts.get(contextId);
                 context.getTasks().add(task);
+                task.setContext(context);
             }
         }
         
@@ -102,7 +106,24 @@ public class DataCache {
         for (ProjectInfo projInfo : projInfos.values()) {
             Task rootTask = tasks.get(projInfo.getRootTaskId());
             Project project = new Project (rootTask);
+            
+            String folderId = projInfo.getFolderId();
+            if (folderId != null) {
+                Folder folder = folders.get(folderId);
+                project.setFolder (folder);
+                folder.getProjects().add(project);
+            }
+            
             projects.put (project.getId (), project);
+            
+            // Eliminate the redundant root task from the hierarchy
+            for (Task childOfRootTask : rootTask.getTasks()) {
+                childOfRootTask.setParent(null);
+                childOfRootTask.setProject(project);
+            } 
+            
+            // Discard the root task
+            tasks.remove(rootTask.getId());   
         }
     }
 

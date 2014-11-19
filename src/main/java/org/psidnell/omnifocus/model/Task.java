@@ -16,6 +16,8 @@ limitations under the License.
 package org.psidnell.omnifocus.model;
 
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.psidnell.omnifocus.sqlite.SQLiteProperty;
 
@@ -32,6 +34,10 @@ public class Task extends Common {
     private String parentTaskId;
 
     private String contextId;
+
+    private Task parent;
+
+    private Project project;
     
     @SQLiteProperty (name="context")
     public String getContextId () {
@@ -79,5 +85,39 @@ public class Task extends Common {
 
     public void setBlocked(boolean blocked) {
         this.blocked = blocked;
+    }
+
+    @JsonIgnore
+    public Task getParent () {
+        return parent;
+    }
+    
+    public void setParent(Task parent) {
+        this.parent = parent;
+    }
+
+    @Override
+    public List<Node> getProjectPath() {
+        if (parent != null) {
+            return getProjectPath(parent);
+        }
+        else if (project != null) {
+            return getProjectPath (project);
+        }
+        else {
+            // Inbox task? TODO
+            LinkedList<Node> result = new LinkedList<>();
+            result.add(this);
+            return result;
+        }
+    }
+
+    @JsonIgnore
+    public Project getProject () {
+        return project;
+    }
+    
+    public void setProject(Project project) {
+        this.project = project;
     }
 }

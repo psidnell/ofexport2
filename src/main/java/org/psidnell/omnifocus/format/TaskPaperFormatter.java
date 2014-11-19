@@ -21,7 +21,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.psidnell.omnifocus.model.Context;
-import org.psidnell.omnifocus.model.Document;
 import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Node;
 import org.psidnell.omnifocus.model.Project;
@@ -38,7 +37,7 @@ public class TaskPaperFormatter implements Formatter {
         
         FormattingVisitor visitor = new FormattingVisitor(out);
         
-        Traverser.traverse(visitor, root, false);
+        Traverser.traverse(visitor, root);
     }
 
     private static class FormattingVisitor implements Visitor {
@@ -60,19 +59,6 @@ public class TaskPaperFormatter implements Formatter {
         
         @Override
         public void exit (Folder node) {
-            depth--;
-        }
-
-        @Override
-        public void enter(Document node) throws IOException {
-            out.write(indent(depth));
-            out.write(tpProject(node.getName()));
-            out.write("\n");
-            depth++;
-        }
-        
-        @Override
-        public void exit (Document node) {
             depth--;
         }
         

@@ -16,7 +16,6 @@ limitations under the License.
 package org.psidnell.omnifocus.visitor;
 
 import org.psidnell.omnifocus.model.Context;
-import org.psidnell.omnifocus.model.Document;
 import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Node;
 import org.psidnell.omnifocus.model.Project;
@@ -24,7 +23,16 @@ import org.psidnell.omnifocus.model.Task;
 
 public class Traverser {
     
-    public static void traverse(Visitor visitor, Node node, boolean filter) {
+    
+    public static void traverse(Visitor visitor, Node node) {
+        traverse(visitor, node, false);
+    }
+    
+    public static void filter(Visitor visitor, Node node) throws Exception {
+        traverse(visitor, node, true);
+    }
+    
+    private static void traverse(Visitor visitor, Node node, boolean filter) {
         try {
             doTraverse(visitor, node, filter);
         } catch (Exception e) {
@@ -32,11 +40,8 @@ public class Traverser {
         }
     }
     
-    public static void doTraverse(Visitor visitor, Node node, boolean filter) throws Exception {
+    private static void doTraverse(Visitor visitor, Node node, boolean filter) throws Exception {
         switch (node.getType()) {
-            case Document.TYPE:
-                doTraverse(visitor, (Document) node, filter);
-                break;
             case Folder.TYPE:
                 doTraverse(visitor, (Folder) node, filter);
                 break;
@@ -51,90 +56,99 @@ public class Traverser {
                 break;
         }
     }
-
-    private static void doTraverse(Visitor visitor, Document node, boolean filter) throws Exception {
-        visitor.enter (node);
-        if (filter) {
-            node.setFolders(visitor.filterFolders(node.getFolders()));
-        }
-        for (Folder child : node.getFolders()) {
-            doTraverse (visitor, child, filter);
-        }
-        if (filter) {
-            node.setProjects(visitor.filterProjects(node.getProjects()));
-        }
-        for (Project child : node.getProjects()) {
-            doTraverse (visitor, child, filter);
-        }
-        if (filter) {
-            node.setContexts(visitor.filterContexts(node.getContexts()));
-        }
-        for (Context child : node.getContexts()) {
-            doTraverse (visitor, child, filter);
-        }
-        if (filter) {
-            node.setTasks(visitor.filterTasks(node.getTasks()));
-        }
-        for (Task child : node.getTasks()) {
-            doTraverse (visitor, child, filter);
-        }
-        
-        visitor.exit (node);
-    }
     
     private static void doTraverse(Visitor visitor, Folder node, boolean filter) throws Exception {
         visitor.enter (node);
+        
         if (filter){
-            node.setFolders(visitor.filterFolders(node.getFolders()));
+            node.setFolders(visitor.filterFoldersDown(node.getFolders()));
         }
+        
+        if (filter){
+            node.setProjects(visitor.filterProjectsDown(node.getProjects()));
+        }
+        
         for (Folder child : node.getFolders()) {
             doTraverse (visitor, child, filter);
         }
-        if (filter){
-            node.setProjects(visitor.filterProjects(node.getProjects()));
-        }
+       
         for (Project child : node.getProjects()) {
             doTraverse (visitor, child, filter);
         }
+        
+        if (filter){
+            node.setFolders(visitor.filterFoldersUp(node.getFolders()));
+        }
+        
+        if (filter){
+            node.setProjects(visitor.filterProjectsUp(node.getProjects()));
+        }
+        
         visitor.exit (node);
     }
 
     private static void doTraverse(Visitor visitor, Task node, boolean filter) throws Exception {
         visitor.enter (node);
+       
         if (filter) {
-            node.setTasks(visitor.filterTasks(node.getTasks()));
+            node.setTasks(visitor.filterTasksDown(node.getTasks()));
         }
+        
         for (Task child : node.getTasks()) {
             doTraverse (visitor, child, filter);
         }
+        
+        if (filter) {
+            node.setTasks(visitor.filterTasksUp(node.getTasks()));
+        }
+        
         visitor.exit (node);
     }
 
     private static void doTraverse(Visitor visitor, Context node, boolean filter) throws Exception {
         visitor.enter (node);
+       
         if (filter) {
-            node.setTasks(visitor.filterTasks(node.getTasks()));
+            node.setTasks(visitor.filterTasksDown(node.getTasks()));
         }
+        
+        if (filter) {
+            node.setContexts(visitor.filterContextsDown(node.getContexts()));
+        }
+        
         for (Task child : node.getTasks()) {
             doTraverse (visitor, child, filter);
         }
-        if (filter) {
-            node.setContexts(visitor.filterContexts(node.getContexts()));
-        }
+       
         for (Context child : node.getContexts()) {
             doTraverse (visitor, child, filter);
+        }
+        
+        if (filter) {
+            node.setTasks(visitor.filterTasksUp(node.getTasks()));
+        }
+        
+        if (filter) {
+            node.setContexts(visitor.filterContextsUp(node.getContexts()));
         }
         visitor.exit(node);
     }
 
     private static void doTraverse(Visitor visitor, Project node, boolean filter) throws Exception {
         visitor.enter (node);
+       
         if (filter) {
-            node.setTasks(visitor.filterTasks(node.getTasks()));
+            node.setTasks(visitor.filterTasksDown(node.getTasks()));
         }
+        
         for (Task child : node.getTasks()) {
             doTraverse (visitor, child, filter);
         }
+        
+        if (filter) {
+            node.setTasks(visitor.filterTasksUp(node.getTasks()));
+        }
+        
         visitor.exit(node);
     }
 }

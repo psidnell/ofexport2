@@ -16,21 +16,14 @@ limitations under the License.
 package org.psidnell.omnifocus.visitor;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.psidnell.omnifocus.model.Context;
-import org.psidnell.omnifocus.model.Document;
 import org.psidnell.omnifocus.model.Folder;
-import org.psidnell.omnifocus.model.Node;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
 
 public interface Visitor {
-    
-    default void enter(Document node) throws Exception {
-    }
-
-    default void exit(Document node) throws Exception {
-    }
     
     default void enter(Folder node) throws Exception {
     }
@@ -56,23 +49,67 @@ public interface Visitor {
     default void exit(Project node) throws Exception {
     }
 
-    default List<Folder> filterFolders(List<Folder> folders) {
-        return folders;
+    default List<Folder> filterFoldersUp(List<Folder> folders) {
+        return folders.stream().filter((p)->includeUp(p)).collect(Collectors.toList());
     }
 
-    default List<Project> filterProjects(List<Project> projects) {
-        return projects;
+    default List<Project> filterProjectsUp(List<Project> projects) {
+        return projects.stream().filter((p)->includeUp(p)).collect(Collectors.toList());
     }
 
-    default List<Context> filterContexts(List<Context> contexts) {
-        return contexts;
+    default List<Context> filterContextsUp(List<Context> contexts) {
+        return contexts.stream().filter((p)->includeUp(p)).collect(Collectors.toList());
     }
 
-    default List<Task> filterTasks(List<Task> tasks) {
-        return tasks;
+    default List<Task> filterTasksUp(List<Task> tasks) {
+        return tasks.stream().filter((p)->includeUp(p)).collect(Collectors.toList());
+    }
+    
+    default List<Folder> filterFoldersDown(List<Folder> folders) {
+        return folders.stream().filter((p)->includeDown(p)).collect(Collectors.toList());
     }
 
-    default List<Node> filterChildren(List<Node> children) {
-        return children;
+    default List<Project> filterProjectsDown(List<Project> projects) {
+        return projects.stream().filter((p)->includeDown(p)).collect(Collectors.toList());
+    }
+
+    default List<Context> filterContextsDown(List<Context> contexts) {
+        return contexts.stream().filter((p)->includeDown(p)).collect(Collectors.toList());
+    }
+
+    default List<Task> filterTasksDown(List<Task> tasks) {
+        return tasks.stream().filter((p)->includeDown(p)).collect(Collectors.toList());
+    }
+    
+    default boolean includeUp (Project p) {
+        return true;
+    }
+    
+    default boolean includeUp (Task t) {
+        return true;
+    }
+    
+    default boolean includeUp (Folder f) {
+        return true;
+    }
+    
+    default boolean includeUp (Context c) {
+        return true;
+    }
+    
+    default boolean includeDown (Project p) {
+        return true;
+    }
+    
+    default boolean includeDown (Task t) {
+        return true;
+    }
+    
+    default boolean includeDown (Folder f) {
+        return true;
+    }
+    
+    default boolean includeDown (Context c) {
+        return true;
     }
 }

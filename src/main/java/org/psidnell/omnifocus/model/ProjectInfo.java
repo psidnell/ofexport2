@@ -20,6 +20,20 @@ import org.psidnell.omnifocus.sqlite.SQLiteProperty;
 public class ProjectInfo {
 
     public String task;
+    private String folderId;
+    
+    @SQLiteProperty(name="folder")
+    public String getFolderId () {
+        return folderId;
+    }
+    
+    public void setFolderId (String folderId) {
+        this.folderId = folderId;
+    }
+    
+    public void setFolderName (String folderId) {
+        this.folderId = folderId;
+    }
     
     @SQLiteProperty(name="task")
     public String getRootTaskId () {

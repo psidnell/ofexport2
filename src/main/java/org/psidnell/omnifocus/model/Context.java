@@ -31,6 +31,8 @@ public class Context extends Node {
     private List<Context> contexts = new LinkedList<>();
     
     private String parentContextId;
+
+    private Context parent;
     
     @SQLiteProperty (name="parent")
     public String getParentContextId () {
@@ -61,5 +63,23 @@ public class Context extends Node {
     @JsonIgnore
     public String getType() {
         return TYPE;
+    }
+
+    @JsonIgnore
+    public Context getParent () {
+        return parent;
+    }
+    public void setParent(Context parent) {
+        this.parent = parent;
+    }
+
+    @Override
+    public List<Node> getProjectPath() {
+        throw new IllegalArgumentException ("not supported");
+    }
+
+    @Override
+    public List<Node> getContextPath() {
+        return getContextPath(parent);
     }
 }

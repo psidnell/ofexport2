@@ -31,6 +31,8 @@ public class Folder extends Node {
     private List<Folder> folders = new LinkedList<>();
 
     private String parentFolderId;
+
+    private Folder parent;
     
     @SQLiteProperty (name="parent")
     public String getParentFolderId () {
@@ -61,5 +63,24 @@ public class Folder extends Node {
     @JsonIgnore
     public String getType() {
         return TYPE;
+    }
+
+    @JsonIgnore
+    public Folder getParent () {
+        return parent;
+    }
+    
+    public void setParent(Folder parent) {
+        this.parent = parent;
+    }
+
+    @Override
+    public List<Node> getProjectPath() {
+        return getContextPath(parent);
+    }
+
+    @Override
+    public List<Node> getContextPath() {
+        throw new IllegalArgumentException("Not supported");
     }
 }

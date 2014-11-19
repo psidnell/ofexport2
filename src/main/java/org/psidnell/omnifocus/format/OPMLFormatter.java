@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.psidnell.omnifocus.model.Context;
-import org.psidnell.omnifocus.model.Document;
 import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Node;
 import org.psidnell.omnifocus.model.Project;
@@ -43,7 +42,7 @@ public class OPMLFormatter implements Formatter {
         out.write("    <title>"+ root.getName() + "</title>");
         out.write("<head>");
         out.write("</body>");
-        Traverser.traverse(visitor, root, false);
+        Traverser.traverse(visitor, root);
         out.write("</body>");
     }
 
@@ -54,17 +53,6 @@ public class OPMLFormatter implements Formatter {
         
         private FormattingVisitor (Writer out) {
             this.out = out;
-        }
-
-        
-        @Override
-        public void enter(Document node) throws IOException {
-            startNode(node.getName());
-        }
-        
-        @Override
-        public void exit (Document node) throws IOException {
-            endNode ();
         }
         
         @Override

@@ -131,36 +131,14 @@ public class Main {
         String projectName = o.nextValue();
         filter = new Visitor () {
             @Override
-            public List<Context> filterContexts(List<Context> contexts) {
-                return new LinkedList<Context> ();
-            }
-            @Override
-            public List<Folder> filterFolders(List<Folder> folders) {
-                return new LinkedList<Folder> ();
-            }
-            @Override
-            public List<Node> filterChildren(List<Node> children) {
-                LinkedList<Node> result = new LinkedList<>();
-                for (Node n : children) {
-                    if (n instanceof Project) {
-                        Project p = (Project) n;
-                        if (p.getName().equals(projectName)) {
-                            result.add (p);
-                        }
-                    }
-                }
-                return result;
-            }
-            @Override
-            public List<Project> filterProjects(List<Project> projects) {
-                LinkedList<Project> result = new LinkedList<>();
-                for (Project p : projects) {
-                    if (p.getName().equals(projectName)) {
-                        result.add (p);
-                    }
-                }
-                return result;
-            }
+            public boolean includeDown(Project p)
+            {
+                return projectName.equals(p.getName());
+            };
+            public boolean includeUp(Folder f)
+            {
+                return !f.getFolders().isEmpty() || !f.getProjects().isEmpty();
+            };
         };
     }
 
@@ -191,7 +169,7 @@ public class Main {
                 projectRoot.getProjects().add(child);
             }
             if (filter != null) {
-                Traverser.doTraverse(filter, projectRoot, true);
+                Traverser.filter(filter, projectRoot);
             }
         }
         else {
@@ -199,7 +177,7 @@ public class Main {
                 contextRoot.getContexts().add(child);
             }
             if (filter != null) {
-                Traverser.doTraverse(filter, contextRoot, true);
+                Traverser.filter(filter, contextRoot);
             }
         }
 
@@ -207,8 +185,6 @@ public class Main {
         Formatter formatter = (Formatter) Class.forName(formatterClassName).newInstance();
         
         TaskSorter sorter = new TaskSorter();
-        sorter.organise(projectRoot);
-        sorter.organise(contextRoot);
         
         Writer out = new OutputStreamWriter(System.out) {
             @Override
@@ -218,9 +194,11 @@ public class Main {
         };
         
         if (projectMode) {
+            sorter.organise(projectRoot);
             formatter.format(projectRoot, out);
         }
         else {
+            sorter.organise(contextRoot);
             formatter.format(contextRoot, out);
         }
         

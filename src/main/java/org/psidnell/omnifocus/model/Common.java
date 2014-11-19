@@ -30,7 +30,7 @@ public abstract class Common extends Node {
     // Of the form: "2014-10-12T23:00:00.000Z"
     private static final DateTimeFormatter DATE_PARSER = ISODateTimeFormat.dateTime();
 
-    private String context;
+    protected Context context;
     private String note;
     private Date deferDate;
     private Date dueDate;
@@ -48,11 +48,12 @@ public abstract class Common extends Node {
         return tasks;
     }
     
-    public String getContext() {
+    @JsonIgnore
+    public Context getContext() {
         return context;
     }
 
-    public void setContext(String context) {
+    public void setContext(Context context) {
         this.context = context;
     }
 
@@ -121,5 +122,10 @@ public abstract class Common extends Node {
             result = DATE_PARSER.parseDateTime(stringForm).toDate();
         }
         return result;
+    }
+    
+    @Override
+    public List<Node> getContextPath() {
+        return getContextPath(context);
     }
 }

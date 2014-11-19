@@ -15,11 +15,15 @@ limitations under the License.
 */
 package org.psidnell.omnifocus.model;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class Project extends Common {
 
     public static final String TYPE = "Project";
+    private Folder folder;
 
     public Project () {
     }
@@ -34,5 +38,19 @@ public class Project extends Common {
     @JsonIgnore
     public String getType() {
         return TYPE;
+    }
+
+    @Override
+    public List<Node> getProjectPath() {
+        return getProjectPath(folder);
+    }
+
+    @JsonIgnore
+    public Folder getFolder () {
+        return folder;
+    }
+    
+    public void setFolder(Folder folder) {
+        this.folder = folder;
     }
 }

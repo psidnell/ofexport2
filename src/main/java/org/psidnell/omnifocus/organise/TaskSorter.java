@@ -30,7 +30,7 @@ public class TaskSorter implements Organiser {
     @Override
     public Node organise(Node root) {
         
-        Traverser.traverse(new SortingVisitor(), root, false);
+        Traverser.traverse(new SortingVisitor(), root);
         
         return root;
     }
