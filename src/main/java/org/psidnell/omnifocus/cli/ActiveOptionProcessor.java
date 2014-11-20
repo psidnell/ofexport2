@@ -33,7 +33,7 @@ public class ActiveOptionProcessor<P> {
         this.progName = progName;
     }
     
-    public boolean processOptions (P program, String[] args) throws Exception {
+    public boolean processOptions (P program, String[] args, int phase) throws Exception {
         CommandLineParser parser = new BasicParser();
         CommandLine cl = parser.parse(options, args);
         
@@ -41,7 +41,9 @@ public class ActiveOptionProcessor<P> {
         @SuppressWarnings("unchecked")
         List<String> unrecognized = cl.getArgList();
         if (!unrecognized.isEmpty() || args.length == 0) {
-            System.out.println ("Unrecognised command line arguments: " + unrecognized);
+            if (!unrecognized.isEmpty()) {
+                System.out.println ("Unrecognised command line arguments: " + unrecognized);
+            }
             printHelp();
             return false;
         }
@@ -57,7 +59,9 @@ public class ActiveOptionProcessor<P> {
         for (Object o : cl.getOptions()) {
             @SuppressWarnings("unchecked")
             ActiveOption<P> opt = (ActiveOption<P>) o;
-            opt.process(program);
+            if (opt.getPhase() == phase) {
+                opt.process(program);
+            }
         }
         
         return true;

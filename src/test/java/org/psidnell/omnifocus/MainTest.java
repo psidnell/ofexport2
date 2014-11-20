@@ -21,12 +21,14 @@ public class MainTest {
     @Test
     public void test() throws Exception {
         Main.main(new String[] {
-                "-p", "TestProject",
+                "-xa",
+                "-ip", "TestProject",
                 "-format", "SimpleTextList"});
     }
     
     @Test
     public void testHelp() throws Exception {
         Main.main(new String[] { "-h" });
+        Main.main(new String[] {});
    }
 }

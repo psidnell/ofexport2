@@ -18,6 +18,8 @@ package org.psidnell.omnifocus;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.lang.reflect.InvocationTargetException;
+import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -28,16 +30,23 @@ import org.psidnell.omnifocus.format.Formatter;
 import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.DataCache;
 import org.psidnell.omnifocus.model.Folder;
-import org.psidnell.omnifocus.model.Node;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.organise.TaskSorter;
 import org.psidnell.omnifocus.sqlite.SQLiteDAO;
+import org.psidnell.omnifocus.util.NoisyRunnable;
+import org.psidnell.omnifocus.util.Wrap;
+import org.psidnell.omnifocus.visitor.IncludedFilter;
+import org.psidnell.omnifocus.visitor.IncludeVisitor;
 import org.psidnell.omnifocus.visitor.Traverser;
 import org.psidnell.omnifocus.visitor.Visitor;
 
 public class Main {
     
     final static Options OPTIONS = new Options();
+
+    private static final int BEFORE_LOAD = 0;
+    private static final int AFTER_LOAD = 1;
+    
     static {
         
 
@@ -47,7 +56,8 @@ public class Main {
         
         OPTIONS.addOption(new ActiveOption<Main> (
                 "h", "help", false, "print help",
-                (m,o)->m.printHelp ()));
+                (m,o)->m.printHelp (),
+                BEFORE_LOAD));
         
         //OPTIONS.addOption(new ActiveOption<Main>(
         //        "f", "foldername", true, "Load projects and tasks from folder specified by name",
@@ -62,16 +72,24 @@ public class Main {
         //        (m,o)->m.processContextName(o)));
         
         OPTIONS.addOption(new ActiveOption<Main>(
-                "p", "projectname", true, "Load tasks from project specified by name",
-                (m,o)->m.processProjectName(o)));
+                "xa", "excludeAll", false, "exclude everything",
+                (m,o)->m.processExcludeAll(o),
+                AFTER_LOAD));
+        
+        OPTIONS.addOption(new ActiveOption<Main>(
+                "ip", "projectname", true, "include tasks from project specified by name",
+                (m,o)->m.processProjectName(o),
+                AFTER_LOAD));
         
         OPTIONS.addOption(new ActiveOption<Main> (
-                "projectMode", false, "this is the default mode)",
-                (m,o)->m.projectMode = true));
+                "projectMode", false, "the default mode",
+                (m,o)->m.projectMode = true,
+                BEFORE_LOAD));
         
         OPTIONS.addOption(new ActiveOption<Main> (
                 "contextMode", false, "inverse of project mode)",
-                (m,o)->m.projectMode = false));
+                (m,o)->m.projectMode = false,
+                BEFORE_LOAD));
         
         //OPTIONS.addOption(new ActiveOption<Main>(
         //        "i", "inbox", false, "Load tasks from the inbox",
@@ -102,8 +120,9 @@ public class Main {
         //        (m,o)->m.processContextExpression (o)));
         
         OPTIONS.addOption(new ActiveOption<Main> (
-                "format", true, "format",
-                (m,o)->m.processFormat (o)));
+                "format", true, "output in this format",
+                (m,o)->m.processFormat (o),
+                AFTER_LOAD));
     }
 
     public static final String PROG = "ofexport2";
@@ -117,11 +136,31 @@ public class Main {
     private String format = "SimpleTextList";
     private boolean projectMode = true;
 
-    private Visitor filter;
+    private List<Runnable> cmdLineActions = new LinkedList<>();
+    private List<Visitor> filters = new LinkedList<>();
+
+    private DataCache data;
+
+    private Folder projectRoot;
+
+    private Context contextRoot;
+
+    private boolean exit = false;
         
     public Main(ActiveOptionProcessor<Main> processor) throws IOException, ClassNotFoundException {
         this.processor = processor;
-        taskExpr = null;
+    }
+
+    private void processExcludeAll(ActiveOption<Main> o) {
+        cmdLineActions.add(Wrap.runnable(()->{
+            if (projectMode) {
+                Traverser.traverse(new IncludeVisitor(false), projectRoot);
+            }
+            else {
+                Traverser.traverse(new IncludeVisitor(false), contextRoot);
+            }
+        }));
+
     }
 
     private void processProjectName(ActiveOption<Main> o) {
@@ -129,17 +168,13 @@ public class Main {
             throw new IllegalArgumentException ("project filters only valid in project mode");
         }
         String projectName = o.nextValue();
-        filter = new Visitor () {
-            @Override
-            public boolean includeDown(Project p)
-            {
-                return projectName.equals(p.getName());
-            };
-            public boolean includeUp(Folder f)
-            {
-                return !f.getFolders().isEmpty() || !f.getProjects().isEmpty();
-            };
-        };
+        cmdLineActions.add(Wrap.runnable(()->{
+            for (Project p : data.getProjects().values()) {
+                if (projectName.equals(p.getName())) {
+                    p.include(projectMode);
+                }
+            }
+        }));
     }
 
     private void processFormat(ActiveOption<Main> o) {
@@ -148,35 +183,53 @@ public class Main {
 
     private void printHelp() {
        processor.printHelp ();
+       exit  = true;
     }
 
-    
-    private void run () throws Exception {
+    private void load () throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, SQLException {
+        data = SQLiteDAO.load();
         
-        DataCache data = SQLiteDAO.load();
-        
-        Folder projectRoot = new Folder();
+        projectRoot = new Folder();
         projectRoot.setName("RootFolder");
         
-        Context contextRoot = new Context();
+        contextRoot = new Context();
         contextRoot.setName("RootContext");
         
         if (projectMode) {
             for (Folder child : data.getFolders().values()){
-                projectRoot.getFolders().add(child);
+                if (child.getParent() == null) {
+                    projectRoot.getFolders().add(child);
+                }
             }
+            
             for (Project child : data.getProjects().values()){
-                projectRoot.getProjects().add(child);
-            }
-            if (filter != null) {
-                Traverser.filter(filter, projectRoot);
+                if (child.getFolder() == null) {
+                    projectRoot.getProjects().add(child);
+                }
             }
         }
         else {
             for (Context child : data.getContexts().values()){
-                contextRoot.getContexts().add(child);
+                if (child.getParent() == null) {
+                    contextRoot.getContexts().add(child);
+                }
+            }            
+        }
+    }
+    
+    private void run () throws Exception {
+        cmdLineActions.stream().forEach((a)->a.run());
+        
+        // Prune items not included
+        filters.add(new IncludedFilter());
+        
+        if (projectMode) {
+            for (Visitor filter : filters) {
+                Traverser.filter(filter, projectRoot);
             }
-            if (filter != null) {
+        }
+        else {
+            for (Visitor filter : filters) {
                 Traverser.filter(filter, contextRoot);
             }
         }
@@ -212,14 +265,16 @@ public class Main {
         
         Main main = new Main (processor);
         
-        if (!processor.processOptions(main, args)) {
+        // Load initial switches, help etc
+        if (!processor.processOptions(main, args, BEFORE_LOAD) || main.exit) {
             return;
         }
+        
+        main.load ();
+        
+        // Load filters etc.
+        processor.processOptions(main, args, AFTER_LOAD);
 
         main.run ();
-    }
-    
-    private static final String escape(String str) {
-        return str.replaceAll("'", "\\'");
     }
 }

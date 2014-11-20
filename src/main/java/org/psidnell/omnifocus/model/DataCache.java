@@ -20,42 +20,43 @@ import java.util.HashMap;
 
 public class DataCache {
     
-    private HashMap<String, Folder> folders;
-    private HashMap<String, ProjectInfo> projInfos;
-    private HashMap<String, Task> tasks;    
-    private HashMap<String, Context> contexts;
-    private HashMap<String, Project> projects;
+    private HashMap<String, Folder> folders = new HashMap<>();
+    private HashMap<String, ProjectInfo> projInfos = new HashMap<>();
+    private HashMap<String, Task> tasks = new HashMap<>();
+    private HashMap<String, Context> contexts = new HashMap<>();
+    private HashMap<String, Project> projects = new HashMap<>();
 
+    public DataCache () {
+        this.folders = new HashMap<>();
+        this.projInfos = new HashMap<>();
+    }
+    
     public DataCache (
             Collection<Folder> folders,
             Collection<ProjectInfo> projInfos,
             Collection<Task> tasks,
             Collection<Context> contexts) {
-        
-        this.folders = new HashMap<>();
+               
         for (Folder folder : folders) {
-            this.folders.put(folder.getId(), folder);
+            add(folder);
         }
         
-        this.projInfos = new HashMap<>();
         for (ProjectInfo projInfo : projInfos) {
-            this.projInfos.put(projInfo.getRootTaskId(), projInfo);
+            add(projInfo);
         }
-        
-        this.tasks = new HashMap<>();
+                
         for (Task task : tasks) {
-            this.tasks.put(task.getId(), task);
+            add(task);
         }
         
-        this.contexts = new HashMap<>();
         for (Context context : contexts) {
-            this.contexts.put(context.getId(), context);
+            add(context);
         }
-        this.projects = new HashMap<>();
+        
         build();
     }
     
-    private final void build() {
+    public final void build() {
 
         // Build Folder Hierarchy
         for (Folder folder : folders.values()) {
@@ -139,5 +140,21 @@ public class DataCache {
 
     public HashMap<String,Project> getProjects() {
         return projects;
+    }
+    
+    public void add(Context context) {
+        this.contexts.put(context.getId(), context);
+    }
+
+    public void add(Task task) {
+        this.tasks.put(task.getId(), task);
+    }
+
+    public void add(ProjectInfo projInfo) {
+        this.projInfos.put(projInfo.getRootTaskId(), projInfo);
+    }
+
+    public void add(Folder folder) {
+        this.folders.put(folder.getId(), folder);
     }
 }

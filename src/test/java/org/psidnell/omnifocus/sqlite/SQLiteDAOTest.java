@@ -15,7 +15,7 @@ limitations under the License.
  */
 package org.psidnell.omnifocus.sqlite;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
 
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
@@ -24,9 +24,7 @@ import java.util.Collection;
 
 import org.junit.Test;
 import org.psidnell.omnifocus.model.Context;
-import org.psidnell.omnifocus.model.DataCache;
 import org.psidnell.omnifocus.model.Folder;
-import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.ProjectInfo;
 import org.psidnell.omnifocus.model.Task;
 

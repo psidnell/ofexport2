@@ -76,11 +76,11 @@ public class Folder extends Node {
 
     @Override
     public List<Node> getProjectPath() {
-        return getContextPath(parent);
+        return getProjectPath(parent);
     }
 
     @Override
     public List<Node> getContextPath() {
-        throw new IllegalArgumentException("Not supported");
+        throw new UnsupportedOperationException();
     }
 }

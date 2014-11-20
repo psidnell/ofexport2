@@ -13,9 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-package org.psidnell.omnifocus.filter;
+package org.psidnell.omnifocus;
 
-
-public class FilterTest {
-
+public interface CmdLineAction {
+    public void act () throws Exception;
 }

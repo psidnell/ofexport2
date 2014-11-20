@@ -15,16 +15,12 @@ limitations under the License.
 */
 package org.psidnell.omnifocus.cli;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 
-import javax.script.ScriptException;
-
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.ParseException;
 
 public class ActiveOption<P> extends Option {
 
@@ -32,23 +28,27 @@ public class ActiveOption<P> extends Option {
     private Stack<String> valStack = new Stack<>();
     private static int count = 0;
     private int order;
+    private int phase;
 
-    public ActiveOption(String opt, String description, ActiveOptionProcess<P> processor) throws IllegalArgumentException {
+    public ActiveOption(String opt, String description, ActiveOptionProcess<P> processor, int phase) throws IllegalArgumentException {
         super(opt, description);
         this.processor = processor;
         setOrder();
+        this.phase = phase;
     }
     
-    public ActiveOption(String opt, boolean hasArg, String description, ActiveOptionProcess<P> processor) throws IllegalArgumentException {
+    public ActiveOption(String opt, boolean hasArg, String description, ActiveOptionProcess<P> processor, int phase) throws IllegalArgumentException {
         super(opt, hasArg, description);
         this.processor = processor;
         setOrder();
+        this.phase = phase;
     }
     
-    public ActiveOption(String opt, String longOpt, boolean hasArg, String description, ActiveOptionProcess<P> processor) throws IllegalArgumentException {
+    public ActiveOption(String opt, String longOpt, boolean hasArg, String description, ActiveOptionProcess<P> processor, int phase) throws IllegalArgumentException {
         super(opt, longOpt, hasArg, description);
         this.processor = processor;
         setOrder();
+        this.phase = phase;
     }
 
     private final void setOrder() {
@@ -75,5 +75,9 @@ public class ActiveOption<P> extends Option {
     
     int getOrder () {
         return order;
+    }
+    
+    int getPhase () {
+        return phase;
     }
 }

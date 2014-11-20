@@ -16,9 +16,6 @@ limitations under the License.
 package org.psidnell.omnifocus.expr;
 
 import java.util.BitSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 import org.antlr.v4.runtime.ANTLRErrorListener;
 import org.antlr.v4.runtime.ANTLRInputStream;

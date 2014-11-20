@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.UUID;
 
 import org.psidnell.omnifocus.sqlite.SQLiteProperty;
+import org.psidnell.omnifocus.visitor.IncludeVisitor;
+import org.psidnell.omnifocus.visitor.Traverser;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -29,6 +31,8 @@ public abstract class Node {
 
     private String id = UUID.randomUUID().toString();
 
+    private boolean included = true;
+    
     @SQLiteProperty
     public String getName() {
         return name;
@@ -50,6 +54,40 @@ public abstract class Node {
     @JsonIgnore
     public abstract String getType();
 
+    @JsonIgnore
+    public boolean getIncluded () {
+        return included;
+    }
+    
+    public void setIncluded (boolean included) {
+        this.included = included;
+    }
+    
+    public void include (boolean projectPath) {
+        
+        // Include this node and all children
+        Traverser.traverse(new IncludeVisitor (true), this);
+        
+        // Include path to root
+        if (projectPath) {
+            for (Node node : getProjectPath()) {
+                node.setIncluded(true);
+            }
+        }
+        else {
+            for (Node node : getContextPath()) {
+                node.setIncluded(true);
+            }
+        }
+    }
+    
+    public void exclude () {
+        this.included = false;
+        
+        // Exclude this node and all children
+        Traverser.traverse(new IncludeVisitor (false), this);
+    }
+    
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -61,7 +99,6 @@ public abstract class Node {
     public abstract List<Node> getProjectPath ();
     
     public abstract List<Node> getContextPath ();
-    
     
     protected List<Node> getProjectPath (Node parent){
         List<Node> path;
@@ -104,5 +141,10 @@ public abstract class Node {
         } else if (!id.equals(other.id))
             return false;
         return true;
+    }
+    
+    @Override
+    public String toString() {
+        return getType() + ":'" + name + "'";
     }
 }

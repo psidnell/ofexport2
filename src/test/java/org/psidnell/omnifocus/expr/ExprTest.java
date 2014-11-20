@@ -15,12 +15,6 @@ limitations under the License.
 */
 package org.psidnell.omnifocus.expr;
 
-import static org.junit.Assert.*;
-
-import java.util.HashMap;
-import java.util.List;
-
-import org.junit.Test;
 
 public class ExprTest {
 

@@ -13,9 +13,16 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-package org.psidnell.omnifocus.filter;
+package org.psidnell.omnifocus.util;
 
-
-public class FilterTest {
-
+public class Wrap {
+    public static Runnable runnable (NoisyRunnable r) {
+            return ()-> {
+                try {
+                    r.run();
+                } catch (Exception e) {
+                    throw new RuntimeException (e);
+                }
+            };
+    }
 }

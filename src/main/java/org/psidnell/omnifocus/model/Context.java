@@ -75,7 +75,7 @@ public class Context extends Node {
 
     @Override
     public List<Node> getProjectPath() {
-        throw new IllegalArgumentException ("not supported");
+        throw new UnsupportedOperationException();
     }
 
     @Override

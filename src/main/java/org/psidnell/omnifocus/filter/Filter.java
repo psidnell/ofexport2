@@ -15,13 +15,9 @@ limitations under the License.
 */
 package org.psidnell.omnifocus.filter;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import org.psidnell.omnifocus.model.Node;
-import org.psidnell.omnifocus.visitor.Traverser;
 
 public class Filter {
 

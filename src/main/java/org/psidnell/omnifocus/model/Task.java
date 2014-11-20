@@ -15,7 +15,6 @@ limitations under the License.
 */
 package org.psidnell.omnifocus.model;
 
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
