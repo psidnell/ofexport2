@@ -21,8 +21,8 @@ public class MainTest {
     @Test
     public void test() throws Exception {
         Main.main(new String[] {
-                "-xa",
-                "-ip", "TestProject",
+                "-a", "Completed",
+                "-ip", "Home",
                 "-format", "SimpleTextList"});
     }
     

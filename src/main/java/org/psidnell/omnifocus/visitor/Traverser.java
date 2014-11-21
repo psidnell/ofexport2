@@ -23,129 +23,142 @@ import org.psidnell.omnifocus.model.Task;
 
 public class Traverser {
     
-    
     public static void traverse(Visitor visitor, Node node) {
-        traverse(visitor, node, false);
-    }
-    
-    public static void filter(Visitor visitor, Node node) throws Exception {
-        traverse(visitor, node, true);
-    }
-    
-    private static void traverse(Visitor visitor, Node node, boolean filter) {
         try {
-            doTraverse(visitor, node, filter);
+            doTraverse(visitor, visitor.getWhat(), node);
         } catch (Exception e) {
             throw new TraversalException(e);
         }
     }
     
-    private static void doTraverse(Visitor visitor, Node node, boolean filter) throws Exception {
+    private static void doTraverse(Visitor visitor, VisitorDescriptor what, Node node) throws Exception {
         switch (node.getType()) {
             case Folder.TYPE:
-                doTraverse(visitor, (Folder) node, filter);
+                doTraverse(visitor, what, (Folder) node);
                 break;
             case Project.TYPE:
-                doTraverse(visitor, (Project) node, filter);
+                doTraverse(visitor, what, (Project) node);
                 break;
             case Context.TYPE:
-                doTraverse(visitor, (Context) node, filter);
+                doTraverse(visitor, what, (Context) node);
                 break;
             case Task.TYPE:
-                doTraverse(visitor, (Task) node, filter);
+                doTraverse(visitor, what, (Task) node);
                 break;
         }
     }
     
-    private static void doTraverse(Visitor visitor, Folder node, boolean filter) throws Exception {
+    private static void doTraverse(Visitor visitor, VisitorDescriptor what, Folder node) throws Exception {
+        if (!what.getVisitFolders()) {
+            return;
+        }
+        
         visitor.enter (node);
         
-        if (filter){
+        if (what.getFilterFolders()){
             node.setFolders(visitor.filterFoldersDown(node.getFolders()));
         }
         
-        if (filter){
+        if (what.getFilterProjects()){
             node.setProjects(visitor.filterProjectsDown(node.getProjects()));
         }
         
         for (Folder child : node.getFolders()) {
-            doTraverse (visitor, child, filter);
+            doTraverse (visitor, what, child);
         }
        
-        for (Project child : node.getProjects()) {
-            doTraverse (visitor, child, filter);
+        if (what.getVisitProjects()) {
+            for (Project child : node.getProjects()) {
+                doTraverse (visitor, what, child);
+            }
         }
         
-        if (filter){
+        if (what.getFilterFolders()){
             node.setFolders(visitor.filterFoldersUp(node.getFolders()));
         }
         
-        if (filter){
+        if (what.getFilterProjects()){
             node.setProjects(visitor.filterProjectsUp(node.getProjects()));
         }
         
         visitor.exit (node);
     }
 
-    private static void doTraverse(Visitor visitor, Task node, boolean filter) throws Exception {
+    private static void doTraverse(Visitor visitor, VisitorDescriptor what, Task node) throws Exception {
+        if (!what.getVisitTasks()) {
+            return;
+        }
+        
         visitor.enter (node);
        
-        if (filter) {
+        if (what.getFilterTasks()) {
             node.setTasks(visitor.filterTasksDown(node.getTasks()));
         }
         
         for (Task child : node.getTasks()) {
-            doTraverse (visitor, child, filter);
+            doTraverse (visitor, what, child);
         }
         
-        if (filter) {
+        if (what.getFilterTasks()) {
             node.setTasks(visitor.filterTasksUp(node.getTasks()));
         }
         
         visitor.exit (node);
     }
 
-    private static void doTraverse(Visitor visitor, Context node, boolean filter) throws Exception {
+    private static void doTraverse(Visitor visitor, VisitorDescriptor what, Context node) throws Exception {
+        if (!what.getVisitContexts()) {
+            return;
+        }
+        
         visitor.enter (node);
        
-        if (filter) {
+        if (what.getFilterTasks()) {
             node.setTasks(visitor.filterTasksDown(node.getTasks()));
         }
         
-        if (filter) {
+        if (what.getFilterContexts()) {
             node.setContexts(visitor.filterContextsDown(node.getContexts()));
         }
         
-        for (Task child : node.getTasks()) {
-            doTraverse (visitor, child, filter);
+        if (what.getVisitTasks()) {
+            for (Task child : node.getTasks()) {
+                doTraverse (visitor, what, child);
+            }
         }
        
         for (Context child : node.getContexts()) {
-            doTraverse (visitor, child, filter);
+            doTraverse (visitor, what, child);
         }
         
-        if (filter) {
+        if (what.getFilterTasks()) {
             node.setTasks(visitor.filterTasksUp(node.getTasks()));
         }
         
-        if (filter) {
+        if (what.getFilterContexts()) {
             node.setContexts(visitor.filterContextsUp(node.getContexts()));
         }
         visitor.exit(node);
     }
 
-    private static void doTraverse(Visitor visitor, Project node, boolean filter) throws Exception {
+    private static void doTraverse(Visitor visitor, VisitorDescriptor what, Project node) throws Exception {
+        if (!what.getVisitProjects()) {
+            return;
+        }
+        
         visitor.enter (node);
        
-        if (filter) {
+        if (what.getFilterTasks()) {
             node.setTasks(visitor.filterTasksDown(node.getTasks()));
         }
         
-        for (Task child : node.getTasks()) {
-            doTraverse (visitor, child, filter);
+        if (what.getVisitTasks()) {
+            for (Task child : node.getTasks()) {
+                doTraverse (visitor, what, child);
+            }
         }
         
-        if (filter) {
+        if (what.getFilterTasks()) {
             node.setTasks(visitor.filterTasksUp(node.getTasks()));
         }
         

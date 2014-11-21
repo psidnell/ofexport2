@@ -13,10 +13,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-package org.psidnell.omnifocus.organise;
+package org.psidnell.omnifocus.model;
 
-import org.psidnell.omnifocus.model.Node;
+public enum Status {
+    Active, Inactive, Done
 
-public interface Organiser {
-    public Node organise(Node root);
 }

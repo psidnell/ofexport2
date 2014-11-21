@@ -83,4 +83,14 @@ public class Folder extends Node {
     public List<Node> getContextPath() {
         throw new UnsupportedOperationException();
     }
+
+    public void add(Project child) {
+        projects.add(child);
+        child.setFolder(this);
+    }
+
+    public void add(Folder child) {
+        folders.add (child);
+        child.setParent(this);
+    }
 }

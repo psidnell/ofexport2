@@ -35,10 +35,10 @@ public abstract class Common extends Node {
     private Date deferDate;
     private Date dueDate;
     private Date completionDate;
-    private boolean completed;
-    private boolean sequential;
-    private boolean flagged;
-    private List<Task> tasks = new LinkedList<>();
+    private boolean sequential = false;
+    private boolean flagged = false;
+    protected List<Task> tasks = new LinkedList<>();
+    
 
     public void setTasks(List<Task> tasks) {
         this.tasks = tasks;
@@ -56,7 +56,7 @@ public abstract class Common extends Node {
     public void setContext(Context context) {
         this.context = context;
     }
-
+    
     public String getNote() {
         return note;
     }
@@ -92,14 +92,12 @@ public abstract class Common extends Node {
         this.completionDate = completionDate;
     }
 
+    @JsonIgnore
     public boolean isCompleted() {
-        return completed;
+        return completionDate != null;
     }
 
-    public void setCompleted(boolean completed) {
-        this.completed = completed;
-    }
-
+    @SQLiteProperty
     public boolean getSequential() {
         return sequential;
     }

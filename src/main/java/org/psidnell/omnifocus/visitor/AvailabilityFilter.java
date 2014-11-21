@@ -15,43 +15,44 @@ limitations under the License.
 */
 package org.psidnell.omnifocus.visitor;
 
+import org.psidnell.omnifocus.model.Availability;
 import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
 
-public class IncludeVisitor implements Visitor {
-
-    private static final VisitorDescriptor WHAT = new VisitorDescriptor().visitAll();
+public class AvailabilityFilter implements Visitor {
     
-    private boolean include ;
+    private static final VisitorDescriptor WHAT = new VisitorDescriptor().visitAll().filterAll();
+    
+    private Availability availability;
 
     @Override
     public VisitorDescriptor getWhat() {
         return WHAT;
     }
     
-    public IncludeVisitor(boolean include) {
-        this.include = include;
+    public AvailabilityFilter (Availability availability) {
+        this.availability = availability;
     }
     
     @Override
-    public void enter(Context node) throws Exception {
-        node.setIncluded(include);
+    public boolean includeDown(Context c) {
+        return availability.is(c);
     }
     
     @Override
-    public void enter(Folder node) throws Exception {
-        node.setIncluded(include);
+    public boolean includeDown(Folder f) {
+        return availability.is(f);
     }
     
     @Override
-    public void enter(Project node) throws Exception {
-        node.setIncluded(include);
+    public boolean includeDown(Project p) {
+        return availability.is(p);
     }
     
     @Override
-    public void enter(Task node) throws Exception {
-        node.setIncluded(include);
+    public boolean includeDown(Task t) {
+        return availability.is(t);
     }
 }

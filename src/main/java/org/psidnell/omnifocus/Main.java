@@ -27,18 +27,20 @@ import org.apache.commons.cli.Options;
 import org.psidnell.omnifocus.cli.ActiveOption;
 import org.psidnell.omnifocus.cli.ActiveOptionProcessor;
 import org.psidnell.omnifocus.format.Formatter;
+import org.psidnell.omnifocus.model.Availability;
 import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.DataCache;
 import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Project;
-import org.psidnell.omnifocus.organise.TaskSorter;
 import org.psidnell.omnifocus.sqlite.SQLiteDAO;
-import org.psidnell.omnifocus.util.NoisyRunnable;
 import org.psidnell.omnifocus.util.Wrap;
-import org.psidnell.omnifocus.visitor.IncludedFilter;
+import org.psidnell.omnifocus.visitor.AvailabilityFilter;
 import org.psidnell.omnifocus.visitor.IncludeVisitor;
+import org.psidnell.omnifocus.visitor.IncludedFilter;
+import org.psidnell.omnifocus.visitor.SortingFilter;
 import org.psidnell.omnifocus.visitor.Traverser;
 import org.psidnell.omnifocus.visitor.Visitor;
+import org.psidnell.omnifocus.visitor.VisitorDescriptor;
 
 public class Main {
     
@@ -71,14 +73,15 @@ public class Main {
         //        "c", "contextname", true, "Load tasks from context specified by name",
         //        (m,o)->m.processContextName(o)));
         
-        OPTIONS.addOption(new ActiveOption<Main>(
-                "xa", "excludeAll", false, "exclude everything",
-                (m,o)->m.processExcludeAll(o),
-                AFTER_LOAD));
         
         OPTIONS.addOption(new ActiveOption<Main>(
                 "ip", "projectname", true, "include tasks from project specified by name",
                 (m,o)->m.processProjectName(o),
+                AFTER_LOAD));
+        
+        OPTIONS.addOption(new ActiveOption<Main>(
+                "a", "availability", true, "FirstAvailable, Available (default), Remaining, All, Completed",
+                (m,o)->{m.availability = Availability.valueOf(o.nextValue());},
                 AFTER_LOAD));
         
         OPTIONS.addOption(new ActiveOption<Main> (
@@ -151,17 +154,6 @@ public class Main {
         this.processor = processor;
     }
 
-    private void processExcludeAll(ActiveOption<Main> o) {
-        cmdLineActions.add(Wrap.runnable(()->{
-            if (projectMode) {
-                Traverser.traverse(new IncludeVisitor(false), projectRoot);
-            }
-            else {
-                Traverser.traverse(new IncludeVisitor(false), contextRoot);
-            }
-        }));
-
-    }
 
     private void processProjectName(ActiveOption<Main> o) {
         if (!projectMode) {
@@ -207,38 +199,43 @@ public class Main {
                     projectRoot.getProjects().add(child);
                 }
             }
+            
+            Traverser.traverse(new IncludeVisitor(false), projectRoot);
         }
         else {
             for (Context child : data.getContexts().values()){
                 if (child.getParent() == null) {
                     contextRoot.getContexts().add(child);
                 }
-            }            
+            }
+            
+            Traverser.traverse(new IncludeVisitor(false), contextRoot);
         }
     }
     
     private void run () throws Exception {
         cmdLineActions.stream().forEach((a)->a.run());
         
-        // Prune items not included
+        filters.add(new AvailabilityFilter (availability));
+        
         filters.add(new IncludedFilter());
+        
+        filters.add(new SortingFilter());
         
         if (projectMode) {
             for (Visitor filter : filters) {
-                Traverser.filter(filter, projectRoot);
+                Traverser.traverse(filter, projectRoot);
             }
         }
         else {
             for (Visitor filter : filters) {
-                Traverser.filter(filter, contextRoot);
+                Traverser.traverse(filter, contextRoot);
             }
         }
 
         String formatterClassName = "org.psidnell.omnifocus.format." + format + "Formatter";
         Formatter formatter = (Formatter) Class.forName(formatterClassName).newInstance();
-        
-        TaskSorter sorter = new TaskSorter();
-        
+                
         Writer out = new OutputStreamWriter(System.out) {
             @Override
             public void close() throws IOException {
@@ -247,11 +244,9 @@ public class Main {
         };
         
         if (projectMode) {
-            sorter.organise(projectRoot);
             formatter.format(projectRoot, out);
         }
         else {
-            sorter.organise(contextRoot);
             formatter.format(contextRoot, out);
         }
         

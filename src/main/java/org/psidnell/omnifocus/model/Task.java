@@ -12,7 +12,7 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*/
+ */
 package org.psidnell.omnifocus.model;
 
 import java.util.LinkedList;
@@ -28,31 +28,36 @@ public class Task extends Common {
 
     private String containingProject;
     private boolean next;
-    private boolean blocked;
-    
     private String parentTaskId;
-
     private String contextId;
-
     private Task parent;
-
     private Project project;
-    
-    @SQLiteProperty (name="context")
-    public String getContextId () {
+    private boolean blocked = false;
+
+    @SQLiteProperty
+    public boolean getBlocked() {
+        return blocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        this.blocked = blocked;
+    }
+
+    @SQLiteProperty(name = "context")
+    public String getContextId() {
         return contextId;
     }
-    
-    public void setContextId (String contextId) {
+
+    public void setContextId(String contextId) {
         this.contextId = contextId;
     }
-    
-    @SQLiteProperty (name="parent")
-    public String getParentTaskId () {
+
+    @SQLiteProperty(name = "parent")
+    public String getParentTaskId() {
         return parentTaskId;
     }
-    
-    public void setParentTaskId (String parentFolderId) {
+
+    public void setParentTaskId(String parentFolderId) {
         this.parentTaskId = parentFolderId;
     }
 
@@ -78,19 +83,11 @@ public class Task extends Common {
         this.next = next;
     }
 
-    public boolean getBlocked() {
-        return blocked;
-    }
-
-    public void setBlocked(boolean blocked) {
-        this.blocked = blocked;
-    }
-
     @JsonIgnore
-    public Task getParent () {
+    public Task getParent() {
         return parent;
     }
-    
+
     public void setParent(Task parent) {
         this.parent = parent;
     }
@@ -99,11 +96,9 @@ public class Task extends Common {
     public List<Node> getProjectPath() {
         if (parent != null) {
             return getProjectPath(parent);
-        }
-        else if (project != null) {
-            return getProjectPath (project);
-        }
-        else {
+        } else if (project != null) {
+            return getProjectPath(project);
+        } else {
             // Inbox task? TODO
             LinkedList<Node> result = new LinkedList<>();
             result.add(this);
@@ -112,11 +107,16 @@ public class Task extends Common {
     }
 
     @JsonIgnore
-    public Project getProject () {
+    public Project getProject() {
         return project;
     }
-    
+
     public void setProject(Project project) {
         this.project = project;
+    }
+    
+    public void add(Task child) {
+        tasks.add(child);
+        child.setParent(this);
     }
 }

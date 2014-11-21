@@ -25,6 +25,7 @@ import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
 import org.psidnell.omnifocus.visitor.Traverser;
 import org.psidnell.omnifocus.visitor.Visitor;
+import org.psidnell.omnifocus.visitor.VisitorDescriptor;
 
 public class SimpleTextListFormatter implements Formatter {
 
@@ -40,11 +41,18 @@ public class SimpleTextListFormatter implements Formatter {
 
     private static class FormattingVisitor implements Visitor {
     
+        private static final VisitorDescriptor WHAT = new VisitorDescriptor().visitAll();
+        
         private int depth = 0;
         private final Writer out;
         
         private FormattingVisitor (Writer out) {
             this.out = out;
+        }
+        
+        @Override
+        public VisitorDescriptor getWhat() {
+            return WHAT;
         }
         
         @Override

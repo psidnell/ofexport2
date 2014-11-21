@@ -31,7 +31,6 @@ import java.util.Map;
 import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.DataCache;
 import org.psidnell.omnifocus.model.Folder;
-import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.ProjectInfo;
 import org.psidnell.omnifocus.model.Task;
 
@@ -119,7 +118,6 @@ public class SQLiteDAO {
         try (ResultSet rs = md.getTables(null, null, "%", null)) {
             while (rs.next()) {
                 String tableName = rs.getString(3);
-                System.out.println(tableName);
                 tableNames.add(tableName);
             }
         }

@@ -63,8 +63,7 @@ public class DataCache {
             String parentId = folder.getParentFolderId();
             if (parentId != null) {
                 Folder parent = folders.get(parentId);
-                parent.getFolders().add(folder);
-                folder.setParent(parent);
+                parent.add (folder);
             }
         }
         
@@ -73,8 +72,7 @@ public class DataCache {
             String parentId = task.getParentTaskId();
             if (parentId != null) {
                 Task parent = tasks.get(parentId);
-                parent.getTasks().add(task);
-                task.setParent(parent);
+                parent.add(task);
             }
         }
         
@@ -83,8 +81,7 @@ public class DataCache {
             String parentId = context.getParentContextId();
             if (parentId != null) {
                 Context parent = contexts.get(parentId);
-                parent.getContexts().add(context);
-                context.setParent(parent);
+                parent.add (context);
             }
         }
        
@@ -103,22 +100,20 @@ public class DataCache {
         // since a copy of the root tasks subtasks is taken
         for (ProjectInfo projInfo : projInfos.values()) {
             Task rootTask = tasks.get(projInfo.getRootTaskId());
-            Project project = new Project (rootTask);
+            Project project = new Project (projInfo, rootTask);
             
             // Set containing Folder for project
             String folderId = projInfo.getFolderId();
             if (folderId != null) {
                 Folder folder = folders.get(folderId);
-                project.setFolder (folder);
-                folder.getProjects().add(project);
+                folder.add(project);
             }
             
             projects.put (project.getId (), project);
             
             // Eliminate the redundant root task from the hierarchy
             for (Task childOfRootTask : rootTask.getTasks()) {
-                childOfRootTask.setParent(null);
-                childOfRootTask.setProject(project);
+                project.add(childOfRootTask);
             } 
             
             // Discard the root task

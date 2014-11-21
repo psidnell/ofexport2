@@ -82,4 +82,14 @@ public class Context extends Node {
     public List<Node> getContextPath() {
         return getContextPath(parent);
     }
+
+    public void add(Context child) {
+        contexts.add(child);
+        child.setParent(this);
+    }
+
+    public void add(Task child) {
+        tasks.add(child);
+        child.setContext(this);
+    }
 }

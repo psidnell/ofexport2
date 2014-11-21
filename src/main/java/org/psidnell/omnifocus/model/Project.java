@@ -23,13 +23,15 @@ public class Project extends Common {
 
     public static final String TYPE = "Project";
     private Folder folder;
+    private Status status;
 
     public Project () {
     }
     
-    public Project (Task rootTask) {
+    public Project (ProjectInfo projInfo, Task rootTask) {
         setId(rootTask.getId ());
         setName(rootTask.getName());
+        status = projInfo.getStatus ();
         getTasks().addAll(rootTask.getTasks());
     }
     
@@ -51,5 +53,15 @@ public class Project extends Common {
     
     public void setFolder(Folder folder) {
         this.folder = folder;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void add(Task child) {
+        tasks.add(child);
+        child.setProject(this);
+        child.setParent(null);
     }
 }

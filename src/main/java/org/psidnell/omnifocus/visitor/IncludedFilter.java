@@ -22,6 +22,13 @@ import org.psidnell.omnifocus.model.Task;
 
 public class IncludedFilter implements Visitor {
     
+    private static final VisitorDescriptor WHAT = new VisitorDescriptor().visitAll().filterAll();
+
+    @Override
+    public VisitorDescriptor getWhat() {
+        return WHAT;
+    }
+    
     @Override
     public boolean includeDown(Context c) {
         return c.getIncluded();

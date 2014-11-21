@@ -25,6 +25,8 @@ import org.psidnell.omnifocus.model.Task;
 
 public interface Visitor {
     
+    VisitorDescriptor getWhat ();
+    
     default void enter(Folder node) throws Exception {
     }
 

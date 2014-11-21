@@ -21,6 +21,29 @@ public class ProjectInfo {
 
     public String task;
     private String folderId;
+    private Status status;
+    
+    
+    @SQLiteProperty (name="status")
+    public String getStatusString () {
+        return status.toString();
+    }
+    
+    public void setStatusString (String status) {
+        switch (status) {
+            case "active":
+                this.status = Status.Active;
+                break;
+            case "inactive":
+                this.status = Status.Inactive;
+                break;
+            case "done":
+                this.status = Status.Done;
+                break;
+            default:
+                throw new IllegalArgumentException ("Unexpected status: " + status);
+        }
+    }
     
     @SQLiteProperty(name="folder")
     public String getFolderId () {
@@ -38,5 +61,9 @@ public class ProjectInfo {
     
     public void setRootTaskId (String task) {
         this.task = task;
+    }
+
+    public Status getStatus() {
+        return status;
     }
 }

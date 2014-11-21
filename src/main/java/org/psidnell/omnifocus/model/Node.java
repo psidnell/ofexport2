@@ -22,6 +22,7 @@ import java.util.UUID;
 import org.psidnell.omnifocus.sqlite.SQLiteProperty;
 import org.psidnell.omnifocus.visitor.IncludeVisitor;
 import org.psidnell.omnifocus.visitor.Traverser;
+import org.psidnell.omnifocus.visitor.VisitorDescriptor;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -32,6 +33,8 @@ public abstract class Node {
     private String id = UUID.randomUUID().toString();
 
     private boolean included = true;
+
+    private int rank;
     
     @SQLiteProperty
     public String getName() {
@@ -51,6 +54,15 @@ public abstract class Node {
         this.id = id;
     }
 
+    @SQLiteProperty
+    public int getRank () {
+        return rank;
+    }
+    
+    public void setRank (int rank) {
+        this.rank = rank;
+    }
+    
     @JsonIgnore
     public abstract String getType();
 
@@ -64,28 +76,22 @@ public abstract class Node {
     }
     
     public void include (boolean projectPath) {
-        
-        // Include this node and all children
-        Traverser.traverse(new IncludeVisitor (true), this);
-        
-        // Include path to root
-        if (projectPath) {
-            for (Node node : getProjectPath()) {
-                node.setIncluded(true);
+        if (!included) {
+            // Include this node and all children
+            Traverser.traverse(new IncludeVisitor (true), this);
+            
+            // Include path to root
+            if (projectPath) {
+                for (Node node : getProjectPath()) {
+                    node.setIncluded(true);
+                }
+            }
+            else {
+                for (Node node : getContextPath()) {
+                    node.setIncluded(true);
+                }
             }
         }
-        else {
-            for (Node node : getContextPath()) {
-                node.setIncluded(true);
-            }
-        }
-    }
-    
-    public void exclude () {
-        this.included = false;
-        
-        // Exclude this node and all children
-        Traverser.traverse(new IncludeVisitor (false), this);
     }
     
     @Override

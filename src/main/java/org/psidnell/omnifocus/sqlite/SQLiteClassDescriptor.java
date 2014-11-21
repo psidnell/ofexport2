@@ -55,14 +55,28 @@ public class SQLiteClassDescriptor<T> {
         columnsForSelect = columns.toString();
     }
 
-    public Collection<T> load(ResultSet rs) throws SQLException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
+    public Collection<T> load(ResultSet rs) throws SQLException, InvocationTargetException, InstantiationException, IllegalAccessException {
         LinkedList<T> tasks = new LinkedList<>();
         while (rs.next()) {
             T instance = clazz.newInstance();
             for (SQLITEPropertyDescriptor desc : properties) {
-                Object rawValue;
-                rawValue = getValue(rs, desc);
-                desc.getSetter().invoke(instance, rawValue);
+                Object rawValue = getValue(rs, desc);
+                Object value = rawValue;
+                try {
+                    if (rawValue != null) {
+                        switch (desc.getType().getSimpleName()) {
+                            case "Boolean": 
+                            case "boolean" :
+                                value =  1 == (Integer) rawValue;
+                                break;
+                        }
+                    }
+                    desc.getSetter().invoke(instance, value);
+                }
+                catch (IllegalArgumentException e) {
+                    String valTypeName = rawValue == null ? "null" : rawValue.getClass().getSimpleName();
+                    throw new IllegalArgumentException ("mismatch " + desc.getType().getSimpleName() + " and " + valTypeName, e);
+                }
             }
             tasks.add (instance);
         }
