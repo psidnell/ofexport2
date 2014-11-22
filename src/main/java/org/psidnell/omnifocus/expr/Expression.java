@@ -15,28 +15,35 @@ limitations under the License.
  */
 package org.psidnell.omnifocus.expr;
 
-import org.psidnell.omnifocus.model.Node;
-
 import ognl.Ognl;
 import ognl.OgnlContext;
 import ognl.OgnlException;
 
-public class Expr {
+import org.psidnell.omnifocus.model.Node;
+
+public class Expression {
 
     private static final OgnlContext OGNL_CONTEXT = new OgnlContext();
-
-    public static Object eval(Node node, String expr) {
+    private Object expression;
+    
+    public Expression (String expression) {
         try {
-            Object expression = Ognl.parseExpression(expr);
-            Object value = Ognl.getValue(expression, OGNL_CONTEXT, node);
-            return value;
+            this.expression = Ognl.parseExpression(expression);
+        } catch (OgnlException e) {
+            throw new IllegalArgumentException(e);
+        }
+    }
+    
+    public Object eval(Node node) {
+        try {
+            return Ognl.getValue(expression, OGNL_CONTEXT, node);
         } catch (OgnlException e) {
             throw new IllegalArgumentException(e);
         }
     }
     
     @SuppressWarnings("unchecked")
-    public static <T> T eval (Node node, String expr, Class<T> clazz) {
-        return (T) eval (node, expr);
+    public <T> T eval (Node node, Class<T> clazz) {
+        return (T) eval (node);
     }
 }

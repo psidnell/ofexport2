@@ -19,13 +19,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
+import org.psidnell.omnifocus.expr.ExpressionFunctions;
 import org.psidnell.omnifocus.sqlite.SQLiteProperty;
 import org.psidnell.omnifocus.visitor.IncludeVisitor;
 import org.psidnell.omnifocus.visitor.Traverser;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public abstract class Node {
+public abstract class Node extends ExpressionFunctions {
 
     protected String name;
 

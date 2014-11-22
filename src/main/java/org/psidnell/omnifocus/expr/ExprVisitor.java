@@ -27,10 +27,10 @@ public class ExprVisitor implements Visitor {
 
     private VisitorDescriptor visitWhat;
     private VisitorDescriptor applyToWhat;
-    private String expr;
+    private Expression expr;
 
     public ExprVisitor (String expr, VisitorDescriptor visitWhat, VisitorDescriptor applyToWhat) {
-        this.expr = expr;
+        this.expr = new Expression (expr);
         this.visitWhat = visitWhat;
         this.applyToWhat = applyToWhat;
     }
@@ -68,7 +68,7 @@ public class ExprVisitor implements Visitor {
     }
     
     private void evaluate(Node node) {
-        boolean include = Expr.eval(node, expr, Boolean.class);
+        boolean include = expr.eval(node, Boolean.class);
         if (include) {
             node.include(true);
         }
