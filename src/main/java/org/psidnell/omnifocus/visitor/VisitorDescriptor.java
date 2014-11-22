@@ -85,39 +85,39 @@ public class VisitorDescriptor {
         return this;
     }
     
-    boolean getFoldersTasks () {
-        return visitFolders ;
+    public boolean getFoldersTasks () {
+        return visitTasks ;
     }
     
-    boolean getVisitTasks () {
+    public boolean getVisitTasks () {
         return visitTasks;
     }
     
-    boolean getVisitProjects () {
+    public boolean getVisitProjects () {
         return visitProjects;
     }
     
-    boolean getVisitContexts () {
+    public boolean getVisitContexts () {
         return visitContexts;
     }
     
-    boolean getVisitFolders () {
-        return visitContexts;
+    public boolean getVisitFolders () {
+        return visitFolders;
     }
  
-    boolean getFilterTasks () {
+    public boolean getFilterTasks () {
         return filterTasks;
     }
     
-    boolean getFilterProjects () {
+    public boolean getFilterProjects () {
         return filterProjects;
     }
     
-    boolean getFilterContexts () {
+    public boolean getFilterContexts () {
         return filterContexts;
     }
     
-    boolean getFilterFolders () {
+    public boolean getFilterFolders () {
         return filterFolders;
     }
 }

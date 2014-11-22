@@ -52,7 +52,7 @@ public interface Visitor {
     }
 
     default List<Folder> filterFoldersUp(List<Folder> folders) {
-        return folders.stream().filter((p)->includeUp(p)).collect(Collectors.toList());
+        return folders.stream().filter((f)->includeUp(f)).collect(Collectors.toList());
     }
 
     default List<Project> filterProjectsUp(List<Project> projects) {
@@ -64,11 +64,11 @@ public interface Visitor {
     }
 
     default List<Task> filterTasksUp(List<Task> tasks) {
-        return tasks.stream().filter((p)->includeUp(p)).collect(Collectors.toList());
+        return tasks.stream().filter((t)->includeUp(t)).collect(Collectors.toList());
     }
     
     default List<Folder> filterFoldersDown(List<Folder> folders) {
-        return folders.stream().filter((p)->includeDown(p)).collect(Collectors.toList());
+        return folders.stream().filter((f)->includeDown(f)).collect(Collectors.toList());
     }
 
     default List<Project> filterProjectsDown(List<Project> projects) {
@@ -76,11 +76,11 @@ public interface Visitor {
     }
 
     default List<Context> filterContextsDown(List<Context> contexts) {
-        return contexts.stream().filter((p)->includeDown(p)).collect(Collectors.toList());
+        return contexts.stream().filter((c)->includeDown(c)).collect(Collectors.toList());
     }
 
     default List<Task> filterTasksDown(List<Task> tasks) {
-        return tasks.stream().filter((p)->includeDown(p)).collect(Collectors.toList());
+        return tasks.stream().filter((t)->includeDown(t)).collect(Collectors.toList());
     }
     
     default boolean includeUp (Project p) {

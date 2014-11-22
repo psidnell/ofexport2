@@ -15,11 +15,12 @@ limitations under the License.
 */
 package org.psidnell.omnifocus.model;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class Project extends Common {
+public class Project extends CommonProjectTask {
 
     public static final String TYPE = "Project";
     private Folder folder;
@@ -32,7 +33,9 @@ public class Project extends Common {
         setId(rootTask.getId ());
         setName(rootTask.getName());
         status = projInfo.getStatus ();
-        getTasks().addAll(rootTask.getTasks());
+        for (Task childOfRootTask : new LinkedList<>(rootTask.getTasks())) {
+            add (childOfRootTask);
+        }
     }
     
     @Override
@@ -61,7 +64,25 @@ public class Project extends Common {
 
     public void add(Task child) {
         tasks.add(child);
-        child.setProject(this);
+        Project oldProject = child.getProject();
+        Task oldParent = child.getParent();
         child.setParent(null);
+        child.setProject(this);
+        if (oldProject != null) {
+            oldProject.getTasks().remove(child);
+        }
+        if (oldParent != null) {
+            oldParent.getTasks().remove(child);
+        }
+    }
+
+    @Override
+    public boolean isAvailable() {
+        return !isCompleted() && Status.Active.equals(getStatus ());
+    }
+
+    @Override
+    public boolean isRemaining() {
+        return !isCompleted() && !Status.Done.equals(getStatus ());
     }
 }

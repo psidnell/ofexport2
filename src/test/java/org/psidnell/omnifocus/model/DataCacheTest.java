@@ -260,6 +260,8 @@ public class DataCacheTest {
         assertSame(child, dataCache.getTasks().get(id));
         assertSame(project, child.getProject());
         assertNull(child.getParent());
+        assertEquals (1, project.getTasks().size());
+        assertTrue (project.getTasks().contains(child));
 
         assertEquals("[rootTask, child]", child.getProjectPath().stream().map((x) -> x.getName()).collect(Collectors.toList()).toString());
         assertEquals("[child]", child.getContextPath().stream().map((x) -> x.getName()).collect(Collectors.toList()).toString());

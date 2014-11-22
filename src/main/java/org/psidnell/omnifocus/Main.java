@@ -26,15 +26,15 @@ import java.util.List;
 import org.apache.commons.cli.Options;
 import org.psidnell.omnifocus.cli.ActiveOption;
 import org.psidnell.omnifocus.cli.ActiveOptionProcessor;
+import org.psidnell.omnifocus.expr.ExprVisitor;
 import org.psidnell.omnifocus.format.Formatter;
-import org.psidnell.omnifocus.model.Availability;
 import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.DataCache;
 import org.psidnell.omnifocus.model.Folder;
+import org.psidnell.omnifocus.model.Node;
 import org.psidnell.omnifocus.model.Project;
+import org.psidnell.omnifocus.model.Task;
 import org.psidnell.omnifocus.sqlite.SQLiteDAO;
-import org.psidnell.omnifocus.util.Wrap;
-import org.psidnell.omnifocus.visitor.AvailabilityFilter;
 import org.psidnell.omnifocus.visitor.IncludeVisitor;
 import org.psidnell.omnifocus.visitor.IncludedFilter;
 import org.psidnell.omnifocus.visitor.SortingFilter;
@@ -73,16 +73,50 @@ public class Main {
         //        "c", "contextname", true, "Load tasks from context specified by name",
         //        (m,o)->m.processContextName(o)));
         
-        
         OPTIONS.addOption(new ActiveOption<Main>(
-                "ip", "projectname", true, "include tasks from project specified by name",
-                (m,o)->m.processProjectName(o),
+                "pe", "projectexpr", true, "include items where project expression is true",
+                (m,o)->m.processProjectExpression(o.nextValue()),
                 AFTER_LOAD));
         
         OPTIONS.addOption(new ActiveOption<Main>(
-                "a", "availability", true, "FirstAvailable, Available (default), Remaining, All, Completed",
-                (m,o)->{m.availability = Availability.valueOf(o.nextValue());},
+                "pi", "projectname", true, "include tasks from project specified by name",
+                (m,o)->m.processProjectName(o.nextValue()),
                 AFTER_LOAD));
+        
+        OPTIONS.addOption(new ActiveOption<Main>(
+                "fe", "folderexpr", true, "include items where folder expression is true",
+                (m,o)->m.processFolderExpression(o.nextValue()),
+                AFTER_LOAD));
+        
+        OPTIONS.addOption(new ActiveOption<Main>(
+                "fi", "foldername", true, "include tasks from project specified by name",
+                (m,o)->m.processFolderName(o.nextValue()),
+                AFTER_LOAD));
+        
+        OPTIONS.addOption(new ActiveOption<Main>(
+                "te", "taskexpr", true, "include items where task expression is true",
+                (m,o)->m.processTaskExpression(o.nextValue()),
+                AFTER_LOAD));
+        
+        OPTIONS.addOption(new ActiveOption<Main>(
+                "ti", "taskname", true, "include tasks specified by name",
+                (m,o)->m.processTaskName(o.nextValue()),
+                AFTER_LOAD));
+        
+        OPTIONS.addOption(new ActiveOption<Main>(
+                "ce", "contextexpr", true, "include items where context expression is true",
+                (m,o)->m.processContextExpression(o.nextValue()),
+                AFTER_LOAD));
+        
+        OPTIONS.addOption(new ActiveOption<Main>(
+                "ci", "taskname", true, "include contexts specified by name",
+                (m,o)->m.processContextName(o.nextValue()),
+                AFTER_LOAD));
+        
+        //OPTIONS.addOption(new ActiveOption<Main>(
+        //        "a", "availability", true, "FirstAvailable, Available (default), Remaining, All, Completed",
+        //        (m,o)->{m.availability = Availability.valueOf(o.nextValue());},
+        //        AFTER_LOAD));
         
         OPTIONS.addOption(new ActiveOption<Main> (
                 "projectMode", false, "the default mode",
@@ -130,16 +164,10 @@ public class Main {
 
     public static final String PROG = "ofexport2";
     
-    private String taskExpr = null;
-    private String projectExpr = null;
-    private String contextExpr = null;
-    private String folderExpr = null;
-    private Availability availability = Availability.Available;
     private ActiveOptionProcessor<Main> processor;
     private String format = "SimpleTextList";
     private boolean projectMode = true;
 
-    private List<Runnable> cmdLineActions = new LinkedList<>();
     private List<Visitor> filters = new LinkedList<>();
 
     private DataCache data;
@@ -154,21 +182,80 @@ public class Main {
         this.processor = processor;
     }
 
-
-    private void processProjectName(ActiveOption<Main> o) {
+    private void processProjectExpression(String expression) {
         if (!projectMode) {
             throw new IllegalArgumentException ("project filters only valid in project mode");
         }
-        String projectName = o.nextValue();
-        cmdLineActions.add(Wrap.runnable(()->{
-            for (Project p : data.getProjects().values()) {
-                if (projectName.equals(p.getName())) {
-                    p.include(projectMode);
-                }
-            }
-        }));
+        VisitorDescriptor visitwhat = new  VisitorDescriptor().visit(Folder.class, Project.class);
+        VisitorDescriptor applyToWhat = new  VisitorDescriptor().visit(Project.class);
+        filters.add(new ExprVisitor(expression, visitwhat, applyToWhat));
+        filters.add(new IncludedFilter());
     }
 
+    private void processProjectName(String projectName) {
+        if (!projectMode) {
+            throw new IllegalArgumentException ("project filters only valid in project mode");
+        }
+        processProjectExpression("name=='" + escape(projectName) + "'");
+    }
+    
+    private void processFolderExpression(String expression) {
+        if (!projectMode) {
+            throw new IllegalArgumentException ("project filters only valid in project mode");
+        }
+        VisitorDescriptor visitWhat = new  VisitorDescriptor().visit(Folder.class);
+        VisitorDescriptor applyToWhat = new  VisitorDescriptor().visit(Folder.class);
+        filters.add(new ExprVisitor(expression, visitWhat, applyToWhat));
+        filters.add(new IncludedFilter());
+    }
+
+    private void processFolderName(String folderName) {
+        if (!projectMode) {
+            throw new IllegalArgumentException ("project filters only valid in project mode");
+        }
+        processFolderExpression("name=='" + escape(folderName) + "'");
+    }
+    
+    private void processTaskName(String taskName) {
+        if (!projectMode) {
+            throw new IllegalArgumentException ("project filters only valid in project mode");
+        }
+        processTaskExpression("name=='" + escape(taskName) + "'");
+    }
+    
+    private void processTaskExpression(String expression) {
+        if (projectMode) {
+            VisitorDescriptor visitWhat = new  VisitorDescriptor().visit(Folder.class, Project.class, Task.class);
+            VisitorDescriptor applyToWhat = new  VisitorDescriptor().visit(Task.class);
+            filters.add(new ExprVisitor(expression, visitWhat, applyToWhat));
+        }
+        else {
+            VisitorDescriptor visitWhat = new  VisitorDescriptor().visit(Context.class, Task.class);
+            VisitorDescriptor applyToWhat = new  VisitorDescriptor().visit(Task.class);
+            filters.add(new ExprVisitor(expression, visitWhat, applyToWhat));
+        }
+        filters.add(new IncludedFilter());
+    }
+
+    private void processContextName(String taskName) {
+        if (projectMode) {
+            throw new IllegalArgumentException ("project filters only valid in project mode");
+        }
+        processContextExpression("name=='" + escape(taskName) + "'");
+    }
+
+    private void processContextExpression(String expression) {
+        if (projectMode) {
+            throw new IllegalArgumentException ("context filters only valid in context mode");
+        }
+        VisitorDescriptor visitWhat = new  VisitorDescriptor().visit(Context.class);
+        VisitorDescriptor applyToWhat = new  VisitorDescriptor().visit(Context.class);
+        filters.add(new ExprVisitor(expression, visitWhat, applyToWhat));
+        filters.add(new IncludedFilter());
+    }
+
+
+    
     private void processFormat(ActiveOption<Main> o) {
         format = o.nextValue();
     }
@@ -177,7 +264,7 @@ public class Main {
        processor.printHelp ();
        exit  = true;
     }
-
+    
     private void load () throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, SQLException {
         data = SQLiteDAO.load();
         
@@ -188,6 +275,7 @@ public class Main {
         contextRoot.setName("RootContext");
         
         if (projectMode) {
+            // Add root projects/folders to the fabricated root folder
             for (Folder child : data.getFolders().values()){
                 if (child.getParent() == null) {
                     projectRoot.getFolders().add(child);
@@ -199,10 +287,10 @@ public class Main {
                     projectRoot.getProjects().add(child);
                 }
             }
-            
             Traverser.traverse(new IncludeVisitor(false), projectRoot);
         }
         else {
+            // Add root contexts to the fabricated root context
             for (Context child : data.getContexts().values()){
                 if (child.getParent() == null) {
                     contextRoot.getContexts().add(child);
@@ -214,23 +302,14 @@ public class Main {
     }
     
     private void run () throws Exception {
-        cmdLineActions.stream().forEach((a)->a.run());
-        
-        filters.add(new AvailabilityFilter (availability));
-        
-        filters.add(new IncludedFilter());
         
         filters.add(new SortingFilter());
         
         if (projectMode) {
-            for (Visitor filter : filters) {
-                Traverser.traverse(filter, projectRoot);
-            }
+            filters.stream().forEachOrdered((f)->Traverser.traverse(f, projectRoot));
         }
         else {
-            for (Visitor filter : filters) {
-                Traverser.traverse(filter, contextRoot);
-            }
+            filters.stream().forEachOrdered((f)->Traverser.traverse(f, contextRoot));
         }
 
         String formatterClassName = "org.psidnell.omnifocus.format." + format + "Formatter";
@@ -271,5 +350,9 @@ public class Main {
         processor.processOptions(main, args, AFTER_LOAD);
 
         main.run ();
+    }
+    
+    private String escape (String val) {
+        return val.replaceAll("'", "\'");
     }
 }

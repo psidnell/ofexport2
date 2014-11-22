@@ -18,6 +18,7 @@ package org.psidnell.omnifocus.format;
 import java.io.IOException;
 import java.io.Writer;
 
+import org.psidnell.omnifocus.model.CommonProjectTask;
 import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Node;
@@ -96,12 +97,7 @@ public class SimpleTextListFormatter implements Formatter {
     
         public void enter(Task node) throws IOException {
             out.write(indent(depth));
-            if (node.isCompleted()) {
-                out.write("[X] ");
-            }
-            else {
-                out.write("[ ] ");
-            }
+            printTickBox(node);
             out.write(node.getName());
             out.write("\n");
             depth++;
@@ -120,7 +116,7 @@ public class SimpleTextListFormatter implements Formatter {
             return indent.toString();
         }
         
-        private void printTickBox(Project node) throws IOException {
+        private void printTickBox(CommonProjectTask node) throws IOException {
             if (node.isCompleted()) {
                 out.write("[X] ");
             }

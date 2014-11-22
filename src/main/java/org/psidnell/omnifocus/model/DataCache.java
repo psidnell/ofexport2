@@ -17,6 +17,8 @@ package org.psidnell.omnifocus.model;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 public class DataCache {
     
@@ -110,11 +112,6 @@ public class DataCache {
             }
             
             projects.put (project.getId (), project);
-            
-            // Eliminate the redundant root task from the hierarchy
-            for (Task childOfRootTask : rootTask.getTasks()) {
-                project.add(childOfRootTask);
-            } 
             
             // Discard the root task
             tasks.remove(rootTask.getId());   

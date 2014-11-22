@@ -25,7 +25,7 @@ import org.psidnell.omnifocus.sqlite.SQLiteProperty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public abstract class Common extends Node {
+public abstract class CommonProjectTask extends Node {
 
     // Of the form: "2014-10-12T23:00:00.000Z"
     private static final DateTimeFormatter DATE_PARSER = ISODateTimeFormat.dateTime();
@@ -38,12 +38,15 @@ public abstract class Common extends Node {
     private boolean sequential = false;
     private boolean flagged = false;
     protected List<Task> tasks = new LinkedList<>();
-    
 
     public void setTasks(List<Task> tasks) {
         this.tasks = tasks;
     }
 
+    public abstract boolean isAvailable ();
+    
+    public abstract boolean isRemaining ();
+    
     public List<Task> getTasks() {
         return tasks;
     }

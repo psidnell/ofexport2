@@ -22,7 +22,6 @@ import java.util.UUID;
 import org.psidnell.omnifocus.sqlite.SQLiteProperty;
 import org.psidnell.omnifocus.visitor.IncludeVisitor;
 import org.psidnell.omnifocus.visitor.Traverser;
-import org.psidnell.omnifocus.visitor.VisitorDescriptor;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -91,6 +90,13 @@ public abstract class Node {
                     node.setIncluded(true);
                 }
             }
+        }
+    }
+    
+    public void exclude () {
+        if (included) {
+            // Include this node and all children
+            Traverser.traverse(new IncludeVisitor (false), this);
         }
     }
     

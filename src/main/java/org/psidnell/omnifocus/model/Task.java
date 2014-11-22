@@ -22,7 +22,7 @@ import org.psidnell.omnifocus.sqlite.SQLiteProperty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class Task extends Common {
+public class Task extends CommonProjectTask {
 
     public static final String TYPE = "Task";
 
@@ -33,7 +33,7 @@ public class Task extends Common {
     private Task parent;
     private Project project;
     private boolean blocked = false;
-
+    
     @SQLiteProperty
     public boolean getBlocked() {
         return blocked;
@@ -117,6 +117,20 @@ public class Task extends Common {
     
     public void add(Task child) {
         tasks.add(child);
+        Task oldParent = child.getParent();
         child.setParent(this);
+        if (oldParent != null) {
+            oldParent.getTasks().remove(child);
+        }
+    }
+
+    @Override
+    public boolean isAvailable() {
+        return !isCompleted() && !getBlocked();
+    }
+
+    @Override
+    public boolean isRemaining() {
+        return !isCompleted();
     }
 }

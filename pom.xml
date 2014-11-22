@@ -7,8 +7,6 @@
 
 	<properties>
 		<jacksonVersion>2.4.3</jacksonVersion>
-		<antlr-version>4.3</antlr-version>
-		<antlr-generated-code-package>org.psidnell.omnifocus.expr</antlr-generated-code-package>
 	</properties>
 
 	<dependencies>
@@ -49,6 +47,11 @@
 			<version>2.5</version>
 		</dependency>
 		<dependency>
+			<groupId>ognl</groupId>
+			<artifactId>ognl</artifactId>
+			<version>3.0.8</version>
+		</dependency>
+		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<version>1.7.7</version>
@@ -59,20 +62,15 @@
 			<version>1.7.7</version>
 		</dependency>
 		<dependency>
-			<groupId>org.antlr</groupId>
-			<artifactId>antlr4-runtime</artifactId>
-			<version>${antlr-version}</version>
-		</dependency>
-		<dependency>
 			<groupId>org.xerial</groupId>
 			<artifactId>sqlite-jdbc</artifactId>
 			<version>3.8.7</version>
 		</dependency>
 		<dependency>
-		    <groupId>org.easymock</groupId>
-		    <artifactId>easymock</artifactId>
-		    <version>3.2</version>
-		    <scope>test</scope>
+			<groupId>org.easymock</groupId>
+			<artifactId>easymock</artifactId>
+			<version>3.2</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -114,96 +112,6 @@
 					<platforms>
 						<platform>unix</platform>
 					</platforms>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.antlr</groupId>
-				<artifactId>antlr4-maven-plugin</artifactId>
-				<version>${antlr-version}</version>
-				<executions>
-					<execution>
-						<id>antlr</id>
-						<goals>
-							<goal>antlr4</goal>
-						</goals>
-						<phase>generate-sources</phase>
-					</execution>
-				</executions>
-				<configuration>
-					<!-- The Antlr plugin can't seem to generate source with the requested 
-						package AND put it in a directory that matches that package. The plugin does 
-						have an option to specify the directory you want the files generated to - 
-						but it then adds that as a source path to maven - which won't be the package 
-						root. It will build and test OK but if you build an eclipse project from 
-						the pom it will give errors for all the misplaced files. I resolve this with 
-						other plugins below -->
-					<arguments>
-						<argument>-package</argument>
-						<argument>${antlr-generated-code-package}</argument>
-					</arguments>
-				</configuration>
-			</plugin>
-			<plugin>
-				<!-- Derive the antlr path from the antlr package variable. -->
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>1.8</version>
-				<executions>
-					<execution>
-						<id>regex-property</id>
-						<goals>
-							<goal>regex-property</goal>
-						</goals>
-						<configuration>
-							<name>antlr-generated-code-path</name>
-							<value>${antlr-generated-code-package}</value>
-							<regex>\.</regex>
-							<replacement>\/</replacement>
-							<failIfNoMatch>true</failIfNoMatch>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<!-- Move the generated antlr files to the directory that matches their 
-					package. -->
-				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.7</version>
-				<executions>
-					<execution>
-						<phase>generate-sources</phase>
-						<configuration>
-							<target>
-								<echo
-									message="package: ${antlr-generated-code-package} path:${antlr-generated-code-path}" />
-								<move
-									todir="${project.build.directory}/generated-sources/antlr4/${antlr-generated-code-path}">
-									<fileset dir="${project.build.directory}/generated-sources/antlr4">
-										<include name="*.java" />
-										<include name="*.tokens" />
-									</fileset>
-								</move>
-							</target>
-						</configuration>
-						<goals>
-							<goal>run</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<artifactId>maven-clean-plugin</artifactId>
-				<version>2.6.1</version>
-				<configuration>
-					<filesets>
-						<fileset>
-							<directory>${project.build.directory}/generated-sources/antlr4</directory>
-							<includes>
-								<include>**/*.java</include>
-								<include>**/*.tokens</include>
-							</includes>
-						</fileset>
-					</filesets>
 				</configuration>
 			</plugin>
 		</plugins>

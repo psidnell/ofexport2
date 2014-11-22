@@ -21,8 +21,16 @@ public class MainTest {
     @Test
     public void test() throws Exception {
         Main.main(new String[] {
-                "-a", "Completed",
-                "-ip", "Home",
+                "-pi", "Home",
+                "-format", "SimpleTextList"});
+    }
+    
+    @Test
+    public void test2() throws Exception {
+        Main.main(new String[] {
+                //"-fe", "name=='Home'",
+                "-pe", "name=='ofexport2'",
+                "-te", "remaining",
                 "-format", "SimpleTextList"});
     }
     
