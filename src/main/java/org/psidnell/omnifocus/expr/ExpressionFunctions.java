@@ -250,12 +250,6 @@ public class ExpressionFunctions {
         return today.getTime();
     }
 
-    protected Calendar todayCalendar() {
-        Calendar cal = new GregorianCalendar();
-        roundToDay(cal);
-        return cal;
-    }
-
     public boolean within (Date date, String lower, String upper) throws ParseException {
         Date lowerDate = date(lower);
         Date upperDate = date(upper);

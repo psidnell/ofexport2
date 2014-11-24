@@ -38,17 +38,16 @@ public class ExpressionTest {
 
         Task t = new Task();
         t.setName("foo");
-        Task t2 = new Task();
-        t2.setName("bar");
-        t.add(t2);
+        t.setCompletionDate(new Date ());
 
         assertEquals ("foo", new Expression("name").eval(t, String.class));
         assertFalse (new Expression("name=='bar'").eval(t, Boolean.class));
         assertTrue (new Expression("name=='foo'").eval(t, Boolean.class));
+        assertTrue (new Expression("completed").eval(t, Boolean.class));
     }
     
     @Test
-    public void testComplexEvaluation() throws OgnlException {
+    public void testArrayAccess() throws OgnlException {
 
         Task t = new Task();
         t.setName("foo");
@@ -56,40 +55,24 @@ public class ExpressionTest {
         t2.setName("bar");
         t.add(t2);
 
-        boolean value = new Expression("name=='foo' && type=='Task' && tasks[0].name=='bar'").eval(t, Boolean.class);
-        assertTrue (value);
+        assertTrue(new Expression("name=='foo' && type=='Task' && tasks[0].name=='bar'").eval(t, Boolean.class));
     }
     
     @Test
     public void testRegularExpressions () {
         Task t = new Task();
         t.setName("fooXXX");
-        
-        assertTrue (t.getName().matches("foo.*"));
-        
-        boolean value = new Expression("name.matches('foo.*')").eval(t, Boolean.class);
-        assertTrue(value);
+                
+        assertTrue(new Expression("name.matches('foo.*')").eval(t, Boolean.class));
+        assertFalse(new Expression("name.matches('bar.*')").eval(t, Boolean.class));
     }
     
     @Test
     public void testDateExpressions () throws ParseException {
         Task t = new Task();
-        Date date = DATE_FORMAT.parse("2014-10-22");
-        t.setCompletionDate(date);
+        t.setCompletionDate(new Date ());
         
-        boolean value = new Expression("completionDate==date('2014-10-22')").eval(t, Boolean.class);
-        assertTrue(value);
-        
-        value = new Expression("date('2014-10-22')==completionDate").eval(t, Boolean.class);
-        assertTrue(value);
-        
-        t.setCompletionDate(null);
-        value = new Expression("completionDate==date('2014-10-22')").eval(t, Boolean.class);
-        assertFalse(value);
-        
-        Date today = new Date (DAY * (System.currentTimeMillis() / DAY));
-        t.setCompletionDate(today);
-        value = new Expression("completionDate==date('today')").eval(t, Boolean.class);
-        assertTrue(value);
+        assertTrue (new Expression("completionDate==date('today')").eval(t, Boolean.class));
+        assertFalse (new Expression("completionDate==date('yesterday')").eval(t, Boolean.class));
     }
 }
