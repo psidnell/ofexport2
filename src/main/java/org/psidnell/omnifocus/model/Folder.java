@@ -36,11 +36,13 @@ public class Folder extends Node {
     private Folder parent;
     
     @ExprAttribute(help="number of tasks.")
+    @JsonIgnore
     public int getProjectCount () {
         return projects.size();
     }
     
-    @ExprAttribute(help="number of tasks.")
+    @ExprAttribute(help="number of projects.")
+    @JsonIgnore
     public int getFolderCount () {
         return folders.size();
     }
@@ -86,11 +88,13 @@ public class Folder extends Node {
     }
 
     @Override
+    @JsonIgnore
     public List<Node> getProjectPath() {
         return getProjectPath(parent);
     }
 
     @Override
+    @JsonIgnore
     public List<Node> getContextPath() {
         throw new UnsupportedOperationException();
     }

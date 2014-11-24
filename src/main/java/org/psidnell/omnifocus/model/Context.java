@@ -36,11 +36,13 @@ public class Context extends Node {
     private Context parent;
     
     @ExprAttribute(help="number of tasks.")
+    @JsonIgnore
     public int getTaskCount () {
         return tasks.size();
     }
     
     @ExprAttribute(help="number of contexts.")
+    @JsonIgnore
     public int getContextCount () {
         return contexts.size();
     }
@@ -85,11 +87,13 @@ public class Context extends Node {
     }
 
     @Override
+    @JsonIgnore
     public List<Node> getProjectPath() {
         throw new UnsupportedOperationException();
     }
 
     @Override
+    @JsonIgnore
     public List<Node> getContextPath() {
         return getContextPath(parent);
     }

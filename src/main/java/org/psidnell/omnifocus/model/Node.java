@@ -115,6 +115,7 @@ public abstract class Node extends ExpressionFunctions {
     
     public abstract List<Node> getContextPath ();
     
+    @JsonIgnore
     protected List<Node> getProjectPath (Node parent){
         List<Node> path;
         if (parent != null)
@@ -128,6 +129,7 @@ public abstract class Node extends ExpressionFunctions {
         return path;
     }
     
+    @JsonIgnore
     protected List<Node> getContextPath (Node parent){
         List<Node> path;
         if (parent != null)

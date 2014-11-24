@@ -158,7 +158,7 @@ public class Main {
         //        (m,o)->m.processContextExpression (o)));
         
         OPTIONS.addOption(new ActiveOption<Main> (
-                "format", true, "output in this format",
+                "f", "format", true, "output in this format",
                 (m,o)->m.processFormat (o),
                 AFTER_LOAD));
     }

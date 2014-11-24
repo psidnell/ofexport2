@@ -54,6 +54,7 @@ public class Project extends CommonProjectTask {
     }
 
     @Override
+    @JsonIgnore
     public List<Node> getProjectPath() {
         return getProjectPath(folder);
     }

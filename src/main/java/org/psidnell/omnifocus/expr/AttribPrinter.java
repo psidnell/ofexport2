@@ -16,14 +16,16 @@ limitations under the License.
 package org.psidnell.omnifocus.expr;
 
 import java.lang.reflect.Method;
+import java.util.TreeSet;
 
 import org.psidnell.omnifocus.model.Node;
 
 public class AttribPrinter {
     
     public static void print (Class<? extends Node> clazz) {
-        System.out.println (clazz.getSimpleName() + ":");
+        TreeSet<String> info = new TreeSet<>();
         for (Method m : clazz.getMethods()) {
+            
             ExprAttribute attrib = m.getAnnotation(ExprAttribute.class);
             if (attrib != null) {
                 String name = null;
@@ -36,9 +38,13 @@ public class AttribPrinter {
                 if (name != null) {
                     name = Character.toLowerCase(name.charAt(0)) + name.substring(1);
                     String type = m.getReturnType().getSimpleName().toLowerCase();
-                    System.out.println ("    " + name + " ("+ type + "): " + attrib.help());
+                    info.add("    " + name + " ("+ type + "): " + attrib.help());
                 }
             }
+        }
+        System.out.println (clazz.getSimpleName() + ":");
+        for (String line : info) {
+            System.out.println(line);
         }
     }
 }

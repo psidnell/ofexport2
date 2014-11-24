@@ -27,8 +27,6 @@ public class Task extends CommonProjectTask {
 
     public static final String TYPE = "Task";
 
-    private String containingProject;
-    private boolean next;
     private String parentTaskId;
     private String contextId;
     private Task parent;
@@ -63,14 +61,6 @@ public class Task extends CommonProjectTask {
         this.parentTaskId = parentFolderId;
     }
 
-    public String getContainingProject() {
-        return containingProject;
-    }
-
-    public void setContainingProject(String containingProject) {
-        this.containingProject = containingProject;
-    }
-
     @Override
     @JsonIgnore
     public String getType() {
@@ -87,6 +77,7 @@ public class Task extends CommonProjectTask {
     }
 
     @Override
+    @JsonIgnore
     public List<Node> getProjectPath() {
         if (parent != null) {
             return getProjectPath(parent);

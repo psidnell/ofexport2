@@ -44,6 +44,7 @@ public abstract class CommonProjectTask extends Node {
     public abstract boolean isRemaining ();
     
     @ExprAttribute(help="number of tasks.")
+    @JsonIgnore
     public int getTaskCount () {
         return tasks.size();
     }
@@ -62,6 +63,7 @@ public abstract class CommonProjectTask extends Node {
     }
     
     @ExprAttribute (help="note text.")
+    @SQLiteProperty (name="plainTextNote")
     public String getNote() {
         return note;
     }
@@ -91,7 +93,7 @@ public abstract class CommonProjectTask extends Node {
     }
 
     @SQLiteProperty(name="dateCompleted")
-    @ExprAttribute (help="date item was completed")
+    @ExprAttribute (help="date item was completed.")
     public Date getCompletionDate() {
         return completionDate;
     }
@@ -127,6 +129,7 @@ public abstract class CommonProjectTask extends Node {
     }
     
     @Override
+    @JsonIgnore
     public List<Node> getContextPath() {
         return getContextPath(context);
     }
