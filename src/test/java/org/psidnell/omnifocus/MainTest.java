@@ -21,10 +21,27 @@ import org.junit.Test;
 import org.psidnell.omnifocus.expr.ExpressionFunctions;
 
 public class MainTest {
+    
+    @Test
+    public void testDueTomorrowContextMode() throws Exception {
+        Main.main(new String[] {
+                "-c",
+                "-te", "dueDate == date('tomorrow')",
+                "-format", "SimpleTextList"});
+    }
+    
     @Test
     public void testWhatsDueToday() throws Exception {
         Main.main(new String[] {
                 "-te", "dueDate == date('today')",
+                "-format", "SimpleTextList"});
+    }
+    
+    @Test
+    public void testWhatsDueThisWeekContextMode() throws Exception {
+        Main.main(new String[] {
+                "-c",
+                "-te", "within(dueDate, 'Mon', 'Fri')",
                 "-format", "SimpleTextList"});
     }
     
@@ -60,5 +77,10 @@ public class MainTest {
     public void testHelp() throws Exception {
         Main.main(new String[] { "-h" });
         Main.main(new String[] {});
+   }
+    
+    @Test
+    public void testInfo() throws Exception {
+        Main.main(new String[] { "-i" });
    }
 }

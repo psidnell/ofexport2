@@ -320,14 +320,6 @@ public class ExpressionFunctionsTest {
         assertEquals ("2014-11-22", date("22nd", cal));
         assertEquals ("2014-11-13", date("13th", cal));
     }
-
-    private Calendar clone(Calendar cal) {
-        return (Calendar) cal.clone();
-    }
-
-    private String date(String x, Calendar cal) throws ParseException {
-        return YYYYMMDD.format(new ExpressionFunctions().date (x,clone(cal)).getTime());
-    }
     
     @Test
     public void testWithin () throws ParseException {
@@ -338,5 +330,13 @@ public class ExpressionFunctionsTest {
         assertTrue (new ExpressionFunctions().within(date, "2014-11-07", "2014-11-07"));
         assertFalse (new ExpressionFunctions().within(date, "2014-11-08", "2014-11-09"));
         assertFalse (new ExpressionFunctions().within(date, "2014-11-05", "2014-11-06"));
+    }
+    
+    private Calendar clone(Calendar cal) {
+        return (Calendar) cal.clone();
+    }
+
+    private String date(String x, Calendar cal) throws ParseException {
+        return YYYYMMDD.format(new ExpressionFunctions().date (x,clone(cal)).getTime());
     }
 }

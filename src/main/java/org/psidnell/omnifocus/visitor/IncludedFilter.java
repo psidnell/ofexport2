@@ -31,21 +31,21 @@ public class IncludedFilter implements Visitor {
     
     @Override
     public boolean includeDown(Context c) {
-        return c.getIncluded();
+        return c.isIncluded();
     }
     
     @Override
     public boolean includeDown(Folder f) {
-        return f.getIncluded();
+        return f.isIncluded();
     }
     
     @Override
     public boolean includeDown(Project p) {
-        return p.getIncluded();
+        return p.isIncluded();
     }
     
     @Override
     public boolean includeDown(Task t) {
-        return t.getIncluded();
+        return t.isIncluded();
     }
 }

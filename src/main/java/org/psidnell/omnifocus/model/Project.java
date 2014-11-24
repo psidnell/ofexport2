@@ -18,6 +18,8 @@ package org.psidnell.omnifocus.model;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.psidnell.omnifocus.expr.ExprAttribute;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class Project extends CommonProjectTask {
@@ -32,6 +34,13 @@ public class Project extends CommonProjectTask {
     public Project (ProjectInfo projInfo, Task rootTask) {
         setId(rootTask.getId ());
         setName(rootTask.getName());
+        setCompletionDate(rootTask.getCompletionDate());
+        setDeferDate(rootTask.getDeferDate());
+        setDueDate(rootTask.getDueDate());
+        setFlagged(rootTask.isFlagged());
+        setNote(rootTask.getNote());
+        setRank(rootTask.getRank());
+        setSequential(rootTask.isSequential());
         status = projInfo.getStatus ();
         for (Task childOfRootTask : new LinkedList<>(rootTask.getTasks())) {
             add (childOfRootTask);
@@ -77,11 +86,13 @@ public class Project extends CommonProjectTask {
     }
 
     @Override
+    @ExprAttribute (help="item is available.")
     public boolean isAvailable() {
         return !isCompleted() && Status.Active.equals(getStatus ());
     }
 
     @Override
+    @ExprAttribute (help="item is remaining.")
     public boolean isRemaining() {
         return !isCompleted() && !Status.Done.equals(getStatus ());
     }

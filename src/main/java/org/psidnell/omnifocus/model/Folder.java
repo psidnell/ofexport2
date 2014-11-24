@@ -18,6 +18,7 @@ package org.psidnell.omnifocus.model;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.psidnell.omnifocus.expr.ExprAttribute;
 import org.psidnell.omnifocus.sqlite.SQLiteProperty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -33,6 +34,16 @@ public class Folder extends Node {
     private String parentFolderId;
 
     private Folder parent;
+    
+    @ExprAttribute(help="number of tasks.")
+    public int getProjectCount () {
+        return projects.size();
+    }
+    
+    @ExprAttribute(help="number of tasks.")
+    public int getFolderCount () {
+        return folders.size();
+    }
     
     @SQLiteProperty (name="parent")
     public String getParentFolderId () {

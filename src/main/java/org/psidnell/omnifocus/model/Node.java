@@ -19,6 +19,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
+import org.psidnell.omnifocus.expr.ExprAttribute;
 import org.psidnell.omnifocus.expr.ExpressionFunctions;
 import org.psidnell.omnifocus.sqlite.SQLiteProperty;
 import org.psidnell.omnifocus.visitor.IncludeVisitor;
@@ -37,6 +38,7 @@ public abstract class Node extends ExpressionFunctions {
     private int rank;
     
     @SQLiteProperty
+    @ExprAttribute (help="item name/text.")
     public String getName() {
         return name;
     }
@@ -67,7 +69,7 @@ public abstract class Node extends ExpressionFunctions {
     public abstract String getType();
 
     @JsonIgnore
-    public boolean getIncluded () {
+    public boolean isIncluded () {
         return included;
     }
     

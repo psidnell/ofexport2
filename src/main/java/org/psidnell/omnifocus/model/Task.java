@@ -18,6 +18,7 @@ package org.psidnell.omnifocus.model;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.psidnell.omnifocus.expr.ExprAttribute;
 import org.psidnell.omnifocus.sqlite.SQLiteProperty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -35,7 +36,8 @@ public class Task extends CommonProjectTask {
     private boolean blocked = false;
     
     @SQLiteProperty
-    public boolean getBlocked() {
+    @ExprAttribute (help="item is blocked.")
+    public boolean isBlocked() {
         return blocked;
     }
 
@@ -73,14 +75,6 @@ public class Task extends CommonProjectTask {
     @JsonIgnore
     public String getType() {
         return TYPE;
-    }
-
-    public boolean getNext() {
-        return next;
-    }
-
-    public void setNext(boolean next) {
-        this.next = next;
     }
 
     @JsonIgnore
@@ -125,11 +119,13 @@ public class Task extends CommonProjectTask {
     }
 
     @Override
+    @ExprAttribute (help="item is available.")
     public boolean isAvailable() {
-        return !isCompleted() && !getBlocked();
+        return !isCompleted() && !isBlocked();
     }
 
     @Override
+    @ExprAttribute (help="item is remaining.")
     public boolean isRemaining() {
         return !isCompleted();
     }

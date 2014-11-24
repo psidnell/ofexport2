@@ -19,13 +19,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
-
-import org.psidnell.omnifocus.expr.ExpressionFunctions;
 
 public class SQLiteClassDescriptor<T> {
     private String columnsForSelect;
@@ -43,16 +40,29 @@ public class SQLiteClassDescriptor<T> {
         for (Method m : clazz.getMethods()) {
             SQLiteProperty p = m.getAnnotation(SQLiteProperty.class);
             if (p != null) {
-                String propName = p.name();
-                if (propName.length() == 0) {
+                String methodName = m.getName();
+                String setterName;
+                String propName;
+                if (methodName.startsWith("is")) {
+                    propName = Character.toLowerCase(m.getName().charAt(2)) +  m.getName().substring(3);
+                    setterName = m.getName().replaceFirst("^is", "set");
+                }
+                else if (methodName.startsWith("get")) {
                     propName = Character.toLowerCase(m.getName().charAt(3)) +  m.getName().substring(4);
+                    setterName = m.getName().replaceFirst("^get", "set");
+                }
+                else {
+                    throw new IllegalArgumentException("bad property accessor: " + m);
                 }
                 
-                String setterName = m.getName().replaceFirst("get", "set");
+                if (p.name().length() != 0) {
+                    propName = p.name();
+                }
+
                 Method setter = clazz.getMethod(setterName, m.getReturnType());
                 columns.append(columns.length() != 0 ? ',' : "");
-                
                 columns.append(propName);
+                
                 SQLITEPropertyDescriptor pd = new SQLITEPropertyDescriptor(propName, setter, m.getReturnType());
                 properties.add(pd);
             }

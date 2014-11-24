@@ -26,6 +26,7 @@ import java.util.List;
 import org.apache.commons.cli.Options;
 import org.psidnell.omnifocus.cli.ActiveOption;
 import org.psidnell.omnifocus.cli.ActiveOptionProcessor;
+import org.psidnell.omnifocus.expr.AttribPrinter;
 import org.psidnell.omnifocus.expr.ExprVisitor;
 import org.psidnell.omnifocus.format.Formatter;
 import org.psidnell.omnifocus.model.Context;
@@ -58,6 +59,11 @@ public class Main {
         OPTIONS.addOption(new ActiveOption<Main> (
                 "h", "help", false, "print help",
                 (m,o)->m.printHelp (),
+                BEFORE_LOAD));
+        
+        OPTIONS.addOption(new ActiveOption<Main> (
+                "i", "info", false, "print note type inormation",
+                (m,o)->m.printTypeInfo (),
                 BEFORE_LOAD));
         
         //OPTIONS.addOption(new ActiveOption<Main>(
@@ -117,13 +123,9 @@ public class Main {
         //        (m,o)->{m.availability = Availability.valueOf(o.nextValue());},
         //        AFTER_LOAD));
         
-        OPTIONS.addOption(new ActiveOption<Main> (
-                "projectMode", false, "the default mode",
-                (m,o)->m.projectMode = true,
-                BEFORE_LOAD));
         
         OPTIONS.addOption(new ActiveOption<Main> (
-                "contextMode", false, "inverse of project mode)",
+                "c", "contextmode", false, "display context hierarchy instead of project hierarchy)",
                 (m,o)->m.projectMode = false,
                 BEFORE_LOAD));
         
@@ -187,7 +189,7 @@ public class Main {
         }
         VisitorDescriptor visitwhat = new  VisitorDescriptor().visit(Folder.class, Project.class);
         VisitorDescriptor applyToWhat = new  VisitorDescriptor().visit(Project.class);
-        filters.add(new ExprVisitor(expression, visitwhat, applyToWhat));
+        filters.add(new ExprVisitor(expression, projectMode, visitwhat, applyToWhat));
         filters.add(new IncludedFilter());
     }
 
@@ -204,7 +206,7 @@ public class Main {
         }
         VisitorDescriptor visitWhat = new  VisitorDescriptor().visit(Folder.class);
         VisitorDescriptor applyToWhat = new  VisitorDescriptor().visit(Folder.class);
-        filters.add(new ExprVisitor(expression, visitWhat, applyToWhat));
+        filters.add(new ExprVisitor(expression, projectMode, visitWhat, applyToWhat));
         filters.add(new IncludedFilter());
     }
 
@@ -226,12 +228,12 @@ public class Main {
         if (projectMode) {
             VisitorDescriptor visitWhat = new  VisitorDescriptor().visit(Folder.class, Project.class, Task.class);
             VisitorDescriptor applyToWhat = new  VisitorDescriptor().visit(Task.class);
-            filters.add(new ExprVisitor(expression, visitWhat, applyToWhat));
+            filters.add(new ExprVisitor(expression, projectMode, visitWhat, applyToWhat));
         }
         else {
             VisitorDescriptor visitWhat = new  VisitorDescriptor().visit(Context.class, Task.class);
             VisitorDescriptor applyToWhat = new  VisitorDescriptor().visit(Task.class);
-            filters.add(new ExprVisitor(expression, visitWhat, applyToWhat));
+            filters.add(new ExprVisitor(expression, projectMode, visitWhat, applyToWhat));
         }
         filters.add(new IncludedFilter());
     }
@@ -249,7 +251,7 @@ public class Main {
         }
         VisitorDescriptor visitWhat = new  VisitorDescriptor().visit(Context.class);
         VisitorDescriptor applyToWhat = new  VisitorDescriptor().visit(Context.class);
-        filters.add(new ExprVisitor(expression, visitWhat, applyToWhat));
+        filters.add(new ExprVisitor(expression, projectMode, visitWhat, applyToWhat));
         filters.add(new IncludedFilter());
     }
 
@@ -263,6 +265,17 @@ public class Main {
        processor.printHelp ();
        exit  = true;
     }
+    
+    private void printTypeInfo() {
+        AttribPrinter.print(Folder.class);
+        System.out.println();
+        AttribPrinter.print(Project.class);
+        System.out.println();
+        AttribPrinter.print(Context.class);
+        System.out.println();
+        AttribPrinter.print(Task.class);
+        exit  = true;
+     }
     
     private void load () throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, SQLException {
         data = SQLiteDAO.load();

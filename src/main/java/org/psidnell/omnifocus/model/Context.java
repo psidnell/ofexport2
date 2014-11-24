@@ -18,6 +18,7 @@ package org.psidnell.omnifocus.model;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.psidnell.omnifocus.expr.ExprAttribute;
 import org.psidnell.omnifocus.sqlite.SQLiteProperty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -33,6 +34,16 @@ public class Context extends Node {
     private String parentContextId;
 
     private Context parent;
+    
+    @ExprAttribute(help="number of tasks.")
+    public int getTaskCount () {
+        return tasks.size();
+    }
+    
+    @ExprAttribute(help="number of contexts.")
+    public int getContextCount () {
+        return contexts.size();
+    }
     
     @SQLiteProperty (name="parent")
     public String getParentContextId () {

@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.psidnell.omnifocus.expr.ExprAttribute;
 import org.psidnell.omnifocus.sqlite.SQLiteProperty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -42,6 +43,11 @@ public abstract class CommonProjectTask extends Node {
     
     public abstract boolean isRemaining ();
     
+    @ExprAttribute(help="number of tasks.")
+    public int getTaskCount () {
+        return tasks.size();
+    }
+    
     public List<Task> getTasks() {
         return tasks;
     }
@@ -55,6 +61,7 @@ public abstract class CommonProjectTask extends Node {
         this.context = context;
     }
     
+    @ExprAttribute (help="note text.")
     public String getNote() {
         return note;
     }
@@ -64,6 +71,7 @@ public abstract class CommonProjectTask extends Node {
     }
 
     @SQLiteProperty(name="dateToStart")
+    @ExprAttribute (help="date item is to start.")
     public Date getDeferDate() {
         return deferDate;
     }
@@ -73,6 +81,7 @@ public abstract class CommonProjectTask extends Node {
     }
 
     @SQLiteProperty(name="dateDue")
+    @ExprAttribute (help="date item is due.")
     public Date getDueDate() {
         return dueDate;
     }
@@ -82,6 +91,7 @@ public abstract class CommonProjectTask extends Node {
     }
 
     @SQLiteProperty(name="dateCompleted")
+    @ExprAttribute (help="date item was completed")
     public Date getCompletionDate() {
         return completionDate;
     }
@@ -91,12 +101,14 @@ public abstract class CommonProjectTask extends Node {
     }
 
     @JsonIgnore
+    @ExprAttribute (help="item is complete.")
     public boolean isCompleted() {
         return completionDate != null;
     }
 
     @SQLiteProperty
-    public boolean getSequential() {
+    @ExprAttribute (help="item is sequential.")
+    public boolean isSequential() {
         return sequential;
     }
 
@@ -104,7 +116,9 @@ public abstract class CommonProjectTask extends Node {
         this.flagged = flagged;
     }
 
-    public boolean getFlagged() {
+    @SQLiteProperty
+    @ExprAttribute (help="item is flagged.")
+    public boolean isFlagged() {
         return flagged;
     }
 
