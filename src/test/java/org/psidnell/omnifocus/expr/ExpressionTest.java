@@ -77,10 +77,6 @@ public class ExpressionTest {
         Date date = DATE_FORMAT.parse("2014-10-22");
         t.setCompletionDate(date);
         
-        assertEquals (date, t.date("2014-10-22"));
-        
-        assertTrue(date.equals(ExpressionTest.DATE_FORMAT.parse("2014-10-22")));
-        
         boolean value = new Expression("completionDate==date('2014-10-22')").eval(t, Boolean.class);
         assertTrue(value);
         
@@ -93,7 +89,7 @@ public class ExpressionTest {
         
         Date today = new Date (DAY * (System.currentTimeMillis() / DAY));
         t.setCompletionDate(today);
-        value = new Expression("completionDate==today()").eval(t, Boolean.class);
+        value = new Expression("completionDate==date('today')").eval(t, Boolean.class);
         assertTrue(value);
     }
 }

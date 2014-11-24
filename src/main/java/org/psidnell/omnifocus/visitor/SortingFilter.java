@@ -26,7 +26,7 @@ import org.psidnell.omnifocus.model.Task;
 
 public class SortingFilter implements Visitor { 
     
-    private static final VisitorDescriptor WHAT = new VisitorDescriptor().visitAll();
+    private static final VisitorDescriptor WHAT = new VisitorDescriptor().visitAll().filterAll();
 
     private static final NodeComparator CMP = new NodeComparator();
     
@@ -62,7 +62,15 @@ public class SortingFilter implements Visitor {
     private static class NodeComparator implements Comparator<Node> {
         @Override
         public int compare(Node o1, Node o2) {
-            return o1.getRank() - o2.getRank();
+            if (o1.getRank() < o2.getRank()) {
+                return -1;
+            }
+            else if (o1.getRank() > o2.getRank()) {
+                return  1;
+            }
+            else {
+                return 0;
+            }
         }
     }
 }

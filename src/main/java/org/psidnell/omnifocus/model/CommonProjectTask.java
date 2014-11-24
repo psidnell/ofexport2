@@ -19,16 +19,11 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
 import org.psidnell.omnifocus.sqlite.SQLiteProperty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public abstract class CommonProjectTask extends Node {
-
-    // Of the form: "2014-10-12T23:00:00.000Z"
-    private static final DateTimeFormatter DATE_PARSER = ISODateTimeFormat.dateTime();
 
     protected Context context;
     private String note;
@@ -74,7 +69,7 @@ public abstract class CommonProjectTask extends Node {
     }
 
     public void setDeferDate(Date deferDate) {
-        this.deferDate = deferDate;
+        this.deferDate = roundToDay(deferDate);
     }
 
     @SQLiteProperty(name="dateDue")
@@ -83,7 +78,7 @@ public abstract class CommonProjectTask extends Node {
     }
 
     public void setDueDate(Date dueDate) {
-        this.dueDate = dueDate;
+        this.dueDate = roundToDay(dueDate);
     }
 
     @SQLiteProperty(name="dateCompleted")
@@ -92,7 +87,7 @@ public abstract class CommonProjectTask extends Node {
     }
 
     public void setCompletionDate(Date completionDate) {
-        this.completionDate = completionDate;
+        this.completionDate = roundToDay(completionDate);
     }
 
     @JsonIgnore
@@ -115,14 +110,6 @@ public abstract class CommonProjectTask extends Node {
 
     public void setSequential(boolean sequential) {
         this.sequential = sequential;
-    }
-
-    protected Date parseDate(String stringForm) {
-        Date result = null;
-        if (stringForm != null) {
-            result = DATE_PARSER.parseDateTime(stringForm).toDate();
-        }
-        return result;
     }
     
     @Override

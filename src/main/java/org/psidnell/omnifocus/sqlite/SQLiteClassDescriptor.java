@@ -19,8 +19,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.GregorianCalendar;
 import java.util.LinkedList;
+
+import org.psidnell.omnifocus.expr.ExpressionFunctions;
 
 public class SQLiteClassDescriptor<T> {
     private String columnsForSelect;
@@ -82,7 +87,7 @@ public class SQLiteClassDescriptor<T> {
         }
         return tasks;
     }
-
+// TODO prepared statements
     private Object getValue(ResultSet rs, SQLITEPropertyDescriptor desc) throws SQLException {
         Object rawValue;
         switch (desc.getType().getSimpleName()) {
@@ -90,7 +95,32 @@ public class SQLiteClassDescriptor<T> {
                 rawValue = rs.getString(desc.getName());
                 break;
             case "Date":
-                rawValue = rs.getDate(desc.getName());
+                // I've deduced what's going on by experimentation.
+                // Weird: Seems to be seconds since 2001 but comes in either
+                // as a Double or as an Integer.
+                rawValue = rs.getObject(desc.getName());
+                if (rawValue == null) {
+                    rawValue = null;
+                }
+                else {
+                    int secondsSince2001;
+                    if (rawValue instanceof Integer) {
+                        secondsSince2001 = (Integer) rawValue;
+                    }
+                    else {
+                        secondsSince2001 = ((Double) rawValue).intValue();
+                    }
+                    
+                    Calendar cal = new GregorianCalendar();
+                    cal.set(Calendar.YEAR, 2001);
+                    cal.set(Calendar.MONTH, Calendar.JANUARY);
+                    cal.set(Calendar.DAY_OF_MONTH, 1);
+                    cal.set(Calendar.HOUR_OF_DAY, 0);
+                    cal.set(Calendar.MINUTE, 0);
+                    cal.set(Calendar.SECOND, secondsSince2001);
+                    cal.set(Calendar.MILLISECOND, 0);
+                    rawValue = cal.getTime();
+                }
                 break;
             default:
                 rawValue = rs.getObject(desc.getName());

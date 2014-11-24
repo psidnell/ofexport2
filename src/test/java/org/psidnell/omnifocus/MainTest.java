@@ -15,22 +15,44 @@ limitations under the License.
 */
 package org.psidnell.omnifocus;
 
+import java.util.Date;
+
 import org.junit.Test;
+import org.psidnell.omnifocus.expr.ExpressionFunctions;
 
 public class MainTest {
     @Test
-    public void test() throws Exception {
+    public void testWhatsDueToday() throws Exception {
         Main.main(new String[] {
-                "-pi", "Home",
+                "-te", "dueDate == date('today')",
                 "-format", "SimpleTextList"});
     }
     
     @Test
-    public void test2() throws Exception {
+    public void testWhatsDueTomorrow() throws Exception {
         Main.main(new String[] {
-                //"-fe", "name=='Home'",
-                "-pe", "name=='ofexport2'",
-                "-te", "remaining",
+                "-te", "dueDate == date('tomorrow')",
+                "-format", "SimpleTextList"});
+    }
+    
+    @Test
+    public void testWhatsCompleteToday() throws Exception {
+        Main.main(new String[] {
+                "-te", "completionDate == date('" + ExpressionFunctions.YYYYMMDD.format(new Date()) + "')",
+                "-format", "SimpleTextList"});
+    }
+    
+    @Test
+    public void testWhatsCompleteThisWorkWeek() throws Exception {
+        Main.main(new String[] {
+                "-te", "within(completionDate, 'Mon', 'Fri')",
+                "-format", "SimpleTextList"});
+    }
+    
+    @Test
+    public void testWhatsCompleteLastWorkWeek() throws Exception {
+        Main.main(new String[] {
+                "-te", "within(completionDate, '-Mon', '-Fri')",
                 "-format", "SimpleTextList"});
     }
     

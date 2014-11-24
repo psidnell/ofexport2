@@ -78,7 +78,7 @@ public class Main {
                 AFTER_LOAD));
         
         OPTIONS.addOption(new ActiveOption<Main>(
-                "pi", "projectname", true, "include tasks from project specified by name",
+                "pn", "projectname", true, "include tasks from project specified by name",
                 (m,o)->m.processProjectName(o.nextValue()),
                 AFTER_LOAD));
         
@@ -88,7 +88,7 @@ public class Main {
                 AFTER_LOAD));
         
         OPTIONS.addOption(new ActiveOption<Main>(
-                "fi", "foldername", true, "include tasks from project specified by name",
+                "fn", "foldername", true, "include tasks from project specified by name",
                 (m,o)->m.processFolderName(o.nextValue()),
                 AFTER_LOAD));
         
@@ -98,7 +98,7 @@ public class Main {
                 AFTER_LOAD));
         
         OPTIONS.addOption(new ActiveOption<Main>(
-                "ti", "taskname", true, "include tasks specified by name",
+                "tn", "taskname", true, "include tasks specified by name",
                 (m,o)->m.processTaskName(o.nextValue()),
                 AFTER_LOAD));
         
@@ -108,7 +108,7 @@ public class Main {
                 AFTER_LOAD));
         
         OPTIONS.addOption(new ActiveOption<Main>(
-                "ci", "taskname", true, "include contexts specified by name",
+                "cn", "taskname", true, "include contexts specified by name",
                 (m,o)->m.processContextName(o.nextValue()),
                 AFTER_LOAD));
         
