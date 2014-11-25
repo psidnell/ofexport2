@@ -66,6 +66,7 @@ public class IntegrationTest {
         TestParams testParams[] = {
                 new TestParams("SimpleTextList", ".txt"),
                 new TestParams("TaskPaper",".taskpaper"),
+                new TestParams("Markdown",".md"),
                 new TestParams("JSON",".json"),
                 new TestParams("XML", ".xml")
             };
@@ -89,6 +90,7 @@ public class IntegrationTest {
         TestParams testParams[] = {
                 new TestParams("SimpleTextList", ".txt"),
                 new TestParams("TaskPaper",".taskpaper"),
+                new TestParams("Markdown",".md"),
                 new TestParams("JSON",".json"),
                 new TestParams("XML", ".xml")
             };

@@ -1,0 +1,24 @@
+# RootFolder
+
+## Home
+
+### ofexport2
+
+- Text output formats should skip roots
+- Write integration tests to test options
+- Issue should projects appear in contexts - or their root tasks? - check what happens
+- Filters (available etc) - finish - test
+- AbortTraversal exception to shortcut unnecessary traversal?
+- Coverage
+- Transforms - create one to experiment
+- Load dates into tasks/projects
+- Look at OF1 for command line inspiration
+- Address TODOs
+- How to restructure (group knitting)
+- load tasks with no context?
+- Add logging
+- How to determine first available?
+- format code
+- command line logging options
+- basic javadoc
+- documentation
