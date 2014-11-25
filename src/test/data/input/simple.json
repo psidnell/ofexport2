@@ -27,6 +27,23 @@
       "available" : true,
       "remaining" : true
     },
+    "oEmYArnh3ri" : {
+      "name" : "%Test completed",
+      "id" : "oEmYArnh3ri",
+      "rank" : 1073741824,
+      "note" : null,
+      "deferDate" : null,
+      "dueDate" : null,
+      "completionDate" : 1416873600000,
+      "sequential" : false,
+      "flagged" : false,
+      "tasks" : [ ],
+      "parentTaskId" : "clioWeWmhyC",
+      "contextId" : "pXJG5nez1F-",
+      "blocked" : false,
+      "available" : false,
+      "remaining" : false
+    },
     "iiqUlIxIGcZ" : {
       "name" : "%TestProjectEmpty",
       "id" : "iiqUlIxIGcZ",

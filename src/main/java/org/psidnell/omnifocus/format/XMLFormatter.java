@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.psidnell.omnifocus.model.Node;
+import org.psidnell.omnifocus.util.IOUtils;
 
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
@@ -29,7 +30,9 @@ public class XMLFormatter implements Formatter {
 
     @Override
     public void format(Node node, Writer out) throws IOException {
+        // Mapper closes the stream - don't want that here
+        Writer closeProofWriter = IOUtils.closeProofWriter(out);
         MAPPER.enable(SerializationFeature.INDENT_OUTPUT);
-        MAPPER.writeValue(out, node);
+        MAPPER.writeValue(closeProofWriter, node);
     }
 }

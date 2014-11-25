@@ -21,6 +21,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.LinkedList;
 
 import org.junit.Test;
 import org.psidnell.omnifocus.Main;
@@ -32,35 +34,79 @@ public class IntegrationTest {
 
     static Logger LOGGER = LoggerFactory.getLogger(IntegrationTest.class);
 
+    private class TestParams {
+        String format;
+        String suffix;
+        TestParams(String format, String suffix) {
+            this.format = format;
+            this.suffix = suffix;
+        }
+    }
+    
     @Test
-    public void testFormats() throws Exception {
+    public void testFormatsInProjectMode() throws Exception {
         // These formats are "<FormatName>.<suffix>"
-        String formats[] = {"SimpleTextList.txt"};
-        for (String format : formats) {
-            for (File input : new File("src/test/data/input").listFiles((f) -> f.getName().endsWith(".json"))) {
-                String formatName = format.replaceAll("\\..*", "");
-                String suffix = "." + format.replaceAll(".*\\.", "");
+        TestParams testParams[] = {
+                new TestParams("SimpleTextList", ".txt"),
+                new TestParams("TaskPaper",".taskpaper"),
+                new TestParams("JSON",".json"),
+                new TestParams("XML", ".xml")
+            };
+        
+        for (TestParams params : testParams) {
+            for (File inputFile : new File("src/test/data/input").listFiles((f) -> f.getName().endsWith(".json"))) {
+                                
+                String outputFileName = inputFile.getName().replaceAll("\\..*", params.suffix);
+                File comparisonFile = new File("src/test/data/output/formats/" + params.format + "/" + outputFileName);
 
-                testFormat(input, formatName, suffix);
+                String args[] = new String[]{"-f", params.format};
+                testFormat(inputFile, comparisonFile, params.format, args);
+            }
+        }
+    }
+    
+    @Test
+    public void testFormatsInContextMode() throws Exception {
+        // These formats are "<FormatName>.<suffix>"
+        TestParams testParams[] = {
+                new TestParams("SimpleTextList", ".txt"),
+                new TestParams("TaskPaper",".taskpaper"),
+                new TestParams("JSON",".json"),
+                new TestParams("XML", ".xml")
+            };
+        
+        String testSuffix = "-c";
+        
+        for (TestParams params : testParams) {
+            for (File inputFile : new File("src/test/data/input").listFiles((f) -> f.getName().endsWith(".json"))) {
+                                
+                String outputFileName = inputFile.getName().replaceAll("\\..*", testSuffix + params.suffix);
+                File comparisonFile = new File("src/test/data/output/formats/" + params.format + "/" + outputFileName);
+
+                String args[] = new String[]{"-c", "-f", params.format};
+                testFormat(inputFile, comparisonFile, params.format, args);
             }
         }
     }
 
-    private void testFormat(File input, String formatName, String suffix) throws Exception {
-        LOGGER.info("TESTING: " + input);
+    private void testFormat(File inputFile, File comparisonFile, String formatNamez, String extraArgs[]) throws Exception {
+        LOGGER.info("TESTING: " + inputFile);
 
         File tmpDir = new File("target/data");
         tmpDir.mkdirs();
-        String outputFileName = input.getName().replaceAll("\\..*", suffix);
-        File tmpFile = new File(tmpDir, outputFileName);
+        File tmpFile = new File(tmpDir, comparisonFile.getName());
 
         LOGGER.info("  Output file: " + tmpFile);
 
-        String args[] = {"-load", input.getPath(), "-f", formatName, "-o", tmpFile.getPath()};
-
+        String baseArgs[] = {"-load", inputFile.getPath(), "-o", tmpFile.getPath()};
+        
+        LinkedList<String> argList = new LinkedList<>();
+        argList.addAll(Arrays.asList(baseArgs));
+        argList.addAll(Arrays.asList(extraArgs));
+        
+        String args[] = argList.toArray(new String[argList.size()]);
+        
         LOGGER.info("  Running: cmdline: " + StringUtils.join(args, " "));
-
-        File comparisonFile = new File("src/test/data/output/formats/" + formatName + "/" + outputFileName);
 
         Main.main(args);
 
@@ -90,8 +136,8 @@ public class IntegrationTest {
         
         if (expected != null && actual != null && !expected.equals(actual)) {
             LOGGER.error("Error on line " + line);
-            LOGGER.error("Expected " + expected);
-            LOGGER.error("Actual:  " + actual);
+            LOGGER.error("Expected: " + expected);
+            LOGGER.error("Actual:   " + actual);
         }
         String message = "Error on line " + line + " " + expected + " != " + actual;
         assertEquals (message, expected, actual);

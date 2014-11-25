@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.psidnell.omnifocus.model.Node;
+import org.psidnell.omnifocus.util.IOUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -28,6 +29,8 @@ public class JSONFormatter implements Formatter {
 
     @Override
     public void format(Node node, Writer out) throws IOException {
-        MAPPER.writerWithDefaultPrettyPrinter().writeValue(out, node);
+        // Mapper closes the stream - don't want that here
+        Writer closeProofWriter = IOUtils.closeProofWriter(out);
+        MAPPER.writerWithDefaultPrettyPrinter().writeValue(closeProofWriter, node);
     }
 }

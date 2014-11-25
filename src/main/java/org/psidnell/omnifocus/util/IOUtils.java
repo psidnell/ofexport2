@@ -22,10 +22,24 @@ import java.io.Writer;
 public class IOUtils {
 
     public static Writer systemOutWriter () {
-       return new OutputStreamWriter(System.out) {
+       return closeProofWriter(new OutputStreamWriter(System.out));
+    }
+    
+    public static Writer closeProofWriter (Writer out) {
+        return new Writer(out) {
             @Override
             public void close() throws IOException {
-                // Don't want to close System.out
+                // Don't want to close underlying writer
+            }
+
+            @Override
+            public void write(char[] cbuf, int off, int len) throws IOException {
+                out.write(cbuf, off, len);
+            }
+
+            @Override
+            public void flush() throws IOException {
+                out.flush();
             }
         };
     }
