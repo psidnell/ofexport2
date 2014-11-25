@@ -17,8 +17,40 @@
       "completionDate" : null,
       "sequential" : false,
       "flagged" : false,
-      "tasks" : [ ],
+      "tasks" : [ {
+        "name" : "%Test Sub task",
+        "id" : "jW45C2x9oBc",
+        "rank" : 0,
+        "note" : null,
+        "deferDate" : null,
+        "dueDate" : null,
+        "completionDate" : null,
+        "sequential" : false,
+        "flagged" : false,
+        "tasks" : [ ],
+        "parentTaskId" : "oZXBUDCwSlB",
+        "contextId" : "pXJG5nez1F-",
+        "blocked" : false,
+        "available" : true,
+        "remaining" : true
+      } ],
       "parentTaskId" : "clioWeWmhyC",
+      "contextId" : "pXJG5nez1F-",
+      "blocked" : true,
+      "available" : false,
+      "remaining" : true
+    }, {
+      "name" : "%Test Sub task",
+      "id" : "jW45C2x9oBc",
+      "rank" : 0,
+      "note" : null,
+      "deferDate" : null,
+      "dueDate" : null,
+      "completionDate" : null,
+      "sequential" : false,
+      "flagged" : false,
+      "tasks" : [ ],
+      "parentTaskId" : "oZXBUDCwSlB",
       "contextId" : "pXJG5nez1F-",
       "blocked" : false,
       "available" : true,
@@ -72,7 +104,14 @@
       "available" : true,
       "remaining" : true
     } ],
-    "contexts" : [ ],
+    "contexts" : [ {
+      "name" : "%Test Sub Context",
+      "id" : "nS9eayxkOXB",
+      "rank" : 0,
+      "tasks" : [ ],
+      "contexts" : [ ],
+      "parentContextId" : "pXJG5nez1F-"
+    } ],
     "parentContextId" : null
   } ],
   "parentContextId" : null

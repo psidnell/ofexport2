@@ -1,0 +1,36 @@
+Folder:
+    folderCount (int): number of projects.
+    name (string): item name/text.
+    projectCount (int): number of tasks.
+
+Project:
+    available (boolean): item is available.
+    completed (boolean): item is complete.
+    completionDate (date): date item was completed.
+    deferDate (date): date item is to start.
+    dueDate (date): date item is due.
+    flagged (boolean): item is flagged.
+    name (string): item name/text.
+    note (string): note text.
+    remaining (boolean): item is remaining.
+    sequential (boolean): item is sequential.
+    taskCount (int): number of tasks.
+
+Context:
+    contextCount (int): number of contexts.
+    name (string): item name/text.
+    taskCount (int): number of tasks.
+
+Task:
+    available (boolean): item is available.
+    blocked (boolean): item is blocked.
+    completed (boolean): item is complete.
+    completionDate (date): date item was completed.
+    deferDate (date): date item is to start.
+    dueDate (date): date item is due.
+    flagged (boolean): item is flagged.
+    name (string): item name/text.
+    note (string): note text.
+    remaining (boolean): item is remaining.
+    sequential (boolean): item is sequential.
+    taskCount (int): number of tasks.

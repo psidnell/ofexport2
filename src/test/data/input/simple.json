@@ -23,8 +23,8 @@
       "tasks" : [ ],
       "parentTaskId" : "clioWeWmhyC",
       "contextId" : "pXJG5nez1F-",
-      "blocked" : false,
-      "available" : true,
+      "blocked" : true,
+      "available" : false,
       "remaining" : true
     },
     "oEmYArnh3ri" : {
@@ -43,6 +43,23 @@
       "blocked" : false,
       "available" : false,
       "remaining" : false
+    },
+    "jW45C2x9oBc" : {
+      "name" : "%Test Sub task",
+      "id" : "jW45C2x9oBc",
+      "rank" : 0,
+      "note" : null,
+      "deferDate" : null,
+      "dueDate" : null,
+      "completionDate" : null,
+      "sequential" : false,
+      "flagged" : false,
+      "tasks" : [ ],
+      "parentTaskId" : "oZXBUDCwSlB",
+      "contextId" : "pXJG5nez1F-",
+      "blocked" : false,
+      "available" : true,
+      "remaining" : true
     },
     "iiqUlIxIGcZ" : {
       "name" : "%TestProjectEmpty",
@@ -80,6 +97,14 @@
     }
   },
   "contexts" : {
+    "nS9eayxkOXB" : {
+      "name" : "%Test Sub Context",
+      "id" : "nS9eayxkOXB",
+      "rank" : 0,
+      "tasks" : [ ],
+      "contexts" : [ ],
+      "parentContextId" : "pXJG5nez1F-"
+    },
     "pXJG5nez1F-" : {
       "name" : "%TestContext",
       "id" : "pXJG5nez1F-",
@@ -94,14 +119,14 @@
     "iiqUlIxIGcZ" : {
       "task" : "iiqUlIxIGcZ",
       "folderId" : "eABGXey-Ql6",
-      "rootTaskId" : "iiqUlIxIGcZ",
-      "statusString" : "Active"
+      "statusString" : "Active",
+      "rootTaskId" : "iiqUlIxIGcZ"
     },
     "clioWeWmhyC" : {
       "task" : "clioWeWmhyC",
       "folderId" : "eABGXey-Ql6",
-      "rootTaskId" : "clioWeWmhyC",
-      "statusString" : "Active"
+      "statusString" : "Active",
+      "rootTaskId" : "clioWeWmhyC"
     }
   }
 }

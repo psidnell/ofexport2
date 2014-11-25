@@ -2,5 +2,6 @@ RootFolder
   %TestFolder
     %TestProject
       [ ] %TestToDo
+        [ ] %Test Sub task
       [X] %Test completed
     %TestProjectEmpty

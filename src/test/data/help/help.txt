@@ -1,0 +1,17 @@
+usage: ofexport2
+ -h,--help                 print help
+ -i,--info                 print note type inormation
+ -pe,--projectexpr <arg>   include items where project expression is true
+ -pn,--projectname <arg>   include tasks from project specified by name
+ -fe,--folderexpr <arg>    include items where folder expression is true
+ -fn,--foldername <arg>    include tasks from project specified by name
+ -te,--taskexpr <arg>      include items where task expression is true
+ -tn,--taskname <arg>      include tasks specified by name
+ -ce,--contextexpr <arg>   include items where context expression is true
+ -cn,--taskname <arg>      include contexts specified by name
+ -c,--contextmode          display context hierarchy instead of project
+                           hierarchy)
+ -f,--format <arg>         output in this format
+ -o,--output <arg>         write output to the file
+ -l,--load <arg>           load data from JSON file instead of database
+                           (for testing)

@@ -15,20 +15,25 @@ limitations under the License.
  */
 package org.psidnell.omnifocus.integrationtest;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.LinkedList;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.psidnell.omnifocus.Main;
+import org.psidnell.omnifocus.model.DataCache;
 import org.psidnell.omnifocus.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 public class IntegrationTest {
 
@@ -41,6 +46,18 @@ public class IntegrationTest {
             this.format = format;
             this.suffix = suffix;
         }
+    }
+
+    @Test
+    public void testRewriteInputFiles () throws JsonGenerationException, JsonMappingException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, SQLException, IOException {
+        
+        if (Mode.REWRITE_INPUT_FILES) {
+            // Regenerate the exported json from raw OmniFocus data
+            DataCache.exportData(new File("src/test/data/input/simple.json"), (n)->n.getName().startsWith("%Test"));
+        }
+        
+        // So I don't forget
+        assertFalse ("TURN THIS OFF", Mode.REWRITE_INPUT_FILES);
     }
     
     @Test
@@ -60,7 +77,7 @@ public class IntegrationTest {
                 File comparisonFile = new File("src/test/data/output/formats/" + params.format + "/" + outputFileName);
 
                 String args[] = new String[]{"-f", params.format};
-                testFormat(inputFile, comparisonFile, params.format, args);
+                testFormat(inputFile, comparisonFile, params.format, args, Mode.REWRITE_INPUT_FILES);
             }
         }
     }
@@ -84,12 +101,12 @@ public class IntegrationTest {
                 File comparisonFile = new File("src/test/data/output/formats/" + params.format + "/" + outputFileName);
 
                 String args[] = new String[]{"-c", "-f", params.format};
-                testFormat(inputFile, comparisonFile, params.format, args);
+                testFormat(inputFile, comparisonFile, params.format, args, Mode.REWRITE_INPUT_FILES);
             }
         }
     }
 
-    private void testFormat(File inputFile, File comparisonFile, String formatNamez, String extraArgs[]) throws Exception {
+    private void testFormat(File inputFile, File comparisonFile, String formatNamez, String extraArgs[], boolean fix) throws Exception {
         LOGGER.info("TESTING: " + inputFile);
 
         File tmpDir = new File("target/data");
@@ -109,38 +126,15 @@ public class IntegrationTest {
         LOGGER.info("  Running: cmdline: " + StringUtils.join(args, " "));
 
         Main.main(args);
-
-        diff(comparisonFile, tmpFile);
-    }
-
-    private static void diff(File expectedFile, File actualFile) throws IOException {
-
-        try (
-            BufferedReader expectedIn = new BufferedReader(new FileReader(expectedFile));
-            BufferedReader actualIn = new BufferedReader(new FileReader(actualFile));) {
-            
-            int line = 1;
-            
-            String expected = expectedIn.readLine();
-            String actual = actualIn.readLine();
-            
-            while (diff (expected, actual, line)) {
-                expected = expectedIn.readLine();
-                actual = actualIn.readLine();
-                line++;
-            }
-        }
-    }
-
-    private static boolean diff(String expected, String actual, int line) {
         
-        if (expected != null && actual != null && !expected.equals(actual)) {
-            LOGGER.error("Error on line " + line);
-            LOGGER.error("Expected: " + expected);
-            LOGGER.error("Actual:   " + actual);
+        if (fix) {
+            LOGGER.error("WARNING overwriting " + inputFile);
+            // Going to (over)write the comparison file with the actual results
+            // Only doing this when writing new tests or after updating the input
+            // file. The comparison will obviously succeed!
+            FileUtils.copyFile(tmpFile, comparisonFile);
         }
-        String message = "Error on line " + line + " " + expected + " != " + actual;
-        assertEquals (message, expected, actual);
-        return expected != null;
+
+        Diff.diff(comparisonFile, tmpFile);
     }
 }
