@@ -53,7 +53,8 @@ public class IntegrationTest {
         
         if (Mode.REWRITE_INPUT_FILES) {
             // Regenerate the exported json from raw OmniFocus data
-            DataCache.exportData(new File("src/test/data/input/simple.json"), (n)->n.getName().startsWith("%Test"));
+            //DataCache.exportData(new File("src/test/data/input/simple.json"), (n)->n.getName().startsWith("%Test"));
+            DataCache.exportData(new File("src/test/data/input/simple2.json"), (n)->n.getName().startsWith("%Test"));
         }
         
         // So I don't forget
@@ -62,7 +63,6 @@ public class IntegrationTest {
     
     @Test
     public void testFormatsInProjectMode() throws Exception {
-        // These formats are "<FormatName>.<suffix>"
         TestParams testParams[] = {
                 new TestParams("SimpleTextList", ".txt"),
                 new TestParams("TaskPaper",".taskpaper"),
@@ -70,21 +70,22 @@ public class IntegrationTest {
                 new TestParams("XML", ".xml")
             };
         
+        String testSuffix = "";
+        
         for (TestParams params : testParams) {
             for (File inputFile : new File("src/test/data/input").listFiles((f) -> f.getName().endsWith(".json"))) {
                                 
-                String outputFileName = inputFile.getName().replaceAll("\\..*", params.suffix);
+                String outputFileName = inputFile.getName().replaceAll("\\..*", testSuffix + params.suffix);
                 File comparisonFile = new File("src/test/data/output/formats/" + params.format + "/" + outputFileName);
 
                 String args[] = new String[]{"-f", params.format};
-                testFormat(inputFile, comparisonFile, params.format, args, Mode.REWRITE_INPUT_FILES);
+                run(inputFile, comparisonFile, params.format, args, Mode.REWRITE_INPUT_FILES);
             }
         }
     }
     
     @Test
     public void testFormatsInContextMode() throws Exception {
-        // These formats are "<FormatName>.<suffix>"
         TestParams testParams[] = {
                 new TestParams("SimpleTextList", ".txt"),
                 new TestParams("TaskPaper",".taskpaper"),
@@ -101,12 +102,72 @@ public class IntegrationTest {
                 File comparisonFile = new File("src/test/data/output/formats/" + params.format + "/" + outputFileName);
 
                 String args[] = new String[]{"-c", "-f", params.format};
-                testFormat(inputFile, comparisonFile, params.format, args, Mode.REWRITE_INPUT_FILES);
+                run(inputFile, comparisonFile, params.format, args, Mode.REWRITE_INPUT_FILES);
             }
         }
     }
+    
+    @Test
+    public void testIncludeFolderByName() throws Exception {
+        TestParams params = new TestParams("SimpleTextList", ".txt");
+        
+        String testSuffix = "-fn";
+        
+       File inputFile = new File("src/test/data/input/simple2.json");
+                                
+        String outputFileName = inputFile.getName().replaceAll("\\..*", testSuffix + params.suffix);
+        File comparisonFile = new File("src/test/data/output/formats/" + params.format + "/" + outputFileName);
 
-    private void testFormat(File inputFile, File comparisonFile, String formatNamez, String extraArgs[], boolean fix) throws Exception {
+        String args[] = new String[]{"-fn", "%Test F2", "-f", params.format};
+        run(inputFile, comparisonFile, params.format, args, Mode.REWRITE_INPUT_FILES);
+    }
+    
+    @Test
+    public void testIncludeProjectByName() throws Exception {
+        TestParams params = new TestParams("SimpleTextList", ".txt");
+        
+        String testSuffix = "-pn";
+        
+       File inputFile = new File("src/test/data/input/simple2.json");
+                                
+        String outputFileName = inputFile.getName().replaceAll("\\..*", testSuffix + params.suffix);
+        File comparisonFile = new File("src/test/data/output/formats/" + params.format + "/" + outputFileName);
+
+        String args[] = new String[]{"-pn", "%Test P1", "-f", params.format};
+        run(inputFile, comparisonFile, params.format, args, Mode.REWRITE_INPUT_FILES);
+    }
+
+    @Test
+    public void testIncludeTaskByName() throws Exception {
+        TestParams params = new TestParams("SimpleTextList", ".txt");
+        
+        String testSuffix = "-tn";
+        
+       File inputFile = new File("src/test/data/input/simple2.json");
+                                
+        String outputFileName = inputFile.getName().replaceAll("\\..*", testSuffix + params.suffix);
+        File comparisonFile = new File("src/test/data/output/formats/" + params.format + "/" + outputFileName);
+
+        String args[] = new String[]{"-tn", "%Test T4", "-f", params.format};
+        run(inputFile, comparisonFile, params.format, args, Mode.REWRITE_INPUT_FILES);
+    }
+    
+    @Test
+    public void testIncludeContextByName() throws Exception {
+        TestParams params = new TestParams("SimpleTextList", ".txt");
+        
+        String testSuffix = "-cn";
+        
+       File inputFile = new File("src/test/data/input/simple2.json");
+                                
+        String outputFileName = inputFile.getName().replaceAll("\\..*", testSuffix + params.suffix);
+        File comparisonFile = new File("src/test/data/output/formats/" + params.format + "/" + outputFileName);
+
+        String args[] = new String[]{"-c", "-cn", "%TestContext", "-f", params.format};
+        run(inputFile, comparisonFile, params.format, args, Mode.REWRITE_INPUT_FILES);
+    }
+    
+    private void run(File inputFile, File comparisonFile, String formatNamez, String extraArgs[], boolean fix) throws Exception {
         LOGGER.info("TESTING: " + inputFile);
 
         File tmpDir = new File("target/data");

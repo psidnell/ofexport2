@@ -1,7 +1,7 @@
 RootFolder
-  %TestFolder
-    %TestProject
+  %Test Folder
+    %Test Project Foo Non Empty
       [ ] %TestToDo
         [ ] %Test Sub task
       [X] %Test completed
-    %TestProjectEmpty
+    %Test Project Bar Empty

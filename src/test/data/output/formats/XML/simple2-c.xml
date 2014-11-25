@@ -5,12 +5,72 @@
   <tasks/>
   <contexts>
     <contexts>
+      <name>No Context</name>
+      <id>__%%NoContext</id>
+      <rank>0</rank>
+      <tasks>
+        <tasks>
+          <name>%Test T1</name>
+          <id>mhCo3Mkpd6p</id>
+          <rank>0</rank>
+          <note/>
+          <deferDate/>
+          <dueDate/>
+          <completionDate/>
+          <sequential>false</sequential>
+          <flagged>false</flagged>
+          <tasks/>
+          <parentTaskId>eexn9cvrlMf</parentTaskId>
+          <contextId/>
+          <blocked>false</blocked>
+          <available>true</available>
+          <remaining>true</remaining>
+        </tasks>
+        <tasks>
+          <name>%Test P1</name>
+          <id>eexn9cvrlMf</id>
+          <rank>0</rank>
+          <note/>
+          <deferDate/>
+          <dueDate/>
+          <completionDate/>
+          <sequential>false</sequential>
+          <flagged>false</flagged>
+          <tasks/>
+          <parentTaskId/>
+          <contextId/>
+          <blocked>true</blocked>
+          <available>false</available>
+          <remaining>true</remaining>
+        </tasks>
+      </tasks>
+      <contexts/>
+      <parentContextId/>
+    </contexts>
+    <contexts>
       <name>%TestContext</name>
       <id>pXJG5nez1F-</id>
       <rank>2147132382</rank>
       <tasks>
         <tasks>
-          <name>%TestToDo</name>
+          <name>%Test T2</name>
+          <id>pB3QzHrpKql</id>
+          <rank>-1073741824</rank>
+          <note/>
+          <deferDate/>
+          <dueDate/>
+          <completionDate/>
+          <sequential>false</sequential>
+          <flagged>false</flagged>
+          <tasks/>
+          <parentTaskId>clioWeWmhyC</parentTaskId>
+          <contextId>pXJG5nez1F-</contextId>
+          <blocked>false</blocked>
+          <available>true</available>
+          <remaining>true</remaining>
+        </tasks>
+        <tasks>
+          <name>%Test T3</name>
           <id>oZXBUDCwSlB</id>
           <rank>0</rank>
           <note/>
@@ -21,7 +81,7 @@
           <flagged>false</flagged>
           <tasks>
             <tasks>
-              <name>%Test Sub task</name>
+              <name>%Test T4</name>
               <id>jW45C2x9oBc</id>
               <rank>0</rank>
               <note/>
@@ -33,8 +93,8 @@
               <tasks/>
               <parentTaskId>oZXBUDCwSlB</parentTaskId>
               <contextId>pXJG5nez1F-</contextId>
-              <blocked>false</blocked>
-              <available>true</available>
+              <blocked>true</blocked>
+              <available>false</available>
               <remaining>true</remaining>
             </tasks>
           </tasks>
@@ -45,7 +105,7 @@
           <remaining>true</remaining>
         </tasks>
         <tasks>
-          <name>%Test Sub task</name>
+          <name>%Test T4</name>
           <id>jW45C2x9oBc</id>
           <rank>0</rank>
           <note/>
@@ -57,12 +117,12 @@
           <tasks/>
           <parentTaskId>oZXBUDCwSlB</parentTaskId>
           <contextId>pXJG5nez1F-</contextId>
-          <blocked>false</blocked>
-          <available>true</available>
+          <blocked>true</blocked>
+          <available>false</available>
           <remaining>true</remaining>
         </tasks>
         <tasks>
-          <name>%Test Project Foo Non Empty</name>
+          <name>%Test P2</name>
           <id>clioWeWmhyC</id>
           <rank>0</rank>
           <note/>
@@ -96,7 +156,7 @@
           <remaining>false</remaining>
         </tasks>
         <tasks>
-          <name>%Test Project Bar Empty</name>
+          <name>%Test P3</name>
           <id>iiqUlIxIGcZ</id>
           <rank>1073741824</rank>
           <note/>

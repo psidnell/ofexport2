@@ -2,7 +2,7 @@ RootContext:
 	%TestContext:
 		- %TestToDo
 		- %Test Sub task
-		- %TestProject
+		- %Test Project Foo Non Empty
 		- %Test completed @2014-00-25-Tue
-		- %TestProjectEmpty
+		- %Test Project Bar Empty
 		%Test Sub Context:

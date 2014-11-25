@@ -65,9 +65,11 @@ public class DataCache {
     public final void build() {
         Project inbox = new Project();
         inbox.setName("Inbox");
+        inbox.setId("__%%Inbox"); // to give deterministic JSON/XML output
 
         Context noContext = new Context ();
         noContext.setName("No Context");
+        noContext.setId("__%%NoContext");  // to give deterministic JSON/XML output
         
         // Build Folder Hierarchy
         for (Folder folder : folders.values()) {
