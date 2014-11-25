@@ -17,8 +17,6 @@ package org.psidnell.omnifocus.format;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.Folder;
@@ -38,7 +36,23 @@ public class MarkdownFormatter implements Formatter {
         
         FormattingVisitor visitor = new FormattingVisitor(out);
         
-        Traverser.traverse(visitor, root);
+        // Ignore the root
+        if (root instanceof Folder) {
+            for (Folder child : ((Folder) root).getFolders()) {
+                Traverser.traverse(visitor, child);
+            }
+            for (Project child : ((Folder) root).getProjects()) {
+                Traverser.traverse(visitor, child);
+            }
+        }
+        else if (root instanceof Context) {
+            for (Context child : ((Context) root).getContexts()) {
+                Traverser.traverse(visitor, child);
+            }
+            for (Task child : ((Context) root).getTasks()) {
+                Traverser.traverse(visitor, child);
+            }
+        }
     }
 
     private static class FormattingVisitor implements Visitor {

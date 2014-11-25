@@ -1,19 +1,17 @@
-# RootFolder
+# %Test F1
 
-## %Test F1
+## %Test F2
 
-### %Test F2
-
-#### %Test P1
+### %Test P1
 
 - %Test T1
 
-### %Test P2
+## %Test P2
 
 - %Test T2
 - %Test T3
   - %Test T4
-- %Test completed @2014-00-25-Tue
+- %Test completed
 
-### %Test P3
+## %Test P3
 

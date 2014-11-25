@@ -38,7 +38,23 @@ public class TaskPaperFormatter implements Formatter {
         
         FormattingVisitor visitor = new FormattingVisitor(out);
         
-        Traverser.traverse(visitor, root);
+        // Ignore the root
+        if (root instanceof Folder) {
+            for (Folder child : ((Folder) root).getFolders()) {
+                Traverser.traverse(visitor, child);
+            }
+            for (Project child : ((Folder) root).getProjects()) {
+                Traverser.traverse(visitor, child);
+            }
+        }
+        else if (root instanceof Context) {
+            for (Context child : ((Context) root).getContexts()) {
+                Traverser.traverse(visitor, child);
+            }
+            for (Task child : ((Context) root).getTasks()) {
+                Traverser.traverse(visitor, child);
+            }
+        }
     }
 
     private static class FormattingVisitor implements Visitor {

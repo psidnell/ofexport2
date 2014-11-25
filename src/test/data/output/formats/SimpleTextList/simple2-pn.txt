@@ -1,5 +1,4 @@
-RootFolder
-  %Test F1
-    %Test F2
-      %Test P1
-        [ ] %Test T1
+%Test F1
+  %Test F2
+    %Test P1
+      [ ] %Test T1

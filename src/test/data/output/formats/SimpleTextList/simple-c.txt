@@ -1,8 +1,7 @@
-RootContext
-  %TestContext
-    [ ] %TestToDo
-    [ ] %Test Sub task
-    [ ] %Test Project Foo Non Empty
-    [X] %Test completed
-    [ ] %Test Project Bar Empty
-    %Test Sub Context
+%TestContext
+  [ ] %TestToDo
+  [ ] %Test Sub task
+  [ ] %Test Project Foo Non Empty
+  [X] %Test completed
+  [ ] %Test Project Bar Empty
+  %Test Sub Context

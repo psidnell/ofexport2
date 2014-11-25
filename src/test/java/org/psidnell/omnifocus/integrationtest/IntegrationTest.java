@@ -176,7 +176,8 @@ public class IntegrationTest {
         tmpDir.mkdirs();
         File tmpFile = new File(tmpDir, comparisonFile.getName());
 
-        LOGGER.info("  Output file: " + tmpFile);
+        LOGGER.info("  Actual file: " + tmpFile);
+        LOGGER.info("  Expected file: " + comparisonFile);
 
         String baseArgs[] = {"-load", inputFile.getPath(), "-o", tmpFile.getPath()};
         

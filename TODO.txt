@@ -1,11 +1,8 @@
-# RootFolder
+# Home
 
-## Home
+## ofexport2
 
-### ofexport2
-
-- Text output formats should skip roots
-- Write integration tests to test options
+- Projects/Folders should be interleaved in their original order  (awkward)
 - Issue should projects appear in contexts - or their root tasks? - check what happens
 - Filters (available etc) - finish - test
 - AbortTraversal exception to shortcut unnecessary traversal?

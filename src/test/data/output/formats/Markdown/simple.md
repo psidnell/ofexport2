@@ -1,12 +1,10 @@
-# RootFolder
+# %Test Folder
 
-## %Test Folder
-
-### %Test Project Foo Non Empty
+## %Test Project Foo Non Empty
 
 - %TestToDo
   - %Test Sub task
-- %Test completed @2014-00-25-Tue
+- %Test completed
 
-### %Test Project Bar Empty
+## %Test Project Bar Empty
 
