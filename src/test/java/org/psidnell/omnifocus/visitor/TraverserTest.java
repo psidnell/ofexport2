@@ -366,6 +366,45 @@ public class TraverserTest {
     }
     
     @Test
+    public void testTraverseContextAndTaskTree_whenEnabled() throws Exception {
+
+        Context parent = new Context();
+        Context childContext = new Context();
+        parent.add(childContext);
+        Task childTask = new Task();
+        parent.add(childTask);
+        Task grandChildTask = new Task();
+        childTask.add(grandChildTask);
+
+        // Create Mocks
+        Visitor v = EasyMock.createMock(Visitor.class);
+        VisitorDescriptor desc = EasyMock.createMock(VisitorDescriptor.class);
+        Object mocks[] = {v, desc};
+
+        // Record
+        EasyMock.expect(v.getWhat()).andReturn(desc).once();
+        EasyMock.expect(desc.getVisitContexts()).andReturn(true).atLeastOnce();
+        EasyMock.expect(desc.getFilterTasks()).andReturn(false).atLeastOnce();
+        EasyMock.expect(desc.getFilterContexts()).andReturn(false).atLeastOnce();
+        EasyMock.expect(desc.getVisitTasks()).andReturn(true).atLeastOnce();
+        v.enter(parent);
+        v.enter(childContext);
+        v.exit(childContext);
+        v.enter(childTask);
+        // Grandchild not visited
+        v.exit(childTask);
+        v.exit(parent);
+
+        // Replay
+        EasyMock.replay(mocks);
+
+        Traverser.traverse(v, parent);
+
+        // Verify
+        EasyMock.verify(mocks);
+    }
+    
+    @Test
     public void testFilterTaskInTask () throws Exception {
 
         Task parent = new Task();

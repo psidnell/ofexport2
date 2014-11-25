@@ -34,21 +34,21 @@ public class Traverser {
     private static void doTraverse(Visitor visitor, VisitorDescriptor what, Node node) throws Exception {
         switch (node.getType()) {
             case Folder.TYPE:
-                doTraverse(visitor, what, (Folder) node);
+                doTraverseFolder(visitor, what, (Folder) node);
                 break;
             case Project.TYPE:
-                doTraverse(visitor, what, (Project) node);
+                doTraverseProject(visitor, what, (Project) node);
                 break;
             case Context.TYPE:
-                doTraverse(visitor, what, (Context) node);
+                doTraverseContext(visitor, what, (Context) node);
                 break;
             case Task.TYPE:
-                doTraverse(visitor, what, (Task) node);
+                doTraverseTask(visitor, what, (Task) node, true);
                 break;
         }
     }
     
-    private static void doTraverse(Visitor visitor, VisitorDescriptor what, Folder node) throws Exception {
+    private static void doTraverseFolder(Visitor visitor, VisitorDescriptor what, Folder node) throws Exception {
         if (!what.getVisitFolders()) {
             return;
         }
@@ -64,12 +64,12 @@ public class Traverser {
         }
         
         for (Folder child : node.getFolders()) {
-            doTraverse (visitor, what, child);
+            doTraverseFolder (visitor, what, child);
         }
        
         if (what.getVisitProjects()) {
             for (Project child : node.getProjects()) {
-                doTraverse (visitor, what, child);
+                doTraverseProject (visitor, what, child);
             }
         }
         
@@ -84,7 +84,7 @@ public class Traverser {
         visitor.exit (node);
     }
 
-    private static void doTraverse(Visitor visitor, VisitorDescriptor what, Task node) throws Exception {
+    private static void doTraverseTask(Visitor visitor, VisitorDescriptor what, Task node, boolean fromProject) throws Exception {
         if (!what.getVisitTasks()) {
             return;
         }
@@ -95,8 +95,11 @@ public class Traverser {
             node.setTasks(visitor.filterTasksDown(node.getTasks()));
         }
         
-        for (Task child : node.getTasks()) {
-            doTraverse (visitor, what, child);
+        if (fromProject) {
+            // Tasks are flat in the context hierarchy
+            for (Task child : node.getTasks()) {
+                doTraverseTask(visitor, what, child, fromProject);
+            }
         }
         
         if (what.getFilterTasks()) {
@@ -106,7 +109,7 @@ public class Traverser {
         visitor.exit (node);
     }
 
-    private static void doTraverse(Visitor visitor, VisitorDescriptor what, Context node) throws Exception {
+    private static void doTraverseContext(Visitor visitor, VisitorDescriptor what, Context node) throws Exception {
         if (!what.getVisitContexts()) {
             return;
         }
@@ -123,12 +126,12 @@ public class Traverser {
         
         if (what.getVisitTasks()) {
             for (Task child : node.getTasks()) {
-                doTraverse (visitor, what, child);
+                doTraverseTask (visitor, what, child, false);
             }
         }
        
         for (Context child : node.getContexts()) {
-            doTraverse (visitor, what, child);
+            doTraverseContext (visitor, what, child);
         }
         
         if (what.getFilterTasks()) {
@@ -141,7 +144,7 @@ public class Traverser {
         visitor.exit(node);
     }
 
-    private static void doTraverse(Visitor visitor, VisitorDescriptor what, Project node) throws Exception {
+    private static void doTraverseProject(Visitor visitor, VisitorDescriptor what, Project node) throws Exception {
         if (!what.getVisitProjects()) {
             return;
         }
@@ -154,7 +157,7 @@ public class Traverser {
         
         if (what.getVisitTasks()) {
             for (Task child : node.getTasks()) {
-                doTraverse (visitor, what, child);
+                doTraverseTask (visitor, what, child, true);
             }
         }
         

@@ -15,8 +15,11 @@ limitations under the License.
 */
 package org.psidnell.omnifocus;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
@@ -35,6 +38,7 @@ import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
 import org.psidnell.omnifocus.sqlite.SQLiteDAO;
+import org.psidnell.omnifocus.util.IOUtils;
 import org.psidnell.omnifocus.visitor.IncludeVisitor;
 import org.psidnell.omnifocus.visitor.IncludedFilter;
 import org.psidnell.omnifocus.visitor.SortingFilter;
@@ -51,11 +55,6 @@ public class Main {
     
     static {
         
-
-        //OPTIONS.addOption(new ActiveOption<Main>(
-        //        "allfolders", false, "Load projects and tasks from all folders",
-        //        (m,o)->m.processAllFolders(o)));
-        
         OPTIONS.addOption(new ActiveOption<Main> (
                 "h", "help", false, "print help",
                 (m,o)->m.printHelp (),
@@ -65,18 +64,6 @@ public class Main {
                 "i", "info", false, "print note type inormation",
                 (m,o)->m.printTypeInfo (),
                 BEFORE_LOAD));
-        
-        //OPTIONS.addOption(new ActiveOption<Main>(
-        //        "f", "foldername", true, "Load projects and tasks from folder specified by name",
-        //        (m,o)->m.processFolderName(o)));
-        
-        //OPTIONS.addOption(new ActiveOption<Main>(
-        //        "e", "documentexpr", true, "???????",
-        //        (m,o)->m.processExpr(o)));
-        
-        //OPTIONS.addOption(new ActiveOption<Main>(
-        //        "c", "contextname", true, "Load tasks from context specified by name",
-        //        (m,o)->m.processContextName(o)));
         
         OPTIONS.addOption(new ActiveOption<Main>(
                 "pe", "projectexpr", true, "include items where project expression is true",
@@ -118,49 +105,25 @@ public class Main {
                 (m,o)->m.processContextName(o.nextValue()),
                 AFTER_LOAD));
         
-        //OPTIONS.addOption(new ActiveOption<Main>(
-        //        "a", "availability", true, "FirstAvailable, Available (default), Remaining, All, Completed",
-        //        (m,o)->{m.availability = Availability.valueOf(o.nextValue());},
-        //        AFTER_LOAD));
-        
-        
         OPTIONS.addOption(new ActiveOption<Main> (
                 "c", "contextmode", false, "display context hierarchy instead of project hierarchy)",
                 (m,o)->m.projectMode = false,
                 BEFORE_LOAD));
         
-        //OPTIONS.addOption(new ActiveOption<Main>(
-        //        "i", "inbox", false, "Load tasks from the inbox",
-        //        (m,o)->m.processInbox()));
-        
-        //OPTIONS.addOption(new ActiveOption<Main> (
-        //        "flagged", true, "flagged (true|false)",
-        //        (m,o)->m.processFlagged (o)));
-        
-        //OPTIONS.addOption(new ActiveOption<Main> (
-        //        "a", "availability", true, "availability (" + Arrays.asList(Availability.values()) + ")".replaceAll(",", "|"),
-        //        (m,o)->m.processAvailability (o)));
-        
-        //OPTIONS.addOption(new ActiveOption<Main> (
-        //        "F", "folderexpr", true, "expression",
-        //        (m,o)->m.processFolderExpression (o)));
-        
-        //OPTIONS.addOption(new ActiveOption<Main> (
-        //        "P", "projectexpr", true, "expression",
-        //        (m,o)->m.processProjectExpression (o)));
-        
-        //OPTIONS.addOption(new ActiveOption<Main> (
-        //        "T", "taskexpr", true, "expression",
-        //        (m,o)->m.processTaskExpression (o)));
-        
-        //OPTIONS.addOption(new ActiveOption<Main> (
-        //        "C", "contextexpr", true, "expression",
-        //        (m,o)->m.processContextExpression (o)));
-        
         OPTIONS.addOption(new ActiveOption<Main> (
                 "f", "format", true, "output in this format",
-                (m,o)->m.processFormat (o),
+                (m,o)->m.processFormat (o.nextValue()),
                 AFTER_LOAD));
+        
+        OPTIONS.addOption(new ActiveOption<Main> (
+                "o", "output", true, "write output to the file",
+                (m,o)->m.outputFile = o.nextValue(),
+                BEFORE_LOAD));
+        
+        OPTIONS.addOption(new ActiveOption<Main> (
+                "l", "load", true, "load data from JSON file instead of database (for testing)",
+                (m,o)->m.jsonInputFile = o.nextValue(),
+                BEFORE_LOAD));
     }
 
     public static final String PROG = "ofexport2";
@@ -171,6 +134,8 @@ public class Main {
 
     private List<Visitor> filters = new LinkedList<>();
 
+    private String jsonInputFile;
+
     private DataCache data;
 
     private Folder projectRoot;
@@ -178,6 +143,8 @@ public class Main {
     private Context contextRoot;
 
     private boolean exit = false;
+    
+    private String outputFile;
         
     public Main(ActiveOptionProcessor<Main> processor) throws IOException, ClassNotFoundException {
         this.processor = processor;
@@ -257,8 +224,8 @@ public class Main {
 
 
     
-    private void processFormat(ActiveOption<Main> o) {
-        format = o.nextValue();
+    private void processFormat(String format) {
+        this.format = format;
     }
 
     private void printHelp() {
@@ -277,8 +244,15 @@ public class Main {
         exit  = true;
      }
     
-    private void load () throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, SQLException {
-        data = SQLiteDAO.load();
+    private void load () throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, SQLException, FileNotFoundException, IOException {
+        if (jsonInputFile != null) {
+            data = DataCache.importData(new File (jsonInputFile));
+        }
+        else {
+            data = SQLiteDAO.load();
+        }
+        
+        data.build();
         
         projectRoot = new Folder();
         projectRoot.setName("RootFolder");
@@ -327,12 +301,13 @@ public class Main {
         String formatterClassName = "org.psidnell.omnifocus.format." + format + "Formatter";
         Formatter formatter = (Formatter) Class.forName(formatterClassName).newInstance();
                 
-        Writer out = new OutputStreamWriter(System.out) {
-            @Override
-            public void close() throws IOException {
-                // Don't want to close System.out
-            }
-        };
+        Writer out;
+        if (outputFile != null) {
+            out = new BufferedWriter(new FileWriter(outputFile));
+        }
+        else {
+            out = new BufferedWriter (IOUtils.systemOutWriter());
+        }
         
         if (projectMode) {
             formatter.format(projectRoot, out);

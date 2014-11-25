@@ -43,6 +43,16 @@ public abstract class CommonProjectTask extends Node {
     
     public abstract boolean isRemaining ();
     
+    public void setAvailable (boolean ignored) {
+        // Dummy setter for derived value since
+        // we want the exported/imported value in the json/xml
+    }
+    
+    public void setRemaining (boolean ignored) {
+        // Dummy setter for derived value since
+        // we want the exported/imported value in the json/xml
+    }
+    
     @ExprAttribute(help="number of tasks.")
     @JsonIgnore
     public int getTaskCount () {

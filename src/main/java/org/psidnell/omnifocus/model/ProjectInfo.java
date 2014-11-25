@@ -17,6 +17,8 @@ package org.psidnell.omnifocus.model;
 
 import org.psidnell.omnifocus.sqlite.SQLiteProperty;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class ProjectInfo {
 
     public String task;
@@ -30,7 +32,7 @@ public class ProjectInfo {
     }
     
     public void setStatusString (String status) {
-        switch (status) {
+        switch (status.toLowerCase()) {
             case "active":
                 this.status = Status.Active;
                 break;
@@ -63,6 +65,7 @@ public class ProjectInfo {
         this.task = task;
     }
 
+    @JsonIgnore
     public Status getStatus() {
         return status;
     }

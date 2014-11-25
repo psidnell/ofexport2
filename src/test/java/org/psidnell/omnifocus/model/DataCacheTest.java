@@ -40,6 +40,7 @@ public class DataCacheTest {
         OutputStreamWriter out = new OutputStreamWriter(System.out);
 
         DataCache cache = SQLiteDAO.load();
+        cache.build();
         for (Context c : cache.getContexts().values()) {
             new SimpleTextListFormatter().format(c, out);
         }
@@ -82,11 +83,14 @@ public class DataCacheTest {
         assertTrue(parent.getTasks().contains(child));
 
         assertEquals("[parent, child]", child.getProjectPath().stream().map((x) -> x.getName()).collect(Collectors.toList()).toString());
-        assertEquals("[child]", child.getContextPath().stream().map((x) -> x.getName()).collect(Collectors.toList()).toString());
+        assertEquals("[No Context, child]", child.getContextPath().stream().map((x) -> x.getName()).collect(Collectors.toList()).toString());
 
-        assertTrue(dataCache.getContexts().isEmpty());
         assertTrue(dataCache.getProjects().isEmpty());
         assertTrue(dataCache.getFolders().isEmpty());
+        
+        assertEquals(1, dataCache.getContexts().size());
+        Context noContext = dataCache.getContexts().values().iterator().next();
+        assertEquals ("No Context", noContext.getName());
     }
 
     @Test
@@ -224,8 +228,11 @@ public class DataCacheTest {
         assertEquals("[rootTask]", project.getContextPath().stream().map((x) -> x.getName()).collect(Collectors.toList()).toString());
 
         assertTrue(dataCache.getTasks().isEmpty());
-        assertTrue(dataCache.getContexts().isEmpty());
         assertTrue(dataCache.getFolders().isEmpty());
+        
+        assertEquals(1, dataCache.getContexts().size());
+        Context noContext = dataCache.getContexts().values().iterator().next();
+        assertEquals ("No Context", noContext.getName());
     }
 
     @Test
@@ -264,10 +271,13 @@ public class DataCacheTest {
         assertTrue (project.getTasks().contains(child));
 
         assertEquals("[rootTask, child]", child.getProjectPath().stream().map((x) -> x.getName()).collect(Collectors.toList()).toString());
-        assertEquals("[child]", child.getContextPath().stream().map((x) -> x.getName()).collect(Collectors.toList()).toString());
-
-        assertTrue(dataCache.getContexts().isEmpty());
+        assertEquals("[No Context, child]", child.getContextPath().stream().map((x) -> x.getName()).collect(Collectors.toList()).toString());
+        
         assertTrue(dataCache.getFolders().isEmpty());
+        
+        assertEquals(1, dataCache.getContexts().size());
+        Context noContext = dataCache.getContexts().values().iterator().next();
+        assertEquals ("No Context", noContext.getName());
     }
 
     @Test
@@ -307,7 +317,69 @@ public class DataCacheTest {
         assertEquals ("[rootTask]", project.getContextPath().stream().map((x)->x.getName()).collect(Collectors.toList()).toString());
 
         assertTrue(dataCache.getTasks().isEmpty());
-        assertTrue(dataCache.getContexts().isEmpty());
+        
+        assertEquals(1, dataCache.getContexts().size());
+        Context noContext = dataCache.getContexts().values().iterator().next();
+        assertEquals ("No Context", noContext.getName());
+    }
+    
+    @Test
+    public void testInbox () {
+
+        DataCache dataCache = new DataCache();
+
+        Task child = new Task();
+        child.setName("child");
+        child.setInInbox(true);
+
+        dataCache.add(child);
+        dataCache.build();
+
+        assertEquals(1, dataCache.getTasks().size());
+        assertSame(child, dataCache.getTasks().get(child.getId()));
+        
+        assertEquals (1, dataCache.getProjects().size());
+        Project inbox = dataCache.getProjects().values().iterator().next();
+        
+        assertSame(inbox, child.getProject());
+        assertEquals(1, inbox.getTasks().size());
+        assertTrue(inbox.getTasks().contains(child));
+
+        assertEquals("[Inbox, child]", child.getProjectPath().stream().map((x) -> x.getName()).collect(Collectors.toList()).toString());
+        assertEquals("[No Context, child]", child.getContextPath().stream().map((x) -> x.getName()).collect(Collectors.toList()).toString());
+
+        assertTrue(dataCache.getFolders().isEmpty());
+        
+        assertEquals(1, dataCache.getContexts().size());
+        Context noContext = dataCache.getContexts().values().iterator().next();
+        assertEquals ("No Context", noContext.getName());  
+    }
+    
+    @Test
+    public void testNoContext() {
+
+        DataCache dataCache = new DataCache();
+
+        Task child = new Task();
+        child.setName("child");
+
+        dataCache.add(child);
+        dataCache.build();
+
+        assertEquals(1, dataCache.getTasks().size());
+        assertSame(child, dataCache.getTasks().get(child.getId()));
+        assertEquals(1, dataCache.getContexts().size());
+        assertEquals (1, dataCache.getContexts().size());
+        Context noContext = dataCache.getContexts().values().iterator().next();
+        assertSame(noContext, child.getContext());
+        assertEquals(1, noContext.getTasks().size());
+        assertTrue(noContext.getTasks().contains(child));
+
+        assertEquals("[child]", child.getProjectPath().stream().map((x) -> x.getName()).collect(Collectors.toList()).toString());
+        assertEquals("[No Context, child]", child.getContextPath().stream().map((x) -> x.getName()).collect(Collectors.toList()).toString());
+
+        assertTrue(dataCache.getFolders().isEmpty());
+        assertTrue(dataCache.getProjects().isEmpty());
     }
 
 }

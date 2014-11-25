@@ -1,0 +1,5 @@
+RootFolder
+  %TestFolder
+    %TestProject
+      [ ] %TestToDo
+    %TestProjectEmpty

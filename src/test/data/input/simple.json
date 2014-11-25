@@ -1,0 +1,90 @@
+{
+  "folders" : {
+    "eABGXey-Ql6" : {
+      "name" : "%TestFolder",
+      "id" : "eABGXey-Ql6",
+      "rank" : 2144470400,
+      "projects" : [ ],
+      "folders" : [ ],
+      "parentFolderId" : null
+    }
+  },
+  "tasks" : {
+    "oZXBUDCwSlB" : {
+      "name" : "%TestToDo",
+      "id" : "oZXBUDCwSlB",
+      "rank" : 0,
+      "note" : null,
+      "deferDate" : null,
+      "dueDate" : null,
+      "completionDate" : null,
+      "sequential" : false,
+      "flagged" : false,
+      "tasks" : [ ],
+      "parentTaskId" : "clioWeWmhyC",
+      "contextId" : "pXJG5nez1F-",
+      "blocked" : false,
+      "available" : true,
+      "remaining" : true
+    },
+    "iiqUlIxIGcZ" : {
+      "name" : "%TestProjectEmpty",
+      "id" : "iiqUlIxIGcZ",
+      "rank" : 1073741824,
+      "note" : null,
+      "deferDate" : null,
+      "dueDate" : null,
+      "completionDate" : null,
+      "sequential" : true,
+      "flagged" : false,
+      "tasks" : [ ],
+      "parentTaskId" : null,
+      "contextId" : "pXJG5nez1F-",
+      "blocked" : false,
+      "available" : true,
+      "remaining" : true
+    },
+    "clioWeWmhyC" : {
+      "name" : "%TestProject",
+      "id" : "clioWeWmhyC",
+      "rank" : 0,
+      "note" : null,
+      "deferDate" : null,
+      "dueDate" : null,
+      "completionDate" : null,
+      "sequential" : true,
+      "flagged" : false,
+      "tasks" : [ ],
+      "parentTaskId" : null,
+      "contextId" : "pXJG5nez1F-",
+      "blocked" : true,
+      "available" : false,
+      "remaining" : true
+    }
+  },
+  "contexts" : {
+    "pXJG5nez1F-" : {
+      "name" : "%TestContext",
+      "id" : "pXJG5nez1F-",
+      "rank" : 2147132382,
+      "tasks" : [ ],
+      "contexts" : [ ],
+      "parentContextId" : null
+    }
+  },
+  "projects" : { },
+  "projectInfos" : {
+    "iiqUlIxIGcZ" : {
+      "task" : "iiqUlIxIGcZ",
+      "folderId" : "eABGXey-Ql6",
+      "rootTaskId" : "iiqUlIxIGcZ",
+      "statusString" : "Active"
+    },
+    "clioWeWmhyC" : {
+      "task" : "clioWeWmhyC",
+      "folderId" : "eABGXey-Ql6",
+      "rootTaskId" : "clioWeWmhyC",
+      "statusString" : "Active"
+    }
+  }
+}

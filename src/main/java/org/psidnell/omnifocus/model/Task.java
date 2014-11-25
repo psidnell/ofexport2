@@ -32,6 +32,17 @@ public class Task extends CommonProjectTask {
     private Task parent;
     private Project project;
     private boolean blocked = false;
+    private boolean inInbox;
+    
+    @SQLiteProperty (name="inInbox")
+    @JsonIgnore
+    public boolean isInInbox () {
+        return inInbox;
+    }
+    
+    public void setInInbox (boolean inInbox) {
+        this.inInbox = inInbox;
+    }
     
     @SQLiteProperty
     @ExprAttribute (help="item is blocked.")
@@ -84,7 +95,6 @@ public class Task extends CommonProjectTask {
         } else if (project != null) {
             return getProjectPath(project);
         } else {
-            // Inbox task? TODO
             LinkedList<Node> result = new LinkedList<>();
             result.add(this);
             return result;
@@ -114,10 +124,13 @@ public class Task extends CommonProjectTask {
     public boolean isAvailable() {
         return !isCompleted() && !isBlocked();
     }
+    
+
 
     @Override
     @ExprAttribute (help="item is remaining.")
     public boolean isRemaining() {
         return !isCompleted();
     }
+   
 }
