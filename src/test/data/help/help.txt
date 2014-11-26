@@ -1,6 +1,6 @@
 usage: ofexport2
  -h,--help                 print help
- -i,--info                 print note type inormation
+ -i,--info                 print additional help inormation
  -pe,--projectexpr <arg>   include items where project expression is true
  -pn,--projectname <arg>   include tasks from project specified by name
  -fe,--folderexpr <arg>    include items where folder expression is true
@@ -15,3 +15,4 @@ usage: ofexport2
  -o,--output <arg>         write output to the file
  -l,--load <arg>           load data from JSON file instead of database
                            (for testing)
+ -loglevel <arg>           set log level [debug,info,warn,error]

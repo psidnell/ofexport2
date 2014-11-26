@@ -23,226 +23,27 @@ import java.io.IOException;
 import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
-import java.util.LinkedList;
-import java.util.List;
 
-import org.apache.commons.cli.Options;
-import org.psidnell.omnifocus.cli.ActiveOption;
-import org.psidnell.omnifocus.cli.ActiveOptionProcessor;
-import org.psidnell.omnifocus.expr.AttribPrinter;
-import org.psidnell.omnifocus.expr.ExprVisitor;
 import org.psidnell.omnifocus.format.Formatter;
 import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.DataCache;
 import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Project;
-import org.psidnell.omnifocus.model.Task;
 import org.psidnell.omnifocus.sqlite.SQLiteDAO;
 import org.psidnell.omnifocus.util.IOUtils;
 import org.psidnell.omnifocus.visitor.IncludeVisitor;
-import org.psidnell.omnifocus.visitor.IncludedFilter;
 import org.psidnell.omnifocus.visitor.SortingFilter;
 import org.psidnell.omnifocus.visitor.Traverser;
-import org.psidnell.omnifocus.visitor.Visitor;
-import org.psidnell.omnifocus.visitor.VisitorDescriptor;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class Main {
-    
-    final static Options OPTIONS = new Options();
-
-    private static final int BEFORE_LOAD = 0;
-    private static final int AFTER_LOAD = 1;
-    
-    static {
+public class Main extends CommandLine {
         
-        OPTIONS.addOption(new ActiveOption<Main> (
-                "h", "help", false, "print help",
-                (m,o)->m.printHelp (),
-                BEFORE_LOAD));
-        
-        OPTIONS.addOption(new ActiveOption<Main> (
-                "i", "info", false, "print note type inormation",
-                (m,o)->m.printTypeInfo (),
-                BEFORE_LOAD));
-        
-        OPTIONS.addOption(new ActiveOption<Main>(
-                "pe", "projectexpr", true, "include items where project expression is true",
-                (m,o)->m.processProjectExpression(o.nextValue()),
-                AFTER_LOAD));
-        
-        OPTIONS.addOption(new ActiveOption<Main>(
-                "pn", "projectname", true, "include tasks from project specified by name",
-                (m,o)->m.processProjectName(o.nextValue()),
-                AFTER_LOAD));
-        
-        OPTIONS.addOption(new ActiveOption<Main>(
-                "fe", "folderexpr", true, "include items where folder expression is true",
-                (m,o)->m.processFolderExpression(o.nextValue()),
-                AFTER_LOAD));
-        
-        OPTIONS.addOption(new ActiveOption<Main>(
-                "fn", "foldername", true, "include tasks from project specified by name",
-                (m,o)->m.processFolderName(o.nextValue()),
-                AFTER_LOAD));
-        
-        OPTIONS.addOption(new ActiveOption<Main>(
-                "te", "taskexpr", true, "include items where task expression is true",
-                (m,o)->m.processTaskExpression(o.nextValue()),
-                AFTER_LOAD));
-        
-        OPTIONS.addOption(new ActiveOption<Main>(
-                "tn", "taskname", true, "include tasks specified by name",
-                (m,o)->m.processTaskName(o.nextValue()),
-                AFTER_LOAD));
-        
-        OPTIONS.addOption(new ActiveOption<Main>(
-                "ce", "contextexpr", true, "include items where context expression is true",
-                (m,o)->m.processContextExpression(o.nextValue()),
-                AFTER_LOAD));
-        
-        OPTIONS.addOption(new ActiveOption<Main>(
-                "cn", "taskname", true, "include contexts specified by name",
-                (m,o)->m.processContextName(o.nextValue()),
-                AFTER_LOAD));
-        
-        OPTIONS.addOption(new ActiveOption<Main> (
-                "c", "contextmode", false, "display context hierarchy instead of project hierarchy)",
-                (m,o)->m.projectMode = false,
-                BEFORE_LOAD));
-        
-        OPTIONS.addOption(new ActiveOption<Main> (
-                "f", "format", true, "output in this format",
-                (m,o)->m.processFormat (o.nextValue()),
-                AFTER_LOAD));
-        
-        OPTIONS.addOption(new ActiveOption<Main> (
-                "o", "output", true, "write output to the file",
-                (m,o)->m.outputFile = o.nextValue(),
-                BEFORE_LOAD));
-        
-        OPTIONS.addOption(new ActiveOption<Main> (
-                "l", "load", true, "load data from JSON file instead of database (for testing)",
-                (m,o)->m.jsonInputFile = o.nextValue(),
-                BEFORE_LOAD));
-    }
-
-    public static final String PROG = "ofexport2";
-    
-    private ActiveOptionProcessor<Main> processor;
-    private String format = "SimpleTextList";
-    private boolean projectMode = true;
-
-    private List<Visitor> filters = new LinkedList<>();
-
-    private String jsonInputFile;
-
     private DataCache data;
 
     private Folder projectRoot;
 
     private Context contextRoot;
-
-    private boolean exit = false;
-    
-    private String outputFile;
-        
-    public Main(ActiveOptionProcessor<Main> processor) throws IOException, ClassNotFoundException {
-        this.processor = processor;
-    }
-
-    private void processProjectExpression(String expression) {
-        if (!projectMode) {
-            throw new IllegalArgumentException ("project filters only valid in project mode");
-        }
-        VisitorDescriptor visitwhat = new  VisitorDescriptor().visit(Folder.class, Project.class);
-        VisitorDescriptor applyToWhat = new  VisitorDescriptor().visit(Project.class);
-        filters.add(new ExprVisitor(expression, projectMode, visitwhat, applyToWhat));
-        filters.add(new IncludedFilter());
-    }
-
-    private void processProjectName(String projectName) {
-        if (!projectMode) {
-            throw new IllegalArgumentException ("project filters only valid in project mode");
-        }
-        processProjectExpression("name=='" + escape(projectName) + "'");
-    }
-    
-    private void processFolderExpression(String expression) {
-        if (!projectMode) {
-            throw new IllegalArgumentException ("project filters only valid in project mode");
-        }
-        VisitorDescriptor visitWhat = new  VisitorDescriptor().visit(Folder.class);
-        VisitorDescriptor applyToWhat = new  VisitorDescriptor().visit(Folder.class);
-        filters.add(new ExprVisitor(expression, projectMode, visitWhat, applyToWhat));
-        filters.add(new IncludedFilter());
-    }
-
-    private void processFolderName(String folderName) {
-        if (!projectMode) {
-            throw new IllegalArgumentException ("project filters only valid in project mode");
-        }
-        processFolderExpression("name=='" + escape(folderName) + "'");
-    }
-    
-    private void processTaskName(String taskName) {
-        if (!projectMode) {
-            throw new IllegalArgumentException ("project filters only valid in project mode");
-        }
-        processTaskExpression("name=='" + escape(taskName) + "'");
-    }
-    
-    private void processTaskExpression(String expression) {
-        if (projectMode) {
-            VisitorDescriptor visitWhat = new  VisitorDescriptor().visit(Folder.class, Project.class, Task.class);
-            VisitorDescriptor applyToWhat = new  VisitorDescriptor().visit(Task.class);
-            filters.add(new ExprVisitor(expression, projectMode, visitWhat, applyToWhat));
-        }
-        else {
-            VisitorDescriptor visitWhat = new  VisitorDescriptor().visit(Context.class, Task.class);
-            VisitorDescriptor applyToWhat = new  VisitorDescriptor().visit(Task.class);
-            filters.add(new ExprVisitor(expression, projectMode, visitWhat, applyToWhat));
-        }
-        filters.add(new IncludedFilter());
-    }
-
-    private void processContextName(String taskName) {
-        if (projectMode) {
-            throw new IllegalArgumentException ("project filters only valid in project mode");
-        }
-        processContextExpression("name=='" + escape(taskName) + "'");
-    }
-
-    private void processContextExpression(String expression) {
-        if (projectMode) {
-            throw new IllegalArgumentException ("context filters only valid in context mode");
-        }
-        VisitorDescriptor visitWhat = new  VisitorDescriptor().visit(Context.class);
-        VisitorDescriptor applyToWhat = new  VisitorDescriptor().visit(Context.class);
-        filters.add(new ExprVisitor(expression, projectMode, visitWhat, applyToWhat));
-        filters.add(new IncludedFilter());
-    }
-
-
-    
-    private void processFormat(String format) {
-        this.format = format;
-    }
-
-    private void printHelp() {
-       processor.printHelp ();
-       exit  = true;
-    }
-    
-    private void printTypeInfo() {
-        AttribPrinter.print(Folder.class);
-        System.out.println();
-        AttribPrinter.print(Project.class);
-        System.out.println();
-        AttribPrinter.print(Context.class);
-        System.out.println();
-        AttribPrinter.print(Task.class);
-        exit  = true;
-     }
     
     private void load () throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, SQLException, FileNotFoundException, IOException {
         if (jsonInputFile != null) {
@@ -324,24 +125,24 @@ public class Main {
     
     public static void main(String args[]) throws Exception {
         
-        ActiveOptionProcessor<Main> processor = new ActiveOptionProcessor<>(PROG, OPTIONS);
-        
-        Main main = new Main (processor);
+        @SuppressWarnings("resource")
+        ApplicationContext appContext = new ClassPathXmlApplicationContext("config.xml");
+
+        Main main = appContext.getBean("main", Main.class);
         
         // Load initial switches, help etc
-        if (!processor.processOptions(main, args, BEFORE_LOAD) || main.exit) {
+        if (!main.processor.processOptions(main, args, BEFORE_LOAD) || main.exit) {
+            LOGGER.debug("Exiting");
             return;
         }
-        
+                
         main.load ();
         
         // Load filters etc.
-        processor.processOptions(main, args, AFTER_LOAD);
+        main.processor.processOptions(main, args, AFTER_LOAD);
 
         main.run ();
-    }
-    
-    private String escape (String val) {
-        return val.replaceAll("'", "\'");
+        
+        LOGGER.debug("Exiting");        
     }
 }

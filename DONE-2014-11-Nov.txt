@@ -2,6 +2,8 @@
 
 ## ofexport2
 
+- Externalise configuration files to directory (not resource path)
+- Allow log level setting from the command line
 - Design integration test framework to test main()
 - Add Markdown format
 - Generate todo & change log as part of build
@@ -41,6 +43,7 @@
 - Mode: project/context
 - Filters - how to filter the root
 - Write tests of knitting
+- Load dates into tasks/projects
 - Use visitor for text format
 - load a folder and subsidiary projects/folders/tasks
 - Add multi level filters to adapters (done folders, finish for other types)
