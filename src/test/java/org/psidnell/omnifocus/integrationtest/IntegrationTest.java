@@ -15,7 +15,7 @@ limitations under the License.
  */
 package org.psidnell.omnifocus.integrationtest;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,7 +27,6 @@ import java.util.LinkedList;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.psidnell.omnifocus.Main;
-import org.psidnell.omnifocus.model.DataCache;
 import org.psidnell.omnifocus.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

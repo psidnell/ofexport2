@@ -4,7 +4,12 @@
 
 - Use spring
 - Externalise configuration files to directory (not resource path)
+  Have default or named configuration files
+  Use spring
 - Templates - use FreeMarker
+  https://www.google.co.uk/search?q=java+templates&ie=UTF-8&oe=UTF-8&hl=en&client=safari#safe=off&hl=en&q=java+template+engine
+  
+  Freemarker
 - Test example template
 - TaskPaper heavy/lite formats (notes)
 - How to specify templates on the command line
@@ -15,6 +20,8 @@
 - Text output formats should skip roots
 - delete main test (replaced by integration tests)
 - Write integration tests to test options
+  nodes by name
+  nodes by expression
 - Export model for testing - save included items, use SQLite descriptors to identify fields
 - Tests failing because contexts not empty - No Context
 - Don't delete root tasks, context walk is flat
@@ -38,11 +45,15 @@
 - Test nodes - esp add(xxx), should unlink from old parents too
 - Make -xa implicit
 - Rethink filters
+  Base classes for visitor/filter with efficient tailored methods, avoiding unnecessary looping.
+  
+  descriptor needs to come from visitor
 - Test knitting
 - Test paths
 - cmdlinf filter of functions - phases
 - Natural order of tasks/items
 - Group doesn't lend itself to filtering
+  Can I do without it - only have it to support grouping by date, another way?
 - Filters - add means of just providing a boolean fn
 - Need to re-invent filtering concepts, tree walks etc from before. include/exclude etc.
 - Mode: project/context
@@ -63,12 +74,23 @@
 - Unit Tests
 - Streaming JSON IO? & parallel execution?
 - Wow it's slow - load whole tree from javascript?
+  Filter and walk in the adapters?
 - Lose the cacheing?
 - Make an executable program
 - Implement visitor pattern
 - Add sorting
 - Add filter to inbox(...)
 - Create README
+  Project name: p=name
+  Project expression: P=expr
+  Context name: c=name
+  Context expression: C=expr
+  Task expression: T=expr
+  Inbox: i
+  Availability: avail=...
+  Flagged: flagged=...
+  Format: fmt=XML,JSON,SimpleTextList
+  Structure: struct=byStart,byCompleted,byProject,byContext
 - Parse command line
 - Load filters from command line
 - How to express filters to end use (command line)r?

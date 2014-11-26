@@ -21,7 +21,7 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
   <@doContext context=c depth=0/>
   </#list>
   <#list tasks as task>
-  <@doTask task=t depth=0/>
+  <@doTask task=t depth=0 projectMode=false/>
   </#list>
 </#if>
 <#--

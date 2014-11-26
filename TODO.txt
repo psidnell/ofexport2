@@ -2,14 +2,24 @@
 
 ## ofexport2
 
-- 
+- Markdown template
 - use visit/recurse: http://freemarker.org/docs/ref_directive_visit.html (maybe)
 - Whitespace usage - can  avoid long lines? eatspace option?
 - documentation
 - OPML
 - Timing and stats
+  Have default or named configuration files
+  Use spring
 - Projects/Folders should be interleaved in their original order  (awkward - worth the cost?)
 - Filters (available etc) - finish - test
+  Issue: 
+  if I search for completed items, I don’t see completed tasks in incomplete
+  projects since the incomplete project is eliminated before we see the tasks.
+  
+  Could have separate availability options for projects, contexts, tasks but can I infer this?
+  
+  ** maybe I’m pruning too early in the availability filter?
+  don’t prevent inclusion???
 - AbortTraversal exception to shortcut unnecessary traversal?
 - Coverage
 - Transforms - create one to experiment
