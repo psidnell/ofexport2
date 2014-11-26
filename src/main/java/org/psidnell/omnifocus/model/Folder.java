@@ -60,6 +60,7 @@ public class Folder extends Node {
         this.projects = projects;
     }
 
+    @ExprAttribute(help="the sub projects")
     public List<Project> getProjects() {
         return projects;
     }
@@ -68,12 +69,14 @@ public class Folder extends Node {
         this.folders = folders;
     }
 
+    @ExprAttribute(help="the sub folders")
     public List<Folder> getFolders() {
         return folders;
     }
     
     @Override
     @JsonIgnore
+    @ExprAttribute(help="the items type")
     public String getType() {
         return TYPE;
     }

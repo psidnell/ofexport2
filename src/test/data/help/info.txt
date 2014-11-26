@@ -1,7 +1,10 @@
 Folder:
     folderCount (int): number of projects.
+    folders (list): the sub folders
     name (string): item name/text.
     projectCount (int): number of tasks.
+    projects (list): the sub projects
+    type (string): the items type
 
 Project:
     available (boolean): item is available.
@@ -15,11 +18,15 @@ Project:
     remaining (boolean): item is remaining.
     sequential (boolean): item is sequential.
     taskCount (int): number of tasks.
+    tasks (list): the sub tasks
+    type (string): the items type
 
 Context:
     contextCount (int): number of contexts.
     name (string): item name/text.
     taskCount (int): number of tasks.
+    tasks (list): the sub tasks
+    type (string): the items type
 
 Task:
     available (boolean): item is available.
@@ -34,3 +41,5 @@ Task:
     remaining (boolean): item is remaining.
     sequential (boolean): item is sequential.
     taskCount (int): number of tasks.
+    tasks (list): the sub tasks
+    type (string): the items type

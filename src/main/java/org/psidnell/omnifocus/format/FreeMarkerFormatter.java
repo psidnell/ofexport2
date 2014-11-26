@@ -16,15 +16,32 @@ limitations under the License.
 package org.psidnell.omnifocus.format;
 
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.psidnell.omnifocus.model.Node;
+
+import freemarker.cache.ClassTemplateLoader;
+import freemarker.cache.TemplateLoader;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+import freemarker.template.TemplateExceptionHandler;
 
 public class FreeMarkerFormatter implements Formatter {
 
     @Override
-    public void format(Node root, Writer out) throws IOException {
-        // TODO Auto-generated method stub
+    public void format(Node root, Writer out) throws IOException, TemplateException {
+        Configuration cfg = new Configuration(Configuration.VERSION_2_3_21);
+        TemplateLoader templateLoader = new ClassTemplateLoader(this.getClass(), "/templates");
+        cfg.setTemplateLoader(templateLoader );        
+        cfg.setDefaultEncoding("UTF-8");
+        cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER); 
         
+        Template temp = cfg.getTemplate("Example.md");
+        
+        temp.process(root, out);  
     }
 }

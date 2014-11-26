@@ -15,14 +15,14 @@ limitations under the License.
 */
 package org.psidnell.omnifocus.format;
 
-import java.io.IOException;
-import java.io.Writer;
+import org.junit.Test;
+import org.psidnell.omnifocus.Main;
 
-import org.psidnell.omnifocus.model.Node;
+public class FreeMarkerFormatterTest {
 
-import freemarker.template.TemplateException;
-
-public interface Formatter {
-    public void format(Node root, Writer out) throws IOException, TemplateException;
-
+    @Test
+    public void testSomething () throws Exception {
+        Main.main(new String []{"-pn", "ofexport2", "-f", "FreeMarker"});
+        Main.main(new String []{"-c", "-cn", "Home", "-f", "FreeMarker"});
+    }
 }

@@ -59,6 +59,7 @@ public abstract class CommonProjectTask extends Node {
         return tasks.size();
     }
     
+    @ExprAttribute(help="the sub tasks")
     public List<Task> getTasks() {
         return tasks;
     }

@@ -60,6 +60,7 @@ public class Context extends Node {
         this.tasks = tasks;
     }
 
+    @ExprAttribute(help="the sub tasks")
     public List<Task> getTasks() {
         return tasks;
     }
@@ -74,6 +75,7 @@ public class Context extends Node {
 
     @Override
     @JsonIgnore
+    @ExprAttribute(help="the items type")
     public String getType() {
         return TYPE;
     }

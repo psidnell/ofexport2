@@ -2,7 +2,6 @@
 
 ## ofexport2
 
-- Use spring
 - Templates
 - documentation
 - OPML
