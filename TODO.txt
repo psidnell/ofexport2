@@ -2,7 +2,8 @@
 
 ## ofexport2
 
-- Templates
+- TaskPaper heavy/lite formats
+- How to specify templates on the command line
 - documentation
 - OPML
 - Timing and stats

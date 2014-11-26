@@ -16,6 +16,7 @@ limitations under the License.
 package org.psidnell.omnifocus.format;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.HashMap;
@@ -30,18 +31,33 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
 
+@SuppressWarnings("unused")
 public class FreeMarkerFormatter implements Formatter {
 
-    @Override
-    public void format(Node root, Writer out) throws IOException, TemplateException {
+    private static final String TEMPLATES = "/templates";
+    private Template template;
+
+    public FreeMarkerFormatter (String templateName) throws IOException {
+        try (InputStream in = this.getClass().getResourceAsStream(TEMPLATES + "/" + templateName)) {
+            if (in == null) {
+                throw new IOException("Resource not found:" + templateName);
+            }
+        }
         Configuration cfg = new Configuration(Configuration.VERSION_2_3_21);
-        TemplateLoader templateLoader = new ClassTemplateLoader(this.getClass(), "/templates");
+        TemplateLoader templateLoader = new ClassTemplateLoader(this.getClass(), TEMPLATES);
         cfg.setTemplateLoader(templateLoader );        
         cfg.setDefaultEncoding("UTF-8");
         cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER); 
-        
-        Template temp = cfg.getTemplate("Example.md");
-        
-        temp.process(root, out);  
+        try {
+            template = cfg.getTemplate( templateName);
+        }
+        catch (IOException e) {
+            throw new IllegalArgumentException(e);
+        }
+    }
+    
+    @Override
+    public void format(Node root, Writer out) throws IOException, TemplateException {
+        template.process(root, out);  
     }
 }

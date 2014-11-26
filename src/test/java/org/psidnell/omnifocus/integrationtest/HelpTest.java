@@ -16,7 +16,6 @@ limitations under the License.
 package org.psidnell.omnifocus.integrationtest;
 
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertSame;
 
 import java.io.File;
 import java.io.FileOutputStream;

@@ -4,6 +4,8 @@
 
 - Use spring
 - Externalise configuration files to directory (not resource path)
+- Templates - use FreeMarker
+- Test example template
 - Allow log level setting from the command line
 - Design integration test framework to test main()
 - Add Markdown format

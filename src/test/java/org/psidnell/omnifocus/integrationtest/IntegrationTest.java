@@ -64,6 +64,7 @@ public class IntegrationTest {
     @Test
     public void testFormatsInProjectMode() throws Exception {
         TestParams testParams[] = {
+                new TestParams("ExampleTemplate",".md"),
                 new TestParams("SimpleTextList", ".txt"),
                 new TestParams("TaskPaper",".taskpaper"),
                 new TestParams("Markdown",".md"),
@@ -88,6 +89,7 @@ public class IntegrationTest {
     @Test
     public void testFormatsInContextMode() throws Exception {
         TestParams testParams[] = {
+                new TestParams("ExampleTemplate",".md"),
                 new TestParams("SimpleTextList", ".txt"),
                 new TestParams("TaskPaper",".taskpaper"),
                 new TestParams("Markdown",".md"),

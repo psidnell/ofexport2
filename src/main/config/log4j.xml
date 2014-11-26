@@ -9,7 +9,7 @@
 		</layout>
 	</appender>
 
-	<logger name="com.psidnell">
+	<logger name="org.psidnell" additivity="false">
 		<level value="info" />
 		<appender-ref ref="console" />
 	</logger>

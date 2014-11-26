@@ -25,6 +25,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 
 import org.psidnell.omnifocus.format.Formatter;
+import org.psidnell.omnifocus.format.FreeMarkerFormatter;
 import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.DataCache;
 import org.psidnell.omnifocus.model.Folder;
@@ -101,8 +102,7 @@ public class Main extends CommandLine {
             filters.stream().forEachOrdered((f)->Traverser.traverse(f, contextRoot));
         }
 
-        String formatterClassName = "org.psidnell.omnifocus.format." + format + "Formatter";
-        Formatter formatter = (Formatter) Class.forName(formatterClassName).newInstance();
+        Formatter formatter = loadFormatter();
                 
         Writer out;
         if (outputFile != null) {
@@ -144,5 +144,22 @@ public class Main extends CommandLine {
         main.run ();
         
         LOGGER.debug("Exiting");        
+    }
+    
+    private Formatter loadFormatter() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+        // Formats are loaded by name.
+        
+        // Start by looking for a freemarker template:
+        try {
+            String templateName = format + ".ftl";
+            return new FreeMarkerFormatter(templateName);
+        }
+        catch (IOException e) {
+            LOGGER.debug("unable to load fremarker template for: " + format, e);
+        }
+        
+        // Then try and load it by class name:
+        String formatterClassName = "org.psidnell.omnifocus.format." + format + "Formatter";
+        return (Formatter) Class.forName(formatterClassName).newInstance();
     }
 }

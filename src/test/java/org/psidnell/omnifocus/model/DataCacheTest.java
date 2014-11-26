@@ -29,24 +29,13 @@ import java.sql.SQLException;
 import java.util.stream.Collectors;
 
 import org.junit.Test;
-import org.psidnell.omnifocus.format.SimpleTextListFormatter;
+import org.psidnell.omnifocus.format.FreeMarkerFormatter;
 import org.psidnell.omnifocus.sqlite.SQLiteDAO;
 
+import freemarker.template.TemplateException;
+
 public class DataCacheTest {
-
-    @Test
-    public void testBuild() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, SQLException, IOException {
-        // Useless "run it and see what breaks test"
-        OutputStreamWriter out = new OutputStreamWriter(System.out);
-
-        DataCache cache = SQLiteDAO.load();
-        cache.build();
-        for (Context c : cache.getContexts().values()) {
-            new SimpleTextListFormatter().format(c, out);
-        }
-        out.flush();
-    }
-
+    
     @Test
     public void testConstruction() {
         DataCache dataCache = new DataCache();

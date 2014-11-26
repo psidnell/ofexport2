@@ -85,16 +85,16 @@ $$$$$$$$$$$$$$$$$$
  -->
 <#macro doProject project depth>
 <@doIndent indent=depth/>Project: ${project.name}
-<#list project.tasks as t><@doTask task=t depth=depth+1/></#list>
+<#list project.tasks as t><@doTask task=t depth=depth+1 projectMode=true/></#list>
 </#macro>
 <#--
 $$$$$$$$$$$$$$$
 $ MACRO: doTask 
 $$$$$$$$$$$$$$$
 -->
-<#macro doTask task depth>
+<#macro doTask task depth projectMode>
 <@doIndent indent=depth/>Task: ${task.name}
-<#list task.tasks as t><@doTask task=t depth=depth+1/></#list>
+<#if projectMode><#list task.tasks as t><@doTask task=t depth=depth+1 projectMode=projectMode/></#list></#if>
 </#macro>
 <#--
 $$$$$$$$$$$$$$$$$$
@@ -104,12 +104,12 @@ $$$$$$$$$$$$$$$$$$
 <#macro doContext context depth>
 <@doIndent indent=depth/>Context: ${context.name}
 <#list context.contexts as c><@doContext context=c depth=depth+1/></#list>
-<#list context.tasks as t><@doTask task=t depth=depth+1/></#list>
+<#list context.tasks as t><@doTask task=t depth=depth+1 projectMode=false/></#list>
 </#macro>
 <#--
 $$$$$$$$$$$$$$$$$$
 $ MACRO: doIndent
 $$$$$$$$$$$$$$$$$$
 -->
-<#macro doIndent indent><#list 0..indent as i>${INDENT}</#list></#macro>
+<#macro doIndent indent><#if (indent > 0)><#list 0..(indent-1) as i>${INDENT}</#list></#if></#macro>
  

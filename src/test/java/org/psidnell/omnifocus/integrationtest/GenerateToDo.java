@@ -21,7 +21,6 @@ import java.util.GregorianCalendar;
 
 import org.junit.Test;
 import org.psidnell.omnifocus.Main;
-import org.psidnell.omnifocus.expr.ExpressionFunctions;
 
 public class GenerateToDo {
 
