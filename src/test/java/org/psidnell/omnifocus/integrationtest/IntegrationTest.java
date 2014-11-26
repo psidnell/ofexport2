@@ -54,7 +54,7 @@ public class IntegrationTest {
         if (Mode.REWRITE_INPUT_FILES) {
             // Regenerate the exported json from raw OmniFocus data
             //DataCache.exportData(new File("src/test/data/input/simple.json"), (n)->n.getName().startsWith("%Test"));
-            DataCache.exportData(new File("src/test/data/input/simple2.json"), (n)->n.getName().startsWith("%Test"));
+            //DataCache.exportData(new File("src/test/data/input/simple2.json"), (n)->n.getName().startsWith("%Test"));
         }
         
         // So I don't forget
@@ -66,7 +66,9 @@ public class IntegrationTest {
         TestParams testParams[] = {
                 new TestParams("ExampleTemplate",".md"),
                 new TestParams("SimpleTextList", ".txt"),
+                new TestParams("TaskPaperLite",".taskpaper"),
                 new TestParams("TaskPaper",".taskpaper"),
+                new TestParams("OPML",".opml"),
                 new TestParams("Markdown",".md"),
                 new TestParams("JSON",".json"),
                 new TestParams("XML", ".xml")
@@ -91,7 +93,9 @@ public class IntegrationTest {
         TestParams testParams[] = {
                 new TestParams("ExampleTemplate",".md"),
                 new TestParams("SimpleTextList", ".txt"),
+                new TestParams("TaskPaperLite",".taskpaper"),
                 new TestParams("TaskPaper",".taskpaper"),
+                new TestParams("OPML",".opml"),
                 new TestParams("Markdown",".md"),
                 new TestParams("JSON",".json"),
                 new TestParams("XML", ".xml")
@@ -202,5 +206,10 @@ public class IntegrationTest {
         }
 
         Diff.diff(comparisonFile, tmpFile);
+    }
+    
+    @Test
+    public void test () throws Exception {
+        Main.main(new String[]{"-pn", "ofexport2", "-f", "OPML"});
     }
 }

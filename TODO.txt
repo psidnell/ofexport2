@@ -2,8 +2,9 @@
 
 ## ofexport2
 
-- TaskPaper heavy/lite formats
-- How to specify templates on the command line
+- 
+- use visit/recurse: http://freemarker.org/docs/ref_directive_visit.html (maybe)
+- Whitespace usage - can  avoid long lines? eatspace option?
 - documentation
 - OPML
 - Timing and stats

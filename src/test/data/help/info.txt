@@ -10,6 +10,7 @@ Project:
     available (boolean): item is available.
     completed (boolean): item is complete.
     completionDate (date): date item was completed.
+    contextName (string): contextName.
     deferDate (date): date item is to start.
     dueDate (date): date item is due.
     flagged (boolean): item is flagged.
@@ -33,6 +34,7 @@ Task:
     blocked (boolean): item is blocked.
     completed (boolean): item is complete.
     completionDate (date): date item was completed.
+    contextName (string): contextName.
     deferDate (date): date item is to start.
     dueDate (date): date item is due.
     flagged (boolean): item is flagged.

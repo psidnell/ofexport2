@@ -6,6 +6,8 @@
 - Externalise configuration files to directory (not resource path)
 - Templates - use FreeMarker
 - Test example template
+- TaskPaper heavy/lite formats (notes)
+- How to specify templates on the command line
 - Allow log level setting from the command line
 - Design integration test framework to test main()
 - Add Markdown format

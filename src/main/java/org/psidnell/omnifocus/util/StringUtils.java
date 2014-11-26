@@ -22,12 +22,31 @@ import java.util.StringJoiner;
 public class StringUtils {
 
     public static String join (Collection<String> data, String delimiter) {
-        StringJoiner sj = new StringJoiner(delimiter);
+        return join (data, new StringJoiner(delimiter));
+    }
+    
+    public static String join (Collection<String> data, String delimiter, String prefix, String suffix) {
+        return join (data, new StringJoiner(delimiter, prefix, suffix));
+    }
+
+    public static String join (String data[], String delimiter) {
+        return join(Arrays.asList(data), new StringJoiner(delimiter));
+    }
+    
+    public static String join (String data[],String delimiter, String prefix, String suffix) {
+        return join(Arrays.asList(data), new StringJoiner(delimiter, prefix, suffix));
+    }
+    
+    public static String join (Collection<String> data, StringJoiner sj) {
         data.stream().forEachOrdered((s)->sj.add(s));
         return sj.toString();
     }
     
-    public static String join (String data[], String delimiter) {
-        return join(Arrays.asList(data), delimiter);
+    public static String times (String str, int n) {
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < n; i++) {
+            result.append(str);
+        }
+        return result.toString();
     }
 }

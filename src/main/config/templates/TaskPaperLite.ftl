@@ -40,8 +40,7 @@ $ MACRO: doProject
 $$$$$$$$$$$$$$$$$$
  -->
 <#macro doProject project depth>
-<@doIndent indent=depth/>${project.name}:<@doTags project/>
-<@doNote node=project depth=depth+1/>
+<@doIndent indent=depth/>${project.name}:
 <#list project.tasks as t><@doTask task=t depth=depth+1 projectMode=true/></#list>
 </#macro>
 <#--
@@ -51,8 +50,7 @@ $$$$$$$$$$$$$$$
 -->
 <#macro doTask task depth, projectMode>
 <@doIndent indent=depth/>
-- ${task.name}<@doTags task/>
-<@doNote node=task depth=depth+1/>
+- ${task.name}<#if task.completed><@doDateTag task.completionDate/></#if>
 <#if projectMode><#list task.tasks as t><@doTask task=t depth=depth+1  projectMode=projectMode/></#list></#if>
 </#macro>
 <#--
@@ -71,19 +69,12 @@ $ MACRO: doIndent
 $$$$$$$$$$$$$$$$$$
 -->
 <#macro doIndent indent><#if (indent > 0)><#list 0..(indent-1) as i>${INDENT}</#list></#if></#macro>
-<#--
-$$$$$$$$$$$$$$$
-$ MACRO: doTags
-$$$$$$$$$$$$$$$
+ <#--
+$$$$$$$$$$$$$$$$$$
+$ MACRO: doDateTag
+$$$$$$$$$$$$$$$$$$
 Using Java SimpleDateFormat conversion
 -->
-<#macro doTags node>
-<#if node.completed> @done(${node.completionDate?string["yyyy-MM-dd"]})</#if><#if node.flagged> @flagged</#if><#if (node.contextName)??> @${node.contextName}</#if></#macro> 
-<#--
-$$$$$$$$$$$$$$$
-$ MACRO: doNote
-$$$$$$$$$$$$$$$
--->
-<#macro doNote node depth>
-<#if (node.note)??>${node.formatNote(depth, INDENT)}</#if></#macro> 
+<#macro doDateTag date> @${date?string["yyyy-MM-dd-EEE"]}</#macro>
+ 
  

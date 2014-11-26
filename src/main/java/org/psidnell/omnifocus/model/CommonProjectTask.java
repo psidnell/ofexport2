@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.psidnell.omnifocus.expr.ExprAttribute;
 import org.psidnell.omnifocus.sqlite.SQLiteProperty;
+import org.psidnell.omnifocus.util.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -51,6 +52,12 @@ public abstract class CommonProjectTask extends Node {
     public void setRemaining (boolean ignored) {
         // Dummy setter for derived value since
         // we want the exported/imported value in the json/xml
+    }
+    
+    @ExprAttribute(help="contextName.")
+    @JsonIgnore
+    public String getContextName () {
+        return context == null ? null : context.getName();
     }
     
     @ExprAttribute(help="number of tasks.")
@@ -143,5 +150,12 @@ public abstract class CommonProjectTask extends Node {
     @JsonIgnore
     public List<Node> getContextPath() {
         return getContextPath(context);
+    }
+    
+    public String formatNote (int depth, String indent) {
+        String lines[] = note.split("\n");
+        String indentChars = StringUtils.times(indent, depth);
+        String delimiter = "\n" + indentChars;
+        return StringUtils.join(lines, delimiter, indentChars, "\n");
     }
 }

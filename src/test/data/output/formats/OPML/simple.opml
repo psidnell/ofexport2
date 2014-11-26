@@ -1,0 +1,19 @@
+<opml version="1.0">
+  <head>
+    <title>OmniFocus</title>
+  </head>
+  <body>
+<outline text="%Test Folder">
+  <outline text="%Test Project Foo Non Empty">
+    <outline text="%TestToDo" context="%TestContext">
+      <outline text="%Test Sub task" context="%TestContext">
+      </outline>
+    </outline>
+    <outline text="%Test completed" completed="2014-11-25" context="%TestContext">
+    </outline>
+  </outline>
+  <outline text="%Test Project Bar Empty">
+  </outline>
+</outline>
+  </body>
+</opml>

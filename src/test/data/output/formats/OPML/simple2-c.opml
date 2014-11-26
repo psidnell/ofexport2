@@ -1,0 +1,29 @@
+<opml version="1.0">
+  <head>
+    <title>OmniFocus</title>
+  </head>
+  <body>
+<outline text="No Context">
+  <outline text="%Test T1" context="No Context">
+  </outline>
+  <outline text="%Test P1" context="No Context">
+  </outline>
+</outline>
+<outline text="%TestContext">
+  <outline text="%Test Sub Context">
+  </outline>
+  <outline text="%Test T2" context="%TestContext">
+  </outline>
+  <outline text="%Test T3" context="%TestContext">
+  </outline>
+  <outline text="%Test T4" context="%TestContext">
+  </outline>
+  <outline text="%Test P2" context="%TestContext">
+  </outline>
+  <outline text="%Test completed" completed="2014-11-25" context="%TestContext">
+  </outline>
+  <outline text="%Test P3" context="%TestContext">
+  </outline>
+</outline>
+  </body>
+</opml>
