@@ -131,7 +131,7 @@ $ MACRO: doProject
 $$$$$$$$$$$$$$$$$$
  -->
 <#macro doProject project depth>
-<@doIndent indent=depth/><H${depth+1} class="Project"><a href="omnifocus:///task/${project.id}">${escape(project.name)}</a></H${depth+1}><ul>
+<@doIndent indent=depth/><H${depth+1} class="Project"><a href="omnifocus:///task/${project.id}">${escape(project.name)}</a><@doAttribs project/></H${depth+1}><ul>
 <#list project.tasks as t><@doTask task=t depth=depth+1 projectMode=true/></#list>
 <@doIndent indent=depth/></ul>
 </#macro>
@@ -141,7 +141,7 @@ $ MACRO: doTask
 $$$$$$$$$$$$$$$
 -->
 <#macro doTask task depth, projectMode>
-<@doIndent indent=depth/><li class="Task"><a href="omnifocus:///task/${task.id}">${escape(task.name)}</a></li><ul>
+<@doIndent indent=depth/><li class="Task"><a href="omnifocus:///task/${task.id}">${escape(task.name)}</a><@doAttribs task/></li><ul>
 <#if projectMode><#list task.tasks as t><@doTask task=t depth=depth+1  projectMode=projectMode/></#list></#if>
 <@doIndent indent=depth/></ul>
 </#macro>
@@ -151,7 +151,7 @@ $ MACRO: doContext
 $$$$$$$$$$$$$$$$$$
 -->
 <#macro doContext context depth>
-<@doIndent indent=depth/><H${depth+1} class="Context"><a href="omnifocus:///context/${context.id}">${escape(context.name)}</a></H${depth+1}>
+<@doIndent indent=depth/><H${depth+1} class="Context"><a href="omnifocus:///context/${context.id}">${escape(context.name)}</a><@doAttribs context/></H${depth+1}>
 <#list context.contexts as c><@doContext context=c depth=depth+1/></#list>
 <#list context.tasks as t><@doTask task=t depth=depth+1 projectMode=false/></#list>
 <@doIndent indent=depth/></ul>
@@ -169,7 +169,7 @@ $$$$$$$$$$$$$$$
 Using Java SimpleDateFormat conversion
 -->
 <#macro doAttribs node>
-<#if node.completed> completed="${node.completionDate?string["yyyy-MM-dd"]}"</#if><#if node.flagged> flagged="flagged"</#if><#if (node.contextName)??> context="${node.contextName?xml}"</#if><#if (node.note)??> _note="${escape(node.note)}"</#if></#macro>
+<span class="Attrib"><#if (node.flagged)??> <span class="AFlagged">FLAGGED</span></#if><#if (node.deferDate)??> <span class="AStart">${node.deferDate?string["yyyy-MM-dd"]}</span></#if><#if (node.dueDate)??> <span class="ADue">${node.dueDate?string["yyyy-MM-dd"]}</span></#if><#if (node.completionDate)??> <span class="AComplete">${node.completionDate?string["yyyy-MM-dd"]}</span></#if></span></#macro>
 <#--
 $$$$$$$$$$$$$$
 $ FUNCTION: escape
