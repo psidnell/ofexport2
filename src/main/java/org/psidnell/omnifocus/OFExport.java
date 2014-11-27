@@ -43,7 +43,7 @@ public class OFExport {
     
     private static Logger LOGGER = LoggerFactory.getLogger(OFExport.class);
     
-    protected String format = "SimpleTextList";
+    protected String format = "txt";
     protected boolean projectMode = true;
     protected List<Visitor> filters = new LinkedList<>();
     protected SortingFilter sortingFilter = new SortingFilter();
@@ -103,7 +103,7 @@ public class OFExport {
         }
         
         // Then try and load it by class name:
-        String formatterClassName = "org.psidnell.omnifocus.format." + format + "Formatter";
+        String formatterClassName = "org.psidnell.omnifocus.format." + format.toUpperCase() + "Formatter";
         return (Formatter) Class.forName(formatterClassName).newInstance();
     }
 

@@ -39,10 +39,11 @@ public class CommandLine {
     public static final String PROG = "ofexport2";
     
     protected ActiveOptionProcessor<CommandLine> processor = new ActiveOptionProcessor<>(PROG, OPTIONS);
-    protected String jsonInputFile;
+    protected String jsonInputFile = null;
     protected boolean exitBeforeLoad = false;
-    protected String outputFile;
-    protected OFExport ofexport;
+    protected String outputFile = null;
+    protected OFExport ofexport = null;
+    protected String format = null;
     
     static {
         
@@ -144,7 +145,7 @@ public class CommandLine {
         
         OPTIONS.addOption(new ActiveOption<CommandLine> (
                 "f", "format", true, "output in this format",
-                (m,o)->m.ofexport.setFormat (o.nextValue()),
+                (m,o)->m.format = o.nextValue(),
                 AFTER_LOAD));
         
         OPTIONS.addOption(new ActiveOption<CommandLine> (

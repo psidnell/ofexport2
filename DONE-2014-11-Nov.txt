@@ -5,19 +5,48 @@
 - Sorting
 - Prune option, add expressions automatically
 - Problem: -cn Home not showing me sub contexts
-  偲敳畭慢汹⁢散慵獥⁩琠捯湴楮略猠瑯⁲散畲獥⁡湤⁥汩浩湡瑥猠獵戠捯湴數瑳੔桩猠楳⁰牯扡扬礠慮⁩獳略⁷楴栠景汤敲猠瑯漮ਊ䍯畬搠慢潲琠浡瑣桩湧⁡晴敲⁡渠楮捬畤攠桩琠ⴠ捯湳敱略湣敳㼊੆楬瑥物湧⁴慳歳⁯渠Ⅳ潭灬整敤⁷潵汤⁡扯牴⁯渠浡瑣栠慮搠楮捬畤攠獵戠捯浰汥瑥搠瑡獫献ਊ䥳⁴桥⁳瑲慴敧礠晬慷敤㼊੓潬畴楯渊ⵣ‭捥‧湡浥㴽≈潭攢⁼簠楮捬畤敤✊ੱ畡汩晩敲猺ਭ⁯湬礊ⴠ敶敲祴桩湧啮摥�
+
+> Presumably because it continues to recurse and eliminates sub contexts
+> This is probably an issue with folders too.
+> 
+> Could abort matching after an include hit - consequences?
+> 
+> Filtering tasks on !completed would abort on match and include sub completed tasks.
+> 
+> Is the strategy flawed?
+> 
+> Solution
+> -c -ce 'name=="Home" || included'
+> 
+> qualifiers:
+> - only
+> - everythingUnder
+
 - More Integration tests - would be better to create tasks programatically
   - Extract key functionality into new OFExport class - test that
 - Do I need all the integration tests now?
+- HTML notes - and verify in browser on real example (project & context mode)
+- Check Markdown displays properly (including notes, project and context mode)
+- How to select what fields to include (ognl exprs to nullify?) - bother? just fix template
 - Markdown template
 - Whitespace usage - can  avoid long lines? eatspace option? (make templates more readable)
 - use visit/recurse: http://freemarker.org/docs/ref_directive_visit.html (maybe)
-  桴瑰㨯⽦牥敭慲步爮潲术摯捳⽲敦彤楲散瑩癥彶楳楴⹨瑭�
+
+> http://freemarker.org/docs/ref_directive_visit.html
+
+- HTML template (base on OPML)
 - Use spring
 - Externalise configuration files to directory (not resource path)
-  䡡癥⁤敦慵汴⁯爠湡浥搠捯湦楧畲慴楯渠晩汥猊啳攠獰物湧
+
+> Have default or named configuration files
+> Use spring
+
 - Templates - use FreeMarker
-  桴瑰猺⼯睷眮杯潧汥⹣漮畫⽳敡牣栿焽橡癡⭴敭灬慴敳♩攽啔䘭㠦潥㵕呆ⴸ♨氽敮♣汩敮琽獡晡物⍳慦攽潦昦桬㵥渦焽橡癡⭴敭灬慴攫敮杩湥ਊ䙲敥浡牫敲
+
+> https://www.google.co.uk/search?q=java+templates&ie=UTF-8&oe=UTF-8&hl=en&client=safari#safe=off&hl=en&q=java+template+engine
+> 
+> Freemarker
+
 - Test example template
 - TaskPaper heavy/lite formats (notes)
 - How to specify templates on the command line
@@ -29,7 +58,10 @@
 - Text output formats should skip roots
 - delete main test (replaced by integration tests)
 - Write integration tests to test options
-  湯摥猠批⁮慭攊湯摥猠批⁥硰牥獳楯�
+
+> nodes by name
+> nodes by expression
+
 - Export model for testing - save included items, use SQLite descriptors to identify fields
 - Tests failing because contexts not empty - No Context
 - Don't delete root tasks, context walk is flat
@@ -51,15 +83,22 @@
 - Load notes
 - Test traverser
 - Test nodes - esp add(xxx), should unlink from old parents too
+- AbortTraversal exception to shortcut unnecessary traversal?
 - Make -xa implicit
 - Rethink filters
-  䉡獥⁣污獳敳⁦潲⁶楳楴潲⽦楬瑥爠睩瑨⁥晦楣楥湴⁴慩汯牥搠浥瑨潤猬⁡癯楤楮朠畮湥捥獳慲礠汯潰楮朮ਊ摥獣物灴潲⁮敥摳⁴漠捯浥⁦牯洠癩獩瑯�
+
+> Base classes for visitor/filter with efficient tailored methods, avoiding unnecessary looping.
+> 
+> descriptor needs to come from visitor
+
 - Test knitting
 - Test paths
 - cmdlinf filter of functions - phases
 - Natural order of tasks/items
 - Group doesn't lend itself to filtering
-  䍡渠䤠摯⁷楴桯畴⁩琠ⴠ潮汹⁨慶攠楴⁴漠獵灰潲琠杲潵灩湧⁢礠摡瑥Ⱐ慮潴桥爠睡礿
+
+> Can I do without it - only have it to support grouping by date, another way?
+
 - Filters - add means of just providing a boolean fn
 - Need to re-invent filtering concepts, tree walks etc from before. include/exclude etc.
 - Mode: project/context
@@ -80,14 +119,27 @@
 - Unit Tests
 - Streaming JSON IO? & parallel execution?
 - Wow it's slow - load whole tree from javascript?
-  䙩汴敲⁡湤⁷慬欠楮⁴桥⁡摡灴敲猿
+
+> Filter and walk in the adapters?
+
 - Lose the cacheing?
 - Make an executable program
 - Implement visitor pattern
 - Add sorting
 - Add filter to inbox(...)
 - Create README
-  偲潪散琠湡浥㨠瀽湡浥੐牯橥捴⁥硰牥獳楯渺⁐㵥硰爊䍯湴數琠湡浥㨠挽湡浥੃潮瑥硴⁥硰牥獳楯渺⁃㵥硰爊呡獫⁥硰牥獳楯渺⁔㵥硰爊䥮扯砺⁩ੁ癡楬慢楬楴示⁡癡楬㴮⸮੆污杧敤㨠晬慧来搽⸮⸊䙯牭慴㨠晭琽塍䰬䩓低ⱓ業灬敔數瑌楳琊却牵捴畲攺⁳瑲畣琽批却慲琬批䍯浰汥瑥搬批偲潪散琬批䍯湴數�
+
+> Project name: p=name
+> Project expression: P=expr
+> Context name: c=name
+> Context expression: C=expr
+> Task expression: T=expr
+> Inbox: i
+> Availability: avail=...
+> Flagged: flagged=...
+> Format: fmt=XML,JSON,SimpleTextList
+> Structure: struct=byStart,byCompleted,byProject,byContext
+
 - Parse command line
 - Load filters from command line
 - How to express filters to end use (command line)r?
@@ -95,6 +147,7 @@
 - How to filter (streams + javascript?)
 - How to export (json/xml to ?)
 - load inbox tasks
+- load tasks with no context?
 - What's in which packages, don't like format visitors all lumped together
 - Add equals hash code to node
 - How to pass filters to javascript
@@ -104,6 +157,8 @@
 - Use intermediate file for output
 - Enum in query: remaining, available, completed, all
 - Process with streams api
+- command line logging options
 - Create executable program
 - Parse the dates
 - Test mode, capture/replay what comes back from JavaScript
+

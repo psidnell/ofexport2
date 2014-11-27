@@ -27,7 +27,7 @@ public class MarkdownTest extends FormatTest {
     public void testProjectMode () throws Exception {
         OFExport ofExport = new OFExport();
         ofExport.getProjectRoot().add(f1);
-        ofExport.setFormat("Markdown");
+        ofExport.setFormat("md");
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
@@ -70,7 +70,7 @@ public class MarkdownTest extends FormatTest {
         OFExport ofExport = new OFExport();
         ofExport.setProjectMode(false);
         ofExport.getContextRoot().add(c1);
-        ofExport.setFormat("Markdown");
+        ofExport.setFormat("md");
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);

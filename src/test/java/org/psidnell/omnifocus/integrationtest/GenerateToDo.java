@@ -29,7 +29,7 @@ public class GenerateToDo {
     @Test
     public void generateToDo () throws Exception {
         Main.main(new String[]{
-                "-pn", "ofexport2", "-te", "!completed", "-f", "Markdown", "-o", "TODO.txt"
+                "-pn", "ofexport2", "-te", "!completed", "-f", "md", "-o", "TODO.txt"
         });
         
         Calendar cal = new GregorianCalendar();
@@ -40,7 +40,7 @@ public class GenerateToDo {
         
         
         Main.main(new String[]{
-                "-pn", "ofexport2", "-te", "completed", "-f", "Markdown", "-o", "DONE-" + dateStr + ".txt"
+                "-pn", "ofexport2", "-te", "completed", "-f", "md", "-o", "DONE-" + dateStr + ".txt"
         });
     }
 }

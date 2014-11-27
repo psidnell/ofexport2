@@ -27,7 +27,7 @@ public class TaskPaperLiteTest extends FormatTest {
     public void testProjectMode () throws Exception {
         OFExport ofExport = new OFExport();
         ofExport.getProjectRoot().add(f1);
-        ofExport.setFormat("TaskPaperLite");
+        ofExport.setFormat("taskpaper-lite");
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
@@ -51,7 +51,7 @@ public class TaskPaperLiteTest extends FormatTest {
     public void testContextMode () throws Exception {
         OFExport ofExport = new OFExport();
         ofExport.setProjectMode(false);
-        ofExport.setFormat("TaskPaperLite");
+        ofExport.setFormat("TaskPaper-Lite");
         ofExport.getContextRoot().add(c1);
         ofExport.process();
         StringWriter out = new StringWriter();

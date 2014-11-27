@@ -27,7 +27,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.Properties;
 
 import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.DataCache;
@@ -37,7 +36,7 @@ import org.psidnell.omnifocus.model.Task;
 
 public class SQLiteDAO {
     
-    public static String DB = "/Users/psidnell/Library/Containers/com.omnigroup.OmniFocus2/Data/Library/Caches/com.omnigroup.OmniFocus2/OmniFocusDatabase2"; // TODO spring?
+    public static String DB = "/Users/psidnell/Library/Containers/com.omnigroup.OmniFocus2/Data/Library/Caches/com.omnigroup.OmniFocus2/OmniFocusDatabase2";
 
     public static String getDriverURL () {
         return "jdbc:sqlite:" + DB;

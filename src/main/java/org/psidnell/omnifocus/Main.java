@@ -82,6 +82,14 @@ public class Main extends CommandLine {
             out = new BufferedWriter (IOUtils.systemOutWriter());
         }
         
+        if (format != null) {
+            ofexport.setFormat(format.toLowerCase());
+        }
+        else if (outputFile != null && outputFile.contains(".")) {
+            int dot = outputFile.indexOf('.');
+            ofexport.setFormat(outputFile.substring(dot + 1).toLowerCase());
+        }
+        
         ofexport.process();
         ofexport.write(out);
         
