@@ -67,41 +67,41 @@ public class CommandLine {
                 AFTER_LOAD));
                 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
-                "pn", "projectname", true, "include project specified by name",
+                "pn", "projectname", true, "include project specified by name.",
                 (m,o)->m.processProjectName(o.nextValue()),
                 AFTER_LOAD));
         
         OPTIONS.addOption(new ActiveOption<CommandLine>(
-                "ps", "projectsort", true, "sort projects by field",
+                "ps", "projectsort", true, "sort projects by field.",
                 (m,o)->m.sortingFilter.addProjectComparator(new ExpressionComparator<>(o.nextValue(), Project.class)),
                 AFTER_LOAD));
 
         // FOLDER
         
         OPTIONS.addOption(new ActiveOption<CommandLine>(
-                "fe", "folderexpr", true, "include items where folder expression is true",
+                "fe", "folderexpr", true, "include items where folder expression is true.",
                 (m,o)->m.processFolderExpression(o.nextValue()),
                 AFTER_LOAD));
         
         OPTIONS.addOption(new ActiveOption<CommandLine>(
-                "fn", "foldername", true, "include folder specified by name",
+                "fn", "foldername", true, "include folder specified by name.",
                 (m,o)->m.processFolderName(o.nextValue()),
                 AFTER_LOAD));
         
         OPTIONS.addOption(new ActiveOption<CommandLine>(
-                "fs", "foldersort", true, "sort folders by field",
+                "fs", "foldersort", true, "sort folders by field.",
                 (m,o)->m.sortingFilter.addFolderComparator(new ExpressionComparator<>(o.nextValue(), Folder.class)),
                 AFTER_LOAD));
 
         // TASK
         
         OPTIONS.addOption(new ActiveOption<CommandLine>(
-                "te", "taskexpr", true, "include items where task expression is true",
+                "te", "taskexpr", true, "include items where task expression is true.",
                 (m,o)->m.processTaskExpression(o.nextValue()),
                 AFTER_LOAD));
         
         OPTIONS.addOption(new ActiveOption<CommandLine>(
-                "tn", "taskname", true, "include tasks specified by name",
+                "tn", "taskname", true, "include tasks specified by name.",
                 (m,o)->m.processTaskName(o.nextValue()),
                 AFTER_LOAD));
         
@@ -113,24 +113,31 @@ public class CommandLine {
         // CONTEXT
         
         OPTIONS.addOption(new ActiveOption<CommandLine>(
-                "ce", "contextexpr", true, "include items where context expression is true",
+                "ce", "contextexpr", true, "include items where context expression is true.",
                 (m,o)->m.processContextExpression(o.nextValue()),
                 AFTER_LOAD));
         
         OPTIONS.addOption(new ActiveOption<CommandLine>(
-                "cn", "taskname", true, "include contexts specified by name",
+                "cn", "taskname", true, "include contexts specified by name.",
                 (m,o)->m.processContextName(o.nextValue()),
                 AFTER_LOAD));
         
         OPTIONS.addOption(new ActiveOption<CommandLine>(
-                "cs", "contextsort", true, "sort contexts by field",
+                "cs", "contextsort", true, "sort contexts by field.",
                 (m,o)->m.sortingFilter.addContextComparator(new ExpressionComparator<>(o.nextValue(), Context.class)),
                 AFTER_LOAD));
+        
+        // GENERAL
 
+        OPTIONS.addOption(new ActiveOption<CommandLine>(
+                "p", "prune", false, "prune empty folders, projects and contexts.",
+                (m,o)->m.addPruneFilters(),
+                AFTER_LOAD));
+        
         // MODES
         
         OPTIONS.addOption(new ActiveOption<CommandLine> (
-                "c", "contextmode", false, "display context hierarchy instead of project hierarchy)",
+                "c", "contextmode", false, "display context hierarchy instead of project hierarchy).",
                 (m,o)->m.projectMode = false,
                 BEFORE_LOAD));
         
@@ -149,12 +156,12 @@ public class CommandLine {
         // DEBUG/DEV
         
         OPTIONS.addOption(new ActiveOption<CommandLine> (
-                "l", "load", true, "load data from JSON file instead of database (for testing)",
+                "l", "load", true, "load data from JSON file instead of database (for testing).",
                 (m,o)->m.jsonInputFile = o.nextValue(),
                 BEFORE_LOAD));
         
         OPTIONS.addOption(new ActiveOption<CommandLine> (
-                "loglevel", true, "set log level [debug,info,warn,error]",
+                "loglevel", true, "set log level [debug,info,warn,error].",
                 (m,o)->m.setLogLevel (o.nextValue()),
                 BEFORE_LOAD));
     }
@@ -206,14 +213,14 @@ public class CommandLine {
         if (!projectMode) {
             throw new IllegalArgumentException ("project filters only valid in project mode");
         }
-        processFolderExpression("name=='" + escape(folderName) + "'");
+        processFolderExpression("name=='" + escape(folderName) + "' || included");
     }
     
     private void processTaskName(String taskName) {
         if (!projectMode) {
             throw new IllegalArgumentException ("project filters only valid in project mode");
         }
-        processTaskExpression("name=='" + escape(taskName) + "'");
+        processTaskExpression("name=='" + escape(taskName) + "' || included");
     }
     
     private void processTaskExpression(String expression) {
@@ -234,7 +241,7 @@ public class CommandLine {
         if (projectMode) {
             throw new IllegalArgumentException ("project filters only valid in project mode");
         }
-        processContextExpression("name=='" + escape(taskName) + "'");
+        processContextExpression("name=='" + escape(taskName) + "' || included");
     }
 
     private void processContextExpression(String expression) {
@@ -247,6 +254,17 @@ public class CommandLine {
         filters.add(new IncludedFilter());
     }
 
+    private void addPruneFilters() {
+        // Go bottom up
+        if (projectMode) {
+            processProjectExpression("taskCount > 0");
+            processFolderExpression("folderCount > 0 || projectCount > 0");
+        }
+        else {
+            processContextExpression("contextCount > 0 || taskCount > 0");
+        }
+    }
+    
     private void processFormat(String format) {
         this.format = format;
     }

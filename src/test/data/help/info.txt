@@ -1,6 +1,7 @@
 Folder:
     folderCount (int): number of projects.
     folders (list): the sub folders
+    included (boolean): true during filtering evaluation if a parent item has matched.
     name (string): item name/text.
     projectCount (int): number of tasks.
     projects (list): the sub projects
@@ -14,6 +15,7 @@ Project:
     deferDate (date): date item is to start.
     dueDate (date): date item is due.
     flagged (boolean): item is flagged.
+    included (boolean): true during filtering evaluation if a parent item has matched.
     name (string): item name/text.
     note (string): note text.
     remaining (boolean): item is remaining.
@@ -24,6 +26,7 @@ Project:
 
 Context:
     contextCount (int): number of contexts.
+    included (boolean): true during filtering evaluation if a parent item has matched.
     name (string): item name/text.
     taskCount (int): number of tasks.
     tasks (list): the sub tasks
@@ -38,6 +41,7 @@ Task:
     deferDate (date): date item is to start.
     dueDate (date): date item is due.
     flagged (boolean): item is flagged.
+    included (boolean): true during filtering evaluation if a parent item has matched.
     name (string): item name/text.
     note (string): note text.
     remaining (boolean): item is remaining.

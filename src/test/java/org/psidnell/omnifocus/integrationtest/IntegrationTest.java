@@ -209,6 +209,6 @@ public class IntegrationTest {
     
     @Test
     public void test () throws Exception {
-        Main.main(new String[]{"-pn", "ofexport2", "-f", "OPML"});
+        Main.main(new String[]{"-fn", "Home", "-te", "flagged && !completed", "-fe", "folderCount>0 || projectCount>0", "-pe", "taskCount>0"});
     }
 }

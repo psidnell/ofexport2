@@ -2,6 +2,7 @@
 
 ## ofexport2
 
+- Sorting
 - Markdown template
 - Whitespace usage - can  avoid long lines? eatspace option? (make templates more readable)
 - use visit/recurse: http://freemarker.org/docs/ref_directive_visit.html (maybe)

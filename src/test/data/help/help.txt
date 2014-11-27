@@ -2,21 +2,22 @@ usage: ofexport2
  -h,--help                 print help.
  -i,--info                 print additional help information.
  -pe,--projectexpr <arg>   include items where project expression is true.
- -pn,--projectname <arg>   include project specified by name
- -ps,--projectsort <arg>   sort projects by field
- -fe,--folderexpr <arg>    include items where folder expression is true
- -fn,--foldername <arg>    include folder specified by name
- -fs,--foldersort <arg>    sort folders by field
- -te,--taskexpr <arg>      include items where task expression is true
- -tn,--taskname <arg>      include tasks specified by name
+ -pn,--projectname <arg>   include project specified by name.
+ -ps,--projectsort <arg>   sort projects by field.
+ -fe,--folderexpr <arg>    include items where folder expression is true.
+ -fn,--foldername <arg>    include folder specified by name.
+ -fs,--foldersort <arg>    sort folders by field.
+ -te,--taskexpr <arg>      include items where task expression is true.
+ -tn,--taskname <arg>      include tasks specified by name.
  -ts,--tasksort <arg>      sort tasks by field
- -ce,--contextexpr <arg>   include items where context expression is true
- -cn,--taskname <arg>      include contexts specified by name
- -cs,--contextsort <arg>   sort contexts by field
+ -ce,--contextexpr <arg>   include items where context expression is true.
+ -cn,--taskname <arg>      include contexts specified by name.
+ -cs,--contextsort <arg>   sort contexts by field.
+ -p,--prune                prune empty folders, projects and contexts.
  -c,--contextmode          display context hierarchy instead of project
-                           hierarchy)
+                           hierarchy).
  -f,--format <arg>         output in this format
  -o,--output <arg>         write output to the file
  -l,--load <arg>           load data from JSON file instead of database
-                           (for testing)
- -loglevel <arg>           set log level [debug,info,warn,error]
+                           (for testing).
+ -loglevel <arg>           set log level [debug,info,warn,error].

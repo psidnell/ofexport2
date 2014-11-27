@@ -69,6 +69,7 @@ public abstract class Node extends ExpressionFunctions {
     public abstract String getType();
 
     @JsonIgnore
+    @ExprAttribute (help="true during filtering evaluation if a parent item has matched.")
     public boolean isIncluded () {
         return included;
     }
