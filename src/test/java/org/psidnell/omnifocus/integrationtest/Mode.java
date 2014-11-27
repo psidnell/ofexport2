@@ -18,5 +18,4 @@ package org.psidnell.omnifocus.integrationtest;
 public class Mode {
 
     public static final boolean REWRITE_INPUT_FILES = false;
-
 }

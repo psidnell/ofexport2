@@ -1,6 +1,0 @@
-%Test Folder:
-	%Test Project Foo Non Empty:
-		- %TestToDo @%TestContext
-			- %Test Sub task @%TestContext
-		- %Test completed @done(2014-11-25) @%TestContext
-	%Test Project Bar Empty:

@@ -71,7 +71,7 @@ public class Diff {
             LOGGER.error("Actual:   " + actual);
         }
         String message = "Error on line " + line + " " + expected + " != " + actual;
-        assertEquals (message, actual, expected);
+        assertEquals (message, expected, actual);
         return expected != null;
     }
 }

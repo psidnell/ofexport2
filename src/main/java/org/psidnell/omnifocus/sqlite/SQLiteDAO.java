@@ -27,6 +27,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Properties;
 
 import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.DataCache;
@@ -62,6 +63,9 @@ public class SQLiteDAO {
     }
 
     public static Connection getConnection () throws SQLException {
+        //Properties props = new Properties();
+        //props.put("characterEncoding", "UTF-16LE");
+        //props.put("useUnicode", "true");
         return DriverManager.getConnection(getDriverURL());
     }
     

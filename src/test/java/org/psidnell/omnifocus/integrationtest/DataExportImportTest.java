@@ -35,12 +35,14 @@ public class DataExportImportTest {
 
     @Test
     public void testExport () throws JsonGenerationException, JsonMappingException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, SQLException, IOException {
+        
+        // Export
         File file = new File("target/test1.json");
         DataCache.exportData(file, (n)->n.getName().startsWith("%Test"));
+        
+        // Import
         DataCache dataCache = DataCache.importData (file);
         ObjectMapper mapper = new ObjectMapper();
-        
-        Writer out = IOUtils.systemOutWriter();
         
         // Just check we've loaded something, other tests will
         // verify the structure
@@ -50,6 +52,8 @@ public class DataExportImportTest {
         assertFalse (dataCache.getTasks().isEmpty());
         assertTrue (dataCache.getProjects().isEmpty());
         
+        // Dump to console
+        Writer out = IOUtils.systemOutWriter();
         mapper.writerWithDefaultPrettyPrinter().writeValue(out, dataCache);
         out.flush();
         out.close();

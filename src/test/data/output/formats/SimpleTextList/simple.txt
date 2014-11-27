@@ -1,6 +1,0 @@
-%Test Folder
-  %Test Project Foo Non Empty
-    [ ] %TestToDo
-      [ ] %Test Sub task
-    [X] %Test completed
-  %Test Project Bar Empty

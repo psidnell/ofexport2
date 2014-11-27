@@ -15,6 +15,7 @@ limitations under the License.
 */
 package org.psidnell.omnifocus.model;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -157,7 +158,19 @@ public abstract class CommonProjectTask extends Node {
     }
     
     public String formatNote (int depth, String indent, String lineSuffix) {
-        String lines[] = note.split("\n");
+        // TODO This isn't ideal, don't know what encoding is coming in from SQLite,
+        // but email attachments in particular seem full of accented chars that arn't
+        // really there. This is clearly not going to support wide characters as is.
+        
+        StringBuilder ascii = new StringBuilder();
+        for (byte byt : note.getBytes()) {
+            int c = 0xFF & byt;
+            if (c >= '\t' && c <= '~') {
+                ascii.append((char)c);
+            }
+        }
+        
+        String lines[] = ascii.toString().replaceAll("\r", "").split("\n");
         String eol = lineSuffix + "\n";
         String indentChars = StringUtils.times(indent, depth);
         String delimiter = eol + indentChars;

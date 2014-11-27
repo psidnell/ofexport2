@@ -1,4 +1,0 @@
-%Test F1
-  %Test P2
-    [ ] %Test T3
-      [ ] %Test T4

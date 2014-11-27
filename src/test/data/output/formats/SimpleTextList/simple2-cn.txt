@@ -1,8 +1,0 @@
-%TestContext
-  %Test Sub Context
-  [ ] %Test T2
-  [ ] %Test T3
-  [ ] %Test T4
-  [ ] %Test P2
-  [X] %Test completed
-  [ ] %Test P3
