@@ -15,12 +15,11 @@ limitations under the License.
 */
 package org.psidnell.omnifocus.visitor;
 
-import java.util.Comparator;
 import java.util.List;
 
+import org.psidnell.omnifocus.expr.ExpressionComparator;
 import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.Folder;
-import org.psidnell.omnifocus.model.Node;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
 
@@ -28,49 +27,53 @@ public class SortingFilter implements Visitor {
     
     private static final VisitorDescriptor WHAT = new VisitorDescriptor().visitAll().filterAll();
 
-    private static final NodeComparator CMP = new NodeComparator();
+    private CompoundComparator<Project> projectComparator = new CompoundComparator<>();
+    private CompoundComparator<Context> contextComparator = new CompoundComparator<>();
+    private CompoundComparator<Folder> folderComparator = new CompoundComparator<>();
+    private CompoundComparator<Task> taskComparator = new CompoundComparator<>();
     
     @Override
     public VisitorDescriptor getWhat() {
         return WHAT;
     }
     
+    public void addProjectComparator (ExpressionComparator<Project> cmp) {
+        projectComparator.add(cmp);
+    }
+    
+    public void addContextComparator (ExpressionComparator<Context> cmp) {
+        contextComparator.add(cmp);
+    }
+    
+    public void addFolderComparator (ExpressionComparator<Folder> cmp) {
+        folderComparator.add(cmp);
+    }
+    
+    public void addTaskComparator (ExpressionComparator<Task> cmp) {
+        taskComparator.add(cmp);
+    }
+    
     @Override
     public List<Context> filterContextsDown(List<Context> contexts) {
-        contexts.sort(CMP);
+        contexts.sort(contextComparator);
         return contexts;
     }
     
     @Override
     public List<Folder> filterFoldersDown(List<Folder> folders)  {
-        folders.sort(CMP);
+        folders.sort(folderComparator);
         return folders;
     }
     
     @Override
     public List<Task> filterTasksDown(List<Task> tasks) {
-        tasks.sort(CMP);
+        tasks.sort(taskComparator);
         return tasks;
     }
     
     @Override
     public List<Project> filterProjectsDown(List<Project> projects) {
-        projects.sort(CMP);
+        projects.sort(projectComparator);
         return projects;
-    }
-    
-    private static class NodeComparator implements Comparator<Node> {
-        @Override
-        public int compare(Node o1, Node o2) {
-            if (o1.getRank() < o2.getRank()) {
-                return -1;
-            }
-            else if (o1.getRank() > o2.getRank()) {
-                return  1;
-            }
-            else {
-                return 0;
-            }
-        }
     }
 }

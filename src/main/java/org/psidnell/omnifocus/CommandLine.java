@@ -24,11 +24,13 @@ import org.psidnell.omnifocus.cli.ActiveOption;
 import org.psidnell.omnifocus.cli.ActiveOptionProcessor;
 import org.psidnell.omnifocus.expr.AttribPrinter;
 import org.psidnell.omnifocus.expr.ExprVisitor;
+import org.psidnell.omnifocus.expr.ExpressionComparator;
 import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
 import org.psidnell.omnifocus.visitor.IncludedFilter;
+import org.psidnell.omnifocus.visitor.SortingFilter;
 import org.psidnell.omnifocus.visitor.Visitor;
 import org.psidnell.omnifocus.visitor.VisitorDescriptor;
 import org.slf4j.Logger;
@@ -45,25 +47,36 @@ public class CommandLine {
     
     static {
         
+        // HELP
+        
         OPTIONS.addOption(new ActiveOption<CommandLine> (
-                "h", "help", false, "print help",
+                "h", "help", false, "print help.",
                 (m,o)->m.printHelp (),
                 BEFORE_LOAD));
         
         OPTIONS.addOption(new ActiveOption<CommandLine> (
-                "i", "info", false, "print additional help inormation",
+                "i", "info", false, "print additional help information.",
                 (m,o)->m.printAdditionalInfo (),
                 BEFORE_LOAD));
         
+        // PROJECT
+        
         OPTIONS.addOption(new ActiveOption<CommandLine>(
-                "pe", "projectexpr", true, "include items where project expression is true",
+                "pe", "projectexpr", true, "include items where project expression is true.",
                 (m,o)->m.processProjectExpression(o.nextValue()),
+                AFTER_LOAD));
+                
+        OPTIONS.addOption(new ActiveOption<CommandLine>(
+                "pn", "projectname", true, "include project specified by name",
+                (m,o)->m.processProjectName(o.nextValue()),
                 AFTER_LOAD));
         
         OPTIONS.addOption(new ActiveOption<CommandLine>(
-                "pn", "projectname", true, "include tasks from project specified by name",
-                (m,o)->m.processProjectName(o.nextValue()),
+                "ps", "projectsort", true, "sort projects by field",
+                (m,o)->m.sortingFilter.addProjectComparator(new ExpressionComparator<>(o.nextValue(), Project.class)),
                 AFTER_LOAD));
+
+        // FOLDER
         
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "fe", "folderexpr", true, "include items where folder expression is true",
@@ -71,9 +84,16 @@ public class CommandLine {
                 AFTER_LOAD));
         
         OPTIONS.addOption(new ActiveOption<CommandLine>(
-                "fn", "foldername", true, "include tasks from project specified by name",
+                "fn", "foldername", true, "include folder specified by name",
                 (m,o)->m.processFolderName(o.nextValue()),
                 AFTER_LOAD));
+        
+        OPTIONS.addOption(new ActiveOption<CommandLine>(
+                "fs", "foldersort", true, "sort folders by field",
+                (m,o)->m.sortingFilter.addFolderComparator(new ExpressionComparator<>(o.nextValue(), Folder.class)),
+                AFTER_LOAD));
+
+        // TASK
         
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "te", "taskexpr", true, "include items where task expression is true",
@@ -86,6 +106,13 @@ public class CommandLine {
                 AFTER_LOAD));
         
         OPTIONS.addOption(new ActiveOption<CommandLine>(
+                "ts", "tasksort", true, "sort tasks by field",
+                (m,o)->m.sortingFilter.addTaskComparator(new ExpressionComparator<>(o.nextValue(), Task.class)),
+                AFTER_LOAD));
+
+        // CONTEXT
+        
+        OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "ce", "contextexpr", true, "include items where context expression is true",
                 (m,o)->m.processContextExpression(o.nextValue()),
                 AFTER_LOAD));
@@ -95,10 +122,19 @@ public class CommandLine {
                 (m,o)->m.processContextName(o.nextValue()),
                 AFTER_LOAD));
         
+        OPTIONS.addOption(new ActiveOption<CommandLine>(
+                "cs", "contextsort", true, "sort contexts by field",
+                (m,o)->m.sortingFilter.addContextComparator(new ExpressionComparator<>(o.nextValue(), Context.class)),
+                AFTER_LOAD));
+
+        // MODES
+        
         OPTIONS.addOption(new ActiveOption<CommandLine> (
                 "c", "contextmode", false, "display context hierarchy instead of project hierarchy)",
                 (m,o)->m.projectMode = false,
                 BEFORE_LOAD));
+        
+        // OUTPUT
         
         OPTIONS.addOption(new ActiveOption<CommandLine> (
                 "f", "format", true, "output in this format",
@@ -109,6 +145,8 @@ public class CommandLine {
                 "o", "output", true, "write output to the file",
                 (m,o)->m.outputFile = o.nextValue(),
                 BEFORE_LOAD));
+        
+        // DEBUG/DEV
         
         OPTIONS.addOption(new ActiveOption<CommandLine> (
                 "l", "load", true, "load data from JSON file instead of database (for testing)",
@@ -130,6 +168,8 @@ public class CommandLine {
     protected String jsonInputFile;
     protected boolean exit = false;
     protected String outputFile;
+    protected SortingFilter sortingFilter = new SortingFilter();
+
         
     public CommandLine() {
         processor = new ActiveOptionProcessor<>(PROG, OPTIONS);

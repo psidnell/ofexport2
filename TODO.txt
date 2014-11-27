@@ -2,11 +2,12 @@
 
 ## ofexport2
 
-- Markdown template
-- use visit/recurse: http://freemarker.org/docs/ref_directive_visit.html (maybe)
-- Whitespace usage - can  avoid long lines? eatspace option?
+- Sorting
+- Check Markdown displays properly (including notes)
+- Prune option, add expressions automatically
+- HTML template (base on OPML)
+- "man" opt instead of "i" print comprehensive help - sub pages? same source as markdown help?
 - documentation
-- OPML
 - Timing and stats
   Have default or named configuration files
   Use spring

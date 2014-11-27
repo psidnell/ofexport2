@@ -2,6 +2,10 @@
 
 ## ofexport2
 
+- Markdown template
+- Whitespace usage - can  avoid long lines? eatspace option? (make templates more readable)
+- use visit/recurse: http://freemarker.org/docs/ref_directive_visit.html (maybe)
+  http://freemarker.org/docs/ref_directive_visit.html
 - Use spring
 - Externalise configuration files to directory (not resource path)
   Have default or named configuration files
@@ -14,6 +18,7 @@
 - TaskPaper heavy/lite formats (notes)
 - How to specify templates on the command line
 - Allow log level setting from the command line
+- OPML
 - Design integration test framework to test main()
 - Add Markdown format
 - Generate todo & change log as part of build

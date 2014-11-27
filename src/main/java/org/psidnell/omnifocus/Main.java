@@ -33,7 +33,6 @@ import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.sqlite.SQLiteDAO;
 import org.psidnell.omnifocus.util.IOUtils;
 import org.psidnell.omnifocus.visitor.IncludeVisitor;
-import org.psidnell.omnifocus.visitor.SortingFilter;
 import org.psidnell.omnifocus.visitor.Traverser;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -93,7 +92,7 @@ public class Main extends CommandLine {
     
     private void run () throws Exception {
         
-        filters.add(new SortingFilter());
+        filters.add(sortingFilter);
         
         if (projectMode) {
             filters.stream().forEachOrdered((f)->Traverser.traverse(f, projectRoot));
