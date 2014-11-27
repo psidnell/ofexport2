@@ -153,9 +153,14 @@ public abstract class CommonProjectTask extends Node {
     }
     
     public String formatNote (int depth, String indent) {
+        return formatNote(depth, indent, "");
+    }
+    
+    public String formatNote (int depth, String indent, String lineSuffix) {
         String lines[] = note.split("\n");
+        String eol = lineSuffix + "\n";
         String indentChars = StringUtils.times(indent, depth);
-        String delimiter = "\n" + indentChars;
-        return StringUtils.join(lines, delimiter, indentChars, "\n");
+        String delimiter = eol + indentChars;
+        return StringUtils.join(lines, delimiter, indentChars, eol);
     }
 }

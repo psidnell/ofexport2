@@ -3,6 +3,7 @@
 ## ofexport2
 
 - More Integration tests - would be better to create tasks programatically
+- HTML notes - and verify in browser on real example
 - How to select what fields to include (ognl exprs to nullify?)
 - Check Markdown displays properly (including notes)
 - HTML template (base on OPML)

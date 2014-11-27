@@ -132,6 +132,7 @@ $$$$$$$$$$$$$$$$$$
  -->
 <#macro doProject project depth>
 <@doIndent indent=depth/><H${depth+1} class="Project"><a href="omnifocus:///task/${project.id}">${escape(project.name)}</a><@doAttribs project/></H${depth+1}><ul>
+<@doNote node=project depth=depth/>
 <#list project.tasks as t><@doTask task=t depth=depth+1 projectMode=true/></#list>
 <@doIndent indent=depth/></ul>
 </#macro>
@@ -142,6 +143,7 @@ $$$$$$$$$$$$$$$
 -->
 <#macro doTask task depth, projectMode>
 <@doIndent indent=depth/><li class="Task"><a href="omnifocus:///task/${task.id}">${escape(task.name)}</a><@doAttribs task/></li><ul>
+<@doNote node=task depth=depth/>
 <#if projectMode><#list task.tasks as t><@doTask task=t depth=depth+1  projectMode=projectMode/></#list></#if>
 <@doIndent indent=depth/></ul>
 </#macro>
@@ -170,6 +172,13 @@ Using Java SimpleDateFormat conversion
 -->
 <#macro doAttribs node>
 <span class="Attrib"><#if (node.flagged)??> <span class="AFlagged">FLAGGED</span></#if><#if (node.deferDate)??> <span class="AStart">${node.deferDate?string["yyyy-MM-dd"]}</span></#if><#if (node.dueDate)??> <span class="ADue">${node.dueDate?string["yyyy-MM-dd"]}</span></#if><#if (node.completionDate)??> <span class="AComplete">${node.completionDate?string["yyyy-MM-dd"]}</span></#if></span></#macro>
+<#--
+$$$$$$$$$$$$$$$
+$ MACRO: doNote
+$$$$$$$$$$$$$$$
+-->
+<#macro doNote node depth>
+<#if (node.note)??>${node.formatNote(depth+3, INDENT, "<br>")}</#if></#macro>
 <#--
 $$$$$$$$$$$$$$
 $ FUNCTION: escape
