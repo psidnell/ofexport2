@@ -6,6 +6,9 @@
         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
 
-    <bean name="main" class="org.psidnell.omnifocus.Main"/>
+	<bean name="ofexport" class="org.psidnell.omnifocus.OFExport"/>
+    <bean name="main" class="org.psidnell.omnifocus.Main">
+    	<property name="ofexport" ref="ofexport"/>
+    </bean>
 
 </beans>

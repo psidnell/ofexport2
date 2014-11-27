@@ -24,28 +24,20 @@ import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 
-import org.psidnell.omnifocus.format.Formatter;
-import org.psidnell.omnifocus.format.FreeMarkerFormatter;
 import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.DataCache;
 import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.sqlite.SQLiteDAO;
 import org.psidnell.omnifocus.util.IOUtils;
-import org.psidnell.omnifocus.visitor.IncludeVisitor;
-import org.psidnell.omnifocus.visitor.Traverser;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class Main extends CommandLine {
         
     private DataCache data;
-
-    private Folder projectRoot;
-
-    private Context contextRoot;
-    
-    private void load () throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, SQLException, FileNotFoundException, IOException {
+ 
+    private void loadData () throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, SQLException, FileNotFoundException, IOException {
         if (jsonInputFile != null) {
             data = DataCache.importData(new File (jsonInputFile));
         }
@@ -55,15 +47,8 @@ public class Main extends CommandLine {
         
         data.build();
         
-        projectRoot = new Folder();
-        projectRoot.setName("RootFolder");
-        projectRoot.setId("__%%RootFolder"); // to give deterministic JSON/XML output
-        
-        contextRoot = new Context();
-        contextRoot.setName("RootContext");
-        contextRoot.setId("__%%RootContext"); // to give deterministic JSON/XML output
-        
-        if (projectMode) {
+        if (ofexport.isProjectMode()) {
+            Folder projectRoot = ofexport.getProjectRoot ();
             // Add root projects/folders to the fabricated root folder
             for (Folder child : data.getFolders().values()){
                 if (child.getParent() == null) {
@@ -76,33 +61,19 @@ public class Main extends CommandLine {
                     projectRoot.getProjects().add(child);
                 }
             }
-            Traverser.traverse(new IncludeVisitor(false), projectRoot);
         }
         else {
+            Context contextRoot = ofexport.getContextRoot ();
             // Add root contexts to the fabricated root context
             for (Context child : data.getContexts().values()){
                 if (child.getParent() == null) {
                     contextRoot.getContexts().add(child);
                 }
             }
-            
-            Traverser.traverse(new IncludeVisitor(false), contextRoot);
         }
     }
     
-    private void run () throws Exception {
-        
-        filters.add(sortingFilter);
-        
-        if (projectMode) {
-            filters.stream().forEachOrdered((f)->Traverser.traverse(f, projectRoot));
-        }
-        else {
-            filters.stream().forEachOrdered((f)->Traverser.traverse(f, contextRoot));
-        }
-
-        Formatter formatter = loadFormatter();
-                
+    void run () throws Exception {
         Writer out;
         if (outputFile != null) {
             out = new BufferedWriter(new FileWriter(outputFile));
@@ -111,17 +82,22 @@ public class Main extends CommandLine {
             out = new BufferedWriter (IOUtils.systemOutWriter());
         }
         
-        if (projectMode) {
-            formatter.format(projectRoot, out);
-        }
-        else {
-            formatter.format(contextRoot, out);
-        }
+        ofexport.process();
+        ofexport.write(out);
         
         out.flush();
         out.close();
     }
+    private boolean procesPreLoadOptions(String[] args) throws Exception {
+        // Load initial switches, help etc
+        return processor.processOptions(this, args, BEFORE_LOAD) && !exitBeforeLoad;
+    }
     
+    private void processPostLoadOptions(String[] args) throws Exception {
+        // Load filters etc.
+        processor.processOptions(this, args, AFTER_LOAD);
+    }
+
     public static void main(String args[]) throws Exception {
         
         @SuppressWarnings("resource")
@@ -129,36 +105,17 @@ public class Main extends CommandLine {
 
         Main main = appContext.getBean("main", Main.class);
         
-        // Load initial switches, help etc
-        if (!main.processor.processOptions(main, args, BEFORE_LOAD) || main.exit) {
+        if (!main.procesPreLoadOptions(args)) {
             LOGGER.debug("Exiting");
             return;
         }
                 
-        main.load ();
+        main.loadData ();
         
-        // Load filters etc.
-        main.processor.processOptions(main, args, AFTER_LOAD);
+        main.processPostLoadOptions(args);
 
         main.run ();
         
         LOGGER.debug("Exiting");        
-    }
-    
-    private Formatter loadFormatter() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
-        // Formats are loaded by name.
-        
-        // Start by looking for a freemarker template:
-        try {
-            String templateName = format + ".ftl";
-            return new FreeMarkerFormatter(templateName);
-        }
-        catch (IOException e) {
-            LOGGER.debug("unable to load fremarker template for: " + format, e);
-        }
-        
-        // Then try and load it by class name:
-        String formatterClassName = "org.psidnell.omnifocus.format." + format + "Formatter";
-        return (Formatter) Class.forName(formatterClassName).newInstance();
     }
 }

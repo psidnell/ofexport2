@@ -15,24 +15,16 @@ limitations under the License.
 */
 package org.psidnell.omnifocus;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import org.apache.commons.cli.Options;
 import org.apache.log4j.Level;
 import org.psidnell.omnifocus.cli.ActiveOption;
 import org.psidnell.omnifocus.cli.ActiveOptionProcessor;
 import org.psidnell.omnifocus.expr.AttribPrinter;
-import org.psidnell.omnifocus.expr.ExprVisitor;
 import org.psidnell.omnifocus.expr.ExpressionComparator;
 import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
-import org.psidnell.omnifocus.visitor.IncludedFilter;
-import org.psidnell.omnifocus.visitor.SortingFilter;
-import org.psidnell.omnifocus.visitor.Visitor;
-import org.psidnell.omnifocus.visitor.VisitorDescriptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,6 +36,14 @@ public class CommandLine {
 
     protected static final int BEFORE_LOAD = 0;
     protected static final int AFTER_LOAD = 1;
+    
+    public static final String PROG = "ofexport2";
+    
+    protected ActiveOptionProcessor<CommandLine> processor = new ActiveOptionProcessor<>(PROG, OPTIONS);
+    protected String jsonInputFile;
+    protected boolean exitBeforeLoad = false;
+    protected String outputFile;
+    protected OFExport ofexport;
     
     static {
         
@@ -63,89 +63,89 @@ public class CommandLine {
         
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "pe", "projectexpr", true, "include items where project expression is true.",
-                (m,o)->m.processProjectExpression(o.nextValue()),
+                (m,o)->m.ofexport.addProjectExpression(o.nextValue()),
                 AFTER_LOAD));
                 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "pn", "projectname", true, "include project specified by name.",
-                (m,o)->m.processProjectName(o.nextValue()),
+                (m,o)->m.ofexport.addProjectExpression("name=='" + escape(o.nextValue()) + "'"),
                 AFTER_LOAD));
         
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "ps", "projectsort", true, "sort projects by field.",
-                (m,o)->m.sortingFilter.addProjectComparator(new ExpressionComparator<>(o.nextValue(), Project.class)),
+                (m,o)->m.ofexport.addProjectComparator(new ExpressionComparator<>(o.nextValue(), Project.class)),
                 AFTER_LOAD));
 
         // FOLDER
         
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "fe", "folderexpr", true, "include items where folder expression is true.",
-                (m,o)->m.processFolderExpression(o.nextValue()),
+                (m,o)->m.ofexport.addFolderExpression (o.nextValue()),
                 AFTER_LOAD));
         
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "fn", "foldername", true, "include folder specified by name.",
-                (m,o)->m.processFolderName(o.nextValue()),
+                (m,o)->m.ofexport.addFolderExpression("name=='" + escape(o.nextValue()) + "' || included"),
                 AFTER_LOAD));
         
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "fs", "foldersort", true, "sort folders by field.",
-                (m,o)->m.sortingFilter.addFolderComparator(new ExpressionComparator<>(o.nextValue(), Folder.class)),
+                (m,o)->m.ofexport.addFolderComparator(new ExpressionComparator<>(o.nextValue(), Folder.class)),
                 AFTER_LOAD));
 
         // TASK
         
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "te", "taskexpr", true, "include items where task expression is true.",
-                (m,o)->m.processTaskExpression(o.nextValue()),
+                (m,o)->m.ofexport.addTaskExpression(o.nextValue()),
                 AFTER_LOAD));
         
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "tn", "taskname", true, "include tasks specified by name.",
-                (m,o)->m.processTaskName(o.nextValue()),
+                (m,o)->m.ofexport.addTaskExpression("name=='" + escape(o.nextValue()) + "' || included"),
                 AFTER_LOAD));
         
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "ts", "tasksort", true, "sort tasks by field",
-                (m,o)->m.sortingFilter.addTaskComparator(new ExpressionComparator<>(o.nextValue(), Task.class)),
+                (m,o)->m.ofexport.addTaskComparator(new ExpressionComparator<>(o.nextValue(), Task.class)),
                 AFTER_LOAD));
 
         // CONTEXT
         
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "ce", "contextexpr", true, "include items where context expression is true.",
-                (m,o)->m.processContextExpression(o.nextValue()),
+                (m,o)->m.ofexport.addContextExpression(o.nextValue()),
                 AFTER_LOAD));
         
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "cn", "taskname", true, "include contexts specified by name.",
-                (m,o)->m.processContextName(o.nextValue()),
+                (m,o)->m.ofexport.addContextExpression("name=='" + escape(o.nextValue()) + "' || included"),
                 AFTER_LOAD));
         
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "cs", "contextsort", true, "sort contexts by field.",
-                (m,o)->m.sortingFilter.addContextComparator(new ExpressionComparator<>(o.nextValue(), Context.class)),
+                (m,o)->m.ofexport.addContextComparator(new ExpressionComparator<>(o.nextValue(), Context.class)),
                 AFTER_LOAD));
         
         // GENERAL
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "p", "prune", false, "prune empty folders, projects and contexts.",
-                (m,o)->m.addPruneFilters(),
+                (m,o)->m.ofexport.addPruneFilter (),
                 AFTER_LOAD));
         
         // MODES
         
         OPTIONS.addOption(new ActiveOption<CommandLine> (
                 "c", "contextmode", false, "display context hierarchy instead of project hierarchy).",
-                (m,o)->m.projectMode = false,
+                (m,o)->m.ofexport.setProjectMode(false),
                 BEFORE_LOAD));
         
         // OUTPUT
         
         OPTIONS.addOption(new ActiveOption<CommandLine> (
                 "f", "format", true, "output in this format",
-                (m,o)->m.processFormat (o.nextValue()),
+                (m,o)->m.ofexport.setFormat (o.nextValue()),
                 AFTER_LOAD));
         
         OPTIONS.addOption(new ActiveOption<CommandLine> (
@@ -166,112 +166,9 @@ public class CommandLine {
                 BEFORE_LOAD));
     }
 
-    public static final String PROG = "ofexport2";
-    
-    protected ActiveOptionProcessor<CommandLine> processor;
-    protected String format = "SimpleTextList";
-    protected boolean projectMode = true;
-    protected List<Visitor> filters = new LinkedList<>();
-    protected String jsonInputFile;
-    protected boolean exit = false;
-    protected String outputFile;
-    protected SortingFilter sortingFilter = new SortingFilter();
-
-        
-    public CommandLine() {
-        processor = new ActiveOptionProcessor<>(PROG, OPTIONS);
-    }
-
-    private void processProjectExpression(String expression) {
-        if (!projectMode) {
-            throw new IllegalArgumentException ("project filters only valid in project mode");
-        }
-        VisitorDescriptor visitwhat = new  VisitorDescriptor().visit(Folder.class, Project.class);
-        VisitorDescriptor applyToWhat = new  VisitorDescriptor().visit(Project.class);
-        filters.add(new ExprVisitor(expression, projectMode, visitwhat, applyToWhat));
-        filters.add(new IncludedFilter());
-    }
-
-    private void processProjectName(String projectName) {
-        if (!projectMode) {
-            throw new IllegalArgumentException ("project filters only valid in project mode");
-        }
-        processProjectExpression("name=='" + escape(projectName) + "'");
-    }
-    
-    private void processFolderExpression(String expression) {
-        if (!projectMode) {
-            throw new IllegalArgumentException ("project filters only valid in project mode");
-        }
-        VisitorDescriptor visitWhat = new  VisitorDescriptor().visit(Folder.class);
-        VisitorDescriptor applyToWhat = new  VisitorDescriptor().visit(Folder.class);
-        filters.add(new ExprVisitor(expression, projectMode, visitWhat, applyToWhat));
-        filters.add(new IncludedFilter());
-    }
-
-    private void processFolderName(String folderName) {
-        if (!projectMode) {
-            throw new IllegalArgumentException ("project filters only valid in project mode");
-        }
-        processFolderExpression("name=='" + escape(folderName) + "' || included");
-    }
-    
-    private void processTaskName(String taskName) {
-        if (!projectMode) {
-            throw new IllegalArgumentException ("project filters only valid in project mode");
-        }
-        processTaskExpression("name=='" + escape(taskName) + "' || included");
-    }
-    
-    private void processTaskExpression(String expression) {
-        if (projectMode) {
-            VisitorDescriptor visitWhat = new  VisitorDescriptor().visit(Folder.class, Project.class, Task.class);
-            VisitorDescriptor applyToWhat = new  VisitorDescriptor().visit(Task.class);
-            filters.add(new ExprVisitor(expression, projectMode, visitWhat, applyToWhat));
-        }
-        else {
-            VisitorDescriptor visitWhat = new  VisitorDescriptor().visit(Context.class, Task.class);
-            VisitorDescriptor applyToWhat = new  VisitorDescriptor().visit(Task.class);
-            filters.add(new ExprVisitor(expression, projectMode, visitWhat, applyToWhat));
-        }
-        filters.add(new IncludedFilter());
-    }
-
-    private void processContextName(String taskName) {
-        if (projectMode) {
-            throw new IllegalArgumentException ("project filters only valid in project mode");
-        }
-        processContextExpression("name=='" + escape(taskName) + "' || included");
-    }
-
-    private void processContextExpression(String expression) {
-        if (projectMode) {
-            throw new IllegalArgumentException ("context filters only valid in context mode");
-        }
-        VisitorDescriptor visitWhat = new  VisitorDescriptor().visit(Context.class);
-        VisitorDescriptor applyToWhat = new  VisitorDescriptor().visit(Context.class);
-        filters.add(new ExprVisitor(expression, projectMode, visitWhat, applyToWhat));
-        filters.add(new IncludedFilter());
-    }
-
-    private void addPruneFilters() {
-        // Go bottom up
-        if (projectMode) {
-            processProjectExpression("taskCount > 0");
-            processFolderExpression("folderCount > 0 || projectCount > 0");
-        }
-        else {
-            processContextExpression("contextCount > 0 || taskCount > 0");
-        }
-    }
-    
-    private void processFormat(String format) {
-        this.format = format;
-    }
-
     private void printHelp() {
        processor.printHelp ();
-       exit  = true;
+       exitBeforeLoad  = true;
     }
     
     private void printAdditionalInfo() {
@@ -282,7 +179,7 @@ public class CommandLine {
         AttribPrinter.print(Context.class);
         System.out.println();
         AttribPrinter.print(Task.class);
-        exit  = true;
+        exitBeforeLoad  = true;
      }
     
     private void setLogLevel(String logLevel) {
@@ -305,7 +202,11 @@ public class CommandLine {
         LOGGER.debug("Log level is " + logLevel);
     }
     
-    private String escape (String val) {
+    private static String escape (String val) {
         return val.replaceAll("'", "\'");
+    }
+    
+    public void setOfexport (OFExport ofexport) {
+        this.ofexport = ofexport;
     }
 }

@@ -3,6 +3,25 @@
 ## ofexport2
 
 - Sorting
+- Prune option, add expressions automatically
+- Problem: -cn Home not showing me sub contexts
+  Presumably because it continues to recurse and eliminates sub contexts
+  This is probably an issue with folders too.
+  
+  Could abort matching after an include hit - consequences?
+  
+  Filtering tasks on !completed would abort on match and include sub completed tasks.
+  
+  Is the strategy flawed?
+  
+  Solution
+  -c -ce 'name=="Home" || included'
+  
+  qualifiers:
+  - only
+  - everythingUnder
+- More Integration tests - would be better to create tasks programatically
+  - Extract key functionality into new OFExport class - test that
 - Markdown template
 - Whitespace usage - can  avoid long lines? eatspace option? (make templates more readable)
 - use visit/recurse: http://freemarker.org/docs/ref_directive_visit.html (maybe)

@@ -2,11 +2,6 @@
 
 ## ofexport2
 
-- Prune option, add expressions automatically
-- Problem: -cn Home not showing me sub contexts
-  Presumably because it continues to recurse and eliminates sub contexts
-  
-  Could abort
 - More Integration tests - would be better to create tasks programatically
 - How to select what fields to include (ognl exprs to nullify?)
 - Check Markdown displays properly (including notes)
