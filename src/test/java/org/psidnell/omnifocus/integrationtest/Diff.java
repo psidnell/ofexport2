@@ -22,7 +22,12 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Diff {
+
+    static Logger LOGGER = LoggerFactory.getLogger(Diff.class);
 
     public static void diff(File expectedFile, File actualFile) throws IOException {
     
@@ -43,16 +48,30 @@ public class Diff {
         }
     }
 
+    public static void diff(String[] expected, String[] actual) {
+
+        int i;
+        for (i = 0; i < expected.length && i < actual.length; i++) {
+            diff (expected[i], actual[i], i+1);
+        }
+        
+        if (expected.length > actual.length) {
+            diff (expected[i], null, i+1);
+        }
+        else if (expected.length < actual.length) {
+            diff (null, actual[i], i+1);
+        }
+    }
+    
     public static boolean diff(String expected, String actual, int line) {
         
         if (expected != null && actual != null && !expected.equals(actual)) {
-            IntegrationTest.LOGGER.error("Error on line " + line);
-            IntegrationTest.LOGGER.error("Expected: " + expected);
-            IntegrationTest.LOGGER.error("Actual:   " + actual);
+            LOGGER.error("Error on line " + line);
+            LOGGER.error("Expected: " + expected);
+            LOGGER.error("Actual:   " + actual);
         }
         String message = "Error on line " + line + " " + expected + " != " + actual;
-        assertEquals (message, expected, actual);
+        assertEquals (message, actual, expected);
         return expected != null;
     }
-
 }

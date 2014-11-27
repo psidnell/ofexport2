@@ -31,6 +31,10 @@ public class Project extends CommonProjectTask {
     public Project () {
     }
     
+    public Project (String name) {
+        this.name = name;
+    }
+    
     public Project (ProjectInfo projInfo, Task rootTask) {
         setId(rootTask.getId ());
         setName(rootTask.getName());

@@ -20,7 +20,6 @@ import org.apache.log4j.Level;
 import org.psidnell.omnifocus.cli.ActiveOption;
 import org.psidnell.omnifocus.cli.ActiveOptionProcessor;
 import org.psidnell.omnifocus.expr.AttribPrinter;
-import org.psidnell.omnifocus.expr.ExpressionComparator;
 import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Project;
@@ -73,7 +72,7 @@ public class CommandLine {
         
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "ps", "projectsort", true, "sort projects by field.",
-                (m,o)->m.ofexport.addProjectComparator(new ExpressionComparator<>(o.nextValue(), Project.class)),
+                (m,o)->m.ofexport.addProjectComparator(o.nextValue()),
                 AFTER_LOAD));
 
         // FOLDER
@@ -90,7 +89,7 @@ public class CommandLine {
         
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "fs", "foldersort", true, "sort folders by field.",
-                (m,o)->m.ofexport.addFolderComparator(new ExpressionComparator<>(o.nextValue(), Folder.class)),
+                (m,o)->m.ofexport.addFolderComparator(o.nextValue()),
                 AFTER_LOAD));
 
         // TASK
@@ -107,7 +106,7 @@ public class CommandLine {
         
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "ts", "tasksort", true, "sort tasks by field",
-                (m,o)->m.ofexport.addTaskComparator(new ExpressionComparator<>(o.nextValue(), Task.class)),
+                (m,o)->m.ofexport.addTaskComparator(o.nextValue()),
                 AFTER_LOAD));
 
         // CONTEXT
@@ -124,7 +123,7 @@ public class CommandLine {
         
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "cs", "contextsort", true, "sort contexts by field.",
-                (m,o)->m.ofexport.addContextComparator(new ExpressionComparator<>(o.nextValue(), Context.class)),
+                (m,o)->m.ofexport.addContextComparator(o.nextValue()),
                 AFTER_LOAD));
         
         // GENERAL

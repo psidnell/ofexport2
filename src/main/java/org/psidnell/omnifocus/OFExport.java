@@ -83,6 +83,7 @@ public class OFExport {
         else {
             formatter.format(contextRoot, out);
         }
+        out.flush();
     }
     
     public void setFormat(String format) {
@@ -181,19 +182,19 @@ public class OFExport {
         return contextRoot;
     }
 
-    public void addProjectComparator(ExpressionComparator<Project> expressionComparator) {
-        sortingFilter.addProjectComparator(expressionComparator);
+    public void addProjectComparator(String expr) {
+        sortingFilter.addProjectComparator(new ExpressionComparator<>(expr, Project.class));
     }
 
-    public void addFolderComparator(ExpressionComparator<Folder> expressionComparator) {
-        sortingFilter.addFolderComparator(expressionComparator);
+    public void addFolderComparator(String expr) {
+        sortingFilter.addFolderComparator(new ExpressionComparator<>(expr, Folder.class));
     }
 
-    public void addTaskComparator(ExpressionComparator<Task> expressionComparator) {
-        sortingFilter.addTaskComparator(expressionComparator);
+    public void addTaskComparator(String expr) {
+        sortingFilter.addTaskComparator(new ExpressionComparator<>(expr, Task.class));
     }
 
-    public void addContextComparator(ExpressionComparator<Context> expressionComparator) {
-        sortingFilter.addContextComparator(expressionComparator);
+    public void addContextComparator(String expr) {
+        sortingFilter.addContextComparator(new ExpressionComparator<>(expr, Context.class));
     }
 }

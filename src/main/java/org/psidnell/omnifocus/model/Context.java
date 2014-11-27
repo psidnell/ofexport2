@@ -35,6 +35,13 @@ public class Context extends Node {
 
     private Context parent;
     
+    public Context () {
+    }
+    
+    public Context(String name) {
+        this.name = name;
+    }
+
     @ExprAttribute(help="number of tasks.")
     @JsonIgnore
     public int getTaskCount () {

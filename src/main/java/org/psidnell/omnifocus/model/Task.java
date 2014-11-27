@@ -34,6 +34,13 @@ public class Task extends CommonProjectTask {
     private boolean blocked = false;
     private boolean inInbox;
     
+    public Task () {
+    }
+    
+    public Task(String name) {
+        this.name = name;
+    }
+
     @SQLiteProperty (name="inInbox")
     @JsonIgnore
     public boolean isInInbox () {

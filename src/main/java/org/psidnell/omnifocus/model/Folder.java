@@ -35,6 +35,13 @@ public class Folder extends Node {
 
     private Folder parent;
     
+    public Folder() {
+    }
+    
+    public Folder(String name) {
+        this.name = name;
+    }
+
     @ExprAttribute(help="number of tasks.")
     @JsonIgnore
     public int getProjectCount () {
