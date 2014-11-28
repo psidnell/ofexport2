@@ -15,6 +15,7 @@ limitations under the License.
 */
 package org.psidnell.omnifocus.sqlite;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -36,10 +37,16 @@ import org.psidnell.omnifocus.model.Task;
 
 public class SQLiteDAO {
     
-    public static String DB = "/Users/psidnell/Library/Containers/com.omnigroup.OmniFocus2/Data/Library/Caches/com.omnigroup.OmniFocus2/OmniFocusDatabase2";
+    private String[] possibleDBLocations;
 
-    public static String getDriverURL () {
-        return "jdbc:sqlite:" + DB;
+    public String getDriverURL () throws SQLException {
+        for (String location : possibleDBLocations) {
+            File file = new File (location);
+            if (file.exists() && file.isFile()) {
+                return "jdbc:sqlite:" + location;
+            }
+        }
+        throw new SQLException("Unable to find the OmniFocus SQLite database in any configured locations");
     }
     
     public static final SQLiteClassDescriptor<Task>TASK_DAO;
@@ -61,14 +68,14 @@ public class SQLiteDAO {
         }
     }
 
-    public static Connection getConnection () throws SQLException {
+    public Connection getConnection () throws SQLException {
         //Properties props = new Properties();
         //props.put("characterEncoding", "UTF-16LE");
         //props.put("useUnicode", "true");
         return DriverManager.getConnection(getDriverURL());
     }
     
-    public static DataCache load () throws SQLException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
+    public DataCache load () throws SQLException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
         try (Connection c = getConnection()) {
             Collection<ProjectInfo> projInfos = load(c, PROJECT_INFO_DAO, null);
             Collection<Folder> folders = load(c, FOLDER_DAO, null);
@@ -78,7 +85,7 @@ public class SQLiteDAO {
         }
     }
     
-    public static <T> Collection<T> load (Connection c, SQLiteClassDescriptor<T> desc, String whereClause) throws SQLException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
+    public <T> Collection<T> load (Connection c, SQLiteClassDescriptor<T> desc, String whereClause) throws SQLException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
         try (Statement stmt = c.createStatement()) {
             String optWhere = whereClause == null ? "" : " " + whereClause;
             try (ResultSet rs = stmt.executeQuery("select "+ desc.getColumnsForSelect() + " from " + desc.getTableName() + optWhere)) {
@@ -87,14 +94,14 @@ public class SQLiteDAO {
         }
     }
     
-    public static void printTables(Connection c) throws SQLException {
+    public void printTables(Connection c) throws SQLException {
         LinkedList<String> tableNames = getTableNames(c);
         for (String tableName : tableNames) {
             getColumnData(c, tableName);
         }
     }
 
-    private static Map<String, String> getColumnData(Connection c, String tableName) throws SQLException {
+    private Map<String, String> getColumnData(Connection c, String tableName) throws SQLException {
         try (Statement stmt = c.createStatement()) {
             HashMap<String, String> data = new HashMap<>();
             stmt.setFetchSize(1);
@@ -114,7 +121,7 @@ public class SQLiteDAO {
         }
     }
 
-    private static LinkedList<String> getTableNames(Connection c) throws SQLException {
+    private LinkedList<String> getTableNames(Connection c) throws SQLException {
         LinkedList<String> tableNames = new LinkedList<>();
         DatabaseMetaData md = c.getMetaData();
 
@@ -125,5 +132,9 @@ public class SQLiteDAO {
             }
         }
         return tableNames;
+    }
+    
+    public void setPossibleDBLocations (String possibleDBLocations[]) {
+        this.possibleDBLocations = possibleDBLocations;
     }
 }

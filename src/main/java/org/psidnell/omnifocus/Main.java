@@ -31,18 +31,19 @@ import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.sqlite.SQLiteDAO;
 import org.psidnell.omnifocus.util.IOUtils;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class Main extends CommandLine {
         
     private DataCache data;
+    
+    private SQLiteDAO sqliteDAO;
  
     private void loadData () throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, SQLException, FileNotFoundException, IOException {
         if (jsonInputFile != null) {
             data = DataCache.importData(new File (jsonInputFile));
         }
         else {
-            data = SQLiteDAO.load();
+            data = sqliteDAO.load();
         }
         
         data.build();
@@ -107,9 +108,8 @@ public class Main extends CommandLine {
     }
 
     public static void main(String args[]) throws Exception {
-        
-        @SuppressWarnings("resource")
-        ApplicationContext appContext = new ClassPathXmlApplicationContext("config.xml");
+                
+        ApplicationContext appContext = OFApplicationContext.INSTANCE;
 
         Main main = appContext.getBean("main", Main.class);
         
@@ -125,5 +125,9 @@ public class Main extends CommandLine {
         main.run ();
         
         LOGGER.debug("Exiting");        
+    }
+    
+    public void setSqliteDAO (SQLiteDAO sqliteDAO) {
+        this.sqliteDAO = sqliteDAO;
     }
 }

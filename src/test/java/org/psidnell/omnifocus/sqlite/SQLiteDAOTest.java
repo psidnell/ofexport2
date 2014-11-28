@@ -22,18 +22,29 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collection;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.psidnell.omnifocus.OFApplicationContext;
 import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.ProjectInfo;
 import org.psidnell.omnifocus.model.Task;
+import org.springframework.context.ApplicationContext;
 
 public class SQLiteDAOTest {
     
+    private static final ApplicationContext appContext = OFApplicationContext.INSTANCE;
+    private SQLiteDAO sqliteDAO;
+    
+    @Before
+    public void setUp () {
+        sqliteDAO = appContext.getBean("sqlitedao", SQLiteDAO.class);
+    }
+    
     @Test
     public void testDumpTables() throws SQLException, ClassNotFoundException {
-        try (Connection c = SQLiteDAO.getConnection()) {
-            SQLiteDAO.printTables(c);
+        try (Connection c = sqliteDAO.getConnection()) {
+            sqliteDAO.printTables(c);
 
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -42,8 +53,8 @@ public class SQLiteDAOTest {
     
     @Test
     public void testLoadTasks() throws ClassNotFoundException, SQLException, NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
-        try (Connection c = SQLiteDAO.getConnection()) {
-            Collection<Task> tasks = SQLiteDAO.load(c, SQLiteDAO.TASK_DAO, null);
+        try (Connection c = sqliteDAO.getConnection()) {
+            Collection<Task> tasks = sqliteDAO.load(c, SQLiteDAO.TASK_DAO, null);
             assertFalse (tasks.isEmpty());
             Task task = tasks.iterator().next();
             System.out.println(task.getId() + ":" + task.getName());
@@ -52,8 +63,8 @@ public class SQLiteDAOTest {
     
     @Test
     public void testLoadFolders() throws ClassNotFoundException, SQLException, NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
-        try (Connection c = SQLiteDAO.getConnection()) {
-            Collection<Folder> folders = SQLiteDAO.load(c, SQLiteDAO.FOLDER_DAO, null);
+        try (Connection c = sqliteDAO.getConnection()) {
+            Collection<Folder> folders = sqliteDAO.load(c, SQLiteDAO.FOLDER_DAO, null);
             assertFalse (folders.isEmpty());
             Folder folder = folders.iterator().next();
             System.out.println(folder.getId() + ":" + folder.getName());
@@ -62,8 +73,8 @@ public class SQLiteDAOTest {
     
     @Test
     public void testLoadProjectsInfo() throws ClassNotFoundException, SQLException, NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
-        try (Connection c = SQLiteDAO.getConnection()) {
-            Collection<ProjectInfo> projects = SQLiteDAO.load(c, SQLiteDAO.PROJECT_INFO_DAO, null);
+        try (Connection c = sqliteDAO.getConnection()) {
+            Collection<ProjectInfo> projects = sqliteDAO.load(c, SQLiteDAO.PROJECT_INFO_DAO, null);
             assertFalse (projects.isEmpty());
             ProjectInfo project = projects.iterator().next();
             System.out.println(project.getRootTaskId());
@@ -72,8 +83,8 @@ public class SQLiteDAOTest {
 
     @Test
     public void testLoadContexts() throws ClassNotFoundException, SQLException, NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
-        try (Connection c = SQLiteDAO.getConnection()) {
-            Collection<Context> contexts = SQLiteDAO.load(c, SQLiteDAO.CONTEXT_DAO, null);
+        try (Connection c = sqliteDAO.getConnection()) {
+            Collection<Context> contexts = sqliteDAO.load(c, SQLiteDAO.CONTEXT_DAO, null);
             assertFalse (contexts.isEmpty());
             Context context = contexts.iterator().next();
             System.out.println(context.getId() + ":" + context.getName());

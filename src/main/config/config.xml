@@ -5,10 +5,24 @@
         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"/>
 
-	<bean name="ofexport" class="org.psidnell.omnifocus.OFExport"/>
-    <bean name="main" class="org.psidnell.omnifocus.Main">
-    	<property name="ofexport" ref="ofexport"/>
-    </bean>
+	<bean name="sqlitedao" class="org.psidnell.omnifocus.sqlite.SQLiteDAO">
+		<property name="possibleDBLocations">
+			<list>
+				<!-- These are the various locations the omnifocus DB might be depending on version and how it was purchased -->
+				<value>${HOME}/Library/Containers/com.omnigroup.OmniFocus2/Data/Library/Caches/com.omnigroup.OmniFocus2/OmniFocusDatabase2</value>
+        		<value>${HOME}/Library/Caches/com.omnigroup.OmniFocus/OmniFocusDatabase2</value> 
+        		<value>${HOME}/Library/Caches/com.omnigroup.OmniFocus.MacAppStore/OmniFocusDatabase2</value>			    
+			</list>
+		</property>
+	</bean>
+
+	<bean name="ofexport" class="org.psidnell.omnifocus.OFExport" />
+
+	<bean name="main" class="org.psidnell.omnifocus.Main">
+		<property name="ofexport" ref="ofexport" />
+		<property name="sqliteDAO" ref="sqlitedao" />
+	</bean>
 
 </beans>

@@ -188,21 +188,21 @@ public class DataCache {
         }
     }
 
-    public static void exportData (File file, Predicate<Node> filterFn) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, SQLException, JsonGenerationException, JsonMappingException, IOException {
+    public static void exportData (File file, Predicate<Node> filterFn, SQLiteDAO sqliteDAO) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, SQLException, JsonGenerationException, JsonMappingException, IOException {
         
-        try (Connection c = SQLiteDAO.getConnection(); Writer out = new FileWriter(file)) {
+        try (Connection c = sqliteDAO.getConnection(); Writer out = new FileWriter(file)) {
             
-            Collection<Folder> folders = SQLiteDAO.load(c, SQLiteDAO.FOLDER_DAO, null)
+            Collection<Folder> folders = sqliteDAO.load(c, SQLiteDAO.FOLDER_DAO, null)
                     .stream().filter(filterFn).collect(Collectors.toList());
-            Collection<Task> tasks = SQLiteDAO.load(c, SQLiteDAO.TASK_DAO, null)
+            Collection<Task> tasks = sqliteDAO.load(c, SQLiteDAO.TASK_DAO, null)
                     .stream().filter(filterFn).collect(Collectors.toList());
-            Collection<Context> contexts = SQLiteDAO.load(c, SQLiteDAO.CONTEXT_DAO, null)
+            Collection<Context> contexts = sqliteDAO.load(c, SQLiteDAO.CONTEXT_DAO, null)
                     .stream().filter(filterFn).collect(Collectors.toList());
     
             // ProjInfos don't have a name, have to use their associated root task names
             Set<String> taskIds = tasks.stream().map((t)->t.getId()).collect(Collectors.toSet());
             
-            Collection<ProjectInfo> projInfos = SQLiteDAO.load(c, SQLiteDAO.PROJECT_INFO_DAO, null)
+            Collection<ProjectInfo> projInfos = sqliteDAO.load(c, SQLiteDAO.PROJECT_INFO_DAO, null)
                     .stream().filter((pi)->taskIds.contains(pi.getRootTaskId())).collect(Collectors.toList());
     
             DataCache dataCache = new DataCache(folders, projInfos, tasks, contexts);

@@ -37,13 +37,13 @@ public class CSVTest extends FormatTest {
         Diff.diff (new String[]
             {
                 "\"f1\",,,,",
-                "\"p1\", \"FLAGGED\",,,",
-                "\"t1\", \"FLAGGED\", \"2014-11-27\",,",
-                "\"t2\", \"FLAGGED\",, \"2014-11-27\",, \"line1 line2\"",
-                "\"t3\", \"FLAGGED\",,, \"2014-11-27\", \"line1 line2\"",
-                "\"t4\", \"FLAGGED\",,, \"2014-11-27\", \"line1 line2\"",
-                "\"p2\", \"FLAGGED\",, \"2014-11-27\", \"2014-11-27\", \"line1 line2\"",
-                "\"p3\", \"FLAGGED\",,,",
+                "\"p1\",\"FLAGGED\",,,",
+                "\"t1\",\"FLAGGED\",\"2014-11-27\",,",
+                "\"t2\",\"FLAGGED\",,\"2014-11-27\",,\"line1 line2\"",
+                "\"t3\",\"FLAGGED\",,,\"2014-11-27\",\"line1 line2\"",
+                "\"t4\",\"FLAGGED\",,,\"2014-11-27\",\"line1 line2\"",
+                "\"p2\",\"FLAGGED\",,\"2014-11-27\",\"2014-11-27\",\"line1 line2\"",
+                "\"p3\",\"FLAGGED\",,,",
             }, out.toString().split("\n"));
     }
     
@@ -63,9 +63,9 @@ public class CSVTest extends FormatTest {
             {
                 "\"c1\",,,,",
                 "\"c2\",,,,",
-                "\"t3\", \"FLAGGED\",,, \"2014-11-27\", \"line1 line2\"",
-                "\"t4\", \"FLAGGED\",,, \"2014-11-27\", \"line1 line2\"",
-                "\"t2\", \"FLAGGED\",, \"2014-11-27\",, \"line1 line2\"",
+                "\"t3\",\"FLAGGED\",,,\"2014-11-27\",\"line1 line2\"",
+                "\"t4\",\"FLAGGED\",,,\"2014-11-27\",\"line1 line2\"",
+                "\"t2\",\"FLAGGED\",,\"2014-11-27\",,\"line1 line2\"",
             }, out.toString().split("\n"));
     }
 }

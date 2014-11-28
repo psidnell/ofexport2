@@ -68,6 +68,6 @@ $ MACRO: doRow
 $$$$$$$$$$$$$$$$$$
 -->
 <#macro doRow node>
-"${node.name?replace("\"","'")}"<#if (node.flagged)??>, "FLAGGED"<#else>,</#if><#if (node.deferDate)??>, "${node.deferDate?string["yyyy-MM-dd"]}"<#else>,</#if><#if (node.dueDate)??>, "${node.dueDate?string["yyyy-MM-dd"]}"<#else>,</#if><#if (node.completionDate)??>, "${node.completionDate?string["yyyy-MM-dd"]}"<#else>,</#if><#if (node.note)??>, "${node.note?replace("\"","'")?replace("\n", " ")}"</#if>
+"${node.name?replace("\"","'")}"<#if (node.flagged)??>,"FLAGGED"<#else>,</#if><#if (node.deferDate)??>,"${node.deferDate?string["yyyy-MM-dd"]}"<#else>,</#if><#if (node.dueDate)??>,"${node.dueDate?string["yyyy-MM-dd"]}"<#else>,</#if><#if (node.completionDate)??>,"${node.completionDate?string["yyyy-MM-dd"]}"<#else>,</#if><#if (node.note)??>,"${node.note?replace("\"","'")?replace("\n"," ")}"</#if>
 </#macro>
  

@@ -16,9 +16,10 @@ Supported export formats are:
 1. Plain Text
 2. Markdown
 3. TaskPaper
-4. OPML
-5. XML
-6. JSON
+4. CSV
+5. OPML
+6. XML
+7. JSON
 
 Other formats can be created by dropping a new FreeMarker template into the **config/templates** directory.
 

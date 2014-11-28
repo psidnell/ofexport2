@@ -23,9 +23,13 @@ import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.psidnell.omnifocus.OFApplicationContext;
 import org.psidnell.omnifocus.model.DataCache;
+import org.psidnell.omnifocus.sqlite.SQLiteDAO;
 import org.psidnell.omnifocus.util.IOUtils;
+import org.springframework.context.ApplicationContext;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -33,12 +37,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class DataExportImportTest {
 
+    private static final ApplicationContext appContext = OFApplicationContext.INSTANCE;
+    private SQLiteDAO sqliteDAO;
+    
+    @Before
+    public void setUp () {
+        sqliteDAO = appContext.getBean("sqlitedao", SQLiteDAO.class);
+    }
+    
     @Test
     public void testExport () throws JsonGenerationException, JsonMappingException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, SQLException, IOException {
         
         // Export
         File file = new File("target/test1.json");
-        DataCache.exportData(file, (n)->n.getName().startsWith("%Test"));
+        DataCache.exportData(file, (n)->n.getName().startsWith("%Test"), sqliteDAO);
         
         // Import
         DataCache dataCache = DataCache.importData (file);
