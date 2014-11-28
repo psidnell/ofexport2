@@ -2,6 +2,17 @@
 
 ## ofexport2
 
+- Filters (available etc) - finish - test
+
+> Issue: 
+> if I search for completed items, I dont see completed tasks in incomplete
+> projects since the incomplete project is eliminated before we see the tasks.
+> 
+> Could have separate availability options for projects, contexts, tasks but can I infer this?
+> 
+> ** maybe Im pruning too early in the availability filter?
+> dont prevent inclusion???
+
 - Sorting
 - Prune option, add expressions automatically
 - Problem: -cn Home not showing me sub contexts
@@ -36,6 +47,7 @@
 > http://freemarker.org/docs/ref_directive_visit.html
 
 - HTML template (base on OPML)
+- Scan all the DB locations
 - Use spring
 - Externalise configuration files to directory (not resource path)
 
@@ -57,6 +69,7 @@
 - Add Markdown format
 - Generate todo & change log as part of build
 - Text output formats should skip roots
+- Projects/Folders should be interleaved in their original order  (awkward - worth the cost?)
 - delete main test (replaced by integration tests)
 - Write integration tests to test options
 

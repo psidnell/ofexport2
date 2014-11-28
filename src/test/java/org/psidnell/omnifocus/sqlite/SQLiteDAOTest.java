@@ -33,7 +33,8 @@ import org.springframework.context.ApplicationContext;
 
 public class SQLiteDAOTest {
     
-    private static final ApplicationContext appContext = OFApplicationContext.INSTANCE;
+    private static final ApplicationContext appContext = OFApplicationContext.create();
+    
     private SQLiteDAO sqliteDAO;
     
     @Before

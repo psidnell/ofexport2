@@ -20,6 +20,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class OFApplicationContext {
     
-    public static final ApplicationContext INSTANCE = new ClassPathXmlApplicationContext ("config.xml");
-
+    public static ApplicationContext create () {
+        return new ClassPathXmlApplicationContext ("config.xml");
+    }
 }

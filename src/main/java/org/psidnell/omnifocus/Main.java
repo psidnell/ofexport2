@@ -109,7 +109,7 @@ public class Main extends CommandLine {
 
     public static void main(String args[]) throws Exception {
                 
-        ApplicationContext appContext = OFApplicationContext.INSTANCE;
+        ApplicationContext appContext = OFApplicationContext.create ();
 
         Main main = appContext.getBean("main", Main.class);
         
