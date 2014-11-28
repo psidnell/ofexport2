@@ -25,15 +25,15 @@ public class Expression {
 
     private static final OgnlContext OGNL_CONTEXT = new OgnlContext();
     private Object expression;
-    
-    public Expression (String expression) {
+
+    public Expression(String expression) {
         try {
             this.expression = Ognl.parseExpression(expression);
         } catch (OgnlException e) {
             throw new IllegalArgumentException(e);
         }
     }
-    
+
     public Object eval(Node node) {
         try {
             return Ognl.getValue(expression, OGNL_CONTEXT, node);
@@ -41,9 +41,9 @@ public class Expression {
             throw new IllegalArgumentException(e);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
-    public <T> T eval (Node node, Class<T> clazz) {
-        return (T) eval (node);
+    public <T> T eval(Node node, Class<T> clazz) {
+        return (T) eval(node);
     }
 }

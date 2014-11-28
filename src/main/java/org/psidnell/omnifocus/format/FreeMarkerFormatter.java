@@ -12,7 +12,7 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*/
+ */
 package org.psidnell.omnifocus.format;
 
 import java.io.IOException;
@@ -37,27 +37,31 @@ public class FreeMarkerFormatter implements Formatter {
     private static final String TEMPLATES = "/templates";
     private Template template;
 
-    public FreeMarkerFormatter (String templateName) throws IOException {
-        try (InputStream in = this.getClass().getResourceAsStream(TEMPLATES + "/" + templateName)) {
+    public FreeMarkerFormatter(String templateName) throws IOException {
+        // If the resource doesn't exist abort so we can look elsewhere
+        try (
+            InputStream in = this.getClass().getResourceAsStream(TEMPLATES + "/" + templateName)) {
             if (in == null) {
                 throw new IOException("Resource not found:" + templateName);
             }
         }
+        
         Configuration cfg = new Configuration(Configuration.VERSION_2_3_21);
         TemplateLoader templateLoader = new ClassTemplateLoader(this.getClass(), TEMPLATES);
-        cfg.setTemplateLoader(templateLoader );        
+        cfg.setTemplateLoader(templateLoader);
         cfg.setDefaultEncoding("UTF-8");
-        cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER); 
+        cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+        
+        // This is fatal - bomb out of application
         try {
-            template = cfg.getTemplate( templateName);
-        }
-        catch (IOException e) {
+            template = cfg.getTemplate(templateName);
+        } catch (IOException e) {
             throw new IllegalArgumentException(e);
         }
     }
-    
+
     @Override
     public void format(Node root, Writer out) throws IOException, TemplateException {
-        template.process(root, out);  
+        template.process(root, out);
     }
 }

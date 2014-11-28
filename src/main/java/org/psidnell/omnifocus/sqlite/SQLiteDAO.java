@@ -12,7 +12,7 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*/
+ */
 package org.psidnell.omnifocus.sqlite;
 
 import java.io.File;
@@ -36,24 +36,24 @@ import org.psidnell.omnifocus.model.ProjectInfo;
 import org.psidnell.omnifocus.model.Task;
 
 public class SQLiteDAO {
-    
+
     private String[] possibleDBLocations;
 
-    public String getDriverURL () throws SQLException {
+    public String getDriverURL() throws SQLException {
         for (String location : possibleDBLocations) {
-            File file = new File (location);
+            File file = new File(location);
             if (file.exists() && file.isFile()) {
                 return "jdbc:sqlite:" + location;
             }
         }
         throw new SQLException("Unable to find the OmniFocus SQLite database in any configured locations");
     }
-    
-    public static final SQLiteClassDescriptor<Task>TASK_DAO;
-    public static final SQLiteClassDescriptor<ProjectInfo>PROJECT_INFO_DAO;
-    public static final SQLiteClassDescriptor<Folder>FOLDER_DAO;
-    public static final SQLiteClassDescriptor<Context>CONTEXT_DAO;
-    
+
+    public static final SQLiteClassDescriptor<Task> TASK_DAO;
+    public static final SQLiteClassDescriptor<ProjectInfo> PROJECT_INFO_DAO;
+    public static final SQLiteClassDescriptor<Folder> FOLDER_DAO;
+    public static final SQLiteClassDescriptor<Context> CONTEXT_DAO;
+
     static {
         try {
             Class.forName("org.sqlite.JDBC");
@@ -62,21 +62,22 @@ public class SQLiteDAO {
             PROJECT_INFO_DAO = new SQLiteClassDescriptor<ProjectInfo>(ProjectInfo.class, "ProjectInfo");
             FOLDER_DAO = new SQLiteClassDescriptor<Folder>(Folder.class, "Folder");
             CONTEXT_DAO = new SQLiteClassDescriptor<Context>(Context.class, "Context");
-            
+
         } catch (NoSuchMethodException | SecurityException | ClassNotFoundException e) {
-            throw new IllegalStateException (e);
+            throw new IllegalStateException(e);
         }
     }
 
-    public Connection getConnection () throws SQLException {
-        //Properties props = new Properties();
-        //props.put("characterEncoding", "UTF-16LE");
-        //props.put("useUnicode", "true");
+    public Connection getConnection() throws SQLException {
+        // Properties props = new Properties();
+        // props.put("characterEncoding", "UTF-16LE");
+        // props.put("useUnicode", "true");
         return DriverManager.getConnection(getDriverURL());
     }
-    
-    public DataCache load () throws SQLException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
-        try (Connection c = getConnection()) {
+
+    public DataCache load() throws SQLException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
+        try (
+            Connection c = getConnection()) {
             Collection<ProjectInfo> projInfos = load(c, PROJECT_INFO_DAO, null);
             Collection<Folder> folders = load(c, FOLDER_DAO, null);
             Collection<Task> tasks = load(c, TASK_DAO, null);
@@ -84,16 +85,19 @@ public class SQLiteDAO {
             return new DataCache(folders, projInfos, tasks, contexts);
         }
     }
-    
-    public <T> Collection<T> load (Connection c, SQLiteClassDescriptor<T> desc, String whereClause) throws SQLException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
-        try (Statement stmt = c.createStatement()) {
+
+    public <T> Collection<T> load(Connection c, SQLiteClassDescriptor<T> desc, String whereClause) throws SQLException, IllegalAccessException, IllegalArgumentException,
+            InvocationTargetException, InstantiationException {
+        try (
+            Statement stmt = c.createStatement()) {
             String optWhere = whereClause == null ? "" : " " + whereClause;
-            try (ResultSet rs = stmt.executeQuery("select "+ desc.getColumnsForSelect() + " from " + desc.getTableName() + optWhere)) {
+            try (
+                ResultSet rs = stmt.executeQuery("select " + desc.getColumnsForSelect() + " from " + desc.getTableName() + optWhere)) {
                 return desc.load(rs);
             }
         }
     }
-    
+
     public void printTables(Connection c) throws SQLException {
         LinkedList<String> tableNames = getTableNames(c);
         for (String tableName : tableNames) {
@@ -102,12 +106,14 @@ public class SQLiteDAO {
     }
 
     private Map<String, String> getColumnData(Connection c, String tableName) throws SQLException {
-        try (Statement stmt = c.createStatement()) {
+        try (
+            Statement stmt = c.createStatement()) {
             HashMap<String, String> data = new HashMap<>();
             stmt.setFetchSize(1);
             stmt.setMaxRows(1);
             System.out.println(tableName + ":");
-            try (ResultSet rs = stmt.executeQuery("select * from " + tableName)) {
+            try (
+                ResultSet rs = stmt.executeQuery("select * from " + tableName)) {
                 ResultSetMetaData rsmd = rs.getMetaData();
                 int columnCount = rsmd.getColumnCount();
                 for (int i = 1; i <= columnCount; i++) {
@@ -125,7 +131,8 @@ public class SQLiteDAO {
         LinkedList<String> tableNames = new LinkedList<>();
         DatabaseMetaData md = c.getMetaData();
 
-        try (ResultSet rs = md.getTables(null, null, "%", null)) {
+        try (
+            ResultSet rs = md.getTables(null, null, "%", null)) {
             while (rs.next()) {
                 String tableName = rs.getString(3);
                 tableNames.add(tableName);
@@ -133,8 +140,8 @@ public class SQLiteDAO {
         }
         return tableNames;
     }
-    
-    public void setPossibleDBLocations (String possibleDBLocations[]) {
+
+    public void setPossibleDBLocations(String possibleDBLocations[]) {
         this.possibleDBLocations = possibleDBLocations;
     }
 }

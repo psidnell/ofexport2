@@ -12,7 +12,7 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*/
+ */
 package org.psidnell.omnifocus.visitor;
 
 import org.psidnell.omnifocus.model.Context;
@@ -23,33 +23,33 @@ import org.psidnell.omnifocus.model.Task;
 public class IncludeVisitor implements Visitor {
 
     private static final VisitorDescriptor WHAT = new VisitorDescriptor().visitAll();
-    
-    private boolean include ;
+
+    private boolean include;
 
     @Override
     public VisitorDescriptor getWhat() {
         return WHAT;
     }
-    
+
     public IncludeVisitor(boolean include) {
         this.include = include;
     }
-    
+
     @Override
     public void enter(Context node) throws Exception {
         node.setIncluded(include);
     }
-    
+
     @Override
     public void enter(Folder node) throws Exception {
         node.setIncluded(include);
     }
-    
+
     @Override
     public void enter(Project node) throws Exception {
         node.setIncluded(include);
     }
-    
+
     @Override
     public void enter(Task node) throws Exception {
         node.setIncluded(include);

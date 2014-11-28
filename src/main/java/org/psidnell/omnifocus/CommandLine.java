@@ -12,7 +12,7 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*/
+ */
 package org.psidnell.omnifocus;
 
 import org.apache.commons.cli.Options;
@@ -28,23 +28,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class CommandLine {
-    
+
     protected final static Logger LOGGER = LoggerFactory.getLogger(CommandLine.class);
-    
+
     final static Options OPTIONS = new Options();
 
     protected static final int BEFORE_LOAD = 0;
     protected static final int AFTER_LOAD = 1;
-    
+
     public static final String PROG = "ofexport2";
-    
+
     protected ActiveOptionProcessor<CommandLine> processor = new ActiveOptionProcessor<>(PROG, OPTIONS);
     protected String jsonInputFile = null;
     protected boolean exitBeforeLoad = false;
     protected String outputFile = null;
     protected OFExport ofexport = null;
     protected String format = null;
-    
+
     static {
         
         // HELP
@@ -167,10 +167,10 @@ public class CommandLine {
     }
 
     private void printHelp() {
-       processor.printHelp ();
-       exitBeforeLoad  = true;
+        processor.printHelp();
+        exitBeforeLoad = true;
     }
-    
+
     private void printAdditionalInfo() {
         AttribPrinter.print(Folder.class);
         System.out.println();
@@ -179,9 +179,9 @@ public class CommandLine {
         AttribPrinter.print(Context.class);
         System.out.println();
         AttribPrinter.print(Task.class);
-        exitBeforeLoad  = true;
-     }
-    
+        exitBeforeLoad = true;
+    }
+
     private void setLogLevel(String logLevel) {
         Level level = Level.DEBUG;
         switch (logLevel.toLowerCase()) {
@@ -201,12 +201,12 @@ public class CommandLine {
         org.apache.log4j.Logger.getLogger("org.psidnell").setLevel(level);
         LOGGER.debug("Log level is " + logLevel);
     }
-    
-    private static String escape (String val) {
+
+    private static String escape(String val) {
         return val.replaceAll("'", "\'");
     }
-    
-    public void setOfexport (OFExport ofexport) {
+
+    public void setOfexport(OFExport ofexport) {
         this.ofexport = ofexport;
     }
 }

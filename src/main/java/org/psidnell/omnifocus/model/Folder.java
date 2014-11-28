@@ -12,7 +12,7 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*/
+ */
 package org.psidnell.omnifocus.model;
 
 import java.util.LinkedList;
@@ -34,65 +34,65 @@ public class Folder extends Node {
     private String parentFolderId;
 
     private Folder parent;
-    
+
     public Folder() {
     }
-    
+
     public Folder(String name) {
         this.name = name;
     }
 
-    @ExprAttribute(help="number of tasks.")
+    @ExprAttribute(help = "number of tasks.")
     @JsonIgnore
-    public int getProjectCount () {
+    public int getProjectCount() {
         return projects.size();
     }
-    
-    @ExprAttribute(help="number of projects.")
-    @JsonIgnore
-    public int getFolderCount () {
-        return folders.size();
+
+    @ExprAttribute(help = "the sub projects")
+    public List<Project> getProjects() {
+        return projects;
     }
-    
-    @SQLiteProperty (name="parent")
-    public String getParentFolderId () {
-        return parentFolderId;
-    }
-    
-    public void setParentFolderId (String parentFolderId) {
-        this.parentFolderId = parentFolderId;
-    }
-    
+
     public void setProjects(List<Project> projects) {
         this.projects = projects;
     }
 
-    @ExprAttribute(help="the sub projects")
-    public List<Project> getProjects() {
-        return projects;
+    @ExprAttribute(help = "number of projects.")
+    @JsonIgnore
+    public int getFolderCount() {
+        return folders.size();
+    }
+
+    @ExprAttribute(help = "the sub folders")
+    public List<Folder> getFolders() {
+        return folders;
     }
 
     public void setFolders(List<Folder> folders) {
         this.folders = folders;
     }
 
-    @ExprAttribute(help="the sub folders")
-    public List<Folder> getFolders() {
-        return folders;
+    @SQLiteProperty(name = "parent")
+    public String getParentFolderId() {
+        return parentFolderId;
     }
-    
+
+    public void setParentFolderId(String parentFolderId) {
+        this.parentFolderId = parentFolderId;
+    }
+
     @Override
     @JsonIgnore
-    @ExprAttribute(help="the items type")
+    @ExprAttribute(help = "the items type")
     public String getType() {
         return TYPE;
     }
 
     @JsonIgnore
-    public Folder getParent () {
+    public Folder getParent() {
         return parent;
     }
-    
+
     public void setParent(Folder parent) {
         this.parent = parent;
     }
@@ -119,10 +119,10 @@ public class Folder extends Node {
     }
 
     public void add(Folder child) {
-        folders.add (child);
+        folders.add(child);
         Folder oldParent = child.getParent();
         child.setParent(this);
-        
+
         if (oldParent != null) {
             oldParent.getFolders().remove(child);
         }

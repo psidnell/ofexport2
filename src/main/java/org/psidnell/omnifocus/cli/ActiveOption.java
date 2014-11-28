@@ -12,7 +12,7 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*/
+ */
 package org.psidnell.omnifocus.cli;
 
 import java.util.Arrays;
@@ -36,14 +36,14 @@ public class ActiveOption<P> extends Option {
         setOrder();
         this.phase = phase;
     }
-    
+
     public ActiveOption(String opt, boolean hasArg, String description, ActiveOptionProcess<P> processor, int phase) throws IllegalArgumentException {
         super(opt, hasArg, description);
         this.processor = processor;
         setOrder();
         this.phase = phase;
     }
-    
+
     public ActiveOption(String opt, String longOpt, boolean hasArg, String description, ActiveOptionProcess<P> processor, int phase) throws IllegalArgumentException {
         super(opt, longOpt, hasArg, description);
         this.processor = processor;
@@ -56,7 +56,7 @@ public class ActiveOption<P> extends Option {
             order = count++;
         }
     }
-    
+
     public String nextValue() {
         return valStack.pop();
     }
@@ -69,15 +69,15 @@ public class ActiveOption<P> extends Option {
         }
     }
 
-    void process (P program) throws Exception {
+    void process(P program) throws Exception {
         processor.process(program, this);
     }
-    
-    int getOrder () {
+
+    int getOrder() {
         return order;
     }
-    
-    int getPhase () {
+
+    int getPhase() {
         return phase;
     }
 }

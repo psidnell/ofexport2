@@ -12,7 +12,7 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*/
+ */
 package org.psidnell.omnifocus.sqlite;
 
 import java.lang.reflect.InvocationTargetException;
@@ -30,13 +30,12 @@ public class SQLiteClassDescriptor<T> {
     private Class<T> clazz;
     private String tableName;
 
-    public SQLiteClassDescriptor (Class<T> clazz, String tableName) throws NoSuchMethodException, SecurityException
-    {
+    public SQLiteClassDescriptor(Class<T> clazz, String tableName) throws NoSuchMethodException, SecurityException {
         this.clazz = clazz;
         this.tableName = tableName;
-        
+
         StringBuilder columns = new StringBuilder();
-        
+
         for (Method m : clazz.getMethods()) {
             SQLiteProperty p = m.getAnnotation(SQLiteProperty.class);
             if (p != null) {
@@ -44,17 +43,15 @@ public class SQLiteClassDescriptor<T> {
                 String setterName;
                 String propName;
                 if (methodName.startsWith("is")) {
-                    propName = Character.toLowerCase(m.getName().charAt(2)) +  m.getName().substring(3);
+                    propName = Character.toLowerCase(m.getName().charAt(2)) + m.getName().substring(3);
                     setterName = m.getName().replaceFirst("^is", "set");
-                }
-                else if (methodName.startsWith("get")) {
-                    propName = Character.toLowerCase(m.getName().charAt(3)) +  m.getName().substring(4);
+                } else if (methodName.startsWith("get")) {
+                    propName = Character.toLowerCase(m.getName().charAt(3)) + m.getName().substring(4);
                     setterName = m.getName().replaceFirst("^get", "set");
-                }
-                else {
+                } else {
                     throw new IllegalArgumentException("bad property accessor: " + m);
                 }
-                
+
                 if (p.name().length() != 0) {
                     propName = p.name();
                 }
@@ -62,7 +59,7 @@ public class SQLiteClassDescriptor<T> {
                 Method setter = clazz.getMethod(setterName, m.getReturnType());
                 columns.append(columns.length() != 0 ? ',' : "");
                 columns.append(propName);
-                
+
                 SQLITEPropertyDescriptor pd = new SQLITEPropertyDescriptor(propName, setter, m.getReturnType());
                 properties.add(pd);
             }
@@ -80,24 +77,24 @@ public class SQLiteClassDescriptor<T> {
                 try {
                     if (rawValue != null) {
                         switch (desc.getType().getSimpleName()) {
-                            case "Boolean": 
-                            case "boolean" :
-                                value =  0 != (Integer) rawValue;
+                            case "Boolean":
+                            case "boolean":
+                                value = 0 != (Integer) rawValue;
                                 break;
                         }
                     }
                     desc.getSetter().invoke(instance, value);
-                }
-                catch (IllegalArgumentException e) {
+                } catch (IllegalArgumentException e) {
                     String valTypeName = rawValue == null ? "null" : rawValue.getClass().getSimpleName();
-                    throw new IllegalArgumentException ("mismatch " + desc.getType().getSimpleName() + " and " + valTypeName, e);
+                    throw new IllegalArgumentException("mismatch " + desc.getType().getSimpleName() + " and " + valTypeName, e);
                 }
             }
-            tasks.add (instance);
+            tasks.add(instance);
         }
         return tasks;
     }
-// TODO prepared statements
+
+    // TODO prepared statements
     private Object getValue(ResultSet rs, SQLITEPropertyDescriptor desc) throws SQLException {
         Object rawValue;
         switch (desc.getType().getSimpleName()) {
@@ -111,16 +108,14 @@ public class SQLiteClassDescriptor<T> {
                 rawValue = rs.getObject(desc.getName());
                 if (rawValue == null) {
                     rawValue = null;
-                }
-                else {
+                } else {
                     int secondsSince2001;
                     if (rawValue instanceof Integer) {
                         secondsSince2001 = (Integer) rawValue;
-                    }
-                    else {
+                    } else {
                         secondsSince2001 = ((Double) rawValue).intValue();
                     }
-                    
+
                     Calendar cal = new GregorianCalendar();
                     cal.set(Calendar.YEAR, 2001);
                     cal.set(Calendar.MONTH, Calendar.JANUARY);
@@ -139,7 +134,6 @@ public class SQLiteClassDescriptor<T> {
         return rawValue;
     }
 
-    
     Collection<SQLITEPropertyDescriptor> getProperties() {
         return properties;
     }

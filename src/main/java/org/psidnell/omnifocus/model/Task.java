@@ -33,26 +33,26 @@ public class Task extends CommonProjectTask {
     private Project project;
     private boolean blocked = false;
     private boolean inInbox;
-    
-    public Task () {
+
+    public Task() {
     }
-    
+
     public Task(String name) {
         this.name = name;
     }
 
-    @SQLiteProperty (name="inInbox")
+    @SQLiteProperty(name = "inInbox")
     @JsonIgnore
-    public boolean isInInbox () {
+    public boolean isInInbox() {
         return inInbox;
     }
-    
-    public void setInInbox (boolean inInbox) {
+
+    public void setInInbox(boolean inInbox) {
         this.inInbox = inInbox;
     }
-    
+
     @SQLiteProperty
-    @ExprAttribute (help="item is blocked.")
+    @ExprAttribute(help = "item is blocked.")
     public boolean isBlocked() {
         return blocked;
     }
@@ -81,7 +81,7 @@ public class Task extends CommonProjectTask {
 
     @Override
     @JsonIgnore
-    @ExprAttribute(help="the items type")
+    @ExprAttribute(help = "the items type")
     public String getType() {
         return TYPE;
     }
@@ -117,7 +117,7 @@ public class Task extends CommonProjectTask {
     public void setProject(Project project) {
         this.project = project;
     }
-    
+
     public void add(Task child) {
         tasks.add(child);
         Task oldParent = child.getParent();
@@ -128,17 +128,15 @@ public class Task extends CommonProjectTask {
     }
 
     @Override
-    @ExprAttribute (help="item is available.")
+    @ExprAttribute(help = "item is available.")
     public boolean isAvailable() {
         return !isCompleted() && !isBlocked();
     }
-    
-
 
     @Override
-    @ExprAttribute (help="item is remaining.")
+    @ExprAttribute(help = "item is remaining.")
     public boolean isRemaining() {
         return !isCompleted();
     }
-   
+
 }

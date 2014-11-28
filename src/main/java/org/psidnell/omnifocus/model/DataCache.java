@@ -12,7 +12,7 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*/
+ */
 package org.psidnell.omnifocus.model;
 
 import java.io.File;
@@ -38,48 +38,44 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class DataCache {
-    
+
     private HashMap<String, Folder> folders = new HashMap<>();
     private HashMap<String, ProjectInfo> projInfos = new HashMap<>();
     private HashMap<String, Task> tasks = new HashMap<>();
     private HashMap<String, Context> contexts = new HashMap<>();
     private HashMap<String, Project> projects = new HashMap<>();
 
-    public DataCache () {
+    public DataCache() {
         this.folders = new HashMap<>();
         this.projInfos = new HashMap<>();
     }
-    
-    public DataCache (
-            Collection<Folder> folders,
-            Collection<ProjectInfo> projInfos,
-            Collection<Task> tasks,
-            Collection<Context> contexts) {
-        
-        folders.stream().forEach((n)->add(n));
-        projInfos.stream().forEach((n)->add(n));
-        tasks.stream().forEach((n)->add(n));
-        contexts.stream().forEach((n)->add(n));
+
+    public DataCache(Collection<Folder> folders, Collection<ProjectInfo> projInfos, Collection<Task> tasks, Collection<Context> contexts) {
+
+        folders.stream().forEach((n) -> add(n));
+        projInfos.stream().forEach((n) -> add(n));
+        tasks.stream().forEach((n) -> add(n));
+        contexts.stream().forEach((n) -> add(n));
     }
-    
+
     public final void build() {
         Project inbox = new Project();
         inbox.setName("Inbox");
         inbox.setId("__%%Inbox"); // to give deterministic JSON/XML output
 
-        Context noContext = new Context ();
+        Context noContext = new Context();
         noContext.setName("No Context");
-        noContext.setId("__%%NoContext");  // to give deterministic JSON/XML output
-        
+        noContext.setId("__%%NoContext"); // to give deterministic JSON/XML output
+
         // Build Folder Hierarchy
         for (Folder folder : folders.values()) {
             String parentId = folder.getParentFolderId();
             if (parentId != null) {
                 Folder parent = folders.get(parentId);
-                parent.add (folder);
+                parent.add(folder);
             }
         }
-        
+
         // Build Task Hierarchy
         for (Task task : tasks.values()) {
             String parentId = task.getParentTaskId();
@@ -87,25 +83,25 @@ public class DataCache {
                 Task parent = tasks.get(parentId);
                 parent.add(task);
             }
-            
+
             if (task.isInInbox() && task.getParentTaskId() == null) {
                 inbox.add(task);
             }
-            
+
             if (task.getContextId() == null) {
                 noContext.add(task);
             }
         }
-        
+
         // Build Context Hierarchy
         for (Context context : contexts.values()) {
             String parentId = context.getParentContextId();
             if (parentId != null) {
                 Context parent = contexts.get(parentId);
-                parent.add (context);
+                parent.add(context);
             }
         }
-       
+
         // Add tasks to contexts
         for (Task task : tasks.values()) {
             String contextId = task.getContextId();
@@ -115,31 +111,31 @@ public class DataCache {
                 task.setContext(context);
             }
         }
-        
+
         // Create Projects from their root tasks
         // Must do this after task hierarchy is woven
         // since a copy of the root tasks subtasks is taken
         for (ProjectInfo projInfo : projInfos.values()) {
             Task rootTask = tasks.get(projInfo.getRootTaskId());
-            Project project = new Project (projInfo, rootTask);
-            
+            Project project = new Project(projInfo, rootTask);
+
             // Set containing Folder for project
             String folderId = projInfo.getFolderId();
             if (folderId != null) {
                 Folder folder = folders.get(folderId);
                 folder.add(project);
             }
-            
-            projects.put (project.getId (), project);
-            
+
+            projects.put(project.getId(), project);
+
             // Discard the root task
-            tasks.remove(rootTask.getId());   
+            tasks.remove(rootTask.getId());
         }
 
         if (!inbox.getTasks().isEmpty()) {
             projects.put(inbox.getId(), inbox);
         }
-        
+
         if (!noContext.getTasks().isEmpty()) {
             contexts.put(noContext.getId(), noContext);
         }
@@ -157,14 +153,14 @@ public class DataCache {
         return contexts;
     }
 
-    public HashMap<String,Project> getProjects() {
+    public HashMap<String, Project> getProjects() {
         return projects;
     }
-    
-    public HashMap<String,ProjectInfo> getProjectInfos() {
+
+    public HashMap<String, ProjectInfo> getProjectInfos() {
         return projInfos;
     }
-    
+
     public void add(Context context) {
         this.contexts.put(context.getId(), context);
     }
@@ -181,32 +177,33 @@ public class DataCache {
         this.folders.put(folder.getId(), folder);
     }
 
-    public static DataCache importData (File file) throws FileNotFoundException, IOException {
-        try (Reader in = new FileReader (file)) {
+    public static DataCache importData(File file) throws FileNotFoundException, IOException {
+        try (
+            Reader in = new FileReader(file)) {
             ObjectMapper mapper = new ObjectMapper();
             return mapper.readValue(in, DataCache.class);
         }
     }
 
-    public static void exportData (File file, Predicate<Node> filterFn, SQLiteDAO sqliteDAO) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, SQLException, JsonGenerationException, JsonMappingException, IOException {
-        
-        try (Connection c = sqliteDAO.getConnection(); Writer out = new FileWriter(file)) {
-            
-            Collection<Folder> folders = sqliteDAO.load(c, SQLiteDAO.FOLDER_DAO, null)
-                    .stream().filter(filterFn).collect(Collectors.toList());
-            Collection<Task> tasks = sqliteDAO.load(c, SQLiteDAO.TASK_DAO, null)
-                    .stream().filter(filterFn).collect(Collectors.toList());
-            Collection<Context> contexts = sqliteDAO.load(c, SQLiteDAO.CONTEXT_DAO, null)
-                    .stream().filter(filterFn).collect(Collectors.toList());
-    
+    public static void exportData(File file, Predicate<Node> filterFn, SQLiteDAO sqliteDAO) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+            InstantiationException, SQLException, JsonGenerationException, JsonMappingException, IOException {
+
+        try (
+            Connection c = sqliteDAO.getConnection();
+            Writer out = new FileWriter(file)) {
+
+            Collection<Folder> folders = sqliteDAO.load(c, SQLiteDAO.FOLDER_DAO, null).stream().filter(filterFn).collect(Collectors.toList());
+            Collection<Task> tasks = sqliteDAO.load(c, SQLiteDAO.TASK_DAO, null).stream().filter(filterFn).collect(Collectors.toList());
+            Collection<Context> contexts = sqliteDAO.load(c, SQLiteDAO.CONTEXT_DAO, null).stream().filter(filterFn).collect(Collectors.toList());
+
             // ProjInfos don't have a name, have to use their associated root task names
-            Set<String> taskIds = tasks.stream().map((t)->t.getId()).collect(Collectors.toSet());
-            
-            Collection<ProjectInfo> projInfos = sqliteDAO.load(c, SQLiteDAO.PROJECT_INFO_DAO, null)
-                    .stream().filter((pi)->taskIds.contains(pi.getRootTaskId())).collect(Collectors.toList());
-    
+            Set<String> taskIds = tasks.stream().map((t) -> t.getId()).collect(Collectors.toSet());
+
+            Collection<ProjectInfo> projInfos = sqliteDAO.load(c, SQLiteDAO.PROJECT_INFO_DAO, null).stream().filter((pi) -> taskIds.contains(pi.getRootTaskId()))
+                    .collect(Collectors.toList());
+
             DataCache dataCache = new DataCache(folders, projInfos, tasks, contexts);
-        
+
             ObjectMapper mapper = new ObjectMapper();
             mapper.writerWithDefaultPrettyPrinter().writeValue(out, dataCache);
         }

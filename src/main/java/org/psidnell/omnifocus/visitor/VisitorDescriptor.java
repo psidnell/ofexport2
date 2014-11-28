@@ -12,7 +12,7 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*/
+ */
 package org.psidnell.omnifocus.visitor;
 
 import org.psidnell.omnifocus.model.Node;
@@ -27,27 +27,27 @@ public class VisitorDescriptor {
     private boolean visitFolders = false;
     private boolean filterFolders;
 
-    public VisitorDescriptor visitAll () {
+    public VisitorDescriptor visitAll() {
         visitTasks = true;
         visitContexts = true;
         visitProjects = true;
         visitFolders = true;
         return this;
     }
-    
-    public VisitorDescriptor filterAll () {
+
+    public VisitorDescriptor filterAll() {
         filterTasks = true;
         filterContexts = true;
         filterProjects = true;
         filterFolders = true;
         return this;
     }
-    
+
     @SafeVarargs
-    public final VisitorDescriptor visit (Class<? extends Node>... classes) {
+    public final VisitorDescriptor visit(Class<? extends Node>... classes) {
         for (Class<? extends Node> clazz : classes) {
             switch (clazz.getSimpleName()) {
-                case "Folder" :
+                case "Folder":
                     visitFolders = true;
                     break;
                 case "Project":
@@ -63,12 +63,12 @@ public class VisitorDescriptor {
         }
         return this;
     }
-    
+
     @SuppressWarnings("unchecked")
-    public VisitorDescriptor filter (Class<? extends Node>... classes) {
+    public VisitorDescriptor filter(Class<? extends Node>... classes) {
         for (Class<? extends Node> clazz : classes) {
             switch (clazz.getSimpleName()) {
-                case "Folder" :
+                case "Folder":
                     filterFolders = true;
                     break;
                 case "Project":
@@ -84,40 +84,40 @@ public class VisitorDescriptor {
         }
         return this;
     }
-    
-    public boolean getFoldersTasks () {
-        return visitTasks ;
-    }
-    
-    public boolean getVisitTasks () {
+
+    public boolean getFoldersTasks() {
         return visitTasks;
     }
-    
-    public boolean getVisitProjects () {
+
+    public boolean getVisitTasks() {
+        return visitTasks;
+    }
+
+    public boolean getVisitProjects() {
         return visitProjects;
     }
-    
-    public boolean getVisitContexts () {
+
+    public boolean getVisitContexts() {
         return visitContexts;
     }
-    
-    public boolean getVisitFolders () {
+
+    public boolean getVisitFolders() {
         return visitFolders;
     }
- 
-    public boolean getFilterTasks () {
+
+    public boolean getFilterTasks() {
         return filterTasks;
     }
-    
-    public boolean getFilterProjects () {
+
+    public boolean getFilterProjects() {
         return filterProjects;
     }
-    
-    public boolean getFilterContexts () {
+
+    public boolean getFilterContexts() {
         return filterContexts;
     }
-    
-    public boolean getFilterFolders () {
+
+    public boolean getFilterFolders() {
         return filterFolders;
     }
 }

@@ -12,7 +12,7 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*/
+ */
 package org.psidnell.omnifocus.format;
 
 import java.io.IOException;
@@ -31,16 +31,16 @@ import org.psidnell.omnifocus.visitor.VisitorDescriptor;
 public class OPMLFormatter implements Formatter {
 
     private static final String INDENT = "  ";
-    
+
     @Override
     public void format(Node root, Writer out) throws IOException {
-        
+
         FormattingVisitor visitor = new FormattingVisitor(out);
-        
+
         out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         out.write("<opml version=\"2.0\">");
         out.write("<head>");
-        out.write("    <title>"+ root.getName() + "</title>");
+        out.write("    <title>" + root.getName() + "</title>");
         out.write("<head>");
         out.write("</body>");
         Traverser.traverse(visitor, root);
@@ -48,72 +48,70 @@ public class OPMLFormatter implements Formatter {
     }
 
     private static class FormattingVisitor implements Visitor {
-    
+
         private static final VisitorDescriptor WHAT = new VisitorDescriptor().visitAll();
-        
+
         private int depth = 0;
         private final Writer out;
-        
-        private FormattingVisitor (Writer out) {
+
+        private FormattingVisitor(Writer out) {
             this.out = out;
         }
-        
+
         @Override
         public VisitorDescriptor getWhat() {
-           return WHAT;
+            return WHAT;
         }
-        
+
         @Override
         public void enter(Folder node) throws IOException {
             startNode(node.getName());
         }
-        
+
         @Override
-        public void exit (Folder node) throws IOException {
-            endNode ();
+        public void exit(Folder node) throws IOException {
+            endNode();
         }
-    
+
         public void enter(Project node) throws IOException {
             startNode(node.getName());
         }
-        
+
         @Override
-        public void exit (Project node) throws IOException {
-            endNode ();
+        public void exit(Project node) throws IOException {
+            endNode();
         }
-    
-        public void enter(Context node)
-                throws IOException {
+
+        public void enter(Context node) throws IOException {
             startNode(node.getName());
         }
-        
+
         @Override
-        public void exit (Context node) throws IOException {
-            endNode ();
+        public void exit(Context node) throws IOException {
+            endNode();
         }
-    
+
         public void enter(Task node) throws IOException {
             startNode(node.getName());
         }
-        
+
         @Override
-        public void exit (Task node) throws IOException {
-            endNode ();
+        public void exit(Task node) throws IOException {
+            endNode();
         }
-    
-        
-        private void startNode (String name) throws IOException {
+
+        private void startNode(String name) throws IOException {
             out.write(indent(depth));
             out.write("<outline text=\"" + name + "\">\n");
             depth++;
         }
-        
-        private void endNode () throws IOException {
+
+        private void endNode() throws IOException {
             depth--;
             out.write(indent(depth));
             out.write("</outline>\n");
         }
-        
+
         String indent(int depth) {
             StringBuilder indent = new StringBuilder();
             for (int i = 0; i < depth; i++) {

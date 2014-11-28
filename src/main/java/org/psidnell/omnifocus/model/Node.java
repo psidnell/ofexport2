@@ -12,7 +12,7 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*/
+ */
 package org.psidnell.omnifocus.model;
 
 import java.util.LinkedList;
@@ -36,9 +36,9 @@ public abstract class Node extends ExpressionFunctions {
     private boolean included = true;
 
     private int rank;
-    
+
     @SQLiteProperty
-    @ExprAttribute (help="item name/text.")
+    @ExprAttribute(help = "item name/text.")
     public String getName() {
         return name;
     }
@@ -47,7 +47,7 @@ public abstract class Node extends ExpressionFunctions {
         this.name = name;
     }
 
-    @SQLiteProperty (name="persistentIdentifier")
+    @SQLiteProperty(name = "persistentIdentifier")
     public String getId() {
         return id;
     }
@@ -57,53 +57,52 @@ public abstract class Node extends ExpressionFunctions {
     }
 
     @SQLiteProperty
-    public int getRank () {
+    public int getRank() {
         return rank;
     }
-    
-    public void setRank (int rank) {
+
+    public void setRank(int rank) {
         this.rank = rank;
     }
-    
+
     @JsonIgnore
     public abstract String getType();
 
     @JsonIgnore
-    @ExprAttribute (help="true during filtering evaluation if a parent item has matched.")
-    public boolean isIncluded () {
+    @ExprAttribute(help = "true during filtering evaluation if a parent item has matched.")
+    public boolean isIncluded() {
         return included;
     }
-    
-    public void setIncluded (boolean included) {
+
+    public void setIncluded(boolean included) {
         this.included = included;
     }
-    
-    public void include (boolean projectPath) {
+
+    public void include(boolean projectPath) {
         if (!included) {
             // Include this node and all children
-            Traverser.traverse(new IncludeVisitor (true), this);
-            
+            Traverser.traverse(new IncludeVisitor(true), this);
+
             // Include path to root
             if (projectPath) {
                 for (Node node : getProjectPath()) {
                     node.setIncluded(true);
                 }
-            }
-            else {
+            } else {
                 for (Node node : getContextPath()) {
                     node.setIncluded(true);
                 }
             }
         }
     }
-    
-    public void exclude () {
+
+    public void exclude() {
         if (included) {
             // Include this node and all children
-            Traverser.traverse(new IncludeVisitor (false), this);
+            Traverser.traverse(new IncludeVisitor(false), this);
         }
     }
-    
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -111,34 +110,30 @@ public abstract class Node extends ExpressionFunctions {
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         return result;
     }
-    
-    public abstract List<Node> getProjectPath ();
-    
-    public abstract List<Node> getContextPath ();
-    
+
+    public abstract List<Node> getProjectPath();
+
+    public abstract List<Node> getContextPath();
+
     @JsonIgnore
-    protected List<Node> getProjectPath (Node parent){
+    protected List<Node> getProjectPath(Node parent) {
         List<Node> path;
-        if (parent != null)
-        {
+        if (parent != null) {
             path = parent.getProjectPath();
-        }
-        else {
-            path = new LinkedList<> ();
+        } else {
+            path = new LinkedList<>();
         }
         path.add(this);
         return path;
     }
-    
+
     @JsonIgnore
-    protected List<Node> getContextPath (Node parent){
+    protected List<Node> getContextPath(Node parent) {
         List<Node> path;
-        if (parent != null)
-        {
+        if (parent != null) {
             path = parent.getContextPath();
-        }
-        else {
-            path = new LinkedList<> ();
+        } else {
+            path = new LinkedList<>();
         }
         path.add(this);
         return path;
@@ -160,7 +155,7 @@ public abstract class Node extends ExpressionFunctions {
             return false;
         return true;
     }
-    
+
     @Override
     public String toString() {
         return getType() + ":'" + name + "'";

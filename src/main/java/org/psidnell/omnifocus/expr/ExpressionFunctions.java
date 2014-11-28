@@ -1,11 +1,3 @@
-package org.psidnell.omnifocus.expr;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-
 /*
  Copyright 2014 Paul Sidnell
 
@@ -21,6 +13,13 @@ import java.util.GregorianCalendar;
  See the License for the specific language governing permissions and
  limitations under the License.
  */
+package org.psidnell.omnifocus.expr;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class ExpressionFunctions {
 
@@ -28,48 +27,47 @@ public class ExpressionFunctions {
 
     protected static final long DAY = 1000 * 60 * 60 * 24;
 
-    
     public Date date(String dateStr) throws ParseException {
         Calendar today = new GregorianCalendar();
-        return date (dateStr, today);
+        return date(dateStr, today);
     }
-    
+
     public Date date(String dateStr, Calendar today) throws ParseException {
         roundToDay(today);
         dateStr = dateStr.trim().toLowerCase();
-        
+
         Date result = parseDateByName(dateStr, today);
-        
+
         if (dateStr.equals("today")) {
             return days(0, today);
         }
-        
+
         if (dateStr.equals("yesterday")) {
             return days(-1, today);
         }
-        
+
         if (dateStr.equals("tomorrow")) {
             return days(1, today);
         }
-        
+
         if (result == null) {
-            result = parseDateByByDayOfMonth (dateStr, today);
+            result = parseDateByByDayOfMonth(dateStr, today);
         }
-        
-        if (result == null)  {
-            result = parseDateByUnit (dateStr, today);
+
+        if (result == null) {
+            result = parseDateByUnit(dateStr, today);
         }
-        
+
         if (result == null) {
             result = roundToDay(YYYYMMDD.parse(dateStr));
         }
-        
+
         return result;
     }
-    
+
     private Date parseDateByByDayOfMonth(String dateStr, Calendar today) {
-        
-        StringBuilder numStr = new StringBuilder ();
+
+        StringBuilder numStr = new StringBuilder();
         int i = 0;
         for (i = 0; i < dateStr.length() && Character.isDigit(dateStr.charAt(i)); i++) {
             numStr.append(dateStr.charAt(i));
@@ -79,29 +77,28 @@ public class ExpressionFunctions {
         }
         int num = Integer.parseInt(numStr.toString());
         dateStr = dateStr.substring(i);
-        
+
         switch (dateStr) {
             case "st":
             case "th":
             case "nd":
                 roundToDay(today);
-                today.set(Calendar.DAY_OF_MONTH,  num);
+                today.set(Calendar.DAY_OF_MONTH, num);
                 return today.getTime();
         }
         return null;
     }
-    
+
     private Date parseDateByUnit(String dateStr, Calendar today) {
-        int direction = 1;       
+        int direction = 1;
         if (dateStr.startsWith("+")) {
             dateStr = dateStr.replaceFirst("\\+", "").trim();
-        }
-        else if (dateStr.startsWith("-")) {
+        } else if (dateStr.startsWith("-")) {
             direction = -1;
             dateStr = dateStr.replaceFirst("-", "").trim();
         }
-        
-        StringBuilder numStr = new StringBuilder ();
+
+        StringBuilder numStr = new StringBuilder();
         int i = 0;
         for (i = 0; i < dateStr.length() && Character.isDigit(dateStr.charAt(i)); i++) {
             numStr.append(dateStr.charAt(i));
@@ -111,7 +108,7 @@ public class ExpressionFunctions {
         }
         int num = Integer.parseInt(numStr.toString());
         dateStr = dateStr.substring(i);
-        
+
         switch (dateStr) {
             case "d":
             case "day":
@@ -144,18 +141,16 @@ public class ExpressionFunctions {
             direction = 1;
             offset = 0;
             dateStr = dateStr.replaceFirst("this", "").trim();
-        }
-        else if (dateStr.startsWith("+")) {
+        } else if (dateStr.startsWith("+")) {
             direction = 1;
             offset = 1;
             dateStr = dateStr.replaceFirst("\\+", "").trim();
-        }
-        else if (dateStr.startsWith("-")) {
+        } else if (dateStr.startsWith("-")) {
             direction = -1;
             offset = 1;
             dateStr = dateStr.replaceFirst("-", "").trim();
         }
-        
+
         switch (dateStr) {
             case "mon":
             case "monday":
@@ -194,7 +189,7 @@ public class ExpressionFunctions {
                 return findMonth(Calendar.MAY, direction, offset, today);
             case "jun":
             case "june":
-                return findMonth(Calendar.JUNE, direction, offset, today); 
+                return findMonth(Calendar.JUNE, direction, offset, today);
             case "jul":
             case "july":
                 return findMonth(Calendar.JULY, direction, offset, today);
@@ -221,15 +216,15 @@ public class ExpressionFunctions {
         int day = adjustStartOfWeek(cal.get(Calendar.DAY_OF_WEEK));
         int diff = adjustStartOfWeek(target) - day;
         int off = direction * unitOffset * 7 + diff;
-        cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH)  + off);
+        cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH) + off);
         return cal.getTime();
     }
-    
+
     protected Date findMonth(int target, int direction, int unitOffset, Calendar cal) {
         int month = cal.get(Calendar.MONTH);
         int diff = target - month;
         int off = direction * unitOffset * 12 + diff;
-        cal.set(Calendar.MONTH, cal.get(Calendar.MONTH)  + off);
+        cal.set(Calendar.MONTH, cal.get(Calendar.MONTH) + off);
         cal.set(Calendar.DAY_OF_MONTH, 1);
         roundToDay(cal);
         return cal.getTime();
@@ -239,8 +234,7 @@ public class ExpressionFunctions {
         // DOW starts on Sunday but want Monday
         if (dow == Calendar.SUNDAY) {
             return 7;
-        }
-        else {
+        } else {
             return dow - Calendar.SUNDAY;
         }
     }
@@ -250,20 +244,20 @@ public class ExpressionFunctions {
         return today.getTime();
     }
 
-    public boolean within (Date date, String lower, String upper) throws ParseException {
+    public boolean within(Date date, String lower, String upper) throws ParseException {
         Date lowerDate = date(lower);
         Date upperDate = date(upper);
         return date != null && date.getTime() >= lowerDate.getTime() && date.getTime() <= upperDate.getTime();
     }
-    
+
     public static void roundToDay(Calendar today) {
         today.set(Calendar.HOUR_OF_DAY, 0);
         today.set(Calendar.MINUTE, 0);
         today.set(Calendar.SECOND, 0);
         today.set(Calendar.MILLISECOND, 0);
     }
-    
-    public static Date roundToDay (Date d) {
-        return d == null ? null : new Date (DAY * (d.getTime() / DAY));
+
+    public static Date roundToDay(Date d) {
+        return d == null ? null : new Date(DAY * (d.getTime() / DAY));
     }
 }
