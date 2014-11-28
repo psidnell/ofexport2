@@ -284,12 +284,18 @@ public class XMLTest extends FormatTest {
                 "          </tasks>",
                 "          <contexts/>",
                 "          <parentContextId/>",
+                "          <active>false</active>",
+                "          <allowsNextAction>false</allowsNextAction>",
                 "        </contexts>",
                 "      </contexts>",
                 "      <parentContextId/>",
+                "      <active>false</active>",
+                "      <allowsNextAction>false</allowsNextAction>",
                 "    </contexts>",
                 "  </contexts>",
                 "  <parentContextId/>",
+                "  <active>false</active>",
+                "  <allowsNextAction>false</allowsNextAction>",
                 "</Context>",
             }, out.toString().split("\n"));
     }

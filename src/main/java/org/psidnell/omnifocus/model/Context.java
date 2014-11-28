@@ -34,6 +34,10 @@ public class Context extends Node {
     private String parentContextId;
 
     private Context parent;
+
+    private boolean active;
+
+    private boolean allowsNextAction;
     
     public Context () {
     }
@@ -91,10 +95,31 @@ public class Context extends Node {
     public Context getParent () {
         return parent;
     }
+
     public void setParent(Context parent) {
         this.parent = parent;
     }
 
+    @SQLiteProperty
+    @ExprAttribute (help="true if context is active")
+    public boolean getActive () {
+        return active;
+    }
+    
+    public void setActive (boolean active) {
+        this.active = active;
+    }
+    
+    @SQLiteProperty
+    @ExprAttribute (help="true if context allows next action")
+    public boolean getAllowsNextAction () {
+        return allowsNextAction;
+    }
+    
+    public void setAllowsNextAction (boolean allowsNextAction) {
+        this.allowsNextAction = allowsNextAction;
+    }
+    
     @Override
     @JsonIgnore
     public List<Node> getProjectPath() {

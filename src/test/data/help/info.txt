@@ -20,11 +20,14 @@ Project:
     note (string): note text.
     remaining (boolean): item is remaining.
     sequential (boolean): item is sequential.
+    status (string): the items status: active, inactive, done
     taskCount (int): number of tasks.
     tasks (list): the sub tasks
     type (string): the items type
 
 Context:
+    active (boolean): true if context is active
+    allowsNextAction (boolean): true if context allows next action
     contextCount (int): number of contexts.
     included (boolean): true during filtering evaluation if a parent item has matched.
     name (string): item name/text.

@@ -82,7 +82,7 @@ public class SQLiteClassDescriptor<T> {
                         switch (desc.getType().getSimpleName()) {
                             case "Boolean": 
                             case "boolean" :
-                                value =  1 == (Integer) rawValue;
+                                value =  0 != (Integer) rawValue;
                                 break;
                         }
                     }

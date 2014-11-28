@@ -26,7 +26,7 @@ public class Project extends CommonProjectTask {
 
     public static final String TYPE = "Project";
     private Folder folder;
-    private Status status;
+    private String status;
 
     public Project () {
     }
@@ -72,8 +72,9 @@ public class Project extends CommonProjectTask {
     public void setFolder(Folder folder) {
         this.folder = folder;
     }
-
-    public Status getStatus() {
+    
+    @ExprAttribute(help="the items status: active, inactive, done")
+    public String getStatus() {
         return status;
     }
 
@@ -94,12 +95,12 @@ public class Project extends CommonProjectTask {
     @Override
     @ExprAttribute (help="item is available.")
     public boolean isAvailable() {
-        return !isCompleted() && Status.Active.equals(getStatus ());
+        return !isCompleted() && "Active".equals(status);
     }
 
     @Override
     @ExprAttribute (help="item is remaining.")
     public boolean isRemaining() {
-        return !isCompleted() && !Status.Done.equals(getStatus ());
+        return !isCompleted() && !"Done".equals(getStatus ());
     }
 }
