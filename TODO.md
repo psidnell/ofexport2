@@ -2,7 +2,6 @@
 
 ## ofexport2
 
-- Make template name equal suffix so it can be inferred
 - "man" opt instead of "i" print comprehensive help - sub pages? same source as markdown help?
 - documentation
 - Timing and stats

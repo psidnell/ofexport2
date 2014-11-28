@@ -28,6 +28,7 @@
 - HTML notes - and verify in browser on real example (project & context mode)
 - Check Markdown displays properly (including notes, project and context mode)
 - How to select what fields to include (ognl exprs to nullify?) - bother? just fix template
+- Make template name equal suffix so it can be inferred
 - Markdown template
 - Whitespace usage - can  avoid long lines? eatspace option? (make templates more readable)
 - use visit/recurse: http://freemarker.org/docs/ref_directive_visit.html (maybe)
