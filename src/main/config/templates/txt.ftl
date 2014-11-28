@@ -48,7 +48,7 @@ $$$$$$$$$$$$$$$
 $ MACRO: doTask 
 $$$$$$$$$$$$$$$
 -->
-<#macro doTask task depth, projectMode>
+<#macro doTask task depth projectMode>
 <@doIndent indent=depth/>
 <#if task.completed>[X]<#else>[ ]</#if> ${task.name}
 <#if projectMode><#list task.tasks as t><@doTask task=t depth=depth+1  projectMode=projectMode/></#list></#if>

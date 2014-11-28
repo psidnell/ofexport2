@@ -3,6 +3,7 @@
 ## ofexport2
 
 - "man" opt instead of "i" print comprehensive help - sub pages? same source as markdown help?
+- Scan all the DB locations
 - documentation
 - Timing and stats
 

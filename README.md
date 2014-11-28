@@ -33,6 +33,7 @@ TBD
 
 ## Installation ##
 
+I should upload a zipped artifact, it's unreasonable to make people build it.
 
 ## Examples/CheatSheet ##
 
@@ -64,7 +65,7 @@ such as FreeMarker and Jackson. I also write better Java than Python.
 I originally wanted to access the OmniFocus data using AppleScript (or JavaScript
 on Yosemite) and did actually get as far as a working prototype that serialised
 JSON data from the osascript command back to the controlling program. While it was
-en the end quite simple to do it was unbelievably slow taking sometimes minutes for
+in the end quite simple to do it was unbelievably slow, taking sometimes minutes for
 a large export rather than about a second when accessing the database directly.
 
 ## Known Issues ##
