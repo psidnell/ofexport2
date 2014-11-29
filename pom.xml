@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.psidnell</groupId>
 	<artifactId>ofexport-v2</artifactId>
@@ -7,10 +8,19 @@
 	<properties>
 		<jacksonVersion>2.4.3</jacksonVersion>
 	</properties>
-	
+
 	<scm>
-    	<developerConnection>scm:git:https://github.com/psidnell/ofexport2.git</developerConnection>
-  	</scm>
+		<developerConnection>scm:git:https://github.com/psidnell/ofexport2.git</developerConnection>
+	</scm>
+
+	<distributionManagement>
+		<repository>
+			<id>myRepoId</id>
+			<name>myCompanyReporsitory</name>
+			<!-- need to create this first: mkdir ~/.m2/releases -->
+			<url>file://${env.HOME}/.m2/releases</url>
+		</repository>
+	</distributionManagement>
 
 	<dependencies>
 		<dependency>
