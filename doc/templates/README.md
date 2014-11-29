@@ -4,27 +4,27 @@
 
 ## Table of Contents
 
-- [Introduction]
-- [Audience]
-- [How it works]
-- [Installation]
-- [Uninstallation]
-- [Usage]
-    - [Overview]
-    - [Filtering]
-    - [Sorting]
-- [Reference]
-    - [Output and Formats]
-    - [Project vs Context Mode]
-    - [Matching and Regular Expressions]
-    - [Date Filters]
-    - [Sorting] 
-    - [Examples]
-- [Writing a Template]
-- [Building it Yourself]
-- [ofexport vs ofexport2]
-- [Other Approaches Considered]
-- [Known Issues]
+- [Introduction](#introduction)
+- [Audience](#audience)
+- [How it works](#how-it-works)
+- [Installation](#installation)
+- [Uninstallation](#uninstallation)
+- [Usage](#usage)
+    - [Overview](#overview)
+    - [Filtering](#filtering)
+    - [Sorting](#sorting)
+- [Reference](#reference)
+    - [Output and Formats](#output-and-formats)
+    - [Project vs Context Mode](#project-vs-context-mode)
+    - [Matching and Regular Expressions](#matching-and-regular-expressions)
+    - [Date Filters](#date-filters)
+    - [Sorting] (#sorting)
+    - [Examples](#examples)
+- [Writing a Template](#writing-a-template)
+- [Building it Yourself](#building-it-yourself)
+- [ofexport vs ofexport2](#ofexport-vs-ofexport2)
+- [Other Approaches Considered](#other-approaches-considered)
+- [Known Issues](#known-issues)
 
 ## Introduction
 
