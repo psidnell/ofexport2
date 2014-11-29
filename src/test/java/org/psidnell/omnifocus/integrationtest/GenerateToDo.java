@@ -22,6 +22,11 @@ import java.util.GregorianCalendar;
 import org.junit.Test;
 import org.psidnell.omnifocus.Main;
 
+/**
+ * @author psidnell
+ *
+ * Requires access to the OmniFocus database.
+ */
 public class GenerateToDo {
 
     public static final SimpleDateFormat FORMAT = new SimpleDateFormat("yyyy-MM-MMM");

@@ -23,16 +23,22 @@ import org.psidnell.omnifocus.model.Task;
 import org.psidnell.omnifocus.visitor.Visitor;
 import org.psidnell.omnifocus.visitor.VisitorDescriptor;
 
+/**
+ * @author psidnell
+ *
+ * Traverses the node tree applying the OGNL expression to each node type required.
+ * 
+ * Two descriptors are supplied to describe which node types to visit and which node types
+ * have the expression applied. 
+ */
 public class ExprVisitor implements Visitor {
 
-    private VisitorDescriptor visitWhat;
-    private VisitorDescriptor applyToWhat;
-    private Expression expr;
-    private boolean projectMode;
+    protected VisitorDescriptor visitWhat;
+    protected VisitorDescriptor applyToWhat;
+    protected Expression expr;
 
-    public ExprVisitor(String expr, boolean projectMode, VisitorDescriptor visitWhat, VisitorDescriptor applyToWhat) {
+    public ExprVisitor(String expr, VisitorDescriptor visitWhat, VisitorDescriptor applyToWhat) {
         this.expr = new Expression(expr);
-        this.projectMode = projectMode;
         this.visitWhat = visitWhat;
         this.applyToWhat = applyToWhat;
     }
@@ -70,12 +76,7 @@ public class ExprVisitor implements Visitor {
         }
     }
 
-    private void evaluate(Node node) {
-        boolean include = expr.eval(node, Boolean.class);
-        if (include) {
-            node.include(projectMode);
-        } else {
-            node.exclude();
-        }
+    protected void evaluate(Node node) {
+        expr.eval(node);
     }
 }

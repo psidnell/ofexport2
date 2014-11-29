@@ -15,6 +15,14 @@ limitations under the License.
  */
 package org.psidnell.omnifocus.cli;
 
+/**
+ * @author psidnell
+ *
+ * @param <P>
+ * 
+ * An action that can be associated with a command line option.
+ *  
+ */
 public interface ActiveOptionProcess<P> {
     void process(P program, ActiveOption<P> o) throws Exception;
 }

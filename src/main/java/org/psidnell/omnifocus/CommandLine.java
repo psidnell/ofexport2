@@ -19,7 +19,7 @@ import org.apache.commons.cli.Options;
 import org.apache.log4j.Level;
 import org.psidnell.omnifocus.cli.ActiveOption;
 import org.psidnell.omnifocus.cli.ActiveOptionProcessor;
-import org.psidnell.omnifocus.expr.AttribPrinter;
+import org.psidnell.omnifocus.expr.ExprAttributePrinter;
 import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Project;
@@ -27,6 +27,12 @@ import org.psidnell.omnifocus.model.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * @author psidnell
+ * 
+ * Command line processing. Contains the options themselves and the values
+ * the options affect.
+ */
 public class CommandLine {
 
     protected final static Logger LOGGER = LoggerFactory.getLogger(CommandLine.class);
@@ -128,6 +134,16 @@ public class CommandLine {
                 AFTER_LOAD));
         
         // GENERAL
+        
+        OPTIONS.addOption(new ActiveOption<CommandLine>(
+                "e", "expr", true, "include items (eany type) where context expression is true.",
+                (m,o)->m.ofexport.addExpression(o.nextValue()),
+                AFTER_LOAD));
+        
+        OPTIONS.addOption(new ActiveOption<CommandLine>(
+                "m", "modexpr", true, "modify a node value.",
+                (m,o)->m.ofexport.addModifyExpression(o.nextValue()),
+                AFTER_LOAD));
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "p", "prune", false, "prune empty folders, projects and contexts.",
@@ -172,13 +188,13 @@ public class CommandLine {
     }
 
     private void printAdditionalInfo() {
-        AttribPrinter.print(Folder.class);
+        ExprAttributePrinter.print(Folder.class);
         System.out.println();
-        AttribPrinter.print(Project.class);
+        ExprAttributePrinter.print(Project.class);
         System.out.println();
-        AttribPrinter.print(Context.class);
+        ExprAttributePrinter.print(Context.class);
         System.out.println();
-        AttribPrinter.print(Task.class);
+        ExprAttributePrinter.print(Task.class);
         exitBeforeLoad = true;
     }
 

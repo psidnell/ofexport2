@@ -23,6 +23,12 @@ import org.psidnell.omnifocus.sqlite.SQLiteProperty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+/**
+ * @author psidnell
+ *
+ * Represents an OmniFocus Context.
+ * 
+ */
 public class Context extends Node {
 
     public static final String TYPE = "Context";

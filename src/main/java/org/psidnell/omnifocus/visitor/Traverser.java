@@ -21,6 +21,17 @@ import org.psidnell.omnifocus.model.Node;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
 
+/**
+ * @author psidnell
+ * 
+ * An implementation of the visitor pattern.
+ * 
+ * Walks the node tree applying Visitor methods on descent,
+ * ascent and on all lists of sub nodes.
+ * 
+ * A descriptor controls which node types are visited.
+ * 
+ */
 public class Traverser {
 
     public static void traverse(Visitor visitor, Node node) {

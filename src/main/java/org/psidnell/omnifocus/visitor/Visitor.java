@@ -23,6 +23,18 @@ import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
 
+/**
+ * @author psidnell
+ *
+ * The Visitor interface.
+ * 
+ * The enter/exit methods are called on the way in/out of a node during traversal.
+ * 
+ * The filter methods are called on all lists of sub-nodes on ascent/descent.
+ * 
+ * The include methods are called on each child node on ascent/descent.
+ * 
+ */
 public interface Visitor {
 
     VisitorDescriptor getWhat();

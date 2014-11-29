@@ -18,9 +18,16 @@ package org.psidnell.omnifocus;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class OFApplicationContext {
+/**
+ * @author psidnell
+ * 
+ * Utility factory class for building the default Spring application context.
+ */
+public class ApplicationContextFactory {
+
+    private static final String CONFIG_XML = "config.xml";
 
     public static ApplicationContext create() {
-        return new ClassPathXmlApplicationContext("config.xml");
+        return new ClassPathXmlApplicationContext(CONFIG_XML);
     }
 }

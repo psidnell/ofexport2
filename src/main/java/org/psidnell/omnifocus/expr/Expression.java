@@ -21,6 +21,11 @@ import ognl.OgnlException;
 
 import org.psidnell.omnifocus.model.Node;
 
+/**
+ * @author psidnell
+ *
+ * A minimal adaptor around the OGNL expression parser.
+ */
 public class Expression {
 
     private static final OgnlContext OGNL_CONTEXT = new OgnlContext();

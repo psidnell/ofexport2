@@ -24,6 +24,16 @@ import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
 
+/**
+ * @author psidnell
+ *
+ * @param <T>
+ * 
+ * Describes a class used for storing data extracted from SQLite.
+ * 
+ * The class is searched for annotated getter methods to determine
+ * the mapping.
+ */
 public class SQLiteClassDescriptor<T> {
     private String columnsForSelect;
     private LinkedList<SQLITEPropertyDescriptor> properties = new LinkedList<>();
@@ -94,7 +104,6 @@ public class SQLiteClassDescriptor<T> {
         return tasks;
     }
 
-    // TODO prepared statements
     private Object getValue(ResultSet rs, SQLITEPropertyDescriptor desc) throws SQLException {
         Object rawValue;
         switch (desc.getType().getSimpleName()) {

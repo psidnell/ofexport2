@@ -27,6 +27,11 @@ import org.psidnell.omnifocus.visitor.Traverser;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+/**
+ * @author psidnell
+ * 
+ * The root class for all nodes in the object tree.
+ */
 public abstract class Node extends ExpressionFunctions {
 
     protected String name;

@@ -25,7 +25,7 @@ import java.sql.SQLException;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.psidnell.omnifocus.OFApplicationContext;
+import org.psidnell.omnifocus.ApplicationContextFactory;
 import org.psidnell.omnifocus.model.DataCache;
 import org.psidnell.omnifocus.sqlite.SQLiteDAO;
 import org.psidnell.omnifocus.util.IOUtils;
@@ -35,9 +35,14 @@ import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * @author psidnell
+ *
+ * Requires access to the OmniFocus database.
+ */
 public class DataExportImportTest {
 
-    private static final ApplicationContext appContext = OFApplicationContext.create();
+    private static final ApplicationContext appContext = ApplicationContextFactory.create();
     
     private SQLiteDAO sqliteDAO;
     

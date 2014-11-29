@@ -23,6 +23,11 @@ import org.psidnell.omnifocus.sqlite.SQLiteProperty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+/**
+ * @author psidnell
+ *
+ * Represents an OmniFocus Folder
+ */
 public class Folder extends Node {
 
     public static final String TYPE = "Folder";

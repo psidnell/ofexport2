@@ -20,6 +20,12 @@ import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
 
+/**
+ * @author psidnell
+ * 
+ * Set all nodes include flag to the specified value.
+ * 
+ */
 public class IncludeVisitor implements Visitor {
 
     private static final VisitorDescriptor WHAT = new VisitorDescriptor().visitAll();

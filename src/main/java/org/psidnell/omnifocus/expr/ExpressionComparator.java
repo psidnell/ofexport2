@@ -19,6 +19,13 @@ import java.util.Comparator;
 
 import org.psidnell.omnifocus.model.Node;
 
+/**
+ * @author psidnell
+ *
+ * @param <T>
+ * 
+ * A comparator that uses OGNL expressions to extract the value to be used for comparison.
+ */
 public class ExpressionComparator<T extends Node> implements Comparator<T> {
 
     private final Expression expression;

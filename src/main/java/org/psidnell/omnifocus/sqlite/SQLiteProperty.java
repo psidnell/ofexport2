@@ -18,6 +18,10 @@ package org.psidnell.omnifocus.sqlite;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+/**
+ * @author psidnell
+ * Annotation used to mark accessors used in the SQLite object/relational mapping.
+ */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SQLiteProperty {
     String name() default "";

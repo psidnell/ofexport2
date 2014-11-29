@@ -24,6 +24,12 @@ import org.psidnell.omnifocus.util.IOUtils;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
+/**
+ * @author psidnell
+ *
+ * Formats the node by dumping the entire tree with Jackson.
+ *
+ */
 public class XMLFormatter implements Formatter {
 
     private static XmlMapper MAPPER = new XmlMapper();

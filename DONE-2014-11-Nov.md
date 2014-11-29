@@ -13,6 +13,10 @@
 > ** maybe Im pruning too early in the availability filter?
 > dont prevent inclusion???
 
+- Code Quality 
+  - Address TODOs
+  - Only integration tests should use real DB
+  - format code
 - Sorting
 - Prune option, add expressions automatically
 - Problem: -cn Home not showing me sub contexts

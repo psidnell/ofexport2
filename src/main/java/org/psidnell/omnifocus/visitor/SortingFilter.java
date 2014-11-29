@@ -23,6 +23,14 @@ import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
 
+/**
+ * @author psidnell
+ * 
+ * Sort all the nodes in the tree.
+ * 
+ * Any number of comparators can be added by node type.
+ * 
+ */
 public class SortingFilter implements Visitor {
 
     private static final VisitorDescriptor WHAT = new VisitorDescriptor().visitAll().filterAll();

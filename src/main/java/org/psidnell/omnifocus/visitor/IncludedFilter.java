@@ -20,6 +20,12 @@ import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
 
+/**
+ * @author psidnell
+ * 
+ * Filter out all nodes who's include flag is false.
+ * 
+ */
 public class IncludedFilter implements Visitor {
 
     private static final VisitorDescriptor WHAT = new VisitorDescriptor().visitAll().filterAll();

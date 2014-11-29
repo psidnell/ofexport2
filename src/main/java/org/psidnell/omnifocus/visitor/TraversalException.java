@@ -15,6 +15,12 @@ limitations under the License.
  */
 package org.psidnell.omnifocus.visitor;
 
+/**
+ * @author psidnell
+ * 
+ * Sometime things don't turn out how you'd hoped.
+ * 
+ */
 public class TraversalException extends RuntimeException {
 
     public TraversalException(Exception e) {

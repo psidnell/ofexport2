@@ -23,6 +23,12 @@ import org.psidnell.omnifocus.util.IOUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * @author psidnell
+ * 
+ * Formats the node by dumping the entire tree with Jackson.
+ * 
+ */
 public class JSONFormatter implements Formatter {
 
     private static ObjectMapper MAPPER = new ObjectMapper();

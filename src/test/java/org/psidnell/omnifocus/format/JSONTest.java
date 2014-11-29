@@ -31,9 +31,7 @@ public class JSONTest extends FormatTest {
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
-        
-        System.out.println(out);
-        
+                
         Diff.diff (new String[]
             {
                 "{",
@@ -169,9 +167,7 @@ public class JSONTest extends FormatTest {
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
-        
-        System.out.println(out);
-        
+                
         Diff.diff (new String[]
             {
                 "{",

@@ -37,6 +37,17 @@ import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * @author psidnell
+ * 
+ * A repository for all the data loaded/saved by the application.
+ * 
+ * Also weaves the flat object structure into it's tree form by
+ * (for example) using the object references provided by the
+ * database and connecting the objects directly.
+ * 
+ * 
+ */
 public class DataCache {
 
     private HashMap<String, Folder> folders = new HashMap<>();
@@ -177,6 +188,14 @@ public class DataCache {
         this.folders.put(folder.getId(), folder);
     }
 
+    /**
+     * Load raw data from a json file. Currently used for testing to avoid using live DB data.
+     * 
+     * @param file
+     * @return
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
     public static DataCache importData(File file) throws FileNotFoundException, IOException {
         try (
             Reader in = new FileReader(file)) {
@@ -185,6 +204,21 @@ public class DataCache {
         }
     }
 
+    /**
+     * Exports data from the DB to a json file. Currently used for testing.
+     * 
+     * @param file
+     * @param filterFn allows data to be filtered to reduce volume e.g. items whose name starts with "%Test".
+     * @param sqliteDAO
+     * @throws IllegalAccessException
+     * @throws IllegalArgumentException
+     * @throws InvocationTargetException
+     * @throws InstantiationException
+     * @throws SQLException
+     * @throws JsonGenerationException
+     * @throws JsonMappingException
+     * @throws IOException
+     */
     public static void exportData(File file, Predicate<Node> filterFn, SQLiteDAO sqliteDAO) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
             InstantiationException, SQLException, JsonGenerationException, JsonMappingException, IOException {
 
@@ -192,14 +226,14 @@ public class DataCache {
             Connection c = sqliteDAO.getConnection();
             Writer out = new FileWriter(file)) {
 
-            Collection<Folder> folders = sqliteDAO.load(c, SQLiteDAO.FOLDER_DAO, null).stream().filter(filterFn).collect(Collectors.toList());
-            Collection<Task> tasks = sqliteDAO.load(c, SQLiteDAO.TASK_DAO, null).stream().filter(filterFn).collect(Collectors.toList());
-            Collection<Context> contexts = sqliteDAO.load(c, SQLiteDAO.CONTEXT_DAO, null).stream().filter(filterFn).collect(Collectors.toList());
+            Collection<Folder> folders = sqliteDAO.load(c, SQLiteDAO.FOLDER_DAO).stream().filter(filterFn).collect(Collectors.toList());
+            Collection<Task> tasks = sqliteDAO.load(c, SQLiteDAO.TASK_DAO).stream().filter(filterFn).collect(Collectors.toList());
+            Collection<Context> contexts = sqliteDAO.load(c, SQLiteDAO.CONTEXT_DAO).stream().filter(filterFn).collect(Collectors.toList());
 
             // ProjInfos don't have a name, have to use their associated root task names
             Set<String> taskIds = tasks.stream().map((t) -> t.getId()).collect(Collectors.toSet());
 
-            Collection<ProjectInfo> projInfos = sqliteDAO.load(c, SQLiteDAO.PROJECT_INFO_DAO, null).stream().filter((pi) -> taskIds.contains(pi.getRootTaskId()))
+            Collection<ProjectInfo> projInfos = sqliteDAO.load(c, SQLiteDAO.PROJECT_INFO_DAO).stream().filter((pi) -> taskIds.contains(pi.getRootTaskId()))
                     .collect(Collectors.toList());
 
             DataCache dataCache = new DataCache(folders, projInfos, tasks, contexts);

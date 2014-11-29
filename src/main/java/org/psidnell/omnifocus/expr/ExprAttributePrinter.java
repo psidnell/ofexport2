@@ -20,7 +20,12 @@ import java.util.TreeSet;
 
 import org.psidnell.omnifocus.model.Node;
 
-public class AttribPrinter {
+/**
+ * @author psidnell
+ *
+ * Prints help from ExprAttribute annotations in a class.
+ */
+public class ExprAttributePrinter {
 
     public static void print(Class<? extends Node> clazz) {
         TreeSet<String> info = new TreeSet<>();

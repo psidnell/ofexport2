@@ -22,6 +22,14 @@ import java.util.Stack;
 
 import org.apache.commons.cli.Option;
 
+/**
+ * @author psidnell
+ *
+ * @param <P>
+ * 
+ * Extends the option object such that simple lambda expression actions (ActiveOptionProcess) can
+ * be provided for execution during processing of the command line.
+ */
 public class ActiveOption<P> extends Option {
 
     private final ActiveOptionProcess<P> processor;

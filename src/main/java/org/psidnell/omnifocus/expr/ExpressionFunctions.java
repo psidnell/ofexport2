@@ -21,6 +21,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+/**
+ * @author psidnell
+ * 
+ * A utility base class that provides methods that simplify using OGNL expressions
+ * in command line options, for example creating Date objects from strings to allow
+ * filters to be expressed more easily.
+ */
 public class ExpressionFunctions {
 
     public static final SimpleDateFormat YYYYMMDD = new SimpleDateFormat("yyyy-MM-dd");

@@ -13,6 +13,9 @@ usage: ofexport2
  -ce,--contextexpr <arg>   include items where context expression is true.
  -cn,--taskname <arg>      include contexts specified by name.
  -cs,--contextsort <arg>   sort contexts by field.
+ -e,--expr <arg>           include items (eany type) where context
+                           expression is true.
+ -m,--modexpr <arg>        modify a node value.
  -p,--prune                prune empty folders, projects and contexts.
  -c,--contextmode          display context hierarchy instead of project
                            hierarchy).

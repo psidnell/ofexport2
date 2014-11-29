@@ -23,6 +23,18 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 
+/**
+ * @author psidnell
+ *
+ * @param <P>
+ * 
+ * A convenience wrapper around CommandLineParser: because everyone always wants to write their own.
+ * 
+ * Provides:
+ * - Lambda methods to be associated with options to simplify integration.
+ * - Phased execution. Options can be grouped and executed by phase.
+ * 
+ */
 public class ActiveOptionProcessor<P> {
 
     private Options options;

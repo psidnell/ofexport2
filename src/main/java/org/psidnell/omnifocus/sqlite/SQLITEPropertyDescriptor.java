@@ -17,6 +17,12 @@ package org.psidnell.omnifocus.sqlite;
 
 import java.lang.reflect.Method;
 
+/**
+ * @author psidnell
+ * 
+ * Describes a property used in the SQLite object relational mapping.
+ * 
+ */
 public class SQLITEPropertyDescriptor {
 
     private String name;

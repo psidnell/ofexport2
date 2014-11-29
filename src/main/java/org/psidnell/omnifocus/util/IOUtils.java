@@ -19,6 +19,11 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
+/**
+ * @author psidnell
+ * 
+ * Utilities for IO 'n stuff.
+ */
 public class IOUtils {
 
     public static Writer systemOutWriter() {

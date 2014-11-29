@@ -22,7 +22,17 @@ import org.psidnell.omnifocus.expr.ExprAttribute;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class Project extends CommonProjectTask {
+/**
+ * @author psidnell
+ * 
+ * Represents an OmniFocus project.
+ * 
+ * Note that projects aren't directly represented in the database.
+ * 
+ * The database has a ProjectInfo and a root task, the union of 
+ * which make up a Project. 
+ */
+public class Project extends CommonProjectAndTaskAttributes {
 
     public static final String TYPE = "Project";
     private Folder folder;

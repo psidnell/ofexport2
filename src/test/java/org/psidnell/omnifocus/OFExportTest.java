@@ -27,6 +27,32 @@ import org.psidnell.omnifocus.model.Task;
 public class OFExportTest {
 
     @Test
+    public void testEverythingIncludedByDefault () throws Exception {
+        OFExport ofExport = new OFExport();
+        
+        Project p1 = new Project ("p1");
+        
+        Task t = new Task ("t1");
+        p1.add(t);
+        
+        Project p2 = new Project ("p2");
+        
+        ofExport.getProjectRoot().add(p1);
+        ofExport.getProjectRoot().add(p2);
+        
+        ofExport.process();
+        StringWriter out = new StringWriter();
+        ofExport.write(out);
+                
+        Diff.diff (new String[]
+            {
+                "p1",
+                "  [ ] t1",
+                "p2"
+            }, out.toString().split("\n"));
+    }
+    
+    @Test
     public void testIncludeProjectSubtreeWhenMatch () throws Exception {
         OFExport ofExport = new OFExport();
         
@@ -518,6 +544,58 @@ public class OFExportTest {
                 "  c3",    
                 "  c2",
                 "  c1"
+            }, out.toString().split("\n"));
+    }
+    
+    @Test
+    public void testModifyNode () throws Exception {
+        OFExport ofExport = new OFExport();
+        
+        Project p1 = new Project ("p1");
+        
+        Task t = new Task ("t1");
+        p1.add(t);
+        
+        Project p2 = new Project ("p2");
+        
+        ofExport.getProjectRoot().add(p1);
+        ofExport.getProjectRoot().add(p2);
+        
+        ofExport.addProjectExpression("name=='p1'");
+        ofExport.addModifyExpression("type=='Project' && name='foo'+type");
+        ofExport.process();
+        StringWriter out = new StringWriter();
+        ofExport.write(out);
+
+        Diff.diff (new String[]
+            {
+                "fooProject",
+                "  [ ] t1",                
+            }, out.toString().split("\n"));
+    }
+    
+    @Test
+    public void testExpr () throws Exception {
+        OFExport ofExport = new OFExport();
+        
+        Project p1 = new Project ("p1");
+        
+        Task t = new Task ("t1");
+        p1.add(t);
+        
+        Project p2 = new Project ("p2");
+        
+        ofExport.getProjectRoot().add(p1);
+        ofExport.getProjectRoot().add(p2);
+        
+        ofExport.addExpression("name=='p1'");
+        ofExport.process();
+        StringWriter out = new StringWriter();
+        ofExport.write(out);
+
+        Diff.diff (new String[]
+            {
+                "p1",
             }, out.toString().split("\n"));
     }
 }

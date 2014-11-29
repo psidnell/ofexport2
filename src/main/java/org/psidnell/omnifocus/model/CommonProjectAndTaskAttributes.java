@@ -25,7 +25,13 @@ import org.psidnell.omnifocus.util.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public abstract class CommonProjectTask extends Node {
+/**
+ * @author psidnell
+ * 
+ * Represents the attributes shared between a Project and a Task.
+ * 
+ */
+public abstract class CommonProjectAndTaskAttributes extends Node {
 
     protected Context context;
     private String note;

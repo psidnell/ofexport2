@@ -125,8 +125,8 @@ public class HelpTest {
         System.setOut(out);
 
         Main.main(new String[] {"-i"});
-        System.out.flush();
-        System.out.close();
+        out.flush();
+        out.close();
 
         System.setOut(stdout);
 

@@ -31,9 +31,7 @@ public class XMLTest extends FormatTest {
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
-        
-        System.out.println(out);
-        
+                
         Diff.diff (new String[]
             {
                 "<Folder>",
@@ -185,9 +183,7 @@ public class XMLTest extends FormatTest {
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
-        
-        System.out.println(out);
-        
+                
         Diff.diff (new String[]
             {
                 "<Context>",

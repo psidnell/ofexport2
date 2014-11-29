@@ -20,6 +20,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -35,6 +36,11 @@ import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.ProjectInfo;
 import org.psidnell.omnifocus.model.Task;
 
+/**
+ * @author psidnell
+ * 
+ * The main SQLite data access object.
+ */
 public class SQLiteDAO {
 
     private String[] possibleDBLocations;
@@ -69,8 +75,9 @@ public class SQLiteDAO {
     }
 
     public Connection getConnection() throws SQLException {
+        // TODO: Failed attempts at specifying charset so non-ascii notes load correctly
         // Properties props = new Properties();
-        // props.put("characterEncoding", "UTF-16LE");
+        // props.put("characterEncoding", "UTF-8");
         // props.put("useUnicode", "true");
         return DriverManager.getConnection(getDriverURL());
     }
@@ -78,21 +85,20 @@ public class SQLiteDAO {
     public DataCache load() throws SQLException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
         try (
             Connection c = getConnection()) {
-            Collection<ProjectInfo> projInfos = load(c, PROJECT_INFO_DAO, null);
-            Collection<Folder> folders = load(c, FOLDER_DAO, null);
-            Collection<Task> tasks = load(c, TASK_DAO, null);
-            Collection<Context> contexts = load(c, CONTEXT_DAO, null);
+            Collection<ProjectInfo> projInfos = load(c, PROJECT_INFO_DAO);
+            Collection<Folder> folders = load(c, FOLDER_DAO);
+            Collection<Task> tasks = load(c, TASK_DAO);
+            Collection<Context> contexts = load(c, CONTEXT_DAO);
             return new DataCache(folders, projInfos, tasks, contexts);
         }
     }
 
-    public <T> Collection<T> load(Connection c, SQLiteClassDescriptor<T> desc, String whereClause) throws SQLException, IllegalAccessException, IllegalArgumentException,
+    public <T> Collection<T> load(Connection c, SQLiteClassDescriptor<T> desc) throws SQLException, IllegalAccessException, IllegalArgumentException,
             InvocationTargetException, InstantiationException {
         try (
-            Statement stmt = c.createStatement()) {
-            String optWhere = whereClause == null ? "" : " " + whereClause;
+            PreparedStatement stmt = c.prepareStatement("select " + desc.getColumnsForSelect() + " from " + desc.getTableName())) {
             try (
-                ResultSet rs = stmt.executeQuery("select " + desc.getColumnsForSelect() + " from " + desc.getTableName() + optWhere)) {
+                ResultSet rs = stmt.executeQuery()) {
                 return desc.load(rs);
             }
         }

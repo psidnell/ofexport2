@@ -20,8 +20,9 @@ import java.io.Writer;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.psidnell.omnifocus.expr.ExprVisitor;
+import org.psidnell.omnifocus.expr.ExprIncludeVisitor;
 import org.psidnell.omnifocus.expr.ExpressionComparator;
+import org.psidnell.omnifocus.expr.ExprVisitor;
 import org.psidnell.omnifocus.format.Formatter;
 import org.psidnell.omnifocus.format.FreeMarkerFormatter;
 import org.psidnell.omnifocus.model.Context;
@@ -39,6 +40,20 @@ import org.slf4j.LoggerFactory;
 
 import freemarker.template.TemplateException;
 
+/**
+ * @author psidnell
+ * 
+ * The main processing class.
+ * 
+ * 1. Model objects are added to the root project/context.
+ * 
+ * 2. Filter expressions are added to reduce the tree.
+ * 
+ * 3. Sorting comparators are added to control the output ordering
+ * 
+ * 4. Finally the tree is processed to produce the output.
+ * 
+ */
 public class OFExport {
 
     private static Logger LOGGER = LoggerFactory.getLogger(OFExport.class);
@@ -110,7 +125,7 @@ public class OFExport {
         }
         VisitorDescriptor visitwhat = new VisitorDescriptor().visit(Folder.class, Project.class);
         VisitorDescriptor applyToWhat = new VisitorDescriptor().visit(Project.class);
-        addFilter(new ExprVisitor(expression, projectMode, visitwhat, applyToWhat));
+        addFilter(new ExprIncludeVisitor(expression, projectMode, visitwhat, applyToWhat));
         addFilter(new IncludedFilter());
     }
 
@@ -120,7 +135,7 @@ public class OFExport {
         }
         VisitorDescriptor visitWhat = new VisitorDescriptor().visit(Folder.class);
         VisitorDescriptor applyToWhat = new VisitorDescriptor().visit(Folder.class);
-        addFilter(new ExprVisitor(expression, projectMode, visitWhat, applyToWhat));
+        addFilter(new ExprIncludeVisitor(expression, projectMode, visitWhat, applyToWhat));
         addFilter(new IncludedFilter());
     }
 
@@ -128,11 +143,11 @@ public class OFExport {
         if (projectMode) {
             VisitorDescriptor visitWhat = new VisitorDescriptor().visit(Folder.class, Project.class, Task.class);
             VisitorDescriptor applyToWhat = new VisitorDescriptor().visit(Task.class);
-            addFilter(new ExprVisitor(expression, projectMode, visitWhat, applyToWhat));
+            addFilter(new ExprIncludeVisitor(expression, projectMode, visitWhat, applyToWhat));
         } else {
             VisitorDescriptor visitWhat = new VisitorDescriptor().visit(Context.class, Task.class);
             VisitorDescriptor applyToWhat = new VisitorDescriptor().visit(Task.class);
-            addFilter(new ExprVisitor(expression, projectMode, visitWhat, applyToWhat));
+            addFilter(new ExprIncludeVisitor(expression, projectMode, visitWhat, applyToWhat));
         }
         addFilter(new IncludedFilter());
     }
@@ -143,8 +158,21 @@ public class OFExport {
         }
         VisitorDescriptor visitWhat = new VisitorDescriptor().visit(Context.class);
         VisitorDescriptor applyToWhat = new VisitorDescriptor().visit(Context.class);
-        addFilter(new ExprVisitor(expression, projectMode, visitWhat, applyToWhat));
+        addFilter(new ExprIncludeVisitor(expression, projectMode, visitWhat, applyToWhat));
         addFilter(new IncludedFilter());
+    }
+    
+    public void addExpression(String expression) {
+        VisitorDescriptor visitWhat = new VisitorDescriptor().visitAll();
+        VisitorDescriptor applyToWhat = new VisitorDescriptor().visitAll();
+        addFilter(new ExprIncludeVisitor(expression, projectMode, visitWhat, applyToWhat));
+        addFilter(new IncludedFilter());
+    }
+    
+    public void addModifyExpression(String expression) {
+        VisitorDescriptor visitWhat = new VisitorDescriptor().visitAll();
+        VisitorDescriptor applyToWhat = new VisitorDescriptor().visitAll();
+        addFilter(new ExprVisitor(expression, visitWhat, applyToWhat));
     }
 
     public void addPruneFilter() {

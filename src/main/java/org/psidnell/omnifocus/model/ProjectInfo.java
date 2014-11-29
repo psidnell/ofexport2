@@ -17,6 +17,13 @@ package org.psidnell.omnifocus.model;
 
 import org.psidnell.omnifocus.sqlite.SQLiteProperty;
 
+/**
+ * @author psidnell
+ * 
+ * Represents data loaded from the ProjectInfo table.
+ * 
+ * Projects are constructed from this and their root task.
+ */
 public class ProjectInfo {
 
     public String task;

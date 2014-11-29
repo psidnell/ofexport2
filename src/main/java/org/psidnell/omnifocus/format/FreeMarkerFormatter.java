@@ -31,6 +31,12 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
 
+/**
+ * @author psidnell
+ * 
+ *  Formats the node structure using a FreeMarker template.
+ *
+ */
 @SuppressWarnings("unused")
 public class FreeMarkerFormatter implements Formatter {
 

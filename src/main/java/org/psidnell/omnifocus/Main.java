@@ -32,6 +32,11 @@ import org.psidnell.omnifocus.sqlite.SQLiteDAO;
 import org.psidnell.omnifocus.util.IOUtils;
 import org.springframework.context.ApplicationContext;
 
+/**
+ * @author psidnell
+ * 
+ * The main(...) of the program. There had to be one somewhere. Well here it is.
+ */
 public class Main extends CommandLine {
 
     private DataCache data;
@@ -107,7 +112,7 @@ public class Main extends CommandLine {
 
     public static void main(String args[]) throws Exception {
 
-        ApplicationContext appContext = OFApplicationContext.create();
+        ApplicationContext appContext = ApplicationContextFactory.create();
 
         Main main = appContext.getBean("main", Main.class);
 

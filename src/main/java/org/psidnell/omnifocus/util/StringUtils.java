@@ -19,6 +19,12 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.StringJoiner;
 
+/**
+ * @author psidnell
+ * 
+ * Things to do with Strings.
+ * 
+ */
 public class StringUtils {
 
     public static String join(Collection<String> data, String delimiter) {
