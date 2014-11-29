@@ -4,14 +4,14 @@
 
 **Index**
 
-- [Introduction](introduction)
-- [Audience](audience)
-- [How it works](how-it-works)
-- [Installation](installation)
-- [Ininstallation](uninstallation)
-- [Usage Overview](usage-overview)
-- [Basic Usage](basic-usage)
-- [Advanced Usage](advanced-usage)
+- [Introduction](#introduction)
+- [Audience](#audience)
+- [How it works](#how-it-works)
+- [Installation](#installation)
+- [Ininstallation](#uninstallation)
+- [Usage Overview](#usage-overview)
+- [Basic Usage](#basic-usage)
+- [Advanced Usage](#advanced-usage)
 
 Before proceeding, please select the required version of this document:
 
