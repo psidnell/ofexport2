@@ -15,6 +15,8 @@ limitations under the License.
  */
 package org.psidnell.omnifocus;
 
+import java.io.IOException;
+
 import org.apache.commons.cli.Options;
 import org.apache.log4j.Level;
 import org.psidnell.omnifocus.cli.ActiveOption;
@@ -182,7 +184,7 @@ public class CommandLine {
                 BEFORE_LOAD));
     }
 
-    private void printHelp() {
+    private void printHelp() throws IOException {
         processor.printHelp();
         exitBeforeLoad = true;
     }

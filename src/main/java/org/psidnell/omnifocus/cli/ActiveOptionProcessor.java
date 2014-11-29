@@ -15,7 +15,10 @@ limitations under the License.
  */
 package org.psidnell.omnifocus.cli;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+import java.util.Properties;
 
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
@@ -80,7 +83,23 @@ public class ActiveOptionProcessor<P> {
     }
 
     @SuppressWarnings("unchecked")
-    public void printHelp() {
+    public void printHelp() throws IOException {
+        
+        System.out.println();
+        System.out.println (progName.toUpperCase());
+        System.out.println();
+        
+        try (
+            InputStream in = this.getClass().getResourceAsStream("/version.properties")) {
+            Properties p = new Properties();
+            p.load(in);
+            System.out.println ("Version: " + p.getProperty("version"));
+            System.out.println ("Build Date: " + p.getProperty("date"));
+
+        }
+        
+        System.out.println();
+        
         HelpFormatter formatter = new HelpFormatter();
         // Output in the order I specify
         formatter.setOptionComparator((x, y) -> ((ActiveOption<P>) x).getOrder() - ((ActiveOption<P>) y).getOrder());

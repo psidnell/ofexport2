@@ -6,6 +6,7 @@
 
 - Create "installer"
   - need this month date option for TODO/DONE
+  - Print version in help
   - maven site?
 - Code Quality 
   - Coverage
