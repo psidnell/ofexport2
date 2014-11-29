@@ -2,8 +2,11 @@
 
 ## ofexport2
 
+### ofexport2
+
 - Create "installer"
-  - Copy in license, docs etc.- everything?
+  - need this month date option for TODO/DONE
+  - maven site?
 - Code Quality 
   - Coverage
   - Timing and stats
@@ -18,4 +21,5 @@
 - How to restructure (group knitting)
 - Look at OF1 for command line inspiration
 - How to determine first available?
+
 
