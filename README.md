@@ -1,26 +1,39 @@
 # OFEXPORT2
 
-*Updated Sat 29 Nov 2014 16:57:11 GMT.*
+*Updated Sat 29 Nov 2014 19:36:10 GMT.*
 
-**Index**
+## Table of Contents
 
-- [Introduction](#introduction)
-- [Audience](#audience)
-- [How it works](#how-it-works)
-- [Installation](#installation)
-- [Ininstallation](#uninstallation)
-- [Usage Overview](#usage-overview)
-- [Basic Usage](#basic-usage)
-- [Advanced Usage](#advanced-usage)
+- [Introduction]
+- [Audience]
+- [How it works]
+- [Installation]
+- [Uninstallation]
+- [Usage]
+    - [Overview]
+    - [Filtering]
+    - [Sorting]
+- [Reference]
+    - [Output and Formats]
+    - [Project vs Context Mode]
+    - [Matching and Regular Expressions]
+    - [Date Filters]
+    - [Sorting] 
+    - [Examples]
+- [Writing a Template]
+- [Building it Yourself]
+- [ofexport vs ofexport2]
+- [Other Approaches Considered]
+- [Known Issues]
+
+## Introduction
+
+**ofexport2** is a tool for exporting OmniFocus data to a variety of file formats, a succesor to [ofexport](https://github.com/psidnell/ofexport/blob/master/DOCUMENTATION.md).
 
 Before proceeding, please select the required version of this document:
 
 - [Latest Stable Release: 0.0.5.ALPHA](https://github.com/psidnell/ofexport2/blob/ofexport-v2-0.0.5.ALPHA/README.md)
 - [Development Version](https://github.com/psidnell/ofexport2/blob/master/README.md)
-
-## Introduction
-
-**ofexport2** is a tool for exporting OmniFocus data to a variety of file formats, a succesor to [ofexport](https://github.com/psidnell/ofexport/blob/master/DOCUMENTATION.md).
 
 This is an early version and at the time of writing I'm making major changes. If you need something reliable and with decent documentation then the original [ofexport](https://github.com/psidnell/ofexport/blob/master/DOCUMENTATION.md) may be the safer bet.
 
@@ -115,42 +128,49 @@ And verify everything has worked by typing **ofexport2** (or **of2**) and ensuri
 
 Simply delete the ofexport2 folder and remove the lines you added to your .bash_profile.
 
-## Usage Overview ##
+## Usage ##
+
+### Overview ###
 
 To print the contents of a named project (In this case I have a project called ofexport2) type:
 
     of2 -pn ofexport2
 
-This outputs the following (explanations added):
+This outputs the following:
 
     Home
       ofexport2
         [ ] Create "installer"
-          [ ] need this month date option for TODO/DONE
           [ ] Print version in help
-          [X] Copy in license, docs etc.- everything?
-          [X] Create "release process" - versioning?
-          [X] Freemarker to process README?
-          [ ] maven site?
-        [X] Filters (available etc) - finish - test
+          [X] Add license, docs etc.
+          [X] Create "release process"
+          [X] Generate README.md from template
+          [ ] maven site generation
+        [X] Filters - finish - test
         [ ] Code Quality
           [ ] Coverage
           [X] Address TODOs
           [ ] Timing and stats
           [ ] Add logging
-          [X] basic javadoc
-          [X] Only integration tests should use real DB
+          [X] basic Javadoc
+          [X] Only integration tests should use real database
           [X] format code
 
 The default output format is a simple text list where uncompleted tasks are prefixed with a [ ] and completed tasks are prefixed with a [X].
 
-What has happened is that the tool has searched all the projects for those that have the name "ofexport2"  (-pn specifies project name). For any that match it shows all the items directly above it (in this case my "Home" folder) and any items beneath it.
+The tool has searched all the projects for those that have the name "ofexport2"  (-pn specifies project name). For any that match it shows all the items directly above it (in this case my "Home" folder) and any items beneath it.
 
-It's possible to refine this to include only uncompleted items:
+### Filtering ###
+
+The usage of "-pn" above is an example of a filter. Any number of filters can be used and each filter is run on the results of the last. Thus filters can only reduce what appears in the output.
+
+For example:
 
     of2 -pn ofexport2 -te '!completed'
 
-The single quotes are to prevent bash from seeing the '!' - it has special meaning in bash. The output will be:
+(The single quotes are to prevent bash from seeing the '!' - it has special meaning in bash.)
+
+The output will be:
 
     Home
       ofexport2
@@ -163,7 +183,7 @@ The single quotes are to prevent bash from seeing the '!' - it has special meani
           [ ] Timing and stats
           [ ] Add logging
 
-Now what has happened is that after the "-pn" option (a filter) has been exectuted, a second filter has been run. In the case the "-te" option is a task expression (actually an [OGNL](http://commons.apache.org/proper/commons-ognl/) expression) that is specifying tasks that have not been completed.
+The case the "-te" option is a task expression (actually an [OGNL](http://commons.apache.org/proper/commons-ognl/) expression) that is eliminating tasks that have been completed.
 
 In OGNL '!' means "not" and "completed" is one of several attributes that a Task has.
 
@@ -190,27 +210,138 @@ And typing simply:
     
 Will list all of the filtering options currently available.
 
-## Basic Usage
+The filtering expressions can be any valid OGNL expression, these can be complex logical expressions:
 
-TBD - GOT HERE
+    of2 -pe 'flagged && !available && taskCount > 1'
 
+These expressions provide fine grained control of what's printed if required. For example if you have the following amongst your projects:
 
+- Folder
+    - Project
+        - [ ] Task X
+            - [X] Sub Task X
+            - [ ] Sub Task Y
+            - [ ] Sub Task Z
 
-##  Advanced Usage ##
+If you search for a node containing "X" as follows:
 
-Explain the filtering process wrt OGNL
+    of2 -te "name.contains(\"X\") && completed==false"
+    
+Then you will get:
 
-TBD
+    Folder
+      Project
+        [] Task X
 
-### Filtering ###
+This may seem odd because normally when a node matches yoy'd see all nodes beneath.
+           
+However, because the expression applies tasks, even though the root task matches, the expression will also be applied to the sub tasks where it fails. 
 
-TBD
+If you wanted to see all the children of the matching task whether completed or not and whatever their name you could try:
+
+    of2 -te "(name.contains(\"X\") && completed==false) || included"
+           
+And you would get:
+
+    Folder
+      Project
+        [ ] Task X
+          [X] Sub Task X
+          [ ] Sub Task Y
+          [ ] Sub Task Z
+
+This makes use of the special "included" attribute which is used internally by ofexport during filtering. If the current expression has evaluated to true on any node above one being matched, then evaluated will be true. If you need to do something complex then this may prove useful.
+
+When you use -fn, -tn or -cn, they actually expand internally to be
+
+    name="<your search>" || included 
+
+# Reference #
+
+#### Output and Formats ####
+
+Output can be written to a file by using the "-o" option, e.g.
+
+    of2 -pn "My Project" -o pyproj.md
+    
+The output will be in "Markdown" format because the file suffix is "md".
+
+The supported suffixes are:
+
+- md: Markdown format
+- taskpaper: TaskPaper format
+- txt: Text format
+- opml: OPML format
+- csv: CSV format
+- html: HTML format
+
+If you want to specify a format different from the one derived from the output file (or are printing to the console) you can use "-f <fmt>".
+
+The format name (specified or derived from the filename suffix) is used to find a FreeMarker template file in **config/templates**.
+
+#### Project vs Context Mode ####
+
+Normally ofexport2 is in project mode, i.e. the project hierachy is used for filterng and output.
+
+By using the "-c" option, the tool operates in context mode.
+
+#### Matching and Regular Expressions #####
+
+To search for a task that contains a substring:
+
+    of2 -te 'name.contains("X")'
+    
+To use regular expressions:
+
+    of2 -te 'name.matches(".*ollocks.*")'
+    
+Note that the part after the "." here is a java method call from the String class, you can use any method or expression returns a boolean:
+
+    of2 -te 'name.matches(".*ollocks.*") && name.contains("gly") && name.length()>4'
+
+#### Date Filters ####
+
+There are various ways to match on dates, for example:
+
+    of2 -te 'completed && completionDate > date("2014-11-26")'
+    of2 -te 'completionDate==date("today")'
+    of2 -te 'within(completionDate,"25th","yesterday")'
+ 
+We're making use of various special functions here:
+
+- **date** takes a date in string form and converts it to a Date object for use in the expression.
+- **within** expressions takes 3 arguments (attribName, fromString, toString)
+
+The strings formats of dates that are accepted are:
+
+- **"2014-11-19"**: specific date (yyyy-mm-dd).
+- **"Mon"**, **"mon"**, **"Monday"**, **"monday"**: the monday of this week (weeks start on Monday).
+- **"-mon"**: The monday of last week.
+- **"+mon"**: the monday of next week.
+- **"Jan"**,**"jan"**,**"January"**,**"january"**: the 1st of January of this year.
+- **"-Jan"**,**"-jan"**,**"-January"**,**"-january"**: the 1st of January last year.
+- **"+Jan"**,**"+jan"**,**"+January"**,**"+january"**: the 1st of January next year.
+- **"1d"**,"**+1day"**,**"-2days"**: days in the future/past.
+- **"1w"**,"**+1week"**,**"-2weeks"**: weeks in the future/past.
+- **"1m"**,"**+1month"**,**"-2months"**: months in the future/past.
+- **"1y"**,"**+1year"**,**"-2years"**: months in the future/past.
+- **"1st"**,"**2nd"**,**"23rd"**: day of this month.
 
 ### Sorting ###
 
-TBD
+By default items are sorted in the order they appear in OmniFocus. To specify an alternate order, for example sort by flagged status (unflagged then flagged):
 
-## Examples/CheatSheet ##
+    of2 -pn proj -ts flagged
+    
+To reverse the order:
+
+    of2 -pn proj -ts r:flagged
+    
+It's possible (much like with filters) to chain multiple sort fields, for example to sort by flagged and then due:
+
+    of2 -pn proj -ts r:flagged -ts dueDate
+
+### Examples ###
 
 TBD
 
@@ -222,7 +353,7 @@ TBD
 
 TBD
 
-## OFEXPORT vs OFEXPORT2
+## ofexport vs ofexport2
 
 The original ofexport was written in python since python comes supplied with
 OS X.
@@ -241,4 +372,7 @@ a large export rather than about a second when accessing the database directly.
 
 ## Known Issues ##
 
-- Task/Project notes are stripped back to ASCII on export because wide characters seem corrupted when I retrieve them. This could be down to the encoding OmniFocus uses or it could be an issue with the SQLite Java driver. I experimented with various obvious specific encodings but that didn't help. 
+- Task/Project notes are stripped back to ASCII on export because wide characters seem corrupted when I retrieve them. This could be down to the encoding OmniFocus uses or it could be an issue with the SQLite Java driver. I experimented with various obvious specific encodings but that didn't help.
+- Context availability is something I haven't been able to deduce from the database.
+- Perspective data is something I haven't managed to decode.
+- In  OmniFocus, child Contexts/Tasks are interleaved, as are child Projects/Folders. In ofexport they are not.
