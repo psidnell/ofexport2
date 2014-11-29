@@ -15,6 +15,7 @@
 
 - Code Quality 
   - Address TODOs
+  - basic javadoc
   - Only integration tests should use real DB
   - format code
 - Sorting

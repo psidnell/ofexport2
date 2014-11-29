@@ -2,6 +2,8 @@
 
 ## ofexport2
 
+- Create "installer"
+  - Copy in license, docs etc.- everything?
 - Code Quality 
   - Coverage
   - Timing and stats
@@ -10,8 +12,6 @@
 > > Use spring
 
   - Add logging
-  - basic javadoc
-- check in "installer"
 - documentation
 - "man" opt instead of "i" print comprehensive help - sub pages? same source as markdown help?
 - Transforms - create one to experiment
