@@ -1,6 +1,6 @@
 # OFEXPORT2
 
-*Updated Sat 29 Nov 2014 19:41:39 GMT.*
+*Updated Sat 29 Nov 2014 19:55:07 GMT.*
 
 ## Table of Contents
 
@@ -12,7 +12,6 @@
 - [Usage](#usage)
     - [Overview](#overview)
     - [Filtering](#filtering)
-    - [Sorting](#sorting)
 - [Reference](#reference)
     - [Output and Formats](#output-and-formats)
     - [Project vs Context Mode](#project-vs-context-mode)
@@ -351,7 +350,21 @@ TBD
 
 ## Building It Yourself ##
 
-TBD
+The build is a straight forward java [maven 3](http://maven.apache.org) build.
+
+After installing maven cd into the ofexport folder and run:
+
+    mvn clean package 
+
+The build folder contains two utility scripts:
+
+- **pre-release.sh** recreates several files with versions/dates updated.
+- **release.sh** runs the maven release goals.
+
+Before releasing can succeed you will need to update the pom file with your own:
+
+- developerConnection
+- distributionManagement/repository/url
 
 ## ofexport vs ofexport2
 
