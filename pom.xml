@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.psidnell</groupId>
 	<artifactId>ofexport-v2</artifactId>
-	<version>0.0.1.ALPHA</version>
+	<version>0.0.2.ALPHA-SNAPSHOT</version>
 
 	<properties>
 		<jacksonVersion>2.4.3</jacksonVersion>
