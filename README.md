@@ -1,11 +1,22 @@
 # OFEXPORT2
 
-*Updated Sat 29 Nov 2014 13:26:53 GMT.*
+*Updated Sat 29 Nov 2014 16:53:37 GMT.*
+
+**Index**
+
+- [Introduction](introduction)
+- [Audience](audience)
+- [How it works](how-it-works)
+- [Installation](installation)
+- [Ininstallation](uninstallation)
+- [Usage Overview](usage-overview)
+- [Basic Usage](basic-usage)
+- [Advanced Usage](advanced-usage)
 
 Before proceeding, please select the required version of this document:
 
-- [Development Version](https://github.com/psidnell/ofexport2/blob/master/README.md)
 - [Latest Stable Release: 0.0.5.ALPHA](https://github.com/psidnell/ofexport2/blob/ofexport-v2-0.0.5.ALPHA/README.md)
+- [Development Version](https://github.com/psidnell/ofexport2/blob/master/README.md)
 
 ## Introduction
 
@@ -47,8 +58,6 @@ The key technologies used are:
 3. [Java 8](https://java.com/en/download/index.jsp) for the main command line program.
 
 Other formats can be created by simply creating new FreeMarker templates.
-
-TBD
 
 ## Installation ##
 
@@ -162,7 +171,7 @@ Folders, Projects, Tasks and Contexts all have attributes that you can use in fi
 
     of2 -i
     
-This will print all the attributes for all the types, for example this is just the Task attributes:
+This will print all the attributes for all the types, for example this is just some of the Task attributes:
 
     Task:
         available (boolean): item is available.
@@ -175,7 +184,17 @@ This will print all the attributes for all the types, for example this is just t
         flagged (boolean): item is flagged.
         etc ...
 
-TBD
+And typing simply:
+
+    of2
+    
+Will list all of the filtering options currently available.
+
+## Basic Usage
+
+TBD - GOT HERE
+
+
 
 ##  Advanced Usage ##
 
