@@ -34,6 +34,8 @@ TBD
 
 ## Installation ##
 
+- Please visit the [Current stable version: 0.0.2.ALPHA](https://github.com/psidnell/ofexport2/blob/ofexport-v2-0.0.2.ALPHA/README.md#installation)
+
 I should upload a zipped artifact, it's unreasonable to make people build it.
 
 ## Examples/CheatSheet ##
