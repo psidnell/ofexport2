@@ -2,7 +2,7 @@
 
 This is the development version - please visit the site for the current stable version:
 
-- [0.0.3.ALPHA](https://github.com/psidnell/ofexport2/blob/ofexport-v2-0.0.3.ALPHA/README.md)
+- [$VERSION](https://github.com/psidnell/ofexport2/blob/ofexport-v2-$VERSION/README.md)
 
 A tool for exporting OmniFocus data to a variety of file formats.
 
@@ -38,7 +38,7 @@ TBD
 
 ## Installation ##
 
-- Download the current stable version zip file: [ofexport-v2-0.0.3.ALPHA.zip](https://github.com/psidnell/ofexport2/archive/ofexport-v2-0.0.3.ALPHA.zip)
+- Download the current stable version zip file: [ofexport-v2-$VERSION.zip](https://github.com/psidnell/ofexport2/archive/ofexport-v2-$VERSION.zip)
 
 
 I should upload a zipped artifact, it's unreasonable to make people build it.
