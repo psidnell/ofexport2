@@ -4,7 +4,6 @@
 
 ### ofexport2
 
-- named options should ignore case and use regexps
 - Create "installer"
   - need this month date option for TODO/DONE
   - maven site?

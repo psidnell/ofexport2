@@ -1,6 +1,6 @@
 # OFEXPORT2
 
-*Updated Sat 29 Nov 2014 19:55:07 GMT.*
+*Updated Sun 30 Nov 2014 07:40:05 GMT.*
 
 ## Table of Contents
 
@@ -352,7 +352,7 @@ TBD
 
 The build is a straight forward java [maven 3](http://maven.apache.org) build.
 
-After installing maven cd into the ofexport folder and run:
+After installing maven, cd into the ofexport folder and run:
 
     mvn clean package 
 

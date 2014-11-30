@@ -19,4 +19,4 @@ ofexport2 -pn ofexport2 -te '!completed' -o doc/TODO.md
 
 echo Generating DONE-$DATE.md
 DATE=`date "+%Y-%m"`
-ofexport2 -pn ofexport2 -te 'completed' -o doc/DONE-$DATE.md
+ofexport2 -pn ofexport2 -te 'completed && completionDate > date("1st")' -o doc/DONE-$DATE.md
