@@ -31,7 +31,7 @@ public class ExpressionComparator<T extends Node> implements Comparator<T> {
     private final Expression expression;
     private final boolean reverse;
 
-    public ExpressionComparator(String expr, Class<T> clazz) {
+    public ExpressionComparator(String expr, Class<T> clazz) { // NOPMD unused clazz
         reverse = expr.startsWith("r:");
         if (reverse) {
             expr = expr.substring(2);

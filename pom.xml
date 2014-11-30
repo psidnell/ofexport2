@@ -185,35 +185,31 @@
 							<artifactId>maven-project-info-reports-plugin</artifactId>
 							<version>2.4</version>
 							<configuration>
-								<reportSets>
-									<reportSet>
-										<reports><!-- select reports -->
-											<report>index</report>
-											<!--<report>plugin-management</report> -->
-											<!--<report>summary</report> -->
-										</reports>
-									</reportSet>
-								</reportSets>
+								<dependencyDetailsEnabled>false</dependencyDetailsEnabled>
+								<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
 							</configuration>
+							<!-- distribution-management, index, dependencies, help, issue-tracking, 
+								plugins, cim, license, dependency-management, mailing-list, project-team, 
+								dependency-convergence, scm, plugin-management, modules, summary -->
+							<reports>
+								<report>index</report>
+								<report>summary</report>
+								<report>scm</report>
+							</reports>
 						</plugin>
 						<plugin>
 							<groupId>org.apache.maven.plugins</groupId>
 							<artifactId>maven-jxr-plugin</artifactId>
 							<version>2.5</version>
 						</plugin>
-						<!-- 
-						<plugin>
-							<groupId>org.apache.maven.plugins</groupId>
-							<artifactId>maven-project-info-reports-plugin</artifactId>
-							<version>2.7</version>
-							<configuration>
-								<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
-							</configuration>
-						</plugin>
-						-->
 						<!-- Doesn't work with java 8 <plugin> <groupId>org.codehaus.mojo</groupId> 
 							<artifactId>cobertura-maven-plugin</artifactId> <version>2.6</version> <configuration> 
 							<formats> <format>html</format> </formats> </configuration> </plugin> -->
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-pmd-plugin</artifactId>
+							<version>3.3</version>
+						</plugin>
 						<plugin>
 							<groupId>org.apache.maven.plugins</groupId>
 							<artifactId>maven-checkstyle-plugin</artifactId>

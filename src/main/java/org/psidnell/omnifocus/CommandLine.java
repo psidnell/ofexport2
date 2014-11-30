@@ -184,12 +184,12 @@ public class CommandLine {
                 BEFORE_LOAD));
     }
 
-    private void printHelp() throws IOException {
+    protected void printHelp() throws IOException {
         processor.printHelp();
         exitBeforeLoad = true;
     }
 
-    private void printAdditionalInfo() {
+    protected void printAdditionalInfo() {
         ExprAttributePrinter.print(Folder.class);
         System.out.println();
         ExprAttributePrinter.print(Project.class);
@@ -200,7 +200,7 @@ public class CommandLine {
         exitBeforeLoad = true;
     }
 
-    private void setLogLevel(String logLevel) {
+    protected void setLogLevel(String logLevel) {
         Level level = Level.DEBUG;
         switch (logLevel.toLowerCase()) {
             case "debug":

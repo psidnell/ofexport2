@@ -76,7 +76,7 @@ public class SQLiteDAO {
     }
 
     public Connection getConnection() throws SQLException {
-        // TODO: Failed attempts at specifying charset so non-ascii notes load correctly
+        // Failed attempts at specifying charset so non-ascii notes load correctly
         // Properties props = new Properties();
         // props.put("characterEncoding", "UTF-8");
         // props.put("useUnicode", "true");
