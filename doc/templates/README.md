@@ -342,11 +342,37 @@ It's possible (much like with filters) to chain multiple sort fields, for exampl
 
 ### Examples ###
 
-TBD
+All flagged and available tasks:
+
+    of2 -te 'flagged && available'
+
+All available and tasks overdue tasks or tasks due within the next week:
+
+    of2 -te 'available && within(dueDate,"-1y","7d")'
+
+All contexts that have no tasks:
+
+    of2 -c -ce 'taskCount==0'
+
+All completed projects, but not their tasks:
+
+    of2 -pe completed -te false
+
+Anything (folder, project task - because we're in project mode) that contains "spark plug":
+
+    of2 -e 'name.toLowerCase().contains("spark plugs")'
+
+Any task with a note containing "towel":
+
+    of2 -te 'note!=null && note.contains("towel")'
 
 ## Writing a Template ##
 
-TBD
+- The templates are written in [FreeMarker](http://freemarker.org) syntax.
+- The templates live in **config/templates**.
+- Using the options "-f xxx" or "-o file.xxx" will cause ofexport to look for a template ***config/templates/xxx.ftl***.
+- The object model available in the templates can be printed using **of2 -i**.
+- Copying and experimenting on an existing template is the best way to start.
 
 ## Building It Yourself ##
 
@@ -358,7 +384,6 @@ After installing maven, cd into the ofexport folder and run:
 
 The build folder contains two utility scripts:
 
-- **update-site.sh** recreates the maven site reports (doc/site). 
 - **pre-release.sh** recreates several files with versions/dates updated.
 - **release.sh** runs the maven release goals.
 

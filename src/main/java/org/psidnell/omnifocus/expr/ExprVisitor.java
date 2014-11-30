@@ -22,6 +22,8 @@ import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
 import org.psidnell.omnifocus.visitor.Visitor;
 import org.psidnell.omnifocus.visitor.VisitorDescriptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author psidnell
@@ -33,12 +35,16 @@ import org.psidnell.omnifocus.visitor.VisitorDescriptor;
  */
 public class ExprVisitor implements Visitor {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExprVisitor.class);
+
     protected VisitorDescriptor visitWhat;
     protected VisitorDescriptor applyToWhat;
     protected Expression expr;
+    protected String exprString;
 
     public ExprVisitor(String expr, VisitorDescriptor visitWhat, VisitorDescriptor applyToWhat) {
         this.expr = new Expression(expr);
+        this.exprString = expr;
         this.visitWhat = visitWhat;
         this.applyToWhat = applyToWhat;
     }
@@ -77,6 +83,7 @@ public class ExprVisitor implements Visitor {
     }
 
     protected void evaluate(Node node) {
+        LOGGER.debug("Applying {} to {}", expr, node);
         expr.eval(node);
     }
 }

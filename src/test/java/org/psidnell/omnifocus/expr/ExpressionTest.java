@@ -28,11 +28,11 @@ import org.psidnell.omnifocus.expr.Expression;
 import org.psidnell.omnifocus.model.Task;
 
 public class ExpressionTest {
-    
+
     public static final long DAY = 1000 * 60 * 60 * 24;
-    
+
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
-    
+
     @Test
     public void testBasicEvaluation() throws OgnlException {
 
@@ -45,7 +45,7 @@ public class ExpressionTest {
         assertTrue (new Expression("name=='foo'").eval(t, Boolean.class));
         assertTrue (new Expression("completed").eval(t, Boolean.class));
     }
-    
+
     @Test
     public void testArrayAccess() throws OgnlException {
 
@@ -57,22 +57,25 @@ public class ExpressionTest {
 
         assertTrue(new Expression("name=='foo' && type=='Task' && tasks[0].name=='bar'").eval(t, Boolean.class));
     }
-    
+
     @Test
     public void testRegularExpressions () {
         Task t = new Task();
         t.setName("fooXXX");
-                
+
         assertTrue(new Expression("name.matches('foo.*')").eval(t, Boolean.class));
         assertFalse(new Expression("name.matches('bar.*')").eval(t, Boolean.class));
     }
-    
+
     @Test
     public void testDateExpressions () throws ParseException {
         Task t = new Task();
         t.setCompletionDate(new Date ());
-        
+        t.setDueDate(new Date ());
+
         assertTrue (new Expression("completionDate==date('today')").eval(t, Boolean.class));
         assertFalse (new Expression("completionDate==date('yesterday')").eval(t, Boolean.class));
+        assertTrue (new Expression("dueDate > date('-1y')").eval(t, Boolean.class));
+        assertTrue (new Expression("within(dueDate,'-1y','7d')").eval(t, Boolean.class));
     }
 }

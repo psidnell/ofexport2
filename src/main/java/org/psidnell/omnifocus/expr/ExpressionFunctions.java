@@ -21,14 +21,19 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author psidnell
  *
- * A utility base class that provides methods that simplify using OGNL expressions
- * in command line options, for example creating Date objects from strings to allow
- * filters to be expressed more easily.
+ *         A utility base class that provides methods that simplify using OGNL expressions in
+ *         command line options, for example creating Date objects from strings to allow filters to
+ *         be expressed more easily.
  */
 public class ExpressionFunctions {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExpressionFunctions.class);
 
     private static final int MONTHS_IN_YEAR = 12;
 
@@ -44,21 +49,22 @@ public class ExpressionFunctions {
     }
 
     public Date date(String dateStr, Calendar today) throws ParseException {
+        LOGGER.debug("date({})", dateStr);
         roundToDay(today);
         dateStr = dateStr.trim().toLowerCase();
 
         Date result = parseDateByName(dateStr, today);
 
         if (dateStr.equals("today")) {
-            return days(0, today);
+            result = days(0, today);
         }
 
         if (dateStr.equals("yesterday")) {
-            return days(-1, today);
+            result = days(-1, today);
         }
 
         if (dateStr.equals("tomorrow")) {
-            return days(1, today);
+            result = days(1, today);
         }
 
         if (result == null) {
@@ -73,6 +79,16 @@ public class ExpressionFunctions {
             result = roundToDay(YYYYMMDD.parse(dateStr));
         }
 
+        LOGGER.debug("date({}) = {}", dateStr, result);
+        return result;
+    }
+
+    public boolean within(Date date, String lower, String upper) throws ParseException {
+        LOGGER.debug("within({},{},{})", date, lower, upper);
+        Date lowerDate = date(lower);
+        Date upperDate = date(upper);
+        boolean result = date != null && date.getTime() >= lowerDate.getTime() && date.getTime() <= upperDate.getTime();
+        LOGGER.debug("within({},{},{})={}", date, lower, upper, result);
         return result;
     }
 
@@ -259,12 +275,6 @@ public class ExpressionFunctions {
     public Date days(int days, Calendar today) {
         today.set(Calendar.DAY_OF_MONTH, today.get(Calendar.DAY_OF_MONTH) + days);
         return today.getTime();
-    }
-
-    public boolean within(Date date, String lower, String upper) throws ParseException {
-        Date lowerDate = date(lower);
-        Date upperDate = date(upper);
-        return date != null && date.getTime() >= lowerDate.getTime() && date.getTime() <= upperDate.getTime();
     }
 
     public static void roundToDay(Calendar today) {

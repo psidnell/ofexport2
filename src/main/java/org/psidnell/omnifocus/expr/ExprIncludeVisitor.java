@@ -17,6 +17,8 @@ package org.psidnell.omnifocus.expr;
 
 import org.psidnell.omnifocus.model.Node;
 import org.psidnell.omnifocus.visitor.VisitorDescriptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author psidnell
@@ -24,6 +26,8 @@ import org.psidnell.omnifocus.visitor.VisitorDescriptor;
  *         Traverses the node tree including only those nodes where the OGNL expression evaluates true.
  */
 public class ExprIncludeVisitor extends ExprVisitor {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExprIncludeVisitor.class);
 
     private boolean projectMode;
 
@@ -34,10 +38,13 @@ public class ExprIncludeVisitor extends ExprVisitor {
 
     @Override
     protected void evaluate(Node node) {
+        LOGGER.debug("Applying {} to {}", exprString, node);
         boolean include = expr.eval(node, Boolean.class);
         if (include) {
+            LOGGER.debug("included");
             node.include(projectMode);
         } else {
+            LOGGER.debug("excluded");
             node.exclude();
         }
     }
