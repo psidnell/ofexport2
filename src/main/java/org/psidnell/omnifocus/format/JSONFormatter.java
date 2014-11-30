@@ -25,13 +25,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * @author psidnell
- * 
+ *
  * Formats the node by dumping the entire tree with Jackson.
- * 
+ *
  */
 public class JSONFormatter implements Formatter {
 
-    private static ObjectMapper MAPPER = new ObjectMapper();
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     @Override
     public void format(Node node, Writer out) throws IOException {

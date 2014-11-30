@@ -27,7 +27,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * @author psidnell
  *
  * Represents an OmniFocus Context.
- * 
+ *
  */
 public class Context extends Node {
 

@@ -20,7 +20,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * @author psidnell
- * 
+ *
  * Utility factory class for building the default Spring application context.
  */
 public class ApplicationContextFactory {

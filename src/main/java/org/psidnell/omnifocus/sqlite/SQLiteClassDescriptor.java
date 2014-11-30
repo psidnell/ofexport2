@@ -28,19 +28,20 @@ import java.util.LinkedList;
  * @author psidnell
  *
  * @param <T>
- * 
+ *
  * Describes a class used for storing data extracted from SQLite.
- * 
+ *
  * The class is searched for annotated getter methods to determine
  * the mapping.
  */
 public class SQLiteClassDescriptor<T> {
+    private static final int TWO_THOUSAND_AND_ONE = 2001;
     private String columnsForSelect;
     private LinkedList<SQLITEPropertyDescriptor> properties = new LinkedList<>();
     private Class<T> clazz;
     private String tableName;
 
-    public SQLiteClassDescriptor(Class<T> clazz, String tableName) throws NoSuchMethodException, SecurityException {
+    public SQLiteClassDescriptor(Class<T> clazz, String tableName) throws NoSuchMethodException {
         this.clazz = clazz;
         this.tableName = tableName;
 
@@ -53,10 +54,10 @@ public class SQLiteClassDescriptor<T> {
                 String setterName;
                 String propName;
                 if (methodName.startsWith("is")) {
-                    propName = Character.toLowerCase(m.getName().charAt(2)) + m.getName().substring(3);
+                    propName = propertyName("is", m.getName());
                     setterName = m.getName().replaceFirst("^is", "set");
                 } else if (methodName.startsWith("get")) {
-                    propName = Character.toLowerCase(m.getName().charAt(3)) + m.getName().substring(4);
+                    propName = propertyName("get", m.getName());
                     setterName = m.getName().replaceFirst("^get", "set");
                 } else {
                     throw new IllegalArgumentException("bad property accessor: " + m);
@@ -77,6 +78,11 @@ public class SQLiteClassDescriptor<T> {
         columnsForSelect = columns.toString();
     }
 
+    private String propertyName(String prefix, String methodName) {
+        int prefixLen = prefix.length();
+        return Character.toLowerCase(methodName.charAt(prefixLen)) + methodName.substring(prefixLen + 1);
+    }
+
     public Collection<T> load(ResultSet rs) throws SQLException, InvocationTargetException, InstantiationException, IllegalAccessException {
         LinkedList<T> tasks = new LinkedList<>();
         while (rs.next()) {
@@ -90,6 +96,8 @@ public class SQLiteClassDescriptor<T> {
                             case "Boolean":
                             case "boolean":
                                 value = 0 != (Integer) rawValue;
+                                break;
+                            default:
                                 break;
                         }
                     }
@@ -126,7 +134,7 @@ public class SQLiteClassDescriptor<T> {
                     }
 
                     Calendar cal = new GregorianCalendar();
-                    cal.set(Calendar.YEAR, 2001);
+                    cal.set(Calendar.YEAR, TWO_THOUSAND_AND_ONE);
                     cal.set(Calendar.MONTH, Calendar.JANUARY);
                     cal.set(Calendar.DAY_OF_MONTH, 1);
                     cal.set(Calendar.HOUR_OF_DAY, 0);

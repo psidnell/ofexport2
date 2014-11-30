@@ -25,11 +25,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * @author psidnell
- * 
+ *
  * Represents an OmniFocus task.
- * 
+ *
  * Note that the root of task represents the project.
- * 
+ *
  * When the model is build a Project is made from the root task
  * which takes ownership of the tasks children.
  */

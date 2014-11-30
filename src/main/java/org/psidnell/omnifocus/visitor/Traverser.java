@@ -23,14 +23,14 @@ import org.psidnell.omnifocus.model.Task;
 
 /**
  * @author psidnell
- * 
+ *
  * An implementation of the visitor pattern.
- * 
+ *
  * Walks the node tree applying Visitor methods on descent,
  * ascent and on all lists of sub nodes.
- * 
+ *
  * A descriptor controls which node types are visited.
- * 
+ *
  */
 public class Traverser {
 
@@ -55,6 +55,8 @@ public class Traverser {
                 break;
             case Task.TYPE:
                 doTraverseTask(visitor, what, (Task) node, true);
+                break;
+            default:
                 break;
         }
     }

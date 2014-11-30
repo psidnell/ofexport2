@@ -17,6 +17,11 @@ package org.psidnell.omnifocus.visitor;
 
 import org.psidnell.omnifocus.model.Node;
 
+/**
+ * @author psidnell
+ *
+ * Describes what nodes should be visited during traversal.
+ */
 public class VisitorDescriptor {
     private boolean visitTasks = false;
     private boolean visitProjects = false;
@@ -59,6 +64,8 @@ public class VisitorDescriptor {
                 case "Context":
                     visitContexts = true;
                     break;
+                default:
+                    break;
             }
         }
         return this;
@@ -79,6 +86,8 @@ public class VisitorDescriptor {
                     break;
                 case "Context":
                     filterContexts = true;
+                    break;
+                default:
                     break;
             }
         }

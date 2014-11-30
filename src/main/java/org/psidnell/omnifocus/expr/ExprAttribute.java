@@ -18,6 +18,12 @@ package org.psidnell.omnifocus.expr;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+/**
+ * @author psidnell
+ *
+ * Identifies an accessor (getter) as an attribute that can be used for expressions.
+ * Only used to provide help information.
+ */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ExprAttribute {
     String help();

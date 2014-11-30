@@ -30,13 +30,13 @@ import org.apache.commons.cli.Options;
  * @author psidnell
  *
  * @param <P>
- * 
+ *
  * A convenience wrapper around CommandLineParser: because everyone always wants to write their own.
- * 
+ *
  * Provides:
  * - Lambda methods to be associated with options to simplify integration.
  * - Phased execution. Options can be grouped and executed by phase.
- * 
+ *
  */
 public class ActiveOptionProcessor<P> {
 
@@ -84,11 +84,11 @@ public class ActiveOptionProcessor<P> {
 
     @SuppressWarnings("unchecked")
     public void printHelp() throws IOException {
-        
+
         System.out.println();
         System.out.println (progName.toUpperCase());
         System.out.println();
-        
+
         try (
             InputStream in = this.getClass().getResourceAsStream("/version.properties")) {
             Properties p = new Properties();
@@ -97,9 +97,9 @@ public class ActiveOptionProcessor<P> {
             System.out.println ("Build Date: " + p.getProperty("date"));
 
         }
-        
+
         System.out.println();
-        
+
         HelpFormatter formatter = new HelpFormatter();
         // Output in the order I specify
         formatter.setOptionComparator((x, y) -> ((ActiveOption<P>) x).getOrder() - ((ActiveOption<P>) y).getOrder());

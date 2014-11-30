@@ -27,9 +27,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * @author psidnell
- * 
+ *
  * Represents the attributes shared between a Project and a Task.
- * 
+ *
  */
 public abstract class CommonProjectAndTaskAttributes extends Node {
 
@@ -176,7 +176,7 @@ public abstract class CommonProjectAndTaskAttributes extends Node {
             }
         }
 
-        String lines[] = ascii.toString().replaceAll("\r", "").split("\n");
+        String[] lines = ascii.toString().replaceAll("\r", "").split("\n");
         String eol = lineSuffix + "\n";
         String indentChars = StringUtils.times(indent, depth);
         String delimiter = eol + indentChars;

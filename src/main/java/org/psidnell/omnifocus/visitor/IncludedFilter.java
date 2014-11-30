@@ -22,9 +22,9 @@ import org.psidnell.omnifocus.model.Task;
 
 /**
  * @author psidnell
- * 
+ *
  * Filter out all nodes who's include flag is false.
- * 
+ *
  */
 public class IncludedFilter implements Visitor {
 

@@ -17,10 +17,7 @@ package org.psidnell.omnifocus.format;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.psidnell.omnifocus.model.Node;
 
@@ -33,11 +30,10 @@ import freemarker.template.TemplateExceptionHandler;
 
 /**
  * @author psidnell
- * 
+ *
  *  Formats the node structure using a FreeMarker template.
  *
  */
-@SuppressWarnings("unused")
 public class FreeMarkerFormatter implements Formatter {
 
     private static final String TEMPLATES = "/templates";
@@ -51,13 +47,13 @@ public class FreeMarkerFormatter implements Formatter {
                 throw new IOException("Resource not found:" + templateName);
             }
         }
-        
+
         Configuration cfg = new Configuration(Configuration.VERSION_2_3_21);
         TemplateLoader templateLoader = new ClassTemplateLoader(this.getClass(), TEMPLATES);
         cfg.setTemplateLoader(templateLoader);
         cfg.setDefaultEncoding("UTF-8");
         cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
-        
+
         // This is fatal - bomb out of application
         try {
             template = cfg.getTemplate(templateName);

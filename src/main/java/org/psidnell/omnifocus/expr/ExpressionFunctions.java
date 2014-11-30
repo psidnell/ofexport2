@@ -23,12 +23,16 @@ import java.util.GregorianCalendar;
 
 /**
  * @author psidnell
- * 
+ *
  * A utility base class that provides methods that simplify using OGNL expressions
  * in command line options, for example creating Date objects from strings to allow
  * filters to be expressed more easily.
  */
 public class ExpressionFunctions {
+
+    private static final int MONTHS_IN_YEAR = 12;
+
+    private static final int DAYS_IN_WEEK = 7;
 
     public static final SimpleDateFormat YYYYMMDD = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -92,6 +96,8 @@ public class ExpressionFunctions {
                 roundToDay(today);
                 today.set(Calendar.DAY_OF_MONTH, num);
                 return today.getTime();
+            default:
+                break;
         }
         return null;
     }
@@ -124,7 +130,7 @@ public class ExpressionFunctions {
             case "w":
             case "week":
             case "weeks":
-                return days(direction * 7 * num, today);
+                return days(direction * DAYS_IN_WEEK * num, today);
             case "m":
             case "month":
             case "months":
@@ -137,6 +143,8 @@ public class ExpressionFunctions {
                 roundToDay(today);
                 today.set(Calendar.YEAR, today.get(Calendar.YEAR) + direction * num);
                 return today.getTime();
+            default:
+                break;
         }
         return null;
     }
@@ -215,6 +223,8 @@ public class ExpressionFunctions {
             case "dec":
             case "december":
                 return findMonth(Calendar.DECEMBER, direction, offset, today);
+            default:
+                break;
         }
         return null;
     }
@@ -222,7 +232,7 @@ public class ExpressionFunctions {
     protected Date findDay(int target, int direction, int unitOffset, Calendar cal) {
         int day = adjustStartOfWeek(cal.get(Calendar.DAY_OF_WEEK));
         int diff = adjustStartOfWeek(target) - day;
-        int off = direction * unitOffset * 7 + diff;
+        int off = direction * unitOffset * DAYS_IN_WEEK + diff;
         cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH) + off);
         return cal.getTime();
     }
@@ -230,7 +240,7 @@ public class ExpressionFunctions {
     protected Date findMonth(int target, int direction, int unitOffset, Calendar cal) {
         int month = cal.get(Calendar.MONTH);
         int diff = target - month;
-        int off = direction * unitOffset * 12 + diff;
+        int off = direction * unitOffset * MONTHS_IN_YEAR + diff;
         cal.set(Calendar.MONTH, cal.get(Calendar.MONTH) + off);
         cal.set(Calendar.DAY_OF_MONTH, 1);
         roundToDay(cal);
@@ -240,7 +250,7 @@ public class ExpressionFunctions {
     private int adjustStartOfWeek(int dow) {
         // DOW starts on Sunday but want Monday
         if (dow == Calendar.SUNDAY) {
-            return 7;
+            return DAYS_IN_WEEK;
         } else {
             return dow - Calendar.SUNDAY;
         }

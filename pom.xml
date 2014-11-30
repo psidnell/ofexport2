@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.psidnell</groupId>
 	<artifactId>ofexport-v2</artifactId>
@@ -155,7 +156,7 @@
 								<copy todir="${basedir}/bin">
 									<fileset dir="${project.build.directory}/ofexport/bin" />
 								</copy>
-								<delete dir="${basedir}/repo"/>
+								<delete dir="${basedir}/repo" />
 								<copy todir="${basedir}/repo">
 									<fileset dir="${project.build.directory}/ofexport/repo" />
 								</copy>
@@ -167,7 +168,77 @@
 					</execution>
 				</executions>
 			</plugin>
+			<!-- Doesn't work with Java 8 <plugin> <groupId>org.codehaus.mojo</groupId> 
+				<artifactId>cobertura-maven-plugin</artifactId> <version>2.6</version> <executions> 
+				<execution> <id>clean</id> <phase>pre-site</phase> <goals> <goal>clean</goal> 
+				</goals> </execution> <execution> <id>instrument</id> <phase>site</phase> 
+				<goals> <goal>instrument</goal> <goal>cobertura</goal> </goals> </execution> 
+				</executions> </plugin> -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>3.0</version>
+				<configuration>
+					<reportPlugins>
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-project-info-reports-plugin</artifactId>
+							<version>2.4</version>
+							<configuration>
+								<reportSets>
+									<reportSet>
+										<reports><!-- select reports -->
+											<report>index</report>
+											<!--<report>plugin-management</report> -->
+											<!--<report>summary</report> -->
+										</reports>
+									</reportSet>
+								</reportSets>
+							</configuration>
+						</plugin>
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-jxr-plugin</artifactId>
+							<version>2.5</version>
+						</plugin>
+						<!-- 
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-project-info-reports-plugin</artifactId>
+							<version>2.7</version>
+							<configuration>
+								<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+							</configuration>
+						</plugin>
+						-->
+						<!-- Doesn't work with java 8 <plugin> <groupId>org.codehaus.mojo</groupId> 
+							<artifactId>cobertura-maven-plugin</artifactId> <version>2.6</version> <configuration> 
+							<formats> <format>html</format> </formats> </configuration> </plugin> -->
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-checkstyle-plugin</artifactId>
+							<version>2.13</version>
+							<reportSets>
+								<reportSet>
+									<reports>
+										<report>checkstyle</report>
+									</reports>
+								</reportSet>
+							</reportSets>
+							<configuration>
+								<configLocation>doc/metrics/checkstyle.xml</configLocation>
+							</configuration>
+						</plugin>
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-surefire-report-plugin</artifactId>
+							<version>2.18</version>
+						</plugin>
+					</reportPlugins>
+				</configuration>
+			</plugin>
 		</plugins>
+
 		<pluginManagement>
 			<plugins>
 				<plugin>

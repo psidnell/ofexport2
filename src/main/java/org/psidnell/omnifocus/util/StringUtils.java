@@ -21,9 +21,9 @@ import java.util.StringJoiner;
 
 /**
  * @author psidnell
- * 
+ *
  * Things to do with Strings.
- * 
+ *
  */
 public class StringUtils {
 

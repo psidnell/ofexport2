@@ -27,12 +27,12 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 /**
  * @author psidnell
  *
- * Formats the node by dumping the entire tree with Jackson.
+ *         Formats the node by dumping the entire tree with Jackson.
  *
  */
 public class XMLFormatter implements Formatter {
 
-    private static XmlMapper MAPPER = new XmlMapper();
+    private static final XmlMapper MAPPER = new XmlMapper();
 
     @Override
     public void format(Node node, Writer out) throws IOException {

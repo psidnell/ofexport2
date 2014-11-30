@@ -21,14 +21,14 @@ import org.psidnell.omnifocus.visitor.VisitorDescriptor;
 /**
  * @author psidnell
  *
- * Traverses the node tree including only those nodes where the OGNL expression evaluates true.
+ *         Traverses the node tree including only those nodes where the OGNL expression evaluates true.
  */
 public class ExprIncludeVisitor extends ExprVisitor {
 
     private boolean projectMode;
 
     public ExprIncludeVisitor(String expr, boolean projectMode, VisitorDescriptor visitWhat, VisitorDescriptor applyToWhat) {
-        super (expr, visitWhat, applyToWhat);
+        super(expr, visitWhat, applyToWhat);
         this.projectMode = projectMode;
     }
 

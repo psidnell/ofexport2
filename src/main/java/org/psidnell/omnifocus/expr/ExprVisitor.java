@@ -27,9 +27,9 @@ import org.psidnell.omnifocus.visitor.VisitorDescriptor;
  * @author psidnell
  *
  * Traverses the node tree applying the OGNL expression to each node type required.
- * 
+ *
  * Two descriptors are supplied to describe which node types to visit and which node types
- * have the expression applied. 
+ * have the expression applied.
  */
 public class ExprVisitor implements Visitor {
 

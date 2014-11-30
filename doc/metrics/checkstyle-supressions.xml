@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE suppressions PUBLIC
+    "-//Puppy Crawl//DTD Suppressions 1.1//EN"
+    "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
+
+<suppressions>
+    <!-- Checkstyle fails on these, lambdas? -->
+    <suppress files="CommandLine\.java" checks="TreeWalker"/>
+    <suppress files="OFExport\.java" checks="TreeWalker"/>
+    <suppress files="ActiveOptionProcessor\.java" checks="TreeWalker"/>
+    <suppress files="DataCache\.java" checks="TreeWalker"/>
+    <suppress files="StringUtils\.java" checks="TreeWalker"/>
+    <suppress files="CompoundComparator\.java" checks="TreeWalker"/>
+    <suppress files="Visitor\.java" checks="TreeWalker"/>
+</suppressions>

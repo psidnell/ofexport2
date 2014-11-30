@@ -38,11 +38,12 @@ import org.psidnell.omnifocus.model.Task;
 
 /**
  * @author psidnell
- * 
+ *
  * The main SQLite data access object.
  */
 public class SQLiteDAO {
 
+    private static final int THREE = 3;
     private String[] possibleDBLocations;
 
     public String getDriverURL() throws SQLException {
@@ -82,7 +83,7 @@ public class SQLiteDAO {
         return DriverManager.getConnection(getDriverURL());
     }
 
-    public DataCache load() throws SQLException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
+    public DataCache load() throws SQLException, IllegalAccessException, InvocationTargetException, InstantiationException {
         try (
             Connection c = getConnection()) {
             Collection<ProjectInfo> projInfos = load(c, PROJECT_INFO_DAO);
@@ -93,7 +94,7 @@ public class SQLiteDAO {
         }
     }
 
-    public <T> Collection<T> load(Connection c, SQLiteClassDescriptor<T> desc) throws SQLException, IllegalAccessException, IllegalArgumentException,
+    public <T> Collection<T> load(Connection c, SQLiteClassDescriptor<T> desc) throws SQLException, IllegalAccessException,
             InvocationTargetException, InstantiationException {
         try (
             PreparedStatement stmt = c.prepareStatement("select " + desc.getColumnsForSelect() + " from " + desc.getTableName())) {
@@ -140,14 +141,14 @@ public class SQLiteDAO {
         try (
             ResultSet rs = md.getTables(null, null, "%", null)) {
             while (rs.next()) {
-                String tableName = rs.getString(3);
+                String tableName = rs.getString(THREE);
                 tableNames.add(tableName);
             }
         }
         return tableNames;
     }
 
-    public void setPossibleDBLocations(String possibleDBLocations[]) {
+    public void setPossibleDBLocations(String[] possibleDBLocations) {
         this.possibleDBLocations = possibleDBLocations;
     }
 }

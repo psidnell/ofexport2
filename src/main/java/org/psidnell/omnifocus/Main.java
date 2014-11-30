@@ -17,7 +17,6 @@ package org.psidnell.omnifocus;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
@@ -34,8 +33,8 @@ import org.springframework.context.ApplicationContext;
 
 /**
  * @author psidnell
- * 
- * The main(...) of the program. There had to be one somewhere. Well here it is.
+ *
+ *         The main(...) of the program. There had to be one somewhere. Well here it is.
  */
 public class Main extends CommandLine {
 
@@ -43,8 +42,7 @@ public class Main extends CommandLine {
 
     private SQLiteDAO sqliteDAO;
 
-    private void loadData() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, SQLException, FileNotFoundException,
-            IOException {
+    private void loadData() throws IllegalAccessException, InvocationTargetException, InstantiationException, SQLException, IOException {
         if (jsonInputFile != null) {
             data = DataCache.importData(new File(jsonInputFile));
         } else {
@@ -78,7 +76,7 @@ public class Main extends CommandLine {
         }
     }
 
-    void run() throws Exception {
+    private void run() throws Exception {
         Writer out;
         if (outputFile != null) {
             out = new BufferedWriter(new FileWriter(outputFile));
@@ -110,7 +108,7 @@ public class Main extends CommandLine {
         processor.processOptions(this, args, AFTER_LOAD);
     }
 
-    public static void main(String args[]) throws Exception {
+    public static void main(String[] args) throws Exception {
 
         ApplicationContext appContext = ApplicationContextFactory.create();
 

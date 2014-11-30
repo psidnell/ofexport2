@@ -26,8 +26,8 @@ import freemarker.template.TemplateException;
  * @author psidnell
  *
  * Interface for a Formatter. Writes the node structure to the output in a particular format.
- * 
+ *
  */
 public interface Formatter {
-    public void format(Node root, Writer out) throws IOException, TemplateException;
+    void format(Node root, Writer out) throws IOException, TemplateException;
 }

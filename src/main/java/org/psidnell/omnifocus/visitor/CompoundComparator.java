@@ -25,13 +25,13 @@ import org.psidnell.omnifocus.model.Node;
  * @author psidnell
  *
  * @param <T>
- * 
+ *
  * A Node comparator that bases it's result on chain of sub comparators.
- * 
+ *
  * The comparators are executed in order until one finds a difference.
- * 
+ *
  * If the no difference is found the nodes rank is used as a tie breaker.
- * 
+ *
  */
 public class CompoundComparator<T extends Node> implements Comparator<T> {
 

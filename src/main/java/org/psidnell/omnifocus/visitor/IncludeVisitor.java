@@ -22,9 +22,9 @@ import org.psidnell.omnifocus.model.Task;
 
 /**
  * @author psidnell
- * 
+ *
  * Set all nodes include flag to the specified value.
- * 
+ *
  */
 public class IncludeVisitor implements Visitor {
 

@@ -29,8 +29,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * @author psidnell
- * 
- * The root class for all nodes in the object tree.
+ *
+ *         The root class for all nodes in the object tree.
  */
 public abstract class Node extends ExpressionFunctions {
 
@@ -146,18 +146,23 @@ public abstract class Node extends ExpressionFunctions {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         Node other = (Node) obj;
         if (id == null) {
-            if (other.id != null)
+            if (other.id != null) {
                 return false;
-        } else if (!id.equals(other.id))
+            }
+        } else if (!id.equals(other.id)) {
             return false;
+        }
         return true;
     }
 

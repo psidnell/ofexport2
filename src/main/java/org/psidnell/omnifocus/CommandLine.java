@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * @author psidnell
- * 
+ *
  * Command line processing. Contains the options themselves and the values
  * the options affect.
  */
@@ -54,94 +54,94 @@ public class CommandLine {
     protected String format = null;
 
     static {
-        
+
         // HELP
-        
+
         OPTIONS.addOption(new ActiveOption<CommandLine> (
                 "h", "help", false, "print help.",
                 (m,o)->m.printHelp (),
                 BEFORE_LOAD));
-        
+
         OPTIONS.addOption(new ActiveOption<CommandLine> (
                 "i", "info", false, "print additional help information.",
                 (m,o)->m.printAdditionalInfo (),
                 BEFORE_LOAD));
-        
+
         // PROJECT
-        
+
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "pe", "projectexpr", true, "include items where project expression is true.",
                 (m,o)->m.ofexport.addProjectExpression(o.nextValue()),
                 AFTER_LOAD));
-                
+
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "pn", "projectname", true, "include project specified by name.",
                 (m,o)->m.ofexport.addProjectExpression("name=='" + escape(o.nextValue()) + "'"),
                 AFTER_LOAD));
-        
+
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "ps", "projectsort", true, "sort projects by field.",
                 (m,o)->m.ofexport.addProjectComparator(o.nextValue()),
                 AFTER_LOAD));
 
         // FOLDER
-        
+
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "fe", "folderexpr", true, "include items where folder expression is true.",
                 (m,o)->m.ofexport.addFolderExpression (o.nextValue()),
                 AFTER_LOAD));
-        
+
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "fn", "foldername", true, "include folder specified by name.",
                 (m,o)->m.ofexport.addFolderExpression("name=='" + escape(o.nextValue()) + "' || included"),
                 AFTER_LOAD));
-        
+
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "fs", "foldersort", true, "sort folders by field.",
                 (m,o)->m.ofexport.addFolderComparator(o.nextValue()),
                 AFTER_LOAD));
 
         // TASK
-        
+
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "te", "taskexpr", true, "include items where task expression is true.",
                 (m,o)->m.ofexport.addTaskExpression(o.nextValue()),
                 AFTER_LOAD));
-        
+
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "tn", "taskname", true, "include tasks specified by name.",
                 (m,o)->m.ofexport.addTaskExpression("name=='" + escape(o.nextValue()) + "' || included"),
                 AFTER_LOAD));
-        
+
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "ts", "tasksort", true, "sort tasks by field",
                 (m,o)->m.ofexport.addTaskComparator(o.nextValue()),
                 AFTER_LOAD));
 
         // CONTEXT
-        
+
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "ce", "contextexpr", true, "include items where context expression is true.",
                 (m,o)->m.ofexport.addContextExpression(o.nextValue()),
                 AFTER_LOAD));
-        
+
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "cn", "taskname", true, "include contexts specified by name.",
                 (m,o)->m.ofexport.addContextExpression("name=='" + escape(o.nextValue()) + "' || included"),
                 AFTER_LOAD));
-        
+
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "cs", "contextsort", true, "sort contexts by field.",
                 (m,o)->m.ofexport.addContextComparator(o.nextValue()),
                 AFTER_LOAD));
-        
+
         // GENERAL
-        
+
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "e", "expr", true, "include items (eany type) where context expression is true.",
                 (m,o)->m.ofexport.addExpression(o.nextValue()),
                 AFTER_LOAD));
-        
+
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "m", "modexpr", true, "modify a node value.",
                 (m,o)->m.ofexport.addModifyExpression(o.nextValue()),
@@ -151,33 +151,33 @@ public class CommandLine {
                 "p", "prune", false, "prune empty folders, projects and contexts.",
                 (m,o)->m.ofexport.addPruneFilter (),
                 AFTER_LOAD));
-        
+
         // MODES
-        
+
         OPTIONS.addOption(new ActiveOption<CommandLine> (
                 "c", "contextmode", false, "display context hierarchy instead of project hierarchy).",
                 (m,o)->m.ofexport.setProjectMode(false),
                 BEFORE_LOAD));
-        
+
         // OUTPUT
-        
+
         OPTIONS.addOption(new ActiveOption<CommandLine> (
                 "f", "format", true, "output in this format",
                 (m,o)->m.format = o.nextValue(),
                 AFTER_LOAD));
-        
+
         OPTIONS.addOption(new ActiveOption<CommandLine> (
                 "o", "output", true, "write output to the file",
                 (m,o)->m.outputFile = o.nextValue(),
                 BEFORE_LOAD));
-        
+
         // DEBUG/DEV
-        
+
         OPTIONS.addOption(new ActiveOption<CommandLine> (
                 "l", "load", true, "load data from JSON file instead of database (for testing).",
                 (m,o)->m.jsonInputFile = o.nextValue(),
                 BEFORE_LOAD));
-        
+
         OPTIONS.addOption(new ActiveOption<CommandLine> (
                 "loglevel", true, "set log level [debug,info,warn,error].",
                 (m,o)->m.setLogLevel (o.nextValue()),

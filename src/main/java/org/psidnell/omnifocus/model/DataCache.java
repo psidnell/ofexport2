@@ -39,14 +39,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * @author psidnell
- * 
+ *
  * A repository for all the data loaded/saved by the application.
- * 
+ *
  * Also weaves the flat object structure into it's tree form by
  * (for example) using the object references provided by the
  * database and connecting the objects directly.
- * 
- * 
+ *
+ *
  */
 public class DataCache {
 
@@ -190,7 +190,7 @@ public class DataCache {
 
     /**
      * Load raw data from a json file. Currently used for testing to avoid using live DB data.
-     * 
+     *
      * @param file
      * @return
      * @throws FileNotFoundException
@@ -206,7 +206,7 @@ public class DataCache {
 
     /**
      * Exports data from the DB to a json file. Currently used for testing.
-     * 
+     *
      * @param file
      * @param filterFn allows data to be filtered to reduce volume e.g. items whose name starts with "%Test".
      * @param sqliteDAO

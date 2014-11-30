@@ -42,17 +42,17 @@ import freemarker.template.TemplateException;
 
 /**
  * @author psidnell
- * 
+ *
  * The main processing class.
- * 
+ *
  * 1. Model objects are added to the root project/context.
- * 
+ *
  * 2. Filter expressions are added to reduce the tree.
- * 
+ *
  * 3. Sorting comparators are added to control the output ordering
- * 
+ *
  * 4. Finally the tree is processed to produce the output.
- * 
+ *
  */
 public class OFExport {
 
@@ -161,14 +161,14 @@ public class OFExport {
         addFilter(new ExprIncludeVisitor(expression, projectMode, visitWhat, applyToWhat));
         addFilter(new IncludedFilter());
     }
-    
+
     public void addExpression(String expression) {
         VisitorDescriptor visitWhat = new VisitorDescriptor().visitAll();
         VisitorDescriptor applyToWhat = new VisitorDescriptor().visitAll();
         addFilter(new ExprIncludeVisitor(expression, projectMode, visitWhat, applyToWhat));
         addFilter(new IncludedFilter());
     }
-    
+
     public void addModifyExpression(String expression) {
         VisitorDescriptor visitWhat = new VisitorDescriptor().visitAll();
         VisitorDescriptor applyToWhat = new VisitorDescriptor().visitAll();

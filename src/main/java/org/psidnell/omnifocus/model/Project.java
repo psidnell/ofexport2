@@ -24,13 +24,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * @author psidnell
- * 
+ *
  * Represents an OmniFocus project.
- * 
+ *
  * Note that projects aren't directly represented in the database.
- * 
- * The database has a ProjectInfo and a root task, the union of 
- * which make up a Project. 
+ *
+ * The database has a ProjectInfo and a root task, the union of
+ * which make up a Project.
  */
 public class Project extends CommonProjectAndTaskAttributes {
 

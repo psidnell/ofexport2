@@ -26,7 +26,7 @@ import org.apache.commons.cli.Option;
  * @author psidnell
  *
  * @param <P>
- * 
+ *
  * Extends the option object such that simple lambda expression actions (ActiveOptionProcess) can
  * be provided for execution during processing of the command line.
  */
@@ -38,28 +38,28 @@ public class ActiveOption<P> extends Option {
     private int order;
     private int phase;
 
-    public ActiveOption(String opt, String description, ActiveOptionProcess<P> processor, int phase) throws IllegalArgumentException {
+    public ActiveOption(String opt, String description, ActiveOptionProcess<P> processor, int phase) {
         super(opt, description);
         this.processor = processor;
         setOrder();
         this.phase = phase;
     }
 
-    public ActiveOption(String opt, boolean hasArg, String description, ActiveOptionProcess<P> processor, int phase) throws IllegalArgumentException {
+    public ActiveOption(String opt, boolean hasArg, String description, ActiveOptionProcess<P> processor, int phase) {
         super(opt, hasArg, description);
         this.processor = processor;
         setOrder();
         this.phase = phase;
     }
 
-    public ActiveOption(String opt, String longOpt, boolean hasArg, String description, ActiveOptionProcess<P> processor, int phase) throws IllegalArgumentException {
+    public ActiveOption(String opt, String longOpt, boolean hasArg, String description, ActiveOptionProcess<P> processor, int phase) {
         super(opt, longOpt, hasArg, description);
         this.processor = processor;
         setOrder();
         this.phase = phase;
     }
 
-    private final void setOrder() {
+    private void setOrder() {
         synchronized (ActiveOption.class) {
             order = count++;
         }
