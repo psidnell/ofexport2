@@ -1,6 +1,6 @@
 # OFEXPORT2
 
-*Updated Sun 30 Nov 2014 11:12:10 GMT.*
+*Updated 2014-11-30.*
 
 ## Table of Contents
 

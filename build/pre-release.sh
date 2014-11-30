@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DATE=`date`
+DATE=`date "+%Y-%m-%d"`
 
 # The version from the pom file without the SNAPSHOT suffix
 NEXT_VERSION=`grep '<version>' pom.xml | head -1 | sed -e 's/.*<version>//' -e 's/<\/version>.*//' -e 's/-SNAPSHOT//'`
