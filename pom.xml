@@ -23,11 +23,6 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.psidnell</groupId>
-			<artifactId>osascript-binding</artifactId>
-			<version>1.0.0</version>
-		</dependency>
-		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-core</artifactId>
 			<version>${jacksonVersion}</version>
@@ -160,6 +155,7 @@
 								<copy todir="${basedir}/bin">
 									<fileset dir="${project.build.directory}/ofexport/bin" />
 								</copy>
+								<delete dir="${basedir}/repo"/>
 								<copy todir="${basedir}/repo">
 									<fileset dir="${project.build.directory}/ofexport/repo" />
 								</copy>
