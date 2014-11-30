@@ -4,11 +4,10 @@
 
 ### ofexport2
 
-- Create "installer"
-  - need this month date option for TODO/DONE
-  - maven site?
 - Code Quality 
+  - Do I really want to publish the site? big...
   - Coverage
+  - maven site report
   - Timing and stats
 
 > > Have default or named configuration files
@@ -17,9 +16,8 @@
   - Add logging
 - documentation
 - "man" opt instead of "i" print comprehensive help - sub pages? same source as markdown help?
-- Transforms - create one to experiment
 - How to restructure (group knitting)
-- Look at OF1 for command line inspiration
+  - Transforms - create one to experiment
 - How to determine first available?
 
 

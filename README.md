@@ -1,6 +1,6 @@
 # OFEXPORT2
 
-*Updated Sun 30 Nov 2014 07:40:05 GMT.*
+*Updated Sun 30 Nov 2014 11:12:10 GMT.*
 
 ## Table of Contents
 
@@ -358,6 +358,7 @@ After installing maven, cd into the ofexport folder and run:
 
 The build folder contains two utility scripts:
 
+- **update-site.sh** recreates the maven site reports (doc/site). 
 - **pre-release.sh** recreates several files with versions/dates updated.
 - **release.sh** runs the maven release goals.
 
