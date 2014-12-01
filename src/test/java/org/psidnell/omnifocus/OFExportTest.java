@@ -66,7 +66,7 @@ public class OFExportTest {
         ofExport.getProjectRoot().add(p1);
         ofExport.getProjectRoot().add(p2);
 
-        ofExport.addProjectExpression("name=='p1'");
+        ofExport.addProjectExpression("name=='p1'", true);
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
@@ -92,7 +92,7 @@ public class OFExportTest {
         ofExport.getProjectRoot().add(p1);
         ofExport.getProjectRoot().add(p2);
 
-        ofExport.addProjectExpression("+:name=='p1'");
+        ofExport.addProjectExpression("name=='p1'", true);
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
@@ -118,7 +118,7 @@ public class OFExportTest {
         ofExport.getProjectRoot().add(f1);
         ofExport.getProjectRoot().add(f2);
 
-        ofExport.addFolderExpression("name=='f1'");
+        ofExport.addFolderExpression("name=='f1'", true);
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
@@ -145,7 +145,7 @@ public class OFExportTest {
         ofExport.getContextRoot().add(c1);
         ofExport.getContextRoot().add(c2);
 
-        ofExport.addContextExpression("name=='c1'");
+        ofExport.addContextExpression("name=='c1'", true);
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
@@ -174,7 +174,7 @@ public class OFExportTest {
         ofExport.getProjectRoot().add(p1);
         ofExport.getProjectRoot().add(p2);
 
-        ofExport.addTaskExpression("+:name=='t1'");
+        ofExport.addTaskExpression("name=='t1'", true);
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
@@ -207,7 +207,7 @@ public class OFExportTest {
         ofExport.getProjectRoot().add(p1);
         ofExport.getProjectRoot().add(p2);
 
-        ofExport.addTaskExpression("-:name=='t2'");
+        ofExport.addTaskExpression("name=='t2'", false);
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
@@ -237,7 +237,7 @@ public class OFExportTest {
         ofExport.getProjectRoot().add(p1);
         ofExport.getProjectRoot().add(p2);
 
-        ofExport.addTaskExpression("name=='t1' || included");
+        ofExport.addTaskExpression("name=='t1'", true);
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
@@ -621,7 +621,7 @@ public class OFExportTest {
         ofExport.getProjectRoot().add(p1);
         ofExport.getProjectRoot().add(p2);
 
-        ofExport.addProjectExpression("name=='p1'");
+        ofExport.addProjectExpression("name=='p1'", true);
         ofExport.addModifyExpression("type=='Project' && name='foo'+type");
         ofExport.process();
         StringWriter out = new StringWriter();

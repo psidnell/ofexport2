@@ -134,7 +134,7 @@ Simply delete the ofexport2 folder and remove the lines you added to your .bash_
 
 To print the contents of a named project (In this case I have a project called ofexport2) type:
 
-    of2 -pn ofexport2
+    of2 -pn 'ofexport2'
 
 This outputs the following:
 
@@ -158,19 +158,49 @@ This outputs the following:
 
 The default output format is a simple text list where uncompleted tasks are prefixed with a [ ] and completed tasks are prefixed with a [X].
 
-The tool has searched all the projects for those that have the name "ofexport2" (-pn specifies project name). For any that match it shows all the items directly above it (in this case my "Home" folder) and any items beneath it.
+The tool has searched all the projects for those that have the name "ofexport2" (-pn specifies project name). For any project that matches it shows all the items directly above it (in this case my "Home" folder) and any items beneath it.
 
 ### Filtering ###
 
-Filters are expressions used to limit what Folders, Projects, Tasks or Contexts appear in the output of the tool. They can be simple like a text search or complex expressions that make use of extensive task attributes.  
- 
-The usage of "-pn" in the previous example is a simple filter. Any number of filters can be used and each filter is run on the results of the last. Thus filters can only reduce what appears in the output.
+- Filters are expressions used to limit what Folders, Projects, Tasks or Contexts appear in the output.
+- Filters can be simple like a text search.
+- Filters can be complex expressions that make use of various attributes of an item.
+- Filters can include items of interest or exclude unwanted items.
+- Any number of filters can be used and each filter is run on the results of the last, filters can only reduce what appears in the output.
 
-For example to narrow what appeared in the previous output to uncompleted tasks we'd use:
+The usage of "-pn" in the previous example is a simple filter that limits the output to Projects that have a specific name. 
 
-    of2 -pn ofexport2 -te '!completed'
+The difference betwee inclide and exclude mode is:
 
-The output will now be:
+- In include mode, if the expression matches a node, then it's parent and all it's descendents will be included in the output.
+- In exclude mode, if the expression matches a node then it and it's descendents are eliminated.
+
+This sounds complicated but what it means is that generally when want to see something you get to see where it is and everything under it. Conversely when you don't want to see something you don't see it or anything under it.
+
+Building on the previous example, here's an operation with two include filters that shows all completed tasks in the "ofexport2" project:
+
+    of2 -pn ofexport2 -ti 'completed'
+
+Produces:
+
+    Home
+      ofexport2
+        [ ] Create "installer"
+          [X] Add license, docs etc.
+          [X] Create "release process"
+          [X] Generate README.md from template
+        [X] Filters - finish - test
+        [ ] Code Quality
+          [X] Address TODOs
+          [X] basic Javadoc
+          [X] Only integration tests should use real database
+          [X] format code
+
+If instead you wanted to only see uncompleted tasks you can change an include filter into an exclude filter:
+
+    of2 -pn ofexport2 -tx 'completed'
+
+Produces:
 
     Home
       ofexport2
@@ -183,19 +213,25 @@ The output will now be:
           [ ] Timing and stats
           [ ] Add logging
 
-The "-te" option is a task expression (actually an [OGNL](http://commons.apache.org/proper/commons-ognl/) expression) that is eliminating tasks that have been completed.
+The "-tx" option is a task exclude expression (actually an [OGNL](http://commons.apache.org/proper/commons-ognl/) expression) that is eliminating tasks that have been completed.
 
 In OGNL '!' means "not" and "completed" is one of several attributes that a Task has.
 
 The single quotes around the argument to -te are to prevent bash from seeing the '!' - it has special meaning in bash.
 
-Each filter expression is applied to all applicable node types and only that match are included. More specifically, if the expression evaluates to true then the node, it's parent and all it's descendents will be included in the output - otherwise it and it's descendents are eliminated. This sounds complicated but what it means is that generally when something matches you get to see where it is and everything in it.
+Note that:
 
-There are options for each node type. To see all the options type:
+    of2 -pn ofexport2
+
+is actually shorthand for:
+
+    of2 -pi 'name=="ofexport2"'
+
+There are include/exclude options for each node type. To see all the options type:
 
     of2
     
-You will see -fn and -fe for Folders, -tn and -te for Tasks etc.
+You will see -fn, -fi and -fx for Folders, -tn, -ti and -tx for Tasks etc.
 
 Folders, Projects, Tasks and Contexts all have attributes that you can use in filters. To get a complete list of the attributes available you can type:
 
@@ -216,49 +252,9 @@ This will print all the attributes for all the types, for example here are some 
 
 Any number of expressions can be provided and filtering expressions can be any valid OGNL expression. These can be complex logical expressions:
 
-    of2 -pe 'flagged && !available && taskCount > 1'
+    of2 -pi 'flagged && !available && taskCount > 1'
 
-These expressions can provide fine grained control of what's printed. For example if you have the following amongst your projects:
-
-- Folder
-    - Project
-        - [ ] Task X
-            - [X] Sub Task X
-            - [ ] Sub Task Y
-            - [ ] Sub Task Z
-
-You can search for an uncompleted Task containing "X" as follows:
-
-    of2 -te 'name.contains("X") && completed==false'
-    
-You will get:
-
-    Folder
-      Project
-        [] Task X
-
-This might at first seem odd because it conflicts with what's been said - that when something matches we see it and everything beneath it.
-When seaching for a Project, when one matches we would see all Tasks beneath. However, the expression here applies to Tasks - and hence sub Tasks.
-Even though the root task matches, the matching continues and the expression will also be applied to the sub tasks where it fails.
-
-If you wanted to see all the children of the matching task whether completed or not and whatever their name or state you could try:
-
-    of2 -te '(name.contains("X") && completed==false) || included'
-           
-And you would get:
-
-    Folder
-      Project
-        [ ] Task X
-          [X] Sub Task X
-          [ ] Sub Task Y
-          [ ] Sub Task Z
-
-This makes use of the special "included" attribute which is used internally by ofexport during filtering. If the current expression has evaluated to true on any node above one being matched, then evaluated will be true. If you need to do something complex then this may prove useful.
-
-When you use -fn, -tn or -cn, they actually expand internally to be
-
-    name="<your search>" || included 
+These expressions can provide fine grained control of what's printed.
 
 # Reference #
 

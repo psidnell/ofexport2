@@ -58,116 +58,138 @@ public class CommandLine {
         // HELP
 
         OPTIONS.addOption(new ActiveOption<CommandLine> (
-                "h", "help", false, "print help.",
+                "h", false, "print help.",
                 (m,o)->m.printHelp (),
                 BEFORE_LOAD));
 
         OPTIONS.addOption(new ActiveOption<CommandLine> (
-                "i", "info", false, "print additional help information.",
+                "i", false, "print additional help information.",
                 (m,o)->m.printAdditionalInfo (),
                 BEFORE_LOAD));
 
         // PROJECT
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
-                "pe", "projectexpr", true, "include items where project expression is true.",
-                (m,o)->m.ofexport.addProjectExpression(o.nextValue()),
+                "pi", true, "include items where project expression is true.",
+                (m,o)->m.ofexport.addProjectExpression(o.nextValue(), true),
                 AFTER_LOAD));
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
-                "pn", "projectname", true, "include project specified by name.",
-                (m,o)->m.ofexport.addProjectExpression("name=='" + escape(o.nextValue()) + "'"),
+                "px", true, "exclude items where project expression is true.",
+                (m,o)->m.ofexport.addProjectExpression(o.nextValue(), false),
+                AFTER_LOAD));
+
+
+        OPTIONS.addOption(new ActiveOption<CommandLine>(
+                "pn", true, "include project specified by name.",
+                (m,o)->m.ofexport.addProjectExpression("name=='" + escape(o.nextValue()) + "'", true),
                 AFTER_LOAD));
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
-                "ps", "projectsort", true, "sort projects by field.",
+                "ps", true, "sort projects by field.",
                 (m,o)->m.ofexport.addProjectComparator(o.nextValue()),
                 AFTER_LOAD));
 
         // FOLDER
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
-                "fe", "folderexpr", true, "include items where folder expression is true.",
-                (m,o)->m.ofexport.addFolderExpression (o.nextValue()),
+                "fi", true, "include items where folder expression is true.",
+                (m,o)->m.ofexport.addFolderExpression (o.nextValue(), true),
                 AFTER_LOAD));
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
-                "fn", "foldername", true, "include folder specified by name.",
-                (m,o)->m.ofexport.addFolderExpression("name=='" + escape(o.nextValue()) + "' || included"),
+                "fx", true, "exclude items where folder expression is true.",
+                (m,o)->m.ofexport.addFolderExpression (o.nextValue(), false),
                 AFTER_LOAD));
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
-                "fs", "foldersort", true, "sort folders by field.",
+                "fn", true, "include folder specified by name.",
+                (m,o)->m.ofexport.addFolderExpression("name=='" + escape(o.nextValue()) + "'", true),
+                AFTER_LOAD));
+
+        OPTIONS.addOption(new ActiveOption<CommandLine>(
+                "fs", true, "sort folders by field.",
                 (m,o)->m.ofexport.addFolderComparator(o.nextValue()),
                 AFTER_LOAD));
 
         // TASK
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
-                "te", "taskexpr", true, "include items where task expression is true.",
-                (m,o)->m.ofexport.addTaskExpression(o.nextValue()),
+                "ti", true, "include items where task expression is true.",
+                (m,o)->m.ofexport.addTaskExpression(o.nextValue(), true),
                 AFTER_LOAD));
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
-                "tn", "taskname", true, "include tasks specified by name.",
-                (m,o)->m.ofexport.addTaskExpression("name=='" + escape(o.nextValue()) + "' || included"),
+                "tx", true, "include items where task expression is true.",
+                (m,o)->m.ofexport.addTaskExpression(o.nextValue(), false),
+                AFTER_LOAD));
+
+
+        OPTIONS.addOption(new ActiveOption<CommandLine>(
+                "tn", true, "include tasks specified by name.",
+                (m,o)->m.ofexport.addTaskExpression("name=='" + escape(o.nextValue()) + "'" , true),
                 AFTER_LOAD));
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
-                "ts", "tasksort", true, "sort tasks by field",
+                "ts", true, "sort tasks by field",
                 (m,o)->m.ofexport.addTaskComparator(o.nextValue()),
                 AFTER_LOAD));
 
         // CONTEXT
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
-                "ce", "contextexpr", true, "include items where context expression is true.",
-                (m,o)->m.ofexport.addContextExpression(o.nextValue()),
+                "ci", true, "include items where context expression is true.",
+                (m,o)->m.ofexport.addContextExpression(o.nextValue(), true),
                 AFTER_LOAD));
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
-                "cn", "taskname", true, "include contexts specified by name.",
-                (m,o)->m.ofexport.addContextExpression("name=='" + escape(o.nextValue()) + "' || included"),
+                "cx", true, "include contexts specified by name.",
+                (m,o)->m.ofexport.addContextExpression("name=='" + escape(o.nextValue()) + "'", true),
                 AFTER_LOAD));
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
-                "cs", "contextsort", true, "sort contexts by field.",
+                "cs", true, "sort contexts by field.",
                 (m,o)->m.ofexport.addContextComparator(o.nextValue()),
                 AFTER_LOAD));
 
         // GENERAL
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
-                "e", "expr", true, "include items (eany type) where context expression is true.",
-                (m,o)->m.ofexport.addExpression(o.nextValue()),
+                "ai", true, "include items (any type) where context expression is true.",
+                (m,o)->m.ofexport.addExpression(o.nextValue(), true),
                 AFTER_LOAD));
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
-                "m", "modexpr", true, "modify a node value.",
+                "ax", true, "exclude items (any type) where context expression is true.",
+                (m,o)->m.ofexport.addExpression(o.nextValue(), false),
+                AFTER_LOAD));
+
+        OPTIONS.addOption(new ActiveOption<CommandLine>(
+                "m", true, "modify a node value.",
                 (m,o)->m.ofexport.addModifyExpression(o.nextValue()),
                 AFTER_LOAD));
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
-                "p", "prune", false, "prune empty folders, projects and contexts.",
+                "p", false, "prune empty folders, projects and contexts.",
                 (m,o)->m.ofexport.addPruneFilter (),
                 AFTER_LOAD));
 
         // MODES
 
         OPTIONS.addOption(new ActiveOption<CommandLine> (
-                "c", "contextmode", false, "display context hierarchy instead of project hierarchy).",
+                "c", false, "display context hierarchy instead of project hierarchy).",
                 (m,o)->m.ofexport.setProjectMode(false),
                 BEFORE_LOAD));
 
         // OUTPUT
 
         OPTIONS.addOption(new ActiveOption<CommandLine> (
-                "f", "format", true, "output in this format",
+                "f", true, "output in this format",
                 (m,o)->m.format = o.nextValue(),
                 AFTER_LOAD));
 
         OPTIONS.addOption(new ActiveOption<CommandLine> (
-                "o", "output", true, "write output to the file",
+                "o", true, "write output to the file",
                 (m,o)->m.outputFile = o.nextValue(),
                 BEFORE_LOAD));
 

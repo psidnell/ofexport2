@@ -121,52 +121,52 @@ public class OFExport {
         return (Formatter) Class.forName(formatterClassName).newInstance();
     }
 
-    public void addProjectExpression(String expression) {
+    public void addProjectExpression(String expression, boolean includeMode) {
         if (!projectMode) {
             throw new IllegalArgumentException("project filters only valid in project mode");
         }
         VisitorDescriptor visitwhat = new VisitorDescriptor().visit(Folder.class, Project.class);
         VisitorDescriptor applyToWhat = new VisitorDescriptor().visit(Project.class);
-        ExprIncludeVisitor filter = new ExprIncludeVisitor(expression, projectMode, visitwhat, applyToWhat);
+        ExprIncludeVisitor filter = new ExprIncludeVisitor(expression, projectMode, includeMode, visitwhat, applyToWhat);
         addExpressionFilter(filter);
     }
 
 
 
-    public void addFolderExpression(String expression) {
+    public void addFolderExpression(String expression, boolean includeMode) {
         if (!projectMode) {
             throw new IllegalArgumentException("project filters only valid in project mode");
         }
         VisitorDescriptor visitWhat = new VisitorDescriptor().visit(Folder.class);
         VisitorDescriptor applyToWhat = new VisitorDescriptor().visit(Folder.class);
-        addExpressionFilter(new ExprIncludeVisitor(expression, projectMode, visitWhat, applyToWhat));
+        addExpressionFilter(new ExprIncludeVisitor(expression, projectMode, includeMode, visitWhat, applyToWhat));
     }
 
-    public void addTaskExpression(String expression) {
+    public void addTaskExpression(String expression, boolean includeMode) {
         if (projectMode) {
             VisitorDescriptor visitWhat = new VisitorDescriptor().visit(Folder.class, Project.class, Task.class);
             VisitorDescriptor applyToWhat = new VisitorDescriptor().visit(Task.class);
-            addExpressionFilter(new ExprIncludeVisitor(expression, projectMode, visitWhat, applyToWhat));
+            addExpressionFilter(new ExprIncludeVisitor(expression, projectMode, includeMode, visitWhat, applyToWhat));
         } else {
             VisitorDescriptor visitWhat = new VisitorDescriptor().visit(Context.class, Task.class);
             VisitorDescriptor applyToWhat = new VisitorDescriptor().visit(Task.class);
-            addExpressionFilter(new ExprIncludeVisitor(expression, projectMode, visitWhat, applyToWhat));
+            addExpressionFilter(new ExprIncludeVisitor(expression, projectMode, includeMode, visitWhat, applyToWhat));
         }
     }
 
-    public void addContextExpression(String expression) {
+    public void addContextExpression(String expression, boolean includeMode) {
         if (projectMode) {
             throw new IllegalArgumentException("context filters only valid in context mode");
         }
         VisitorDescriptor visitWhat = new VisitorDescriptor().visit(Context.class);
         VisitorDescriptor applyToWhat = new VisitorDescriptor().visit(Context.class);
-        addExpressionFilter(new ExprIncludeVisitor(expression, projectMode, visitWhat, applyToWhat));
+        addExpressionFilter(new ExprIncludeVisitor(expression, projectMode, includeMode, visitWhat, applyToWhat));
     }
 
-    public void addExpression(String expression) {
+    public void addExpression(String expression, boolean includeMode) {
         VisitorDescriptor visitWhat = new VisitorDescriptor().visitAll();
         VisitorDescriptor applyToWhat = new VisitorDescriptor().visitAll();
-        addExpressionFilter(new ExprIncludeVisitor(expression, projectMode, visitWhat, applyToWhat));
+        addExpressionFilter(new ExprIncludeVisitor(expression, projectMode, includeMode, visitWhat, applyToWhat));
     }
 
     private void addExpressionFilter(ExprIncludeVisitor filter) {
@@ -187,10 +187,10 @@ public class OFExport {
     public void addPruneFilter() {
         // Go bottom up
         if (projectMode) {
-            addProjectExpression("taskCount > 0");
-            addFolderExpression("folderCount > 0 || projectCount > 0");
+            addProjectExpression("taskCount > 0", true);
+            addFolderExpression("folderCount > 0 || projectCount > 0", true);
         } else {
-            addContextExpression("contextCount > 0 || taskCount > 0");
+            addContextExpression("contextCount > 0 || taskCount > 0", true);
         }
     }
 

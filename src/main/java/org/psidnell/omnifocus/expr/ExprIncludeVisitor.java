@@ -35,18 +35,10 @@ public class ExprIncludeVisitor extends ExprVisitor {
 
     private boolean includeMode = true;
 
-    public ExprIncludeVisitor(String expr, boolean projectMode, VisitorDescriptor visitWhat, VisitorDescriptor applyToWhat) {
-        super(stripPlusOrMinus(expr), visitWhat, applyToWhat);
+    public ExprIncludeVisitor(String expr, boolean projectMode, boolean includeMode, VisitorDescriptor visitWhat, VisitorDescriptor applyToWhat) {
+        super(expr, visitWhat, applyToWhat);
         this.projectMode = projectMode;
-
-        includeMode = !expr.startsWith("-:");
-    }
-
-    private static String stripPlusOrMinus(String expr) {
-        if (expr.startsWith("+:") || expr.startsWith("-:")) {
-            return expr.substring(2);
-        }
-        return expr;
+        this.includeMode = includeMode;
     }
 
     @Override
