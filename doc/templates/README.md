@@ -27,29 +27,30 @@
 
 ## Introduction
 
-**ofexport2** is a tool for exporting OmniFocus data to a variety of file formats, a succesor to [ofexport](https://github.com/psidnell/ofexport/blob/master/DOCUMENTATION.md).
+**ofexport2** is a command line tool for exporting OmniFocus data to a variety of file formats and is a complete re-write of the original [ofexport](https://github.com/psidnell/ofexport/blob/master/DOCUMENTATION.md).
 
 Before proceeding, please select the required version of this document:
 
 - [Latest Stable Release: $VERSION](https://github.com/psidnell/ofexport2/blob/ofexport-v2-$VERSION/README.md)
 - [Development Version](https://github.com/psidnell/ofexport2/blob/master/README.md)
 
-This is an early version and at the time of writing I'm making major changes. If you need something reliable and with decent documentation then the original [ofexport](https://github.com/psidnell/ofexport/blob/master/DOCUMENTATION.md) may be the safer bet.
+This is an early version and at the time of writing I'm making major changes. If you need something reliable and with good documentation then the original [ofexport](https://github.com/psidnell/ofexport/blob/master/DOCUMENTATION.md) is stable and functional.
 
 ## Audience ##
 
 To be able to use ofexport there are some pre-requisites. You need to:
 
-- Have OmniFocus installed.
+- Have [OmniFocus](https://www.omnigroup.com/omnifocus) installed.
 - Be comfortable using bash and the command line.
-- Have Java 8 or know how to install it.
-- Have read and appreciated The Hitchhikers Guide to the Galaxy.
+- Know what an [expression](http://en.wikipedia.org/wiki/Expression_(computer_science)) is.
+- Have [Java 8](https://www.oracle.com/java/index.html) or know how to install it.
+- Have read and appreciated [The Hitchhikers Guide to the Galaxy](http://en.wikipedia.org/wiki/The_Hitchhiker's_Guide_to_the_Galaxy).
 
 Without all of the above I want nothing more to do with you. Goodbye.
 
 ## How it works
 
-1. The tool reads the entire OmniFocus database.
+1. The tool reads the entire OmniFocus SQLite database.
 2. Various command line filters are applied to eliminate unwanted data, sort, etc.
 3. The remaining data is printed to the console or saved to a file in some specific format.
 
@@ -63,17 +64,15 @@ Currently supported export formats are:
 6. XML
 7. JSON
 
-The key technologies used are:
+The key technologies used for the transformation are:
 
-1. [OGNL](http://commons.apache.org/proper/commons-ognl/) for specifying filters.
-2. [FreeMarker](http://http://freemarker.org) for writing templates.
-3. [Java 8](https://java.com/en/download/index.jsp) for the main command line program.
-
-Other formats can be created by simply creating new FreeMarker templates.
+1. [Java 8](https://java.com/en/download/index.jsp) for the main command line program.
+2. [OGNL](http://commons.apache.org/proper/commons-ognl/) for specifying filters and sorting.
+3. [FreeMarker](http://http://freemarker.org) for the templates to provide the output.
 
 ## Installation ##
 
-Installation is entirely manual and done from the command line, but just a matter or downloading/unpacking the zip and adding it's bin directory to your path.
+Installation is entirely manual and done from the command line. Essentially yo will be downloading/unpacking the zip and adding it's bin directory to your path.
 
 ### 1. You should have Java 8 already installed.
 
@@ -95,6 +94,8 @@ Download either:
 - The current development version: [master.zip](https://github.com/psidnell/ofexport2/archive/master.zip)
 
 Unzip this file and move/rename the root folder as you wish. For now I'm going to assume you moved and renamed it to **~/Applications/ofexport2**.
+
+Alternatively, if you're familiar with git you can check out this git repository - which will make updating simpler.
 
 ### 3. Set Execute Permission on the ofexport Shell Script ###
 
@@ -157,19 +158,19 @@ This outputs the following:
 
 The default output format is a simple text list where uncompleted tasks are prefixed with a [ ] and completed tasks are prefixed with a [X].
 
-The tool has searched all the projects for those that have the name "ofexport2"  (-pn specifies project name). For any that match it shows all the items directly above it (in this case my "Home" folder) and any items beneath it.
+The tool has searched all the projects for those that have the name "ofexport2" (-pn specifies project name). For any that match it shows all the items directly above it (in this case my "Home" folder) and any items beneath it.
 
 ### Filtering ###
 
-The usage of "-pn" above is an example of a filter. Any number of filters can be used and each filter is run on the results of the last. Thus filters can only reduce what appears in the output.
+Filters are expressions used to limit what Folders, Projects, Tasks or Contexts appear in the output of the tool. They can be simple like a text search or complex expressions that make use of extensive task attributes.  
+ 
+The usage of "-pn" in the previous example is a simple filter. Any number of filters can be used and each filter is run on the results of the last. Thus filters can only reduce what appears in the output.
 
-For example:
+For example to narrow what appeared in the previous output to uncompleted tasks we'd use:
 
     of2 -pn ofexport2 -te '!completed'
 
-(The single quotes are to prevent bash from seeing the '!' - it has special meaning in bash.)
-
-The output will be:
+The output will now be:
 
     Home
       ofexport2
@@ -182,38 +183,42 @@ The output will be:
           [ ] Timing and stats
           [ ] Add logging
 
-The case the "-te" option is a task expression (actually an [OGNL](http://commons.apache.org/proper/commons-ognl/) expression) that is eliminating tasks that have been completed.
+The "-te" option is a task expression (actually an [OGNL](http://commons.apache.org/proper/commons-ognl/) expression) that is eliminating tasks that have been completed.
 
 In OGNL '!' means "not" and "completed" is one of several attributes that a Task has.
+
+The single quotes around the argument to -te are to prevent bash from seeing the '!' - it has special meaning in bash.
+
+Each filter expression is applied to all applicable node types and only that match are included. More specifically, if the expression evaluates to true then the node, it's parent and all it's descendents will be included in the output - otherwise it and it's descendents are eliminated. This sounds complicated but what it means is that generally when something matches you get to see where it is and everything in it.
+
+There are options for each node type. To see all the options type:
+
+    of2
+    
+You will see -fn and -fe for Folders, -tn and -te for Tasks etc.
 
 Folders, Projects, Tasks and Contexts all have attributes that you can use in filters. To get a complete list of the attributes available you can type:
 
     of2 -i
     
-This will print all the attributes for all the types, for example this is just some of the Task attributes:
+This will print all the attributes for all the types, for example here are some of the Task attributes:
 
     Task:
         available (boolean): item is available.
         blocked (boolean): item is blocked.
         completed (boolean): item is complete.
-        completionDate (date): date item was completed.
+        completionDate (date): date item was completed or null.
         contextName (string): contextName.
-        deferDate (date): date item is to start.
-        dueDate (date): date item is due.
+        deferDate (date): date item is to start or null.
+        dueDate (date): date item is due or null.
         flagged (boolean): item is flagged.
         etc ...
 
-And typing simply:
-
-    of2
-    
-Will list all of the filtering options currently available.
-
-The filtering expressions can be any valid OGNL expression, these can be complex logical expressions:
+Any number of expressions can be provided and filtering expressions can be any valid OGNL expression. These can be complex logical expressions:
 
     of2 -pe 'flagged && !available && taskCount > 1'
 
-These expressions provide fine grained control of what's printed if required. For example if you have the following amongst your projects:
+These expressions can provide fine grained control of what's printed. For example if you have the following amongst your projects:
 
 - Folder
     - Project
@@ -222,23 +227,23 @@ These expressions provide fine grained control of what's printed if required. Fo
             - [ ] Sub Task Y
             - [ ] Sub Task Z
 
-If you search for a node containing "X" as follows:
+You can search for an uncompleted Task containing "X" as follows:
 
-    of2 -te "name.contains(\"X\") && completed==false"
+    of2 -te 'name.contains("X") && completed==false'
     
-Then you will get:
+You will get:
 
     Folder
       Project
         [] Task X
 
-This may seem odd because normally when a node matches yoy'd see all nodes beneath.
-           
-However, because the expression applies tasks, even though the root task matches, the expression will also be applied to the sub tasks where it fails. 
+This might at first seem odd because it conflicts with what's been said - that when something matches we see it and everything beneath it.
+When seaching for a Project, when one matches we would see all Tasks beneath. However, the expression here applies to Tasks - and hence sub Tasks.
+Even though the root task matches, the matching continues and the expression will also be applied to the sub tasks where it fails.
 
-If you wanted to see all the children of the matching task whether completed or not and whatever their name you could try:
+If you wanted to see all the children of the matching task whether completed or not and whatever their name or state you could try:
 
-    of2 -te "(name.contains(\"X\") && completed==false) || included"
+    of2 -te '(name.contains("X") && completed==false) || included'
            
 And you would get:
 

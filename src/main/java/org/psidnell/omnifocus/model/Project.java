@@ -63,7 +63,7 @@ public class Project extends CommonProjectAndTaskAttributes {
 
     @Override
     @JsonIgnore
-    @ExprAttribute(help = "the items type")
+    @ExprAttribute(help = "the items type: '" + TYPE + "'.")
     public String getType() {
         return TYPE;
     }
@@ -83,7 +83,7 @@ public class Project extends CommonProjectAndTaskAttributes {
         this.folder = folder;
     }
 
-    @ExprAttribute(help = "the items status: active, inactive, done")
+    @ExprAttribute(help = "the items status: 'active', 'inactive' or 'done'.")
     public String getStatus() {
         return status;
     }

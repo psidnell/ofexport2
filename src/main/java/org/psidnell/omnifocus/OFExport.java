@@ -68,10 +68,12 @@ public class OFExport {
     public OFExport() {
         projectRoot = new Folder();
         projectRoot.setName("RootFolder");
+        projectRoot.setIsRoot(true);
         projectRoot.setId("__%%RootFolder"); // to give deterministic JSON/XML output
 
         contextRoot = new Context();
         contextRoot.setName("RootContext");
+        contextRoot.setIsRoot(true);
         contextRoot.setId("__%%RootContext"); // to give deterministic JSON/XML output
     }
 

@@ -91,7 +91,7 @@ public class Task extends CommonProjectAndTaskAttributes {
 
     @Override
     @JsonIgnore
-    @ExprAttribute(help = "the items type")
+    @ExprAttribute(help = "the items type: '" + TYPE + "'.")
     public String getType() {
         return TYPE;
     }

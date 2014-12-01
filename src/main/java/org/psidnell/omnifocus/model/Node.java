@@ -42,6 +42,8 @@ public abstract class Node extends ExpressionFunctions {
 
     private int rank;
 
+    private boolean isRoot;
+
     @SQLiteProperty
     @ExprAttribute(help = "item name/text.")
     public String getName() {
@@ -74,7 +76,7 @@ public abstract class Node extends ExpressionFunctions {
     public abstract String getType();
 
     @JsonIgnore
-    @ExprAttribute(help = "true during filtering evaluation if a parent item has matched.")
+    @ExprAttribute(help = "true during filtering an expression when a parent item has already matched.")
     public boolean isIncluded() {
         return included;
     }
@@ -142,6 +144,15 @@ public abstract class Node extends ExpressionFunctions {
         }
         path.add(this);
         return path;
+    }
+
+    @JsonIgnore
+    public boolean isRoot () {
+        return isRoot;
+    }
+
+    public void setIsRoot (boolean isRoot) {
+        this.isRoot = isRoot;
     }
 
     @Override

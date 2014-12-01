@@ -24,12 +24,12 @@ import org.psidnell.omnifocus.model.Task;
 /**
  * @author psidnell
  *
- * An implementation of the visitor pattern.
+ *         An implementation of the visitor pattern.
  *
- * Walks the node tree applying Visitor methods on descent,
- * ascent and on all lists of sub nodes.
+ *         Walks the node tree applying Visitor methods on descent, ascent and on all lists of sub
+ *         nodes.
  *
- * A descriptor controls which node types are visited.
+ *         A descriptor controls which node types are visited.
  *
  */
 public class Traverser {
@@ -43,141 +43,156 @@ public class Traverser {
     }
 
     private static void doTraverse(Visitor visitor, VisitorDescriptor what, Node node) throws Exception {
-        switch (node.getType()) {
-            case Folder.TYPE:
-                doTraverseFolder(visitor, what, (Folder) node);
-                break;
-            case Project.TYPE:
-                doTraverseProject(visitor, what, (Project) node);
-                break;
-            case Context.TYPE:
-                doTraverseContext(visitor, what, (Context) node);
-                break;
-            case Task.TYPE:
-                doTraverseTask(visitor, what, (Task) node, true);
-                break;
-            default:
-                break;
+        try {
+            switch (node.getType()) {
+                case Folder.TYPE:
+                    doTraverseFolder(visitor, what, (Folder) node);
+                    break;
+                case Project.TYPE:
+                    doTraverseProject(visitor, what, (Project) node);
+                    break;
+                case Context.TYPE:
+                    doTraverseContext(visitor, what, (Context) node);
+                    break;
+                case Task.TYPE:
+                    doTraverseTask(visitor, what, (Task) node, true);
+                    break;
+                default:
+                    break;
+            }
+        } catch (NodeTraversalAbortException e) {
         }
     }
 
     private static void doTraverseFolder(Visitor visitor, VisitorDescriptor what, Folder node) throws Exception {
-        if (!what.getVisitFolders()) {
-            return;
-        }
-
-        visitor.enter(node);
-
-        if (what.getFilterFolders()) {
-            node.setFolders(visitor.filterFoldersDown(node.getFolders()));
-        }
-
-        if (what.getFilterProjects()) {
-            node.setProjects(visitor.filterProjectsDown(node.getProjects()));
-        }
-
-        for (Folder child : node.getFolders()) {
-            doTraverseFolder(visitor, what, child);
-        }
-
-        if (what.getVisitProjects()) {
-            for (Project child : node.getProjects()) {
-                doTraverseProject(visitor, what, child);
+        try {
+            if (!what.getVisitFolders()) {
+                return;
             }
-        }
 
-        if (what.getFilterFolders()) {
-            node.setFolders(visitor.filterFoldersUp(node.getFolders()));
-        }
+            visitor.enter(node);
 
-        if (what.getFilterProjects()) {
-            node.setProjects(visitor.filterProjectsUp(node.getProjects()));
-        }
+            if (what.getFilterFolders()) {
+                node.setFolders(visitor.filterFoldersDown(node.getFolders()));
+            }
 
-        visitor.exit(node);
+            if (what.getFilterProjects()) {
+                node.setProjects(visitor.filterProjectsDown(node.getProjects()));
+            }
+
+            for (Folder child : node.getFolders()) {
+                doTraverseFolder(visitor, what, child);
+            }
+
+            if (what.getVisitProjects()) {
+                for (Project child : node.getProjects()) {
+                    doTraverseProject(visitor, what, child);
+                }
+            }
+
+            if (what.getFilterFolders()) {
+                node.setFolders(visitor.filterFoldersUp(node.getFolders()));
+            }
+
+            if (what.getFilterProjects()) {
+                node.setProjects(visitor.filterProjectsUp(node.getProjects()));
+            }
+
+            visitor.exit(node);
+        } catch (NodeTraversalAbortException e) {
+        }
     }
 
     private static void doTraverseTask(Visitor visitor, VisitorDescriptor what, Task node, boolean fromProject) throws Exception {
-        if (!what.getVisitTasks()) {
-            return;
-        }
-
-        visitor.enter(node);
-
-        if (what.getFilterTasks()) {
-            node.setTasks(visitor.filterTasksDown(node.getTasks()));
-        }
-
-        if (fromProject) {
-            // Tasks are flat in the context hierarchy
-            for (Task child : node.getTasks()) {
-                doTraverseTask(visitor, what, child, fromProject);
+        try {
+            if (!what.getVisitTasks()) {
+                return;
             }
-        }
 
-        if (what.getFilterTasks()) {
-            node.setTasks(visitor.filterTasksUp(node.getTasks()));
-        }
+            visitor.enter(node);
 
-        visitor.exit(node);
+            if (what.getFilterTasks()) {
+                node.setTasks(visitor.filterTasksDown(node.getTasks()));
+            }
+
+            if (fromProject) {
+                // Tasks are flat in the context hierarchy
+                for (Task child : node.getTasks()) {
+                    doTraverseTask(visitor, what, child, fromProject);
+                }
+            }
+
+            if (what.getFilterTasks()) {
+                node.setTasks(visitor.filterTasksUp(node.getTasks()));
+            }
+
+            visitor.exit(node);
+        } catch (NodeTraversalAbortException e) {
+        }
     }
 
     private static void doTraverseContext(Visitor visitor, VisitorDescriptor what, Context node) throws Exception {
-        if (!what.getVisitContexts()) {
-            return;
-        }
-
-        visitor.enter(node);
-
-        if (what.getFilterTasks()) {
-            node.setTasks(visitor.filterTasksDown(node.getTasks()));
-        }
-
-        if (what.getFilterContexts()) {
-            node.setContexts(visitor.filterContextsDown(node.getContexts()));
-        }
-
-        if (what.getVisitTasks()) {
-            for (Task child : node.getTasks()) {
-                doTraverseTask(visitor, what, child, false);
+        try {
+            if (!what.getVisitContexts()) {
+                return;
             }
-        }
 
-        for (Context child : node.getContexts()) {
-            doTraverseContext(visitor, what, child);
-        }
+            visitor.enter(node);
 
-        if (what.getFilterTasks()) {
-            node.setTasks(visitor.filterTasksUp(node.getTasks()));
-        }
+            if (what.getFilterTasks()) {
+                node.setTasks(visitor.filterTasksDown(node.getTasks()));
+            }
 
-        if (what.getFilterContexts()) {
-            node.setContexts(visitor.filterContextsUp(node.getContexts()));
+            if (what.getFilterContexts()) {
+                node.setContexts(visitor.filterContextsDown(node.getContexts()));
+            }
+
+            if (what.getVisitTasks()) {
+                for (Task child : node.getTasks()) {
+                    doTraverseTask(visitor, what, child, false);
+                }
+            }
+
+            for (Context child : node.getContexts()) {
+                doTraverseContext(visitor, what, child);
+            }
+
+            if (what.getFilterTasks()) {
+                node.setTasks(visitor.filterTasksUp(node.getTasks()));
+            }
+
+            if (what.getFilterContexts()) {
+                node.setContexts(visitor.filterContextsUp(node.getContexts()));
+            }
+            visitor.exit(node);
+        } catch (NodeTraversalAbortException e) {
         }
-        visitor.exit(node);
     }
 
     private static void doTraverseProject(Visitor visitor, VisitorDescriptor what, Project node) throws Exception {
-        if (!what.getVisitProjects()) {
-            return;
-        }
-
-        visitor.enter(node);
-
-        if (what.getFilterTasks()) {
-            node.setTasks(visitor.filterTasksDown(node.getTasks()));
-        }
-
-        if (what.getVisitTasks()) {
-            for (Task child : node.getTasks()) {
-                doTraverseTask(visitor, what, child, true);
+        try {
+            if (!what.getVisitProjects()) {
+                return;
             }
-        }
 
-        if (what.getFilterTasks()) {
-            node.setTasks(visitor.filterTasksUp(node.getTasks()));
-        }
+            visitor.enter(node);
 
-        visitor.exit(node);
+            if (what.getFilterTasks()) {
+                node.setTasks(visitor.filterTasksDown(node.getTasks()));
+            }
+
+            if (what.getVisitTasks()) {
+                for (Task child : node.getTasks()) {
+                    doTraverseTask(visitor, what, child, true);
+                }
+            }
+
+            if (what.getFilterTasks()) {
+                node.setTasks(visitor.filterTasksUp(node.getTasks()));
+            }
+
+            visitor.exit(node);
+        } catch (NodeTraversalAbortException e) {
+        }
     }
 }

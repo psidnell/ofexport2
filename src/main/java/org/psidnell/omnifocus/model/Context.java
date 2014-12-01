@@ -58,7 +58,7 @@ public class Context extends Node {
         return tasks.size();
     }
 
-    @ExprAttribute(help = "the sub tasks")
+    @ExprAttribute(help = "the sub tasks.")
     public List<Task> getTasks() {
         return tasks;
     }
@@ -92,7 +92,7 @@ public class Context extends Node {
 
     @Override
     @JsonIgnore
-    @ExprAttribute(help = "the items type")
+    @ExprAttribute(help = "the items type: '" + TYPE + "'.")
     public String getType() {
         return TYPE;
     }
@@ -107,7 +107,7 @@ public class Context extends Node {
     }
 
     @SQLiteProperty
-    @ExprAttribute(help = "true if context is active")
+    //@ExprAttribute(help = "true if context is active.") doesn't do what I think it does
     public boolean getActive() {
         return active;
     }
@@ -117,7 +117,7 @@ public class Context extends Node {
     }
 
     @SQLiteProperty
-    @ExprAttribute(help = "true if context allows next action")
+    //@ExprAttribute(help = "true if context allows next action") doesn't do what I think it does
     public boolean getAllowsNextAction() {
         return allowsNextAction;
     }

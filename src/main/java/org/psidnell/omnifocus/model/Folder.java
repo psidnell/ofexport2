@@ -47,7 +47,7 @@ public class Folder extends Node {
         this.name = name;
     }
 
-    @ExprAttribute(help = "number of tasks.")
+    @ExprAttribute(help = "number of sub projects.")
     @JsonIgnore
     public int getProjectCount() {
         return projects.size();
@@ -62,13 +62,13 @@ public class Folder extends Node {
         this.projects = projects;
     }
 
-    @ExprAttribute(help = "number of projects.")
+    @ExprAttribute(help = "number of sub folders.")
     @JsonIgnore
     public int getFolderCount() {
         return folders.size();
     }
 
-    @ExprAttribute(help = "the sub folders")
+    @ExprAttribute(help = "the sub folders.")
     public List<Folder> getFolders() {
         return folders;
     }
@@ -88,7 +88,7 @@ public class Folder extends Node {
 
     @Override
     @JsonIgnore
-    @ExprAttribute(help = "the items type")
+    @ExprAttribute(help = "the items type: '" + TYPE + "'.")
     public String getType() {
         return TYPE;
     }

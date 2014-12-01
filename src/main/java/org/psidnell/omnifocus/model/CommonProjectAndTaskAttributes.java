@@ -48,7 +48,7 @@ public abstract class CommonProjectAndTaskAttributes extends Node {
         return tasks.size();
     }
 
-    @ExprAttribute(help = "the sub tasks")
+    @ExprAttribute(help = "the sub tasks.")
     public List<Task> getTasks() {
         return tasks;
     }
@@ -97,7 +97,7 @@ public abstract class CommonProjectAndTaskAttributes extends Node {
     }
 
     @SQLiteProperty(name = "dateToStart")
-    @ExprAttribute(help = "date item is to start.")
+    @ExprAttribute(help = "date item is to start or null.")
     public Date getDeferDate() {
         return deferDate;
     }
@@ -107,7 +107,7 @@ public abstract class CommonProjectAndTaskAttributes extends Node {
     }
 
     @SQLiteProperty(name = "dateDue")
-    @ExprAttribute(help = "date item is due.")
+    @ExprAttribute(help = "date item is due or null.")
     public Date getDueDate() {
         return dueDate;
     }
@@ -117,7 +117,7 @@ public abstract class CommonProjectAndTaskAttributes extends Node {
     }
 
     @SQLiteProperty(name = "dateCompleted")
-    @ExprAttribute(help = "date item was completed.")
+    @ExprAttribute(help = "date item was completed or null.")
     public Date getCompletionDate() {
         return completionDate;
     }
