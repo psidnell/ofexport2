@@ -18,12 +18,12 @@ package org.psidnell.omnifocus.visitor;
 /**
  * @author psidnell
  *
- * Sometime things don't turn out how you'd hoped.
+ *         Sometime things don't turn out how you'd hoped.
  *
  */
 public class TraversalException extends RuntimeException {
 
-    public TraversalException () {
+    public TraversalException() {
     }
 
     public TraversalException(Exception e) {

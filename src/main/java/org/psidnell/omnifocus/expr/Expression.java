@@ -20,19 +20,23 @@ import ognl.OgnlContext;
 import ognl.OgnlException;
 
 import org.psidnell.omnifocus.model.Node;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author psidnell
  *
- * A minimal adaptor around the OGNL expression parser.
+ *         A minimal adaptor around the OGNL expression parser.
  */
 public class Expression {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(Expression.class);
     private static final OgnlContext OGNL_CONTEXT = new OgnlContext();
     private Object expression;
 
     public Expression(String expression) {
         try {
+            LOGGER.debug("new Expression(\"{}\")", expression);
             this.expression = Ognl.parseExpression(expression);
         } catch (OgnlException e) {
             throw new IllegalArgumentException(e);

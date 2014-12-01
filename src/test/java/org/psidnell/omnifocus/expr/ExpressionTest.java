@@ -78,4 +78,16 @@ public class ExpressionTest {
         assertTrue (new Expression("dueDate > date('-1y')").eval(t, Boolean.class));
         assertTrue (new Expression("within(dueDate,'-1y','7d')").eval(t, Boolean.class));
     }
+
+    @Test
+    public void testQuotes() throws OgnlException {
+
+        Task t = new Task();
+        t.setName("foo");
+        t.setCompletionDate(new Date ());
+
+        assertEquals ("foo", new Expression("name").eval(t, String.class));
+        assertTrue (new Expression("name=='foo'").eval(t, Boolean.class));
+        assertTrue (new Expression("name==\"foo\"").eval(t, Boolean.class));
+    }
 }

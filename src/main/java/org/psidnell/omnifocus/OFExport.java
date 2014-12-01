@@ -127,9 +127,11 @@ public class OFExport {
         }
         VisitorDescriptor visitwhat = new VisitorDescriptor().visit(Folder.class, Project.class);
         VisitorDescriptor applyToWhat = new VisitorDescriptor().visit(Project.class);
-        addFilter(new ExprIncludeVisitor(expression, projectMode, visitwhat, applyToWhat));
-        addFilter(new IncludedFilter());
+        ExprIncludeVisitor filter = new ExprIncludeVisitor(expression, projectMode, visitwhat, applyToWhat);
+        addExpressionFilter(filter);
     }
+
+
 
     public void addFolderExpression(String expression) {
         if (!projectMode) {
@@ -137,21 +139,19 @@ public class OFExport {
         }
         VisitorDescriptor visitWhat = new VisitorDescriptor().visit(Folder.class);
         VisitorDescriptor applyToWhat = new VisitorDescriptor().visit(Folder.class);
-        addFilter(new ExprIncludeVisitor(expression, projectMode, visitWhat, applyToWhat));
-        addFilter(new IncludedFilter());
+        addExpressionFilter(new ExprIncludeVisitor(expression, projectMode, visitWhat, applyToWhat));
     }
 
     public void addTaskExpression(String expression) {
         if (projectMode) {
             VisitorDescriptor visitWhat = new VisitorDescriptor().visit(Folder.class, Project.class, Task.class);
             VisitorDescriptor applyToWhat = new VisitorDescriptor().visit(Task.class);
-            addFilter(new ExprIncludeVisitor(expression, projectMode, visitWhat, applyToWhat));
+            addExpressionFilter(new ExprIncludeVisitor(expression, projectMode, visitWhat, applyToWhat));
         } else {
             VisitorDescriptor visitWhat = new VisitorDescriptor().visit(Context.class, Task.class);
             VisitorDescriptor applyToWhat = new VisitorDescriptor().visit(Task.class);
-            addFilter(new ExprIncludeVisitor(expression, projectMode, visitWhat, applyToWhat));
+            addExpressionFilter(new ExprIncludeVisitor(expression, projectMode, visitWhat, applyToWhat));
         }
-        addFilter(new IncludedFilter());
     }
 
     public void addContextExpression(String expression) {
@@ -160,14 +160,21 @@ public class OFExport {
         }
         VisitorDescriptor visitWhat = new VisitorDescriptor().visit(Context.class);
         VisitorDescriptor applyToWhat = new VisitorDescriptor().visit(Context.class);
-        addFilter(new ExprIncludeVisitor(expression, projectMode, visitWhat, applyToWhat));
-        addFilter(new IncludedFilter());
+        addExpressionFilter(new ExprIncludeVisitor(expression, projectMode, visitWhat, applyToWhat));
     }
 
     public void addExpression(String expression) {
         VisitorDescriptor visitWhat = new VisitorDescriptor().visitAll();
         VisitorDescriptor applyToWhat = new VisitorDescriptor().visitAll();
-        addFilter(new ExprIncludeVisitor(expression, projectMode, visitWhat, applyToWhat));
+        addExpressionFilter(new ExprIncludeVisitor(expression, projectMode, visitWhat, applyToWhat));
+    }
+
+    private void addExpressionFilter(ExprIncludeVisitor filter) {
+        // If the filter is an include filter then we exclude everything first and vice versa.
+        addFilter(new IncludeVisitor(!filter.isIncludeMode()));
+        // Then the filter is run
+        addFilter(filter);
+        // Finally we eliminate anything not included
         addFilter(new IncludedFilter());
     }
 

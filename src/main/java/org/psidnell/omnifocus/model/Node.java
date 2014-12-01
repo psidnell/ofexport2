@@ -147,11 +147,11 @@ public abstract class Node extends ExpressionFunctions {
     }
 
     @JsonIgnore
-    public boolean isRoot () {
+    public boolean isRoot() {
         return isRoot;
     }
 
-    public void setIsRoot (boolean isRoot) {
+    public void setIsRoot(boolean isRoot) {
         this.isRoot = isRoot;
     }
 

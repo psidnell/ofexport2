@@ -20,7 +20,6 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -49,7 +48,8 @@ public class ActiveOptionProcessor<P> {
     }
 
     public boolean processOptions(P program, String[] args, int phase) throws Exception {
-        CommandLineParser parser = new BasicParser();
+
+        CommandLineParser parser = new FixedParser();
         CommandLine cl = parser.parse(options, args);
 
         // If there are unrecognised options then stop

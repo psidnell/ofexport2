@@ -26,42 +26,57 @@ import org.junit.Test;
 public class ActiveOptionProcessorTest {
 
     private LinkedList<String> list = new LinkedList<>();
-    
+
     @Before
     public void before () {
         list.clear();
     }
-    
+
     @Test
     public void testOrderOfProcessing () throws Exception {
         Options options = new Options();
         options.addOption(new ActiveOption<ActiveOptionProcessorTest>("x", true, "i'm an opt", (p,o)->gotX(o), 0));
         options.addOption(new ActiveOption<ActiveOptionProcessorTest>("y", true, "i'm an opt", (p,o)->gotY(o), 0));
-        
+
         ActiveOptionProcessor<ActiveOptionProcessorTest> p = new ActiveOptionProcessor<ActiveOptionProcessorTest>("test", options);
         p.processOptions(this, new String[]{"-x", "1", "-y", "2", "-x", "3", "-y", "4"}, 0);
-        
+
         // Show that options processed in order
         assertEquals ("[X:1, Y:2, X:3, Y:4]", list.toString());
     }
-    
+
     @Test
     public void testPhasedProcessing () throws Exception {
         Options options = new Options();
         options.addOption(new ActiveOption<ActiveOptionProcessorTest>("x", true, "i'm an opt", (p,o)->gotX(o), 0));
         options.addOption(new ActiveOption<ActiveOptionProcessorTest>("y", true, "i'm an opt", (p,o)->gotY(o), 1));
-        
+
         ActiveOptionProcessor<ActiveOptionProcessorTest> p = new ActiveOptionProcessor<ActiveOptionProcessorTest>("test", options);
         p.processOptions(this, new String[]{"-x", "1", "-y", "2", "-x", "3", "-y", "4"}, 1);
-        
+
         // Show that options processed in order
         assertEquals ("[Y:2, Y:4]", list.toString());
+    }
+
+    @Test
+    public void testWeirdBugWhereQuotesGotEaten () throws Exception {
+
+        // The library I'm using strips quotes from around arguments and thats really
+        // inconvenient. I've fixed this in by subclassing BasicParser.
+        Options options = new Options();
+        options.addOption(new ActiveOption<ActiveOptionProcessorTest>("x", true, "i'm an opt", (p,o)->gotX(o), 0));
+
+        ActiveOptionProcessor<ActiveOptionProcessorTest> p = new ActiveOptionProcessor<ActiveOptionProcessorTest>("test", options);
+        p.processOptions(this, new String[]{"-x", "\"1\""}, 0);
+
+        // Show that options processed in order
+        assertEquals ("[X:\"1\"]", list.toString());
     }
 
     private void gotX(ActiveOption<ActiveOptionProcessorTest> o) {
         list.add("X:" + o.nextValue());
     }
-    
+
     private void gotY(ActiveOption<ActiveOptionProcessorTest> o) {
         list.add("Y:" + o.nextValue());
     }

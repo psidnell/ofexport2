@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Stack;
 
 import org.apache.commons.cli.Option;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author psidnell
@@ -31,6 +33,8 @@ import org.apache.commons.cli.Option;
  * be provided for execution during processing of the command line.
  */
 public class ActiveOption<P> extends Option {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ActiveOption.class);
 
     private final ActiveOptionProcess<P> processor;
     private Stack<String> valStack = new Stack<>();
@@ -70,6 +74,7 @@ public class ActiveOption<P> extends Option {
     }
 
     public void setValues(String[] optionValues) {
+        LOGGER.debug("{}={}", getOpt(), optionValues);
         if (optionValues != null) {
             List<String> valList = Arrays.asList(optionValues);
             Collections.reverse(valList);

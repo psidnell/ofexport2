@@ -20,6 +20,8 @@ import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Node;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author psidnell
@@ -34,6 +36,8 @@ import org.psidnell.omnifocus.model.Task;
  */
 public class Traverser {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(Traverser.class);
+
     public static void traverse(Visitor visitor, Node node) {
         try {
             doTraverse(visitor, visitor.getWhat(), node);
@@ -43,6 +47,7 @@ public class Traverser {
     }
 
     private static void doTraverse(Visitor visitor, VisitorDescriptor what, Node node) throws Exception {
+        LOGGER.debug("Traversing: {}", node);
         try {
             switch (node.getType()) {
                 case Folder.TYPE:
@@ -61,14 +66,18 @@ public class Traverser {
                     break;
             }
         } catch (NodeTraversalAbortException e) {
+            LOGGER.debug("Traversal aborted: {}", node);
         }
     }
 
     private static void doTraverseFolder(Visitor visitor, VisitorDescriptor what, Folder node) throws Exception {
+
         try {
             if (!what.getVisitFolders()) {
                 return;
             }
+
+            LOGGER.debug("Traversing: {}", node);
 
             visitor.enter(node);
 
@@ -100,6 +109,7 @@ public class Traverser {
 
             visitor.exit(node);
         } catch (NodeTraversalAbortException e) {
+            LOGGER.debug("Traversal aborted: {}", node);
         }
     }
 
@@ -108,6 +118,8 @@ public class Traverser {
             if (!what.getVisitTasks()) {
                 return;
             }
+
+            LOGGER.debug("Traversing: {}", node);
 
             visitor.enter(node);
 
@@ -128,6 +140,7 @@ public class Traverser {
 
             visitor.exit(node);
         } catch (NodeTraversalAbortException e) {
+            LOGGER.debug("Traversal aborted: {}", node);
         }
     }
 
@@ -136,6 +149,8 @@ public class Traverser {
             if (!what.getVisitContexts()) {
                 return;
             }
+
+            LOGGER.debug("Traversing: {}", node);
 
             visitor.enter(node);
 
@@ -166,6 +181,7 @@ public class Traverser {
             }
             visitor.exit(node);
         } catch (NodeTraversalAbortException e) {
+            LOGGER.debug("Traversal aborted: {}", node);
         }
     }
 
@@ -174,6 +190,8 @@ public class Traverser {
             if (!what.getVisitProjects()) {
                 return;
             }
+
+            LOGGER.debug("Traversing: {}", node);
 
             visitor.enter(node);
 
@@ -193,6 +211,7 @@ public class Traverser {
 
             visitor.exit(node);
         } catch (NodeTraversalAbortException e) {
+            LOGGER.debug("Traversal aborted: {}", node);
         }
     }
 }

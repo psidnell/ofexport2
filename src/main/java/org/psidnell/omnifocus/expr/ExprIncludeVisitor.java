@@ -16,6 +16,7 @@ limitations under the License.
 package org.psidnell.omnifocus.expr;
 
 import org.psidnell.omnifocus.model.Node;
+import org.psidnell.omnifocus.visitor.NodeTraversalAbortException;
 import org.psidnell.omnifocus.visitor.VisitorDescriptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +24,8 @@ import org.slf4j.LoggerFactory;
 /**
  * @author psidnell
  *
- *         Traverses the node tree including only those nodes where the OGNL expression evaluates true.
+ *         Traverses the node tree including only those nodes where the OGNL expression evaluates
+ *         true.
  */
 public class ExprIncludeVisitor extends ExprVisitor {
 
@@ -31,21 +33,40 @@ public class ExprIncludeVisitor extends ExprVisitor {
 
     private boolean projectMode;
 
+    private boolean includeMode = true;
+
     public ExprIncludeVisitor(String expr, boolean projectMode, VisitorDescriptor visitWhat, VisitorDescriptor applyToWhat) {
-        super(expr, visitWhat, applyToWhat);
+        super(stripPlusOrMinus(expr), visitWhat, applyToWhat);
         this.projectMode = projectMode;
+
+        includeMode = !expr.startsWith("-:");
+    }
+
+    private static String stripPlusOrMinus(String expr) {
+        if (expr.startsWith("+:") || expr.startsWith("-:")) {
+            return expr.substring(2);
+        }
+        return expr;
     }
 
     @Override
     protected void evaluate(Node node) {
-        LOGGER.debug("Applying {} to {}", exprString, node);
-        boolean include = expr.eval(node, Boolean.class);
-        if (include) {
-            LOGGER.debug("included");
-            node.include(projectMode);
-        } else {
-            LOGGER.debug("excluded");
-            node.exclude();
+        if (!node.isRoot()) {
+            LOGGER.debug("Applying {} to {}", exprString, node);
+            boolean result = expr.eval(node, Boolean.class);
+            if (includeMode && result) {
+                LOGGER.debug("included");
+                node.include(projectMode);
+                throw new NodeTraversalAbortException();
+            } else if (!includeMode && result) {
+                LOGGER.debug("excluded");
+                node.exclude();
+                throw new NodeTraversalAbortException();
+            }
         }
+    }
+
+    public boolean isIncludeMode() {
+        return includeMode;
     }
 }
