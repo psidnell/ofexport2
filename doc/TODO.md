@@ -4,14 +4,7 @@
 
 ### ofexport2
 
-- Don't print help when no options - update doc
-- Documentation
-  - Proof Read
-  - Check prune still works
-  - Check examples
-  - Update explanation of filters to mention include exclude.
-  - Add "Examples"
-  - Add "Writing a Template"
+- Release process hasn't released correct jars from root directory
 - Code Quality 
   - Do I really want to publish the site? big...
   - Coverage
