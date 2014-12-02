@@ -26,12 +26,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 /**
  * @author psidnell
  *
- * Represents an OmniFocus task.
+ *         Represents an OmniFocus task.
  *
- * Note that the root of task represents the project.
+ *         Note that the root of task represents the project.
  *
- * When the model is build a Project is made from the root task
- * which takes ownership of the tasks children.
+ *         When the model is build a Project is made from the root task which takes ownership of the
+ *         tasks children.
  */
 public class Task extends CommonProjectAndTaskAttributes {
 
@@ -43,6 +43,8 @@ public class Task extends CommonProjectAndTaskAttributes {
     private Project project;
     private boolean blocked = false;
     private boolean inInbox;
+
+    private boolean isProject;
 
     public Task() {
     }
@@ -147,6 +149,16 @@ public class Task extends CommonProjectAndTaskAttributes {
     @ExprAttribute(help = "item is remaining.")
     public boolean isRemaining() {
         return !isCompleted();
+    }
+
+    @JsonIgnore
+    @ExprAttribute(help = "true if task represents a project.")
+    public boolean isProjectTask() {
+        return isProject;
+    }
+
+    public void setIsProjectTask(boolean isProject) {
+        this.isProject = isProject;
     }
 
 }

@@ -59,6 +59,7 @@ public class Project extends CommonProjectAndTaskAttributes {
         for (Task childOfRootTask : new LinkedList<>(rootTask.getTasks())) {
             add(childOfRootTask);
         }
+        rootTask.setIsProjectTask(true);
     }
 
     @Override

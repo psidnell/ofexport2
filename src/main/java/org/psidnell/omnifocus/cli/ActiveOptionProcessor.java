@@ -55,7 +55,7 @@ public class ActiveOptionProcessor<P> {
         // If there are unrecognised options then stop
         @SuppressWarnings("unchecked")
         List<String> unrecognized = cl.getArgList();
-        if (!unrecognized.isEmpty() || args.length == 0) {
+        if (!unrecognized.isEmpty()) {
             if (!unrecognized.isEmpty()) {
                 System.out.println("Unrecognised command line arguments: " + unrecognized);
             }

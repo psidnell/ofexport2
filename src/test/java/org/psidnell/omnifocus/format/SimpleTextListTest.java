@@ -22,7 +22,7 @@ import org.psidnell.omnifocus.OFExport;
 import org.psidnell.omnifocus.integrationtest.Diff;
 
 public class SimpleTextListTest extends FormatTest {
-    
+
     @Test
     public void testProjectMode () throws Exception {
         OFExport ofExport = new OFExport();
@@ -30,20 +30,20 @@ public class SimpleTextListTest extends FormatTest {
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
-                
+
         Diff.diff (new String[]
             {
                 "f1",
                 "  p1",
-                "    [ ] t1",
-                "    [ ] t2",
-                "    [X] t3",
-                "      [X] t4",
-                "  p2",
+                "    [ ] t1 FLAGGED",
+                "    [ ] t2 due:2014-11-27",
+                "    [X] t3 done:2014-11-27",
+                "      [X] t4 done:2014-11-27",
+                "  p2 done:2014-11-27 due:2014-11-27 FLAGGED",
                 "  p3"
             }, out.toString().split("\n"));
     }
-    
+
     @Test
     public void testContextMode () throws Exception {
         OFExport ofExport = new OFExport();
@@ -52,14 +52,14 @@ public class SimpleTextListTest extends FormatTest {
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
-                
+
         Diff.diff (new String[]
             {
                 "c1",
                 "  c2",
-                "    [X] t3",
-                "    [X] t4",
-                "  [ ] t2",
+                "    [X] t3 done:2014-11-27",
+                "    [X] t4 done:2014-11-27",
+                "  [ ] t2 due:2014-11-27",
             }, out.toString().split("\n"));
     }
 }

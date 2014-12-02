@@ -22,7 +22,7 @@ import org.psidnell.omnifocus.OFExport;
 import org.psidnell.omnifocus.integrationtest.Diff;
 
 public class TaskPaperTest extends FormatTest {
-    
+
     @Test
     public void testProjectMode () throws Exception {
         OFExport ofExport = new OFExport();
@@ -31,13 +31,13 @@ public class TaskPaperTest extends FormatTest {
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
-                
+
         Diff.diff (new String[]
             {
                 "f1:",
                 "\tp1:",
                 "\t\t- t1 @flagged",
-                "\t\t- t2 @c1",
+                "\t\t- t2 @done(2014-11-27) @c1",
                 "\t\t\tline1",
                 "\t\t\tline2",
                 "\t\t- t3 @done(2014-11-27) @c2",
@@ -46,13 +46,13 @@ public class TaskPaperTest extends FormatTest {
                 "\t\t\t- t4 @done(2014-11-27) @c2",
                 "\t\t\t\tline1",
                 "\t\t\t\tline2",
-                "\tp2: @done(2014-11-27) @flagged",
+                "\tp2: @done(2014-11-27) @flagged @done(2014-11-27)",
                 "\t\tline1",
                 "\t\tline2",
                 "\tp3:",
             }, out.toString().split("\n"));
     }
-    
+
     @Test
     public void testContextMode () throws Exception {
         OFExport ofExport = new OFExport();
@@ -62,7 +62,7 @@ public class TaskPaperTest extends FormatTest {
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
-                
+
         Diff.diff (new String[]
             {
                 "c1:",
@@ -73,7 +73,7 @@ public class TaskPaperTest extends FormatTest {
                 "\t\t- t4 @done(2014-11-27) @c2",
                 "\t\t\tline1",
                 "\t\t\tline2",
-                "\t- t2 @c1",
+                "\t- t2 @done(2014-11-27) @c1",
                 "\t\tline1",
                 "\t\tline2",
             }, out.toString().split("\n"));

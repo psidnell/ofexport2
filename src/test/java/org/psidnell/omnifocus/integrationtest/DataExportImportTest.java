@@ -43,25 +43,25 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class DataExportImportTest {
 
     private static final ApplicationContext appContext = ApplicationContextFactory.create();
-    
+
     private SQLiteDAO sqliteDAO;
-    
+
     @Before
     public void setUp () {
         sqliteDAO = appContext.getBean("sqlitedao", SQLiteDAO.class);
     }
-    
+
     @Test
     public void testExport () throws JsonGenerationException, JsonMappingException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, SQLException, IOException {
-        
+
         // Export
         File file = new File("target/test1.json");
-        DataCache.exportData(file, (n)->n.getName().startsWith("%Test"), sqliteDAO);
-        
+        DataCache.exportData(file, (n)->true, sqliteDAO);
+
         // Import
         DataCache dataCache = DataCache.importData (file);
         ObjectMapper mapper = new ObjectMapper();
-        
+
         // Just check we've loaded something, other tests will
         // verify the structure
         assertFalse (dataCache.getContexts().isEmpty());
@@ -69,7 +69,7 @@ public class DataExportImportTest {
         assertFalse (dataCache.getFolders().isEmpty());
         assertFalse (dataCache.getTasks().isEmpty());
         assertTrue (dataCache.getProjects().isEmpty());
-        
+
         // Dump to console
         Writer out = IOUtils.systemOutWriter();
         mapper.writerWithDefaultPrettyPrinter().writeValue(out, dataCache);

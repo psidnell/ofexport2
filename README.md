@@ -1,6 +1,8 @@
 # OFEXPORT2
 
-*Updated 2014-11-30.*
+*Updated 2014-12-02.*
+
+[Release Notes](doc/RELEASE-NOTES.md)
 
 ## Table of Contents
 
@@ -17,7 +19,8 @@
     - [Project vs Context Mode](#project-vs-context-mode)
     - [Matching and Regular Expressions](#matching-and-regular-expressions)
     - [Date Filters](#date-filters)
-    - [Sorting] (#sorting)
+    - [Sorting](#sorting)
+    - [Pruning](#pruning)
     - [Examples](#examples)
 - [Writing a Template](#writing-a-template)
 - [Building it Yourself](#building-it-yourself)
@@ -27,30 +30,31 @@
 
 ## Introduction
 
-**ofexport2** is a tool for exporting OmniFocus data to a variety of file formats, a succesor to [ofexport](https://github.com/psidnell/ofexport/blob/master/DOCUMENTATION.md).
+**ofexport2** is a command line tool for exporting OmniFocus data to a variety of file formats and is a complete re-write of the original [ofexport](https://github.com/psidnell/ofexport/blob/master/DOCUMENTATION.md).
 
 Before proceeding, please select the required version of this document:
 
-- [Latest Stable Release: 0.0.6.ALPHA](https://github.com/psidnell/ofexport2/blob/ofexport-v2-0.0.6.ALPHA/README.md)
+- [Latest Stable Release: 1.0.0](https://github.com/psidnell/ofexport2/blob/ofexport-v2-1.0.0/README.md)
 - [Development Version](https://github.com/psidnell/ofexport2/blob/master/README.md)
 
-This is an early version and at the time of writing I'm making major changes. If you need something reliable and with decent documentation then the original [ofexport](https://github.com/psidnell/ofexport/blob/master/DOCUMENTATION.md) may be the safer bet.
+This is an early version and at the time of writing I'm making major changes. If you need something reliable and with good documentation then the original [ofexport](https://github.com/psidnell/ofexport/blob/master/DOCUMENTATION.md) is stable and functional.
 
 ## Audience ##
 
-To be able to use ofexport there are some pre-requisites. You need to:
+To be able to use ofexport2 there are some pre-requisites, you need to:
 
-- Have OmniFocus installed.
+- Have [OmniFocus](https://www.omnigroup.com/omnifocus) installed.
 - Be comfortable using bash and the command line.
-- Have Java 8 or know how to install it.
-- Have read and appreciated The Hitchhikers Guide to the Galaxy.
+- Know what an [expression](http://en.wikipedia.org/wiki/Expression_(computer_science)) is.
+- Have [Java 8](https://www.oracle.com/java/index.html) or know how to install it.
+- Have read and appreciated [The Hitchhikers Guide to the Galaxy](http://en.wikipedia.org/wiki/The_Hitchhiker's_Guide_to_the_Galaxy).
 
-Without all of the above I want nothing more to do with you. Goodbye.
+You're going to have to know [where your towel is](http://hitchhikers.wikia.com/wiki/Towel).
 
 ## How it works
 
-1. The tool reads the entire OmniFocus database.
-2. Various command line filters are applied to eliminate unwanted data, sort, etc.
+1. The tool reads the entire OmniFocus SQLite database.
+2. Various command line filters are applied to eliminate unwanted data, sort items, etc.
 3. The remaining data is printed to the console or saved to a file in some specific format.
 
 Currently supported export formats are:
@@ -63,17 +67,15 @@ Currently supported export formats are:
 6. XML
 7. JSON
 
-The key technologies used are:
+The key technologies used for the transformation are:
 
-1. [OGNL](http://commons.apache.org/proper/commons-ognl/) for specifying filters.
-2. [FreeMarker](http://http://freemarker.org) for writing templates.
-3. [Java 8](https://java.com/en/download/index.jsp) for the main command line program.
-
-Other formats can be created by simply creating new FreeMarker templates.
+1. [Java 8](https://java.com/en/download/index.jsp) for the main command line program.
+2. [OGNL](http://commons.apache.org/proper/commons-ognl/) for specifying filters and sorting.
+3. [FreeMarker](http://http://freemarker.org) for the templates to provide the output.
 
 ## Installation ##
 
-Installation is entirely manual and done from the command line, but just a matter or downloading/unpacking the zip and adding it's bin directory to your path.
+Installation is entirely manual and done from the command line. Essentially you will be downloading/unpacking the zip and adding it's bin directory to your path.
 
 ### 1. You should have Java 8 already installed.
 
@@ -89,18 +91,21 @@ You should see output similar to:
 
 ### 2. Download:
 
-Download either:
+To get the required files, (in increasing order of danger) either:
 
-- The latest stable version: [ofexport-v2-0.0.6.ALPHA.zip](https://github.com/psidnell/ofexport2/archive/ofexport-v2-0.0.6.ALPHA.zip)
-- The current development version: [master.zip](https://github.com/psidnell/ofexport2/archive/master.zip)
+- Download the latest stable version: [ofexport-v2-1.0.0.zip](https://github.com/psidnell/ofexport2/archive/ofexport-v2-1.0.0.zip)
+- Download the current development version: [master.zip](https://github.com/psidnell/ofexport2/archive/master.zip)
+- If you want to stay on the bleeding edge, check out this git repository so you can take updates as you wish.
 
-Unzip this file and move/rename the root folder as you wish. For now I'm going to assume you moved and renamed it to **~/Applications/ofexport2**.
+If you downloaded a zip, unzip it and move/rename the root folder as you wish.
+
+For now I'm going to assume you moved and renamed it to **~/Applications/ofexport2**.
 
 ### 3. Set Execute Permission on the ofexport Shell Script ###
 
 On the command line type:
 
-    chmod +x ~/Applications/ofexport2/bin/ofexport
+    chmod +x ~/Applications/ofexport2/bin/ofexport2
 
 Make sure it's working by running:
 
@@ -121,7 +126,7 @@ When done reload your environment by typing:
 
     . ~/.bash_profile
 
-And verify everything has worked by typing **ofexport2** (or **of2**) and ensuring it prints it's command line options.
+Finally verify everything has worked by typing **ofexport2** (or **of2**) and ensuring it prints it's command line options.
 
 ## Uninstallation ###
 
@@ -131,9 +136,9 @@ Simply delete the ofexport2 folder and remove the lines you added to your .bash_
 
 ### Overview ###
 
-To print the contents of a named project (In this case I have a project called ofexport2) type:
+To print the contents of a named project (In this case I have a project called ofexport2, you should supply your own) type:
 
-    of2 -pn ofexport2
+    of2 -pn 'ofexport2'
 
 This outputs the following:
 
@@ -157,19 +162,50 @@ This outputs the following:
 
 The default output format is a simple text list where uncompleted tasks are prefixed with a [ ] and completed tasks are prefixed with a [X].
 
-The tool has searched all the projects for those that have the name "ofexport2"  (-pn specifies project name). For any that match it shows all the items directly above it (in this case my "Home" folder) and any items beneath it.
+The tool has searched all the projects for those that have the exact name "ofexport2" (-pn specifies project name). For any project that matches it shows all the items directly above it (in this case my "Home" folder) and any items beneath it.
+
+The "-pn" specifies a filter (project name) and the text after it ('ofexport2') is it's argument. The single quotes around the argument aren't strictly necessary here but stop bash from attempting to interpret the contents. It's good practice to put single quotes around filter arguments since in more advanced examples they're going to contain spaces and all manner of characters from the 2nd row of your keyboard that would otherwise get bash very excited indeeed.  
 
 ### Filtering ###
 
-The usage of "-pn" above is an example of a filter. Any number of filters can be used and each filter is run on the results of the last. Thus filters can only reduce what appears in the output.
+- Filters are expressions used to limit what Folders, Projects, Tasks or Contexts appear in the output.
+- Filters can be simple like a text search.
+- Filters can be complex expressions that make use of various attributes of an item.
+- Filters can either include items of interest or exclude unwanted items.
+- Any number of filters can be used.
+- Filters are executed in order, each filter is run on the results of the last, thus filters can only reduce what appears in the output.
 
-For example:
+The difference between include and exclude filters is:
 
-    of2 -pn ofexport2 -te '!completed'
+- **include**: if the expression matches a node then it, it's parent and all it's descendents will be included in the output.
+- **exclude**: if the expression matches a node then it and it's descendents are eliminated.
 
-(The single quotes are to prevent bash from seeing the '!' - it has special meaning in bash.)
+This sounds complicated but what it means is that generally when we want to see something you get to see where it is and everything under it. Conversely when you don't want to see something you don't see it or anything under it.
 
-The output will be:
+Building on the previous example, here's an operation with two include filters that shows all completed tasks in the "ofexport2" project:
+
+    of2 -pn 'ofexport2' -ti 'completed'
+
+Produces:
+
+    Home
+      ofexport2
+        [ ] Create "installer"
+          [X] Add license, docs etc.
+          [X] Create "release process"
+          [X] Generate README.md from template
+        [X] Filters - finish - test
+        [ ] Code Quality
+          [X] Address TODOs
+          [X] basic Javadoc
+          [X] Only integration tests should use real database
+          [X] format code
+
+If instead you wanted to only see only uncompleted tasks you can change an include filter into an exclude filter:
+
+    of2 -pn ofexport2 -tx 'completed'
+
+Produces:
 
     Home
       ofexport2
@@ -182,78 +218,46 @@ The output will be:
           [ ] Timing and stats
           [ ] Add logging
 
-The case the "-te" option is a task expression (actually an [OGNL](http://commons.apache.org/proper/commons-ognl/) expression) that is eliminating tasks that have been completed.
+The "-tx" option is a task exclude expression (actually an [OGNL](http://commons.apache.org/proper/commons-ognl/) expression) that is excluding tasks that have been completed.
 
-In OGNL '!' means "not" and "completed" is one of several attributes that a Task has.
+Here "completed" refers to one of several attributes that a Task has.
 
-Folders, Projects, Tasks and Contexts all have attributes that you can use in filters. To get a complete list of the attributes available you can type:
+It's worth noting that:
+
+    of2 -pn 'ofexport2'
+
+is actually shorthand for use of the "name" attribute that all nodes have, it's equivalent to:
+
+    of2 -pi 'name=="ofexport2"'
+
+There are include/exclude options for each node type. To see all the options type:
+
+    of2 -h
+    
+You will see -fn, -fi and -fx for Folders, -tn, -ti and -tx for Tasks etc.
+
+Folders, Projects, Tasks and Contexts all have attributes that you can use in filters. To get a complete list of the attributes currently available you can type:
 
     of2 -i
     
-This will print all the attributes for all the types, for example this is just some of the Task attributes:
+This will print all the attributes for all the types, for example here are some of the Task attributes:
 
     Task:
         available (boolean): item is available.
         blocked (boolean): item is blocked.
         completed (boolean): item is complete.
-        completionDate (date): date item was completed.
-        contextName (string): contextName.
-        deferDate (date): date item is to start.
-        dueDate (date): date item is due.
+        completionDate (date): date item was completed or null.
+        contextName (string): the context name or null.
+        deferDate (date): date item is to start or null.
+        dueDate (date): date item is due or null.
         flagged (boolean): item is flagged.
         etc ...
 
-And typing simply:
+Any number of expressions can be provided and filtering expressions can be any valid OGNL expression. These can be complex logical expressions:
 
-    of2
-    
-Will list all of the filtering options currently available.
+    of2 -pi 'flagged && !available && taskCount > 1'
 
-The filtering expressions can be any valid OGNL expression, these can be complex logical expressions:
-
-    of2 -pe 'flagged && !available && taskCount > 1'
-
-These expressions provide fine grained control of what's printed if required. For example if you have the following amongst your projects:
-
-- Folder
-    - Project
-        - [ ] Task X
-            - [X] Sub Task X
-            - [ ] Sub Task Y
-            - [ ] Sub Task Z
-
-If you search for a node containing "X" as follows:
-
-    of2 -te "name.contains(\"X\") && completed==false"
-    
-Then you will get:
-
-    Folder
-      Project
-        [] Task X
-
-This may seem odd because normally when a node matches yoy'd see all nodes beneath.
-           
-However, because the expression applies tasks, even though the root task matches, the expression will also be applied to the sub tasks where it fails. 
-
-If you wanted to see all the children of the matching task whether completed or not and whatever their name you could try:
-
-    of2 -te "(name.contains(\"X\") && completed==false) || included"
-           
-And you would get:
-
-    Folder
-      Project
-        [ ] Task X
-          [X] Sub Task X
-          [ ] Sub Task Y
-          [ ] Sub Task Z
-
-This makes use of the special "included" attribute which is used internally by ofexport during filtering. If the current expression has evaluated to true on any node above one being matched, then evaluated will be true. If you need to do something complex then this may prove useful.
-
-When you use -fn, -tn or -cn, they actually expand internally to be
-
-    name="<your search>" || included 
+Using filter expressions it's possible to get fine grained control of what's printed.
 
 # Reference #
 
@@ -263,7 +267,7 @@ Output can be written to a file by using the "-o" option, e.g.
 
     of2 -pn "My Project" -o pyproj.md
     
-The output will be in "Markdown" format because the file suffix is "md".
+The output will be automatically be in "Markdown" format because the file suffix is "md".
 
 The supported suffixes are:
 
@@ -274,7 +278,7 @@ The supported suffixes are:
 - csv: CSV format
 - html: HTML format
 
-If you want to specify a format different from the one derived from the output file (or are printing to the console) you can use "-f <fmt>".
+If you want to specify a format different from the one derived from the output file (or are printing to the console) you can use "-f fmt".
 
 The format name (specified or derived from the filename suffix) is used to find a FreeMarker template file in **config/templates**.
 
@@ -284,19 +288,24 @@ Normally ofexport2 is in project mode, i.e. the project hierachy is used for fil
 
 By using the "-c" option, the tool operates in context mode.
 
+It's an error to try and use a project filter in context mode and vice versa.
+
 #### Matching and Regular Expressions #####
 
 To search for a task that contains a substring:
 
-    of2 -te 'name.contains("X")'
+    of2 -ti 'name.contains("X")'
     
 To use regular expressions:
 
-    of2 -te 'name.matches(".*ollocks.*")'
+    of2 -ti 'name.matches(".*ollocks.*")'
     
-Note that the part after the "." here is a java method call from the String class, you can use any method or expression returns a boolean:
+You can use any method or expression returns a boolean:
 
-    of2 -te 'name.matches(".*ollocks.*") && name.contains("gly") && name.length()>4'
+    of2 -ti 'name.matches(".*ollocks.*") && name.contains("gly") && name.length()>4'
+
+What's happening here is that the OGLN expression is making direct use of methods on the Java [String](https://docs.oracle.com/javase/8/docs/api/java/lang/String.html) class( e.g. "matches()"), this provides for
+a great deal of flexibility in what can be achieved in the expressions.
 
 #### Date Filters ####
 
@@ -306,16 +315,16 @@ There are various ways to match on dates, for example:
     of2 -te 'completionDate==date("today")'
     of2 -te 'within(completionDate,"25th","yesterday")'
  
-We're making use of various special functions here:
+We're making use of some special custom functions here:
 
 - **date** takes a date in string form and converts it to a Date object for use in the expression.
-- **within** expressions takes 3 arguments (attribName, fromString, toString)
+- **within** expressions takes 3 arguments (attrib, fromString, toString) and returns true if the date attribute is within the range.
 
 The strings formats of dates that are accepted are:
 
 - **"2014-11-19"**: specific date (yyyy-mm-dd).
 - **"Mon"**, **"mon"**, **"Monday"**, **"monday"**: the monday of this week (weeks start on Monday).
-- **"-mon"**: The monday of last week.
+- **"-mon"**: the monday of last week.
 - **"+mon"**: the monday of next week.
 - **"Jan"**,**"jan"**,**"January"**,**"january"**: the 1st of January of this year.
 - **"-Jan"**,**"-jan"**,**"-January"**,**"-january"**: the 1st of January last year.
@@ -328,43 +337,64 @@ The strings formats of dates that are accepted are:
 
 ### Sorting ###
 
-By default items are sorted in the order they appear in OmniFocus. To specify an alternate order, for example sort by flagged status (unflagged then flagged):
+A generally useful commandline, show all tasks prioritised by flagged and sorted by due.
 
-    of2 -pn proj -ts flagged
+    of2 -ti available -ts r:flagged -ts dueDate
     
-To reverse the order:
+Here, prefixing "r:" on the sort attribute causes the sort to reverse it's order.
 
-    of2 -pn proj -ts r:flagged
-    
 It's possible (much like with filters) to chain multiple sort fields, for example to sort by flagged and then due:
 
-    of2 -pn proj -ts r:flagged -ts dueDate
+The above will list things in the following order:
+
+- Flagged items sorted by due date.
+- Unflagged items sorted by due date.
+
+### Pruning ###
+
+Sometimes the output is cluttered with empty Contexts, Folders or Projects that you want to keep in OmniFocus
+but not see in the output.
+
+Using the **-p** option eliminates them.
 
 ### Examples ###
 
-All flagged and available tasks:
+All available tasks:
 
-    of2 -te 'flagged && available'
+    of2 -ti available
 
-All available and tasks overdue tasks or tasks due within the next week:
+All available tasks but organised by context:
 
-    of2 -te 'available && within(dueDate,"-1y","7d")'
+    of2 -c -ti available
 
-All contexts that have no tasks:
+All available tasks organised by context but excluding the projects themselves:
 
-    of2 -c -ce 'taskCount==0'
+    of2 -c -ti available -tx projectTask
+
+All flagged and available tasks (two forms):
+
+    of2 -ti flagged -ti available
+    of2 -ti 'flagged && available'
+
+All available tasks due within the next week:
+
+    of2 -ti 'available && within(dueDate,"today","7d")'
+
+All contexts that have no tasks or sub contexts:
+
+    of2 -c -ci 'taskCount==0 && contextCount==0'
 
 All completed projects, but not their tasks:
 
-    of2 -pe completed -te false
+    of2 -pi completed -tx true
 
-Anything (folder, project task - because we're in project mode) that contains "spark plug":
+Anything (folder, project task - because we're in project mode) that contains "spark plug" in upper or lower case:
 
-    of2 -e 'name.toLowerCase().contains("spark plugs")'
+    of2 -ai 'name.toLowerCase().contains("spark plug")'
 
 Any task with a note containing "towel":
 
-    of2 -te 'note!=null && note.contains("towel")'
+    of2 -ti 'note!=null && note.contains("towel")'
 
 ## Writing a Template ##
 
@@ -372,7 +402,8 @@ Any task with a note containing "towel":
 - The templates live in **config/templates**.
 - Using the options "-f xxx" or "-o file.xxx" will cause ofexport to look for a template ***config/templates/xxx.ftl***.
 - The object model available in the templates can be printed using **of2 -i**.
-- Copying and experimenting on an existing template is the best way to start.
+
+Copying and experimenting on an existing template is the best way to start.
 
 ## Building It Yourself ##
 
