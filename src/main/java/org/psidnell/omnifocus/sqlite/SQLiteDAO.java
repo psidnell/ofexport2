@@ -35,6 +35,8 @@ import org.psidnell.omnifocus.model.DataCache;
 import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.ProjectInfo;
 import org.psidnell.omnifocus.model.Task;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author psidnell
@@ -43,13 +45,17 @@ import org.psidnell.omnifocus.model.Task;
  */
 public class SQLiteDAO {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(SQLiteDAO.class);
+
     private static final int THREE = 3;
     private String[] possibleDBLocations;
 
     public String getDriverURL() throws SQLException {
         for (String location : possibleDBLocations) {
             File file = new File(location);
+            LOGGER.info("Checking database file: {}", file);
             if (file.exists() && file.isFile()) {
+                LOGGER.info("Found database file: {}", file);
                 return "jdbc:sqlite:" + location;
             }
         }
@@ -84,12 +90,21 @@ public class SQLiteDAO {
     }
 
     public DataCache load() throws SQLException, IllegalAccessException, InvocationTargetException, InstantiationException {
+
+        LOGGER.info("Starting DB load");
+
         try (
             Connection c = getConnection()) {
             Collection<ProjectInfo> projInfos = load(c, PROJECT_INFO_DAO);
             Collection<Folder> folders = load(c, FOLDER_DAO);
             Collection<Task> tasks = load(c, TASK_DAO);
             Collection<Context> contexts = load(c, CONTEXT_DAO);
+
+            LOGGER.info("Loaded {} folders", folders.size());
+            LOGGER.info("Loaded {} projects", projInfos.size());
+            LOGGER.info("Loaded {} contexts", contexts.size());
+            LOGGER.info("Loaded {} tasks", tasks.size());
+
             return new DataCache(folders, projInfos, tasks, contexts);
         }
     }

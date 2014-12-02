@@ -4,7 +4,7 @@
 
 ### ofexport2
 
-- Release process hasn't released correct jars from root directory
+- Is this release process worth the pain? just do everything on master?
 - Code Quality 
   - Do I really want to publish the site? big...
   - Coverage

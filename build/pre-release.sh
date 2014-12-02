@@ -20,3 +20,9 @@ ofexport2 -pn ofexport2 -ti '!completed' -o doc/TODO.md
 echo Generating DONE-$DATE.md
 DATE=`date "+%Y-%m"`
 ofexport2 -pn ofexport2 -ti 'completed && completionDate >= date("1st")' -o doc/DONE-$DATE.md
+
+mvn clean package
+rm -rf bin
+rm -rf repo
+cp -a target/ofexport/bin .
+cp -a target/ofexport/repo .

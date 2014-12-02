@@ -20,6 +20,8 @@ import java.io.InputStream;
 import java.io.Writer;
 
 import org.psidnell.omnifocus.model.Node;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import freemarker.cache.ClassTemplateLoader;
 import freemarker.cache.TemplateLoader;
@@ -36,8 +38,11 @@ import freemarker.template.TemplateExceptionHandler;
  */
 public class FreeMarkerFormatter implements Formatter {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(FreeMarkerFormatter.class);
+
     private static final String TEMPLATES = "/templates";
     private Template template;
+    private String templateName;
 
     public FreeMarkerFormatter(String templateName) throws IOException {
         // If the resource doesn't exist abort so we can look elsewhere
@@ -47,6 +52,8 @@ public class FreeMarkerFormatter implements Formatter {
                 throw new IOException("Resource not found:" + templateName);
             }
         }
+
+        this.templateName = templateName;
 
         Configuration cfg = new Configuration(Configuration.VERSION_2_3_21);
         TemplateLoader templateLoader = new ClassTemplateLoader(this.getClass(), TEMPLATES);
@@ -64,6 +71,7 @@ public class FreeMarkerFormatter implements Formatter {
 
     @Override
     public void format(Node root, Writer out) throws IOException, TemplateException {
+        LOGGER.info("Formatting with {}: {}", templateName, root);
         template.process(root, out);
     }
 }

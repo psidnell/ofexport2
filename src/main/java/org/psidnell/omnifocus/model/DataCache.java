@@ -32,6 +32,8 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.psidnell.omnifocus.sqlite.SQLiteDAO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -49,6 +51,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  *
  */
 public class DataCache {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(DataCache.class);
 
     private HashMap<String, Folder> folders = new HashMap<>();
     private HashMap<String, ProjectInfo> projInfos = new HashMap<>();
@@ -70,6 +74,8 @@ public class DataCache {
     }
 
     public final void build() {
+        LOGGER.info("Starting tree reconstruction");
+
         Project inbox = new Project();
         inbox.setName("Inbox");
         inbox.setId("__%%Inbox"); // to give deterministic JSON/XML output
@@ -151,6 +157,9 @@ public class DataCache {
         if (!noContext.getTasks().isEmpty()) {
             contexts.put(noContext.getId(), noContext);
         }
+
+        LOGGER.info("Finished tree reconstruction");
+
     }
 
     public HashMap<String, Folder> getFolders() {

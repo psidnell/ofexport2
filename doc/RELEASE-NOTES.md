@@ -3,6 +3,8 @@
 ## 1.0.2 2014-12-02
 
 - Ironing out release issues.
+- Fixed bug when using "-pn x", was adding single quotes to expression instead of double.
+- Added extensive logging. 
 
 ## 1.0.1 2014-12-02
 

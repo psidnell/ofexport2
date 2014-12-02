@@ -19,6 +19,8 @@ import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author psidnell
@@ -27,6 +29,8 @@ import org.psidnell.omnifocus.model.Task;
  *
  */
 public class IncludeVisitor implements Visitor {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(IncludeVisitor.class);
 
     private static final VisitorDescriptor WHAT = new VisitorDescriptor().visitAll();
 
@@ -43,21 +47,25 @@ public class IncludeVisitor implements Visitor {
 
     @Override
     public void enter(Context node) throws Exception {
+        LOGGER.debug("Including context include={} {}", include, node);
         node.setIncluded(include);
     }
 
     @Override
     public void enter(Folder node) throws Exception {
+        LOGGER.debug("Including folder include={} {}", include, node);
         node.setIncluded(include);
     }
 
     @Override
     public void enter(Project node) throws Exception {
+        LOGGER.debug("Including project include={} {}", include, node);
         node.setIncluded(include);
     }
 
     @Override
     public void enter(Task node) throws Exception {
+        LOGGER.debug("Including task include={} {}", include, node);
         node.setIncluded(include);
     }
 }

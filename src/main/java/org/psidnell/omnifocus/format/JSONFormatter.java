@@ -20,6 +20,8 @@ import java.io.Writer;
 
 import org.psidnell.omnifocus.model.Node;
 import org.psidnell.omnifocus.util.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -31,10 +33,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class JSONFormatter implements Formatter {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(JSONFormatter.class);
+
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     @Override
     public void format(Node node, Writer out) throws IOException {
+        LOGGER.info("Formatting: {}", node);
         // Mapper closes the stream - don't want that here
         Writer closeProofWriter = IOUtils.closeProofWriter(out);
         MAPPER.writerWithDefaultPrettyPrinter().writeValue(closeProofWriter, node);

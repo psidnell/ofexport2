@@ -47,7 +47,7 @@ public class Traverser {
     }
 
     private static void doTraverse(Visitor visitor, VisitorDescriptor what, Node node) throws Exception {
-        LOGGER.debug("Traversing: {}", node);
+        LOGGER.debug("Traversing node: {}", node);
         try {
             switch (node.getType()) {
                 case Folder.TYPE:
@@ -77,7 +77,7 @@ public class Traverser {
                 return;
             }
 
-            LOGGER.debug("Traversing: {}", node);
+            LOGGER.debug("Traversing folder: {}", node);
 
             visitor.enter(node);
 
@@ -119,7 +119,7 @@ public class Traverser {
                 return;
             }
 
-            LOGGER.debug("Traversing: {}", node);
+            LOGGER.debug("Traversing task: {}", node);
 
             visitor.enter(node);
 
@@ -150,7 +150,7 @@ public class Traverser {
                 return;
             }
 
-            LOGGER.debug("Traversing: {}", node);
+            LOGGER.debug("Traversing context: {}", node);
 
             visitor.enter(node);
 
@@ -191,7 +191,7 @@ public class Traverser {
                 return;
             }
 
-            LOGGER.debug("Traversing: {}", node);
+            LOGGER.debug("Traversing project: {}", node);
 
             visitor.enter(node);
 

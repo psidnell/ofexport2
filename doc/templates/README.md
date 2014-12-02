@@ -22,8 +22,8 @@
     - [Sorting](#sorting)
     - [Pruning](#pruning)
     - [Examples](#examples)
-- [Writing a Template](#writing-a-template)
-- [Building it Yourself](#building-it-yourself)
+    - [Writing a Template](#writing-a-template)
+    - [Building it Yourself](#building-it-yourself)
 - [ofexport vs ofexport2](#ofexport-vs-ofexport2)
 - [Other Approaches Considered](#other-approaches-considered)
 - [Known Issues](#known-issues)
@@ -396,7 +396,7 @@ Any task with a note containing "towel":
 
     of2 -ti 'note!=null && note.contains("towel")'
 
-## Writing a Template ##
+### Writing a Template ###
 
 - The templates are written in [FreeMarker](http://freemarker.org) syntax.
 - The templates live in **config/templates**.
@@ -405,7 +405,7 @@ Any task with a note containing "towel":
 
 Copying and experimenting on an existing template is the best way to start.
 
-## Building It Yourself ##
+### Building It Yourself ###
 
 The build is a straight forward java [maven 3](http://maven.apache.org) build.
 
