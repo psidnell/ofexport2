@@ -144,29 +144,6 @@
 					</platforms>
 				</configuration>
 			</plugin>
-			<plugin>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.7</version>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<configuration>
-							<target>
-								<copy todir="${basedir}/bin">
-									<fileset dir="${project.build.directory}/ofexport/bin" />
-								</copy>
-								<delete dir="${basedir}/repo" />
-								<copy todir="${basedir}/repo">
-									<fileset dir="${project.build.directory}/ofexport/repo" />
-								</copy>
-							</target>
-						</configuration>
-						<goals>
-							<goal>run</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 			<!-- Doesn't work with Java 8 <plugin> <groupId>org.codehaus.mojo</groupId> 
 				<artifactId>cobertura-maven-plugin</artifactId> <version>2.6</version> <executions> 
 				<execution> <id>clean</id> <phase>pre-site</phase> <goals> <goal>clean</goal> 
