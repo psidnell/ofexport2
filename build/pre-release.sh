@@ -11,8 +11,8 @@ echo Generating README.md
 cat doc/templates/README.md | sed -e "s/\$VERSION/$NEXT_VERSION/g" -e "s/\$DATE/$DATE/g" > README.md
 
 echo Generating version.properties
-echo "version:$NEXT_VERSION" > src/main/resources/version.properties
-echo "date:$DATE" >> src/main/resources/version.properties
+echo "version:$NEXT_VERSION" > config/version.properties
+echo "date:$DATE" >> config/version.properties
 
 echo Generating TODO.md
 ofexport2 -pn ofexport2 -ti '!completed' -o doc/TODO.md
