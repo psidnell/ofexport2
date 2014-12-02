@@ -17,7 +17,7 @@
     - [Project vs Context Mode](#project-vs-context-mode)
     - [Matching and Regular Expressions](#matching-and-regular-expressions)
     - [Date Filters](#date-filters)
-    - [Sorting] (#sorting)
+    - [Sorting](#sorting)
     - [Examples](#examples)
 - [Writing a Template](#writing-a-template)
 - [Building it Yourself](#building-it-yourself)
@@ -38,7 +38,7 @@ This is an early version and at the time of writing I'm making major changes. If
 
 ## Audience ##
 
-To be able to use ofexport there are some pre-requisites. You need to:
+To be able to use ofexport there are some pre-requisites, you need to:
 
 - Have [OmniFocus](https://www.omnigroup.com/omnifocus) installed.
 - Be comfortable using bash and the command line.
@@ -46,12 +46,12 @@ To be able to use ofexport there are some pre-requisites. You need to:
 - Have [Java 8](https://www.oracle.com/java/index.html) or know how to install it.
 - Have read and appreciated [The Hitchhikers Guide to the Galaxy](http://en.wikipedia.org/wiki/The_Hitchhiker's_Guide_to_the_Galaxy).
 
-Without all of the above I want nothing more to do with you. Goodbye.
+You're going to have to know [where your towel is](http://hitchhikers.wikia.com/wiki/Towel).
 
 ## How it works
 
 1. The tool reads the entire OmniFocus SQLite database.
-2. Various command line filters are applied to eliminate unwanted data, sort, etc.
+2. Various command line filters are applied to eliminate unwanted data, sort items, etc.
 3. The remaining data is printed to the console or saved to a file in some specific format.
 
 Currently supported export formats are:
@@ -72,7 +72,7 @@ The key technologies used for the transformation are:
 
 ## Installation ##
 
-Installation is entirely manual and done from the command line. Essentially yo will be downloading/unpacking the zip and adding it's bin directory to your path.
+Installation is entirely manual and done from the command line. Essentially you will be downloading/unpacking the zip and adding it's bin directory to your path.
 
 ### 1. You should have Java 8 already installed.
 
@@ -88,20 +88,21 @@ You should see output similar to:
 
 ### 2. Download:
 
-Download either:
+To get the required files, (in increasing order of danger) either:
 
-- The latest stable version: [ofexport-v2-$VERSION.zip](https://github.com/psidnell/ofexport2/archive/ofexport-v2-$VERSION.zip)
-- The current development version: [master.zip](https://github.com/psidnell/ofexport2/archive/master.zip)
+- Download the latest stable version: [ofexport-v2-$VERSION.zip](https://github.com/psidnell/ofexport2/archive/ofexport-v2-$VERSION.zip)
+- Download the current development version: [master.zip](https://github.com/psidnell/ofexport2/archive/master.zip)
+- If you want to stay on the bleeding edge, check out this git repository so you can take updates as you wish.
 
-Unzip this file and move/rename the root folder as you wish. For now I'm going to assume you moved and renamed it to **~/Applications/ofexport2**.
+If you downloaded a zip, unzip it and move/rename the root folder as you wish.
 
-Alternatively, if you're familiar with git you can check out this git repository - which will make updating simpler.
+For now I'm going to assume you moved and renamed it to **~/Applications/ofexport2**.
 
 ### 3. Set Execute Permission on the ofexport Shell Script ###
 
 On the command line type:
 
-    chmod +x ~/Applications/ofexport2/bin/ofexport
+    chmod +x ~/Applications/ofexport2/bin/ofexport2
 
 Make sure it's working by running:
 
@@ -122,7 +123,7 @@ When done reload your environment by typing:
 
     . ~/.bash_profile
 
-And verify everything has worked by typing **ofexport2** (or **of2**) and ensuring it prints it's command line options.
+Finally verify everything has worked by typing **ofexport2** (or **of2**) and ensuring it prints it's command line options.
 
 ## Uninstallation ###
 
@@ -132,7 +133,7 @@ Simply delete the ofexport2 folder and remove the lines you added to your .bash_
 
 ### Overview ###
 
-To print the contents of a named project (In this case I have a project called ofexport2) type:
+To print the contents of a named project (In this case I have a project called ofexport2, you should supply your own) type:
 
     of2 -pn 'ofexport2'
 
@@ -158,28 +159,29 @@ This outputs the following:
 
 The default output format is a simple text list where uncompleted tasks are prefixed with a [ ] and completed tasks are prefixed with a [X].
 
-The tool has searched all the projects for those that have the name "ofexport2" (-pn specifies project name). For any project that matches it shows all the items directly above it (in this case my "Home" folder) and any items beneath it.
+The tool has searched all the projects for those that have the exact name "ofexport2" (-pn specifies project name). For any project that matches it shows all the items directly above it (in this case my "Home" folder) and any items beneath it.
+
+The "-pn" specifies a filter (project name) and the text after it ('ofexport2') is it's argument. The single quotes around the argument aren't strictly necessary here but stop bash from attempting to interpret the contents. It's good practice to put single quotes around filter arguments since in more advanced examples they're going to contain spaces and all manner of characters from the 2nd row of your keyboard that would otherwise get bash very excited indeeed.  
 
 ### Filtering ###
 
 - Filters are expressions used to limit what Folders, Projects, Tasks or Contexts appear in the output.
 - Filters can be simple like a text search.
 - Filters can be complex expressions that make use of various attributes of an item.
-- Filters can include items of interest or exclude unwanted items.
-- Any number of filters can be used and each filter is run on the results of the last, filters can only reduce what appears in the output.
+- Filters can either include items of interest or exclude unwanted items.
+- Any number of filters can be used.
+- Filters are executed in order, each filter is run on the results of the last, thus filters can only reduce what appears in the output.
 
-The usage of "-pn" in the previous example is a simple filter that limits the output to Projects that have a specific name. 
+The difference between include and exclude filters is:
 
-The difference betwee inclide and exclude mode is:
+- **include**: if the expression matches a node then it, it's parent and all it's descendents will be included in the output.
+- **exclude**: if the expression matches a node then it and it's descendents are eliminated.
 
-- In include mode, if the expression matches a node, then it's parent and all it's descendents will be included in the output.
-- In exclude mode, if the expression matches a node then it and it's descendents are eliminated.
-
-This sounds complicated but what it means is that generally when want to see something you get to see where it is and everything under it. Conversely when you don't want to see something you don't see it or anything under it.
+This sounds complicated but what it means is that generally when we want to see something you get to see where it is and everything under it. Conversely when you don't want to see something you don't see it or anything under it.
 
 Building on the previous example, here's an operation with two include filters that shows all completed tasks in the "ofexport2" project:
 
-    of2 -pn ofexport2 -ti 'completed'
+    of2 -pn 'ofexport2' -ti 'completed'
 
 Produces:
 
@@ -196,7 +198,7 @@ Produces:
           [X] Only integration tests should use real database
           [X] format code
 
-If instead you wanted to only see uncompleted tasks you can change an include filter into an exclude filter:
+If instead you wanted to only see only uncompleted tasks you can change an include filter into an exclude filter:
 
     of2 -pn ofexport2 -tx 'completed'
 
@@ -215,13 +217,11 @@ Produces:
 
 The "-tx" option is a task exclude expression (actually an [OGNL](http://commons.apache.org/proper/commons-ognl/) expression) that is eliminating tasks that have been completed.
 
-In OGNL '!' means "not" and "completed" is one of several attributes that a Task has.
-
-The single quotes around the argument to -te are to prevent bash from seeing the '!' - it has special meaning in bash.
+In OGNL "completed" is one of several attributes that a Task has.
 
 Note that:
 
-    of2 -pn ofexport2
+    of2 -pn 'ofexport2'
 
 is actually shorthand for:
 
