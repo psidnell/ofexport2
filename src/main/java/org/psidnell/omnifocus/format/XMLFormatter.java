@@ -20,6 +20,8 @@ import java.io.Writer;
 
 import org.psidnell.omnifocus.model.Node;
 import org.psidnell.omnifocus.util.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
@@ -32,10 +34,13 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
  */
 public class XMLFormatter implements Formatter {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(XMLFormatter.class);
+
     private static final XmlMapper MAPPER = new XmlMapper();
 
     @Override
     public void format(Node node, Writer out) throws IOException {
+        LOGGER.info("Formatting: {}", node);
         // Mapper closes the stream - don't want that here
         Writer closeProofWriter = IOUtils.closeProofWriter(out);
         MAPPER.enable(SerializationFeature.INDENT_OUTPUT);

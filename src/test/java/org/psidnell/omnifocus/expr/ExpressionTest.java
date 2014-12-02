@@ -90,4 +90,25 @@ public class ExpressionTest {
         assertTrue (new Expression("name=='foo'").eval(t, Boolean.class));
         assertTrue (new Expression("name==\"foo\"").eval(t, Boolean.class));
     }
+
+    @Test
+    public void testNumberFormatExceptionBug() throws OgnlException {
+
+        Task t = new Task();
+        t.setName("foo");
+        t.setCompletionDate(new Date ());
+
+        try {
+            // Interpreting as a char/int?
+            new Expression("name=='x'").eval(t, Boolean.class);
+            fail ();
+        }
+        catch (NumberFormatException e) {
+
+        }
+        assertFalse (new Expression("name=='xx'").eval(t, Boolean.class));
+        assertFalse (new Expression("name==\"x\"").eval(t, Boolean.class));
+
+        // Lesson: use double quotes
+    }
 }

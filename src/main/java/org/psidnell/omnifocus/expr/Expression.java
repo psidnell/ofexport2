@@ -33,11 +33,13 @@ public class Expression {
     private static final Logger LOGGER = LoggerFactory.getLogger(Expression.class);
     private static final OgnlContext OGNL_CONTEXT = new OgnlContext();
     private Object expression;
+    private String expressionStr;
 
     public Expression(String expression) {
         try {
             LOGGER.debug("new Expression(\"{}\")", expression);
             this.expression = Ognl.parseExpression(expression);
+            this.expressionStr = expression;
         } catch (OgnlException e) {
             throw new IllegalArgumentException(e);
         }
@@ -53,6 +55,7 @@ public class Expression {
 
     @SuppressWarnings("unchecked")
     public <T> T eval(Node node, Class<T> clazz) {
+        LOGGER.debug("Evaluating {} on {}", expressionStr, node);
         return (T) eval(node);
     }
 }

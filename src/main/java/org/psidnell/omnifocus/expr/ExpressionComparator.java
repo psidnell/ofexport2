@@ -18,6 +18,8 @@ package org.psidnell.omnifocus.expr;
 import java.util.Comparator;
 
 import org.psidnell.omnifocus.model.Node;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author psidnell
@@ -27,6 +29,8 @@ import org.psidnell.omnifocus.model.Node;
  *            A comparator that uses OGNL expressions to extract the value to be used for comparison.
  */
 public class ExpressionComparator<T extends Node> implements Comparator<T> {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExpressionComparator.class);
 
     private final Expression expression;
     private final boolean reverse;
@@ -42,6 +46,8 @@ public class ExpressionComparator<T extends Node> implements Comparator<T> {
     @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
     public int compare(T o1, T o2) {
+
+        LOGGER.debug("Comparing {} and {} (reverse={})", o1, o2, reverse);
 
         Object val1 = expression.eval(o1);
         Object val2 = expression.eval(o2);
@@ -62,6 +68,8 @@ public class ExpressionComparator<T extends Node> implements Comparator<T> {
         if (reverse) {
             result = -result;
         }
+
+        LOGGER.debug("Result is {}", result);
 
         return result;
     }

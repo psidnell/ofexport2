@@ -82,7 +82,7 @@ public class CommandLine {
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "pn", true, "include project specified by name.",
-                (m,o)->m.ofexport.addProjectExpression("name=='" + escape(o.nextValue()) + "'", true),
+                (m,o)->m.ofexport.addProjectExpression("name==\"" + escape(o.nextValue()) + "\"", true),
                 AFTER_LOAD));
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
@@ -104,7 +104,7 @@ public class CommandLine {
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "fn", true, "include folder specified by name.",
-                (m,o)->m.ofexport.addFolderExpression("name=='" + escape(o.nextValue()) + "'", true),
+                (m,o)->m.ofexport.addFolderExpression("name==\"" + escape(o.nextValue()) + "\"", true),
                 AFTER_LOAD));
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
@@ -127,7 +127,7 @@ public class CommandLine {
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "tn", true, "include tasks specified by name.",
-                (m,o)->m.ofexport.addTaskExpression("name=='" + escape(o.nextValue()) + "'" , true),
+                (m,o)->m.ofexport.addTaskExpression("name==\"" + escape(o.nextValue()) + "\"" , true),
                 AFTER_LOAD));
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
@@ -144,7 +144,7 @@ public class CommandLine {
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "cx", true, "include contexts specified by name.",
-                (m,o)->m.ofexport.addContextExpression("name=='" + escape(o.nextValue()) + "'", true),
+                (m,o)->m.ofexport.addContextExpression("name==\"" + escape(o.nextValue()) + "\"", true),
                 AFTER_LOAD));
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(

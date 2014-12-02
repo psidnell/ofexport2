@@ -80,6 +80,7 @@ public class ExpressionFunctions {
         }
 
         LOGGER.debug("date({}) = {}", dateStr, result);
+
         return result;
     }
 

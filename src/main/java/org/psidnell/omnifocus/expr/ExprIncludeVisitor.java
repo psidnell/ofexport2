@@ -47,11 +47,11 @@ public class ExprIncludeVisitor extends ExprVisitor {
             LOGGER.debug("Applying {} to {}", exprString, node);
             boolean result = expr.eval(node, Boolean.class);
             if (includeMode && result) {
-                LOGGER.debug("included");
+                LOGGER.debug("Included");
                 node.include(projectMode);
                 throw new NodeTraversalAbortException();
             } else if (!includeMode && result) {
-                LOGGER.debug("excluded");
+                LOGGER.debug("Excluded");
                 node.exclude();
                 throw new NodeTraversalAbortException();
             }
