@@ -2,6 +2,8 @@
 
 *Updated $DATE.*
 
+[Release Notes](doc/RELEASE-NOTES.md)
+
 ## Table of Contents
 
 - [Introduction](#introduction)
