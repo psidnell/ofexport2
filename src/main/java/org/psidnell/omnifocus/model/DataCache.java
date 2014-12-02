@@ -139,7 +139,8 @@ public class DataCache {
 
             projects.put(project.getId(), project);
 
-            // Discard the root task
+            // Discard the root task. But note that it'll still be
+            // a child in any contexts
             tasks.remove(rootTask.getId());
         }
 

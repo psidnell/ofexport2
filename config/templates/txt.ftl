@@ -40,7 +40,7 @@ $ MACRO: doProject
 $$$$$$$$$$$$$$$$$$
  -->
 <#macro doProject project depth>
-<@doIndent indent=depth/>${project.name}
+<@doIndent indent=depth/>${project.name}<@doAttribs project/>
 <#list project.tasks as t><@doTask task=t depth=depth+1 projectMode=true/></#list>
 </#macro>
 <#--
@@ -50,7 +50,7 @@ $$$$$$$$$$$$$$$
 -->
 <#macro doTask task depth projectMode>
 <@doIndent indent=depth/>
-<#if task.completed>[X]<#else>[ ]</#if> ${task.name}
+<#if task.completed>[X]<#else>[ ]</#if> ${task.name}<@doAttribs task/>
 <#if projectMode><#list task.tasks as t><@doTask task=t depth=depth+1  projectMode=projectMode/></#list></#if>
 </#macro>
 <#--
@@ -63,6 +63,14 @@ $$$$$$$$$$$$$$$$$$
 <#list context.contexts as c><@doContext context=c depth=depth+1/></#list>
 <#list context.tasks as t><@doTask task=t depth=depth+1 projectMode=false/></#list>
 </#macro>
+<#--
+$$$$$$$$$$$$$$$
+$ MACRO: doAttribs
+$$$$$$$$$$$$$$$
+Using Java SimpleDateFormat conversion
+-->
+<#macro doAttribs node>
+<#if (node.completionDate)??> done:${node.completionDate?string["yyyy-MM-dd"]}</#if><#if (node.dueDate)??> due:${node.dueDate?string["yyyy-MM-dd"]}</#if><#if node.flagged> FLAGGED</#if></#macro> 
 <#--
 $$$$$$$$$$$$$$$$$$
 $ MACRO: doIndent

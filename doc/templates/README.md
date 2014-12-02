@@ -18,6 +18,7 @@
     - [Matching and Regular Expressions](#matching-and-regular-expressions)
     - [Date Filters](#date-filters)
     - [Sorting](#sorting)
+    - [Pruning](#pruning)
     - [Examples](#examples)
 - [Writing a Template](#writing-a-template)
 - [Building it Yourself](#building-it-yourself)
@@ -38,7 +39,7 @@ This is an early version and at the time of writing I'm making major changes. If
 
 ## Audience ##
 
-To be able to use ofexport there are some pre-requisites, you need to:
+To be able to use ofexport2 there are some pre-requisites, you need to:
 
 - Have [OmniFocus](https://www.omnigroup.com/omnifocus) installed.
 - Be comfortable using bash and the command line.
@@ -215,25 +216,25 @@ Produces:
           [ ] Timing and stats
           [ ] Add logging
 
-The "-tx" option is a task exclude expression (actually an [OGNL](http://commons.apache.org/proper/commons-ognl/) expression) that is eliminating tasks that have been completed.
+The "-tx" option is a task exclude expression (actually an [OGNL](http://commons.apache.org/proper/commons-ognl/) expression) that is excluding tasks that have been completed.
 
-In OGNL "completed" is one of several attributes that a Task has.
+Here "completed" refers to one of several attributes that a Task has.
 
-Note that:
+It's worth noting that:
 
     of2 -pn 'ofexport2'
 
-is actually shorthand for:
+is actually shorthand for use of the "name" attribute that all nodes have, it's equivalent to:
 
     of2 -pi 'name=="ofexport2"'
 
 There are include/exclude options for each node type. To see all the options type:
 
-    of2
+    of2 -h
     
 You will see -fn, -fi and -fx for Folders, -tn, -ti and -tx for Tasks etc.
 
-Folders, Projects, Tasks and Contexts all have attributes that you can use in filters. To get a complete list of the attributes available you can type:
+Folders, Projects, Tasks and Contexts all have attributes that you can use in filters. To get a complete list of the attributes currently available you can type:
 
     of2 -i
     
@@ -244,7 +245,7 @@ This will print all the attributes for all the types, for example here are some 
         blocked (boolean): item is blocked.
         completed (boolean): item is complete.
         completionDate (date): date item was completed or null.
-        contextName (string): contextName.
+        contextName (string): the context name or null.
         deferDate (date): date item is to start or null.
         dueDate (date): date item is due or null.
         flagged (boolean): item is flagged.
@@ -254,7 +255,7 @@ Any number of expressions can be provided and filtering expressions can be any v
 
     of2 -pi 'flagged && !available && taskCount > 1'
 
-These expressions can provide fine grained control of what's printed.
+Using filter expressions it's possible to get fine grained control of what's printed.
 
 # Reference #
 
@@ -264,7 +265,7 @@ Output can be written to a file by using the "-o" option, e.g.
 
     of2 -pn "My Project" -o pyproj.md
     
-The output will be in "Markdown" format because the file suffix is "md".
+The output will be automatically be in "Markdown" format because the file suffix is "md".
 
 The supported suffixes are:
 
@@ -275,7 +276,7 @@ The supported suffixes are:
 - csv: CSV format
 - html: HTML format
 
-If you want to specify a format different from the one derived from the output file (or are printing to the console) you can use "-f <fmt>".
+If you want to specify a format different from the one derived from the output file (or are printing to the console) you can use "-f fmt".
 
 The format name (specified or derived from the filename suffix) is used to find a FreeMarker template file in **config/templates**.
 
@@ -285,19 +286,24 @@ Normally ofexport2 is in project mode, i.e. the project hierachy is used for fil
 
 By using the "-c" option, the tool operates in context mode.
 
+It's an error to try and use a project filter in context mode and vice versa.
+
 #### Matching and Regular Expressions #####
 
 To search for a task that contains a substring:
 
-    of2 -te 'name.contains("X")'
+    of2 -ti 'name.contains("X")'
     
 To use regular expressions:
 
-    of2 -te 'name.matches(".*ollocks.*")'
+    of2 -ti 'name.matches(".*ollocks.*")'
     
-Note that the part after the "." here is a java method call from the String class, you can use any method or expression returns a boolean:
+You can use any method or expression returns a boolean:
 
-    of2 -te 'name.matches(".*ollocks.*") && name.contains("gly") && name.length()>4'
+    of2 -ti 'name.matches(".*ollocks.*") && name.contains("gly") && name.length()>4'
+
+What's happening here is that the OGLN expression is making direct use of methods on the Java [String](https://docs.oracle.com/javase/8/docs/api/java/lang/String.html) class( e.g. "matches()"), this provides for
+a great deal of flexibility in what can be achieved in the expressions.
 
 #### Date Filters ####
 
@@ -307,16 +313,16 @@ There are various ways to match on dates, for example:
     of2 -te 'completionDate==date("today")'
     of2 -te 'within(completionDate,"25th","yesterday")'
  
-We're making use of various special functions here:
+We're making use of some special custom functions here:
 
 - **date** takes a date in string form and converts it to a Date object for use in the expression.
-- **within** expressions takes 3 arguments (attribName, fromString, toString)
+- **within** expressions takes 3 arguments (attrib, fromString, toString) and returns true if the date attribute is within the range.
 
 The strings formats of dates that are accepted are:
 
 - **"2014-11-19"**: specific date (yyyy-mm-dd).
 - **"Mon"**, **"mon"**, **"Monday"**, **"monday"**: the monday of this week (weeks start on Monday).
-- **"-mon"**: The monday of last week.
+- **"-mon"**: the monday of last week.
 - **"+mon"**: the monday of next week.
 - **"Jan"**,**"jan"**,**"January"**,**"january"**: the 1st of January of this year.
 - **"-Jan"**,**"-jan"**,**"-January"**,**"-january"**: the 1st of January last year.
@@ -329,43 +335,64 @@ The strings formats of dates that are accepted are:
 
 ### Sorting ###
 
-By default items are sorted in the order they appear in OmniFocus. To specify an alternate order, for example sort by flagged status (unflagged then flagged):
+A generally useful commandline, show all tasks prioritised by flagged and sorted by due.
 
-    of2 -pn proj -ts flagged
+    of2 -ti available -ts r:flagged -ts dueDate
     
-To reverse the order:
+Here, prefixing "r:" on the sort attribute causes the sort to reverse it's order.
 
-    of2 -pn proj -ts r:flagged
-    
 It's possible (much like with filters) to chain multiple sort fields, for example to sort by flagged and then due:
 
-    of2 -pn proj -ts r:flagged -ts dueDate
+The above will list things in the following order:
+
+- Flagged items sorted by due date.
+- Unflagged items sorted by due date.
+
+### Pruning ###
+
+Sometimes the output is cluttered with empty Contexts, Folders or Projects that you want to keep in OmniFocus
+but not see in the output.
+
+Using the **-p** option eliminates them.
 
 ### Examples ###
 
-All flagged and available tasks:
+All available tasks:
 
-    of2 -te 'flagged && available'
+    of2 -ti available
 
-All available and tasks overdue tasks or tasks due within the next week:
+All available tasks but organised by context:
 
-    of2 -te 'available && within(dueDate,"-1y","7d")'
+    of2 -c -ti available
 
-All contexts that have no tasks:
+All available tasks organised by context but excluding the projects themselves:
 
-    of2 -c -ce 'taskCount==0'
+    of2 -c -ti available -tx projectTask
+
+All flagged and available tasks (two forms):
+
+    of2 -ti flagged -ti available
+    of2 -ti 'flagged && available'
+
+All available tasks due within the next week:
+
+    of2 -ti 'available && within(dueDate,"today","7d")'
+
+All contexts that have no tasks or sub contexts:
+
+    of2 -c -ci 'taskCount==0 && contextCount==0'
 
 All completed projects, but not their tasks:
 
-    of2 -pe completed -te false
+    of2 -pi completed -tx true
 
-Anything (folder, project task - because we're in project mode) that contains "spark plug":
+Anything (folder, project task - because we're in project mode) that contains "spark plug" in upper or lower case:
 
-    of2 -e 'name.toLowerCase().contains("spark plugs")'
+    of2 -ai 'name.toLowerCase().contains("spark plug")'
 
 Any task with a note containing "towel":
 
-    of2 -te 'note!=null && note.contains("towel")'
+    of2 -ti 'note!=null && note.contains("towel")'
 
 ## Writing a Template ##
 
@@ -373,7 +400,8 @@ Any task with a note containing "towel":
 - The templates live in **config/templates**.
 - Using the options "-f xxx" or "-o file.xxx" will cause ofexport to look for a template ***config/templates/xxx.ftl***.
 - The object model available in the templates can be printed using **of2 -i**.
-- Copying and experimenting on an existing template is the best way to start.
+
+Copying and experimenting on an existing template is the best way to start.
 
 ## Building It Yourself ##
 

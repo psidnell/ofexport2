@@ -71,7 +71,7 @@ public abstract class CommonProjectAndTaskAttributes extends Node {
         // we want the exported/imported value in the json/xml
     }
 
-    @ExprAttribute(help = "contextName.")
+    @ExprAttribute(help = "the context name or null.")
     @JsonIgnore
     public String getContextName() {
         return context == null ? null : context.getName();
