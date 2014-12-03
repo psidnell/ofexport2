@@ -21,6 +21,7 @@
     - [Date Filters](#date-filters)
     - [Sorting](#sorting)
     - [Pruning](#pruning)
+    - [Flattening](#flattening)
     - [Examples](#examples)
     - [Writing a Template](#writing-a-template)
     - [Building it Yourself](#building-it-yourself)
@@ -34,7 +35,7 @@
 
 Before proceeding, please select the required version of this document:
 
-- [Latest Stable Release: 1.0.3](https://github.com/psidnell/ofexport2/blob/ofexport-v2-1.0.3/README.md)
+- [Latest Stable Release: 1.0.4](https://github.com/psidnell/ofexport2/blob/ofexport-v2-1.0.4/README.md)
 - [Development Version](https://github.com/psidnell/ofexport2/blob/master/README.md)
 
 This is an early version and at the time of writing I'm making major changes. If you need something reliable and with good documentation then the original [ofexport](https://github.com/psidnell/ofexport/blob/master/DOCUMENTATION.md) is stable and functional.
@@ -93,7 +94,7 @@ You should see output similar to:
 
 To get the required files, (in increasing order of danger) either:
 
-- Download the latest stable version: [ofexport-v2-1.0.3.zip](https://github.com/psidnell/ofexport2/archive/ofexport-v2-1.0.3.zip)
+- Download the latest stable version: [ofexport-v2-1.0.4.zip](https://github.com/psidnell/ofexport2/archive/ofexport-v2-1.0.4.zip)
 - Download the current development version: [master.zip](https://github.com/psidnell/ofexport2/archive/master.zip)
 - If you want to stay on the bleeding edge, check out this git repository so you can take updates as you wish.
 
@@ -357,6 +358,14 @@ but not see in the output.
 
 Using the **-p** option eliminates them.
 
+### Flattening ###
+
+Sometimes what is a useful Folder/Context hierarchy in OmniFocus ends up making reports look cluttered.
+
+The **-F** option flattens nested the hierarchy to just Folder/Projects/Contexts and lifts sub tasks up to the level of their parent.
+
+All projects and contexts are moved to the root level, and sub tasks moved up to the level of their parent.
+
 ### Examples ###
 
 All available tasks:
@@ -395,6 +404,44 @@ Anything (folder, project task - because we're in project mode) that contains "s
 Any task with a note containing "towel":
 
     of2 -ti 'note!=null && note.contains("towel")'
+
+What I do to generate weekly reports. I want a flattened list of work tasks completed this week:
+
+    of2 -fn 'Work' -ti 'completed && completionDate >= date("mon")' -p -F -f report -o ~/Desktop/Report.taskpaper
+
+### Tips ###
+
+#### Include Projects with Tags ####
+
+Generate a report containing projects whose note contains "#report#".
+
+    of2 -pi 'note!=null && note.contains("#report")'
+
+#### Save Useful Commands as Scripts ####
+
+Here's my "today" script. It creates a TaskPaper file on my desktop that contains everything I've completed today (excluding routine maintenance tasks) and then opens TaskPaper on the file. To be able to do this is pretty much why I wrote the tool.
+
+    !/bin/bash
+    
+    FOLDER="$1"
+    
+    if [ -z "$FOLDER" ]; then
+        FOLDER="Work"
+    fi
+    
+    FILE="$HOME/Desktop/REPORT-$FOLDER-`date +"%Y-W%V-%h-%d"`.taskpaper"
+    
+    ofexport2 \
+     -fi "name==\"$FOLDER\"" \
+     -fx 'name=="Routine Maint"' \
+     -ti 'completed && completionDate >= date("today")' \
+     -F -p \
+     -f report \
+     -o "$FILE"
+    
+    open $FILE
+
+I have an almost identical script called "thisweek" where the "today" is replaced with "mon".
 
 ### Writing a Template ###
 

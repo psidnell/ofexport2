@@ -4,8 +4,9 @@
 
 ### ofexport2
 
-- How to restructure (group knitting)
-  - Transforms - create one to experiment
-- How to determine first available?
+- Release V1.0.4
+- Longer Term
+  - How to determine first available?
+  - Decode attributes on contexts
 
 
