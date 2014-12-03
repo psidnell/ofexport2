@@ -86,4 +86,9 @@ public class ExprVisitor implements Visitor {
         LOGGER.debug("Applying {} to {}", expr, node);
         expr.eval(node);
     }
+
+    @Override
+    public String toString() {
+        return exprString;
+    }
 }

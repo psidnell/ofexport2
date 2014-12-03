@@ -23,6 +23,7 @@ import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
+import org.psidnell.omnifocus.visitor.FlattenFilter;
 
 public class OFExportTest {
 
@@ -633,4 +634,168 @@ public class OFExportTest {
                 "  [ ] t1",
             }, out.toString().split("\n"));
     }
+
+    @Test
+    public void testFlattenFolders () throws Exception {
+        OFExport ofExport = new OFExport();
+
+        Folder f1 = new Folder ("f1");
+
+        Project p1 = new Project ("p1");
+        f1.add(p1);
+
+        Task t1 = new Task ("t1");
+        p1.add(t1);
+
+        Task t2 = new Task ("t2");
+        t1.add (t2);
+
+        Project p2 = new Project ("p2");
+
+        ofExport.getProjectRoot().add(f1);
+        ofExport.getProjectRoot().add(p2);
+
+        ofExport.addFilter(new FlattenFilter());
+        ofExport.addProjectComparator("name");
+        ofExport.addTaskComparator("name");
+        ofExport.process();
+        StringWriter out = new StringWriter();
+        ofExport.write(out);
+
+        Diff.diff (new String[]
+            {
+                "p1",
+                "  [ ] t1",
+                "  [ ] t2",
+                "p2",
+            }, out.toString().split("\n"));
+    }
+
+    @Test
+    public void testFlattenContexts () throws Exception {
+        OFExport ofExport = new OFExport();
+        ofExport.setProjectMode(false);
+
+        Context c1 = new Context ("c1");
+        c1.setRank(2);
+        Context c2 = new Context ("c2");
+        c2.setRank(1);
+        Context c3 = new Context ("c3");
+        c3.setRank(3);
+
+        Context c = new Context ("c");
+        c.add(c1);
+        c.add(c2);
+        c.add(c3);
+
+        Task t1 = new Task ("t1");
+        c2.add(t1);
+        Task t2 = new Task ("t2");
+        c2.add(t2);
+
+
+        ofExport.getContextRoot().add(c);
+        ofExport.addContextComparator("name");
+        ofExport.addTaskComparator("name");
+        ofExport.addFilter(new FlattenFilter());
+        ofExport.process();
+        StringWriter out = new StringWriter();
+        ofExport.write(out);
+
+        Diff.diff (new String[]
+                {
+                    "c",
+                    "c1",
+                    "c2",
+                    "  [ ] t1",
+                    "  [ ] t2",
+                    "c3"
+                }, out.toString().split("\n"));
+    }
+
+    @Test
+    public void testPruneFolders () throws Exception {
+        OFExport ofExport = new OFExport();
+
+        Folder f1 = new Folder ("f1");
+
+        Folder f2 = new Folder ("f2");
+
+        Folder f3 = new Folder ("f3");
+
+        Project p1 = new Project ("p1");
+        f1.add(p1);
+
+        Task t1 = new Task ("t1");
+        p1.add(t1);
+
+        Task t2 = new Task ("t2");
+        t1.add (t2);
+
+        Project p2 = new Project ("p2");
+
+        Project p3 = new Project ("p3");
+        f3.add(p3);
+
+        ofExport.getProjectRoot().add(f1);
+        ofExport.getProjectRoot().add(f2);
+        ofExport.getProjectRoot().add(f3);
+        ofExport.getProjectRoot().add(p2);
+
+        ofExport.addPruneFilter();
+        ofExport.addProjectComparator("name");
+        ofExport.addTaskComparator("name");
+        ofExport.process();
+        StringWriter out = new StringWriter();
+        ofExport.write(out);
+
+        Diff.diff (new String[]
+            {
+                "f1",
+                "  p1",
+                "    [ ] t1",
+                "      [ ] t2",
+            }, out.toString().split("\n"));
+    }
+
+    @Test
+    public void testPruneContexts () throws Exception {
+        OFExport ofExport = new OFExport();
+        ofExport.setProjectMode(false);
+
+        Context c1 = new Context ("c1");
+        c1.setRank(2);
+        Context c2 = new Context ("c2");
+        c2.setRank(1);
+        Context c3 = new Context ("c3");
+        c3.setRank(3);
+
+        Context c = new Context ("c");
+        c.add(c1);
+        c.add(c2);
+        c.add(c3);
+
+        Task t1 = new Task ("t1");
+        c2.add(t1);
+        Task t2 = new Task ("t2");
+        c2.add(t2);
+
+
+        ofExport.getContextRoot().add(c);
+        ofExport.addContextComparator("name");
+        ofExport.addTaskComparator("name");
+        ofExport.addPruneFilter();
+        ofExport.process();
+        StringWriter out = new StringWriter();
+        ofExport.write(out);
+
+        Diff.diff (new String[]
+                {
+                    "c",
+                    "  c2",
+                    "    [ ] t1",
+                    "    [ ] t2",
+                }, out.toString().split("\n"));
+    }
+
 }

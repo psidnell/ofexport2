@@ -396,6 +396,10 @@ Any task with a note containing "towel":
 
     of2 -ti 'note!=null && note.contains("towel")'
 
+What I do to generate weekly reports. I want a flattened list of work tasks completed this week:
+
+    of2 -fn 'Work' -ti 'completed && completionDate >= date("mon")' -p -F -f report -o ~/Desktop/Report.taskpaper
+
 ### Writing a Template ###
 
 - The templates are written in [FreeMarker](http://freemarker.org) syntax.

@@ -115,21 +115,22 @@ public class Folder extends Node {
     }
 
     public void add(Project child) {
-        projects.add(child);
         Folder parent = child.getFolder();
-        child.setFolder(this);
         if (parent != null) {
             parent.getProjects().remove(child);
         }
+
+        projects.add(child);
+        child.setFolder(this);
     }
 
     public void add(Folder child) {
-        folders.add(child);
         Folder oldParent = child.getParent();
-        child.setParent(this);
-
         if (oldParent != null) {
             oldParent.getFolders().remove(child);
         }
+
+        folders.add(child);
+        child.setParent(this);
     }
 }

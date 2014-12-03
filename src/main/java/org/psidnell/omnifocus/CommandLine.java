@@ -26,6 +26,7 @@ import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
+import org.psidnell.omnifocus.visitor.FlattenFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -177,6 +178,11 @@ public class CommandLine {
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "p", false, "prune empty folders, projects and contexts.",
                 (m,o)->m.ofexport.addPruneFilter (),
+                AFTER_LOAD));
+
+        OPTIONS.addOption(new ActiveOption<CommandLine>(
+                "F", false, "Flatten hierarchies",
+                (m,o)->m.ofexport.addFilter (new FlattenFilter()),
                 AFTER_LOAD));
 
         // MODES

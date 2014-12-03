@@ -2,6 +2,9 @@
 
 ## 1.0.4
 
+- Fixed prune bug.
+- Added -F flatten option.
+
 ## 1.0.3
 
 - Fixed bug when using "-pn x", was adding single quotes to expression instead of double.
