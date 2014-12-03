@@ -21,6 +21,7 @@
     - [Date Filters](#date-filters)
     - [Sorting](#sorting)
     - [Pruning](#pruning)
+    - [Flattening](#flattening)
     - [Examples](#examples)
     - [Writing a Template](#writing-a-template)
     - [Building it Yourself](#building-it-yourself)
@@ -357,6 +358,14 @@ but not see in the output.
 
 Using the **-p** option eliminates them.
 
+### Flattening ###
+
+Sometimes what is a useful Folder/Context hierarchy in OmniFocus ends up making reports look cluttered.
+
+The **-F** option flattens nested the hierarchy to just Folder/Projects/Contexts and lifts sub tasks up to the level of their parent.
+
+All projects and contexts are moved to the root level, and sub tasks moved up to the level of their parent.
+
 ### Examples ###
 
 All available tasks:
@@ -399,6 +408,40 @@ Any task with a note containing "towel":
 What I do to generate weekly reports. I want a flattened list of work tasks completed this week:
 
     of2 -fn 'Work' -ti 'completed && completionDate >= date("mon")' -p -F -f report -o ~/Desktop/Report.taskpaper
+
+### Tips ###
+
+#### Include Projects with Tags ####
+
+Generate a report containing projects whose note contains "#report#".
+
+    of2 -pi 'note!=null && note.contains("#report")'
+
+#### Save Useful Commands as Scripts ####
+
+Here's my "today" script. It creates a TaskPaper file on my desktop that contains everything I've completed today (excluding routine maintenance tasks) and then opens TaskPaper on the file. To be able to do this is pretty much why I wrote the tool.
+
+    !/bin/bash
+    
+    FOLDER="$1"
+    
+    if [ -z "$FOLDER" ]; then
+        FOLDER="Work"
+    fi
+    
+    FILE="$HOME/Desktop/REPORT-$FOLDER-`date +"%Y-W%V-%h-%d"`.taskpaper"
+    
+    ofexport2 \
+     -fi "name==\"$FOLDER\"" \
+     -fx 'name=="Routine Maint"' \
+     -ti 'completed && completionDate >= date("today")' \
+     -F -p \
+     -f report \
+     -o "$FILE"
+    
+    open $FILE
+
+I have an almost identical script called "thisweek" where the "today" is replaced with "mon".
 
 ### Writing a Template ###
 

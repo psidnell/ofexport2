@@ -12,7 +12,7 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*/
+ */
 package org.psidnell.omnifocus.visitor;
 
 import java.util.Set;
@@ -22,6 +22,11 @@ import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
 
+/**
+ * @author psidnell
+ *
+ *         Flatten node hierarchies to improve readability.
+ */
 public class FlattenFilter implements Visitor {
 
     private static final VisitorDescriptor WHAT = new VisitorDescriptor().visit(Folder.class, Project.class, Context.class);
@@ -37,7 +42,7 @@ public class FlattenFilter implements Visitor {
         CollectingVisitor collector = new CollectingVisitor(new VisitorDescriptor().visit(Folder.class, Project.class));
         Traverser.traverse(collector, node);
 
-        Set<Project> projects = collector.getProjects ();
+        Set<Project> projects = collector.getProjects();
         node.getFolders().clear();
         for (Project child : projects) {
             node.add(child);
@@ -52,7 +57,7 @@ public class FlattenFilter implements Visitor {
         CollectingVisitor collector = new CollectingVisitor(new VisitorDescriptor().visit(Project.class, Task.class));
         Traverser.traverse(collector, node);
 
-        Set<Task> tasks = collector.getTasks ();
+        Set<Task> tasks = collector.getTasks();
         node.getTasks().clear();
         for (Task child : tasks) {
             node.add(child);
@@ -65,7 +70,7 @@ public class FlattenFilter implements Visitor {
         CollectingVisitor collector = new CollectingVisitor(new VisitorDescriptor().visit(Context.class));
         Traverser.traverse(collector, node);
 
-        Set<Context> contexts = collector.getContexts ();
+        Set<Context> contexts = collector.getContexts();
         contexts.remove(node);
         node.getContexts().clear();
         for (Context child : contexts) {

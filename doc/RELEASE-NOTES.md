@@ -4,6 +4,7 @@
 
 - Fixed prune bug.
 - Added -F flatten option.
+- Added a "Tips" section in the documentation.
 
 ## 1.0.3
 

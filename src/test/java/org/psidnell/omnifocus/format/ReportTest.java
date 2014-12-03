@@ -34,7 +34,7 @@ public class ReportTest extends FormatTest {
 
         Diff.diff (new String[]
             {
-                "Weekly Report XXXX-XX-XX-XXX:",
+                "Progress Report XXXX-XX-XX-XXX:",
                 "\tp1:",
                 "\t\t- t1",
                 "\t\t- t2",
@@ -57,7 +57,7 @@ public class ReportTest extends FormatTest {
 
         Diff.diff (new String[]
             {
-                "Weekly Report XXXX-XX-XX-XXX:",
+                "Progress Report XXXX-XX-XX-XXX:",
                 "\tc1:",
                 "\t\tc2:",
                 "\t\t\t- t3 @2014-11-27-Thu",

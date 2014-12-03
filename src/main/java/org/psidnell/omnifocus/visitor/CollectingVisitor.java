@@ -37,7 +37,7 @@ public class CollectingVisitor implements Visitor {
     private HashSet<Folder> folders = new HashSet<>();
     private HashSet<Context> contexts = new HashSet<>();
 
-    public CollectingVisitor (VisitorDescriptor what) {
+    public CollectingVisitor(VisitorDescriptor what) {
         this.what = what;
     }
 
