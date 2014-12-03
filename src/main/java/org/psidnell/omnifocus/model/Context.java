@@ -139,20 +139,23 @@ public class Context extends Node {
     }
 
     public void add(Context child) {
-        contexts.add(child);
         Context oldParent = child.getParent();
-        child.setParent(this);
         if (oldParent != null) {
             oldParent.getContexts().remove(child);
         }
+
+        contexts.add(child);
+        child.setParent(this);
+
     }
 
     public void add(Task child) {
-        tasks.add(child);
         Context oldParent = child.getContext();
-        child.setContext(this);
         if (oldParent != null) {
             oldParent.getTasks().remove(child);
         }
+
+        tasks.add(child);
+        child.setContext(this);
     }
 }

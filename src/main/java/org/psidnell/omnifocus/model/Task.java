@@ -131,12 +131,13 @@ public class Task extends CommonProjectAndTaskAttributes {
     }
 
     public void add(Task child) {
-        tasks.add(child);
         Task oldParent = child.getParent();
-        child.setParent(this);
         if (oldParent != null) {
             oldParent.getTasks().remove(child);
         }
+
+        child.setParent(this);
+        tasks.add(child);
     }
 
     @Override

@@ -80,11 +80,9 @@ public class OFExport {
     public void process() throws Exception {
 
         if (projectMode) {
-            Traverser.traverse(new IncludeVisitor(false), projectRoot);
             filters.stream().forEachOrdered((f) -> Traverser.traverse(f, projectRoot));
             Traverser.traverse(sortingFilter, projectRoot);
         } else {
-            Traverser.traverse(new IncludeVisitor(false), contextRoot);
             filters.stream().forEachOrdered((f) -> Traverser.traverse(f, contextRoot));
             Traverser.traverse(sortingFilter, contextRoot);
         }
@@ -187,10 +185,10 @@ public class OFExport {
     public void addPruneFilter() {
         // Go bottom up
         if (projectMode) {
-            addProjectExpression("taskCount > 0", true);
-            addFolderExpression("folderCount > 0 || projectCount > 0", true);
+            addProjectExpression("taskCount == 0", false);
+            addFolderExpression("folderCount == 0 && projectCount == 0", false);
         } else {
-            addContextExpression("contextCount > 0 || taskCount > 0", true);
+            addContextExpression("contextCount == 0 && taskCount == 0", false);
         }
     }
 
