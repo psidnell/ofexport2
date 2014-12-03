@@ -42,7 +42,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class DataExportImportTest {
 
-    private static final ApplicationContext appContext = ApplicationContextFactory.create();
+    private static final ApplicationContext appContext = ApplicationContextFactory.getContext();
 
     private SQLiteDAO sqliteDAO;
 

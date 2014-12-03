@@ -4,7 +4,12 @@
 
 - Ironing out release issues.
 - Fixed bug when using "-pn x", was adding single quotes to expression instead of double.
-- Added extensive logging. 
+- Added extensive logging.
+- Improved resource usage during build/test.
+- Changed structure of root model passed into freemarker template.
+- Created report.ftl, a weekly report template.
+- Added config.properties and way to access them from templates.
+- Added missing -cn option.
 
 ## 1.0.1 2014-12-02
 

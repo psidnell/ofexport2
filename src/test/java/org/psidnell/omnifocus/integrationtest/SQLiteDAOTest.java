@@ -39,7 +39,7 @@ import org.springframework.context.ApplicationContext;
  */
 public class SQLiteDAOTest {
     
-    private static final ApplicationContext appContext = ApplicationContextFactory.create();
+    private static final ApplicationContext appContext = ApplicationContextFactory.getContext();
     
     private SQLiteDAO sqliteDAO;
     

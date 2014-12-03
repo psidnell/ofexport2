@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="
         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
-	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"/>
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" >
+    	<property name="locations" value="classpath:config.properties"/>
+	</bean>
 
 	<bean name="sqlitedao" class="org.psidnell.omnifocus.sqlite.SQLiteDAO">
 		<property name="possibleDBLocations">
 			<list>
-				<!-- These are the various locations the omnifocus DB might be depending on version and how it was purchased -->
+				<!-- These are the various locations the omnifocus DB might be depending 
+					on version and how it was purchased -->
 				<value>${HOME}/Library/Containers/com.omnigroup.OmniFocus2/Data/Library/Caches/com.omnigroup.OmniFocus2/OmniFocusDatabase2</value>
-        		<value>${HOME}/Library/Caches/com.omnigroup.OmniFocus/OmniFocusDatabase2</value> 
-        		<value>${HOME}/Library/Caches/com.omnigroup.OmniFocus.MacAppStore/OmniFocusDatabase2</value>			    
+				<value>${HOME}/Library/Caches/com.omnigroup.OmniFocus/OmniFocusDatabase2</value>
+				<value>${HOME}/Library/Caches/com.omnigroup.OmniFocus.MacAppStore/OmniFocusDatabase2</value>
 			</list>
 		</property>
 	</bean>

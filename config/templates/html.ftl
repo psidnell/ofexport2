@@ -97,18 +97,18 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
     </style>
   </head>
   <body>
-<#if type == "Folder">
-  <#list folders as f>
+<#if root.type == "Folder">
+  <#list root.folders as f>
     <@doFolder folder=f depth=0/>
   </#list>
-  <#list projects as p>
+  <#list root.projects as p>
   <@doProject project=p depth=0/>
   </#list>
-<#elseif type == "Context">
-  <#list contexts as c>
+<#elseif root.type == "Context">
+  <#list root.contexts as c>
   <@doContext context=c depth=0/>
   </#list>
-  <#list tasks as task>
+  <#list root.tasks as task>
   <@doTask task=t depth=0 projectMode=false/>
   </#list>
 </#if>
@@ -171,7 +171,7 @@ $$$$$$$$$$$$$$$
 Using Java SimpleDateFormat conversion
 -->
 <#macro doAttribs node>
-<span class="Attrib"><#if (node.flagged)??> <span class="AFlagged">FLAGGED</span></#if><#if (node.deferDate)??> <span class="AStart">${node.deferDate?string["yyyy-MM-dd"]}</span></#if><#if (node.dueDate)??> <span class="ADue">${node.dueDate?string["yyyy-MM-dd"]}</span></#if><#if (node.completionDate)??> <span class="AComplete">${node.completionDate?string["yyyy-MM-dd"]}</span></#if></span></#macro>
+<span class="Attrib"><#if (node.flagged)??> <span class="AFlagged">FLAGGED</span></#if><#if (node.deferDate)??> <span class="AStart">${node.deferDate?string[config.template_date_format]}</span></#if><#if (node.dueDate)??> <span class="ADue">${node.dueDate?string[config.template_date_format]}</span></#if><#if (node.completionDate)??> <span class="AComplete">${node.completionDate?string[config.template_date_format]}</span></#if></span></#macro>
 <#--
 $$$$$$$$$$$$$$$
 $ MACRO: doNote

@@ -148,6 +148,11 @@ public class CommandLine {
                 AFTER_LOAD));
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
+                "cn", true, "include contexts specified by name.",
+                (m,o)->m.ofexport.addContextExpression("name==\"" + escape(o.nextValue()) + "\"" , true),
+                AFTER_LOAD));
+
+        OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "cs", true, "sort contexts by field.",
                 (m,o)->m.ofexport.addContextComparator(o.nextValue()),
                 AFTER_LOAD));

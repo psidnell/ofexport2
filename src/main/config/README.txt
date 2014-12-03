@@ -1,1 +1,1 @@
-Just here to keep appassembler plugin happy.
+Directory here to keep appassembler plugin happy.

@@ -9,18 +9,18 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 $ Walk over items in root node
 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 -->
-<#if type == "Folder">
-  <#list folders as f>
+<#if root.type == "Folder">
+  <#list root.folders as f>
     <@doFolder folder=f headingDepth=0/>
   </#list>
-  <#list projects as p>
+  <#list root.projects as p>
   <@doProject project=p headingDepth=0/>
   </#list>
-<#elseif type == "Context">
-  <#list contexts as c>
+<#elseif root.type == "Context">
+  <#list root.contexts as c>
   <@doContext context=c headingDepth=0/>
   </#list>
-  <#list tasks as task>
+  <#list root.tasks as task>
   <@doTask task=t headingDepth=0 textDepth=0 projectMode=false/>
   </#list>
 </#if>

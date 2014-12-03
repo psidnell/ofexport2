@@ -9,18 +9,18 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 $ Walk over items in root node
 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 -->
-<#if type == "Folder">
-  <#list folders as f>
+<#if root.type == "Folder">
+  <#list root.folders as f>
     <@doFolder folder=f depth=0/>
   </#list>
-  <#list projects as p>
+  <#list root.projects as p>
   <@doProject project=p depth=0/>
   </#list>
-<#elseif type == "Context">
-  <#list contexts as c>
+<#elseif root.type == "Context">
+  <#list root.contexts as c>
   <@doContext context=c depth=0/>
   </#list>
-  <#list tasks as task>
+  <#list root.tasks as task>
   <@doTask task=t depth=0 projectMode=false/>
   </#list>
 </#if>
@@ -78,7 +78,7 @@ $$$$$$$$$$$$$$$
 Using Java SimpleDateFormat conversion
 -->
 <#macro doTags node>
-<#if (node.completionDate)??> @done(${node.completionDate?string["yyyy-MM-dd"]})</#if><#if node.flagged> @flagged</#if><#if (node.dueDate)??> @done(${node.dueDate?string["yyyy-MM-dd"]})</#if><#if (node.contextName)??> @${node.contextName}</#if></#macro> 
+<#if (node.completionDate)??> @done(${node.completionDate?string[config.template_date_format]})</#if><#if node.flagged> @flagged</#if><#if (node.dueDate)??> @done(${node.dueDate?string["yyyy-MM-dd"]})</#if><#if (node.contextName)??> @${node.contextName}</#if></#macro> 
 <#--
 $$$$$$$$$$$$$$$
 $ MACRO: doNote

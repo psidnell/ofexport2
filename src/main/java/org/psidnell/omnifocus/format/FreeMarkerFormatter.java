@@ -18,7 +18,9 @@ package org.psidnell.omnifocus.format;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Writer;
+import java.util.HashMap;
 
+import org.psidnell.omnifocus.ApplicationContextFactory;
 import org.psidnell.omnifocus.model.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +35,7 @@ import freemarker.template.TemplateExceptionHandler;
 /**
  * @author psidnell
  *
- *  Formats the node structure using a FreeMarker template.
+ *         Formats the node structure using a FreeMarker template.
  *
  */
 public class FreeMarkerFormatter implements Formatter {
@@ -69,9 +71,14 @@ public class FreeMarkerFormatter implements Formatter {
         }
     }
 
+
+
     @Override
     public void format(Node root, Writer out) throws IOException, TemplateException {
-        LOGGER.info("Formatting with {}: {}", templateName, root);
-        template.process(root, out);
+        HashMap<String, Object> fmRoot = new HashMap<>();
+        fmRoot.put("root", root);
+        fmRoot.put("config", ApplicationContextFactory.getConfigProperties());
+        LOGGER.info("Formatting with {}: {}", templateName, fmRoot);
+        template.process(fmRoot, out);
     }
 }

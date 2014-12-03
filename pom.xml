@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.psidnell</groupId>
 	<artifactId>ofexport-v2</artifactId>
@@ -103,15 +104,16 @@
 	</dependencies>
 
 	<build>
-		<resources>
-			<resource>
+		<testResources>
+			<testResource>
 				<directory>${basedir}/config</directory>
-			</resource>
-		</resources>
+			</testResource>
+		</testResources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.2</version>
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
@@ -150,6 +152,24 @@
 				</goals> </execution> <execution> <id>instrument</id> <phase>site</phase> 
 				<goals> <goal>instrument</goal> <goal>cobertura</goal> </goals> </execution> 
 				</executions> </plugin> -->
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.7</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<configuration>
+							<target>
+							    <delete dir="${project.build.directory}/ofexport/config"/>
+							    <symlink link="${project.build.directory}/ofexport/config" resource="${basedir}/config"/>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>

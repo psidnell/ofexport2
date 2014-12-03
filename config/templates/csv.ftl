@@ -9,18 +9,18 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 $ Walk over items in root node
 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 -->
-<#if type == "Folder">
-  <#list folders as f>
+<#if root.type == "Folder">
+  <#list root.folders as f>
     <@doFolder folder=f/>
   </#list>
-  <#list projects as p>
+  <#list root.projects as p>
   <@doProject project=p/>
   </#list>
-<#elseif type == "Context">
-  <#list contexts as c>
+<#elseif root.type == "Context">
+  <#list root.contexts as c>
   <@doContext context=c/>
   </#list>
-  <#list tasks as task>
+  <#list root.tasks as task>
   <@doTask task=t projectMode=false/>
   </#list>
 </#if>
@@ -68,6 +68,6 @@ $ MACRO: doRow
 $$$$$$$$$$$$$$$$$$
 -->
 <#macro doRow node>
-"${node.name?replace("\"","'")}"<#if (node.flagged)??>,"FLAGGED"<#else>,</#if><#if (node.deferDate)??>,"${node.deferDate?string["yyyy-MM-dd"]}"<#else>,</#if><#if (node.dueDate)??>,"${node.dueDate?string["yyyy-MM-dd"]}"<#else>,</#if><#if (node.completionDate)??>,"${node.completionDate?string["yyyy-MM-dd"]}"<#else>,</#if><#if (node.note)??>,"${node.note?replace("\"","'")?replace("\n"," ")}"</#if>
+"${node.name?replace("\"","'")}"<#if (node.flagged)??>,"FLAGGED"<#else>,</#if><#if (node.deferDate)??>,"${node.deferDate?string[config.template_date_format]}"<#else>,</#if><#if (node.dueDate)??>,"${node.dueDate?string[config.template_date_format]}"<#else>,</#if><#if (node.completionDate)??>,"${node.completionDate?string[config.template_date_format]}"<#else>,</#if><#if (node.note)??>,"${node.note?replace("\"","'")?replace("\n"," ")}"</#if>
 </#macro>
  

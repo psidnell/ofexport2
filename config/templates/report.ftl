@@ -4,24 +4,26 @@ $ DEFINE CONSTANTS
 $$$$$$$$$$$$$$$$$$
 -->
 <#global INDENT="\t">
+<#global TODAY=root.date("today")>
+${config.report_ftl_title} ${TODAY?string[config.report_date_format]}:
 <#--
 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 $ Walk over items in root node
 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 -->
-<#if type == "Folder">
-  <#list folders as f>
-    <@doFolder folder=f depth=0/>
+<#if root.type == "Folder">
+  <#list root.folders as f>
+    <@doFolder folder=f depth=1/>
   </#list>
-  <#list projects as p>
-  <@doProject project=p depth=0/>
+  <#list root.projects as p>
+  <@doProject project=p depth=1/>
   </#list>
-<#elseif type == "Context">
-  <#list contexts as c>
-  <@doContext context=c depth=0/>
+<#elseif root.type == "Context">
+  <#list root.contexts as c>
+  <@doContext context=c depth=1/>
   </#list>
-  <#list tasks as task>
-  <@doTask task=t depth=0 projectMode=false/>
+  <#list root.tasks as task>
+  <@doTask task=t depth=1 projectMode=false/>
   </#list>
 </#if>
 <#--
@@ -30,9 +32,8 @@ $ MACRO: doFolder
 $$$$$$$$$$$$$$$$$
 -->
 <#macro doFolder folder depth>
-<@doIndent indent=depth/>${folder.name}:
-<#list folder.folders as f><@doFolder folder=f depth=(depth+1)/></#list>
-<#list folder.projects as p><@doProject project=p depth=(depth+1)/></#list>
+<#list folder.folders as f><@doFolder folder=f depth=(depth)/></#list>
+<#list folder.projects as p><@doProject project=p depth=(depth)/></#list>
 </#macro>
 <#--
 $$$$$$$$$$$$$$$$$$
@@ -75,6 +76,6 @@ $ MACRO: doDateTag
 $$$$$$$$$$$$$$$$$$
 Using Java SimpleDateFormat conversion
 -->
-<#macro doDateTag date> @${date?string["yyyy-MM-dd-EEE"]}</#macro>
+<#macro doDateTag date> @${date?string[config.report_date_format]}</#macro>
  
  

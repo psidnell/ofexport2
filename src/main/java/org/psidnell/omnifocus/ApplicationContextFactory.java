@@ -15,19 +15,36 @@ limitations under the License.
  */
 package org.psidnell.omnifocus;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * @author psidnell
  *
- * Utility factory class for building the default Spring application context.
+ *         Utility factory class for building the default Spring application context.
  */
 public class ApplicationContextFactory {
 
-    private static final String CONFIG_XML = "config.xml";
+    private static final String CONFIG_XML = "/config.xml";
+    private static final String CONFIG_PROPERTIES = "/config.properties";
 
-    public static ApplicationContext create() {
+    public static ApplicationContext getContext() {
         return new ClassPathXmlApplicationContext(CONFIG_XML);
+    }
+
+    public static Properties getConfigProperties() throws IOException {
+        try (
+            InputStream in = ApplicationContextFactory.class.getResourceAsStream(CONFIG_PROPERTIES)) {
+            if (in == null) {
+                throw new IOException("config not found");
+            }
+            Properties config = new Properties();
+            config.load(in);
+            return config;
+        }
     }
 }

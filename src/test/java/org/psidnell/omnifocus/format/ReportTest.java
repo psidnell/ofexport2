@@ -21,20 +21,20 @@ import org.junit.Test;
 import org.psidnell.omnifocus.OFExport;
 import org.psidnell.omnifocus.integrationtest.Diff;
 
-public class TaskPaperLiteTest extends FormatTest {
-    
+public class ReportTest extends FormatTest {
+
     @Test
     public void testProjectMode () throws Exception {
         OFExport ofExport = new OFExport();
         ofExport.getProjectRoot().add(f1);
-        ofExport.setFormat("taskpaper-lite");
+        ofExport.setFormat("report");
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
-                
+
         Diff.diff (new String[]
             {
-                "f1:",
+                "Weekly Report XXXX-XX-XX-XXX:",
                 "\tp1:",
                 "\t\t- t1",
                 "\t\t- t2",
@@ -42,26 +42,27 @@ public class TaskPaperLiteTest extends FormatTest {
                 "\t\t\t- t4 @2014-11-27-Thu",
                 "\tp2:",
                 "\tp3:",
-            }, out.toString().split("\n"));
+            }, out.toString().replaceFirst("[0-9]+-[0-9]+-[0-9]+-[A-Z][a-z]+:", "XXXX-XX-XX-XXX:"). split("\n"));
     }
-    
+
     @Test
     public void testContextMode () throws Exception {
         OFExport ofExport = new OFExport();
         ofExport.setProjectMode(false);
-        ofExport.setFormat("TaskPaper-Lite");
+        ofExport.setFormat("report");
         ofExport.getContextRoot().add(c1);
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
-                
+
         Diff.diff (new String[]
             {
-                "c1:",
-                "\tc2:",
-                "\t\t- t3 @2014-11-27-Thu",
-                "\t\t- t4 @2014-11-27-Thu",
-                "\t- t2",
-            }, out.toString().split("\n"));
+                "Weekly Report XXXX-XX-XX-XXX:",
+                "\tc1:",
+                "\t\tc2:",
+                "\t\t\t- t3 @2014-11-27-Thu",
+                "\t\t\t- t4 @2014-11-27-Thu",
+                "\t\t- t2",
+            }, out.toString().replaceFirst("[0-9]+-[0-9]+-[0-9]+-[A-Z][a-z]+:", "XXXX-XX-XX-XXX:"). split("\n"));
     }
 }
