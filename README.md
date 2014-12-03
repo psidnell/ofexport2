@@ -23,6 +23,7 @@
     - [Pruning](#pruning)
     - [Flattening](#flattening)
     - [Examples](#examples)
+    - [Tips](#tips)
     - [Writing a Template](#writing-a-template)
     - [Building it Yourself](#building-it-yourself)
 - [ofexport vs ofexport2](#ofexport-vs-ofexport2)
@@ -35,7 +36,7 @@
 
 Before proceeding, please select the required version of this document:
 
-- [Latest Stable Release: 1.0.4](https://github.com/psidnell/ofexport2/blob/ofexport-v2-1.0.4/README.md)
+- [Latest Stable Release: 1.0.5](https://github.com/psidnell/ofexport2/blob/ofexport-v2-1.0.5/README.md)
 - [Development Version](https://github.com/psidnell/ofexport2/blob/master/README.md)
 
 This is an early version and at the time of writing I'm making major changes. If you need something reliable and with good documentation then the original [ofexport](https://github.com/psidnell/ofexport/blob/master/DOCUMENTATION.md) is stable and functional.
@@ -94,7 +95,7 @@ You should see output similar to:
 
 To get the required files, (in increasing order of danger) either:
 
-- Download the latest stable version: [ofexport-v2-1.0.4.zip](https://github.com/psidnell/ofexport2/archive/ofexport-v2-1.0.4.zip)
+- Download the latest stable version: [ofexport-v2-1.0.5.zip](https://github.com/psidnell/ofexport2/archive/ofexport-v2-1.0.5.zip)
 - Download the current development version: [master.zip](https://github.com/psidnell/ofexport2/archive/master.zip)
 - If you want to stay on the bleeding edge, check out this git repository so you can take updates as you wish.
 
