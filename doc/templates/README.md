@@ -23,6 +23,7 @@
     - [Pruning](#pruning)
     - [Flattening](#flattening)
     - [Examples](#examples)
+    - [Tips](#tips)
     - [Writing a Template](#writing-a-template)
     - [Building it Yourself](#building-it-yourself)
 - [ofexport vs ofexport2](#ofexport-vs-ofexport2)
