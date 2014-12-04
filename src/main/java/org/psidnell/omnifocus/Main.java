@@ -15,10 +15,12 @@ limitations under the License.
  */
 package org.psidnell.omnifocus;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
@@ -96,6 +98,15 @@ public class Main extends CommandLine {
 
         out.flush();
         out.close();
+
+        if (open) {
+            String[] cmdargs = {"open", outputFile};
+            Process p = Runtime.getRuntime().exec(cmdargs);
+            try (
+                BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
+                org.apache.commons.io.IOUtils.copy(input, System.out);
+            }
+        }
     }
 
     private boolean procesPreLoadOptions(String[] args) throws Exception {

@@ -43,7 +43,7 @@ public class FlattenFilter implements Visitor {
         Traverser.traverse(collector, node);
 
         Set<Project> projects = collector.getProjects();
-        node.getFolders().clear();
+        node.getProjects().clear();
         for (Project child : projects) {
             node.add(child);
         }

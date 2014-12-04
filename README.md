@@ -1,8 +1,15 @@
 # OFEXPORT2
 
-*Updated 2014-12-03.*
+*Updated 2014-12-04.*
 
 [Release Notes](doc/RELEASE-NOTES.md)
+
+Support:
+
+- [Wiki](https://github.com/psidnell/ofexport2/wiki)
+- [Bugs](https://github.com/psidnell/ofexport2/issues)
+- [Blog: Poor Signal](http://poor-signal.blogspot.co.uk)
+- [Twitter: @psidnell](http://twitter.com/psidnell)
 
 ## Table of Contents
 

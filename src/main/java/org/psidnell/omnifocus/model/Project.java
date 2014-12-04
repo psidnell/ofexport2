@@ -25,12 +25,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 /**
  * @author psidnell
  *
- * Represents an OmniFocus project.
+ *         Represents an OmniFocus project.
  *
- * Note that projects aren't directly represented in the database.
+ *         Note that projects aren't directly represented in the database.
  *
- * The database has a ProjectInfo and a root task, the union of
- * which make up a Project.
+ *         The database has a ProjectInfo and a root task, the union of which make up a Project.
  */
 public class Project extends CommonProjectAndTaskAttributes {
 
@@ -89,7 +88,7 @@ public class Project extends CommonProjectAndTaskAttributes {
         return status;
     }
 
-    public void setStatus (String status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 

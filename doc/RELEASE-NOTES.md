@@ -1,8 +1,10 @@
 # OFEXPORT2 Release Notes
 
-## 1.0.5 (??????????)
+## 1.0.5 (2014-12-04)
 
-- Added diagnostic template (debug.ftl)
+- Added diagnostic template (debug.ftl).
+- Fixed bug where -F caused duplication of Projects.
+- Added -O fname that writes to a file then opens it.
 
 ## 1.0.4 (2014-12-03)
 

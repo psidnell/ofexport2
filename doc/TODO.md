@@ -4,7 +4,8 @@
 
 ### ofexport2
 
-- Release V1.0.4
+- Add -fo open
+- Tell people...
 - Longer Term
   - How to determine first available?
   - Decode attributes on contexts

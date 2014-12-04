@@ -53,6 +53,7 @@ public class CommandLine {
     protected String outputFile = null;
     protected OFExport ofexport = null;
     protected String format = null;
+    protected boolean open = false;
 
     static {
 
@@ -202,6 +203,11 @@ public class CommandLine {
         OPTIONS.addOption(new ActiveOption<CommandLine> (
                 "o", true, "write output to the file",
                 (m,o)->m.outputFile = o.nextValue(),
+                BEFORE_LOAD));
+
+        OPTIONS.addOption(new ActiveOption<CommandLine> (
+                "O", true, "write output to the file and open it",
+                (m,o)->{m.outputFile = o.nextValue(); m.open=true;},
                 BEFORE_LOAD));
 
         // DEBUG/DEV
