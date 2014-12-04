@@ -22,7 +22,7 @@ import org.psidnell.omnifocus.OFExport;
 import org.psidnell.omnifocus.integrationtest.Diff;
 
 public class JSONTest extends FormatTest {
-    
+
     @Test
     public void testProjectMode () throws Exception {
         OFExport ofExport = new OFExport();
@@ -31,7 +31,7 @@ public class JSONTest extends FormatTest {
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
-                
+
         Diff.diff (new String[]
             {
                 "{",
@@ -118,7 +118,7 @@ public class JSONTest extends FormatTest {
                 "        \"available\" : false,",
                 "        \"remaining\" : false",
                 "      } ],",
-                "      \"status\" : null,",
+                "      \"status\" : \"status\",",
                 "      \"available\" : false,",
                 "      \"remaining\" : true",
                 "    }, {",
@@ -132,7 +132,7 @@ public class JSONTest extends FormatTest {
                 "      \"sequential\" : false,",
                 "      \"flagged\" : true,",
                 "      \"tasks\" : [ ],",
-                "      \"status\" : null,",
+                "      \"status\" : \"status\",",
                 "      \"available\" : false,",
                 "      \"remaining\" : false",
                 "    }, {",
@@ -146,7 +146,7 @@ public class JSONTest extends FormatTest {
                 "      \"sequential\" : false,",
                 "      \"flagged\" : false,",
                 "      \"tasks\" : [ ],",
-                "      \"status\" : null,",
+                "      \"status\" : \"status\",",
                 "      \"available\" : false,",
                 "      \"remaining\" : true",
                 "    } ],",
@@ -157,7 +157,7 @@ public class JSONTest extends FormatTest {
                 "}",
             }, out.toString().split("\n"));
     }
-    
+
     @Test
     public void testContextMode () throws Exception {
         OFExport ofExport = new OFExport();
@@ -167,7 +167,7 @@ public class JSONTest extends FormatTest {
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
-                
+
         Diff.diff (new String[]
             {
                 "{",

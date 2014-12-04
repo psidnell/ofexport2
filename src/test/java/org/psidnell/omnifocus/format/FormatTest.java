@@ -34,53 +34,56 @@ public abstract class FormatTest {
     public void setUp () throws ParseException {
         c1 = new Context ("c1");
         setId (c1);
-        
+
         Context c2 = new Context ("c2");
         setId(c2);
         c1.add(c2);
-        
+
         f1 = new Folder ("f1");
         setId(f1);
-        
+
         Project p1 = new Project ("p1");
+        p1.setStatus("status");
         setId(p1);
         f1.add(p1);
-        
+
         Task t1 = new Task("t1");
         setId(t1);
         t1.setDeferDate(new ExpressionFunctions().date("2014-11-27"));
         t1.setFlagged(true);
         p1.add(t1);
-        
+
         Task t2 = new Task("t2");
         setId(t2);
         t2.setDueDate(new ExpressionFunctions().date("2014-11-27"));
         t2.setNote("line1\nline2");
         c1.add(t2);
         p1.add(t2);
-        
+
         Task t3 = new Task("t3");
         setId(t3);
         t3.setCompletionDate(new ExpressionFunctions().date("2014-11-27"));
         t3.setNote("line1\nline2");
         c2.add(t3);
         p1.add(t3);
-        
+
         Task t4 = new Task("t4");
         setId(t4);
         t4.setCompletionDate(new ExpressionFunctions().date("2014-11-27"));
         t4.setNote("line1\nline2");
         c2.add(t4);
         t3.add(t4);
-        
+
         Project p2 = new Project ("p2");
+        p2.setStatus("status");
         setId(p2);
         p2.setFlagged(true);
         p2.setDueDate(new ExpressionFunctions().date("2014-11-27"));
         f1.add(p2);
         p2.setNote("line1\nline2");
-        
+
         Project p3 = new Project ("p3");
+        p3.setStatus("status");
         setId(p3);
         p2.setCompletionDate(new ExpressionFunctions().date("2014-11-27"));
         f1.add(p3);

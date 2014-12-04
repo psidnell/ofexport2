@@ -89,6 +89,10 @@ public class Project extends CommonProjectAndTaskAttributes {
         return status;
     }
 
+    public void setStatus (String status) {
+        this.status = status;
+    }
+
     public void add(Task child) {
         Project oldProject = child.getProject();
         Task oldParent = child.getParent();

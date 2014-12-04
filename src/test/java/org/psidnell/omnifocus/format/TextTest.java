@@ -21,7 +21,7 @@ import org.junit.Test;
 import org.psidnell.omnifocus.OFExport;
 import org.psidnell.omnifocus.integrationtest.Diff;
 
-public class SimpleTextListTest extends FormatTest {
+public class TextTest extends FormatTest {
 
     @Test
     public void testProjectMode () throws Exception {

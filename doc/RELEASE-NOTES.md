@@ -1,12 +1,16 @@
 # OFEXPORT2 Release Notes
 
-## 1.0.4
+## 1.0.5 (??????????)
+
+- Added diagnostic template (debug.ftl)
+
+## 1.0.4 (2014-12-03)
 
 - Fixed prune bug.
 - Added -F flatten option.
 - Added a "Tips" section in the documentation.
 
-## 1.0.3
+## 1.0.3 (2014-12-03)
 
 - Fixed bug when using "-pn x", was adding single quotes to expression instead of double.
 - Added extensive logging.
@@ -16,14 +20,14 @@
 - Added config.properties and way to access them from templates.
 - Added missing -cn option.
 
-## 1.0.2
+## 1.0.2 (2014-12-02)
 
 - Ironing out release issues.
 
-## 1.0.1
+## 1.0.1 (2014-12-02)
 
 - Ironing out release issues.
 
-## 1.0.0
+## 1.0.0 (2014-12-02)
 
 - First release.

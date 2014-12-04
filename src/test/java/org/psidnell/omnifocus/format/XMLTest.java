@@ -22,7 +22,7 @@ import org.psidnell.omnifocus.OFExport;
 import org.psidnell.omnifocus.integrationtest.Diff;
 
 public class XMLTest extends FormatTest {
-    
+
     @Test
     public void testProjectMode () throws Exception {
         OFExport ofExport = new OFExport();
@@ -31,7 +31,7 @@ public class XMLTest extends FormatTest {
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
-                
+
         Diff.diff (new String[]
             {
                 "<Folder>",
@@ -129,7 +129,7 @@ public class XMLTest extends FormatTest {
                 "              <remaining>false</remaining>",
                 "            </tasks>",
                 "          </tasks>",
-                "          <status/>",
+                "          <status>status</status>",
                 "          <available>false</available>",
                 "          <remaining>true</remaining>",
                 "        </projects>",
@@ -145,7 +145,7 @@ public class XMLTest extends FormatTest {
                 "          <sequential>false</sequential>",
                 "          <flagged>true</flagged>",
                 "          <tasks/>",
-                "          <status/>",
+                "          <status>status</status>",
                 "          <available>false</available>",
                 "          <remaining>false</remaining>",
                 "        </projects>",
@@ -160,7 +160,7 @@ public class XMLTest extends FormatTest {
                 "          <sequential>false</sequential>",
                 "          <flagged>false</flagged>",
                 "          <tasks/>",
-                "          <status/>",
+                "          <status>status</status>",
                 "          <available>false</available>",
                 "          <remaining>true</remaining>",
                 "        </projects>",
@@ -173,7 +173,7 @@ public class XMLTest extends FormatTest {
                 "</Folder>",
             }, out.toString().split("\n"));
     }
-    
+
     @Test
     public void testContextMode () throws Exception {
         OFExport ofExport = new OFExport();
@@ -183,7 +183,7 @@ public class XMLTest extends FormatTest {
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
-                
+
         Diff.diff (new String[]
             {
                 "<Context>",
