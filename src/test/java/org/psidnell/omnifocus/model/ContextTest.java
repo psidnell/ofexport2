@@ -1,6 +1,7 @@
 package org.psidnell.omnifocus.model;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
@@ -28,59 +29,81 @@ public class ContextTest {
     public void testAddContext () {
         Context parent = new Context ();
         Context child = new Context ();
-        
+
         parent.add(child);
         assertEquals (1, parent.getContexts().size());
         assertTrue (parent.getContexts().contains(child));
         assertSame (parent, child.getParent());
     }
-    
+
     @Test
     public void testAddContextDisconnectsFromPrevious () {
         Context parent1 = new Context ();
         Context child = new Context ();
-        
+
         parent1.add(child);
         assertEquals (1, parent1.getContexts().size());
         assertTrue (parent1.getContexts().contains(child));
         assertSame (parent1, child.getParent());
-        
+
         Context parent2 = new Context ();
         parent2.add(child);
         assertEquals (1, parent2.getContexts().size());
         assertTrue (parent2.getContexts().contains(child));
         assertSame (parent2, child.getParent());
-        
+
         assertTrue (parent1.getContexts().isEmpty());
     }
-    
+
     @Test
     public void testAddTask () {
         Context parent = new Context ();
         Task child = new Task ();
-        
+
         parent.add(child);
         assertEquals (1, parent.getTasks().size());
         assertTrue (parent.getTasks().contains(child));
         assertSame (parent, child.getContext());
     }
-    
+
     @Test
     public void testAddTaskDisconnectsFromPrevious () {
         Context parent1 = new Context ();
         Task child = new Task ();
-        
+
         parent1.add(child);
         assertEquals (1, parent1.getTasks().size());
         assertTrue (parent1.getTasks().contains(child));
         assertSame (parent1, child.getContext());
-        
+
         Context parent2 = new Context ();
         parent2.add(child);
         assertEquals (1, parent2.getTasks().size());
         assertTrue (parent2.getTasks().contains(child));
         assertSame (parent2, child.getContext());
-        
+
         assertTrue (parent1.getTasks().isEmpty());
+    }
+
+    @Test public void testAvailability () {
+
+        Context c = new Context ("parent");
+
+        assertTrue (c.isAvailable());
+
+        c.setAllowsNextAction(false);
+        assertFalse (c.isAvailable());
+    }
+
+    @Test public void testAvailabilityNotInheritedFromParent () {
+
+        Context parent = new Context ("parent");
+        Context child = new Context ("child");
+        parent.add(child);
+
+        assertTrue (child.isAvailable());
+
+        parent.setAllowsNextAction(false);
+        assertTrue (child.isAvailable());
     }
 }

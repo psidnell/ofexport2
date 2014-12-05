@@ -40,6 +40,8 @@ public class Folder extends Node {
 
     private Folder parent;
 
+    private boolean active = true;
+
     public Folder() {
     }
 
@@ -132,5 +134,29 @@ public class Folder extends Node {
 
         folders.add(child);
         child.setParent(this);
+    }
+
+    @Override
+    @ExprAttribute(help="folder is available.")
+    public boolean isAvailable() {
+        boolean available = active;
+
+        if (available && parent != null) {
+            available = available && parent.isAvailable();
+        }
+        return available;
+    }
+
+    public void setAvailable (boolean dummy) {
+        // Dummy method to allow Jackson deserialisation
+    }
+
+    @SQLiteProperty
+    public boolean isActive () {
+        return active;
+    }
+
+    public void setActive (boolean active) {
+        this.active = active;
     }
 }

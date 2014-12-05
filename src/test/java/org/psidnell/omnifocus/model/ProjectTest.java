@@ -2,7 +2,6 @@ package org.psidnell.omnifocus.model;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
@@ -25,40 +24,39 @@ limitations under the License.
  */
 
 public class ProjectTest {
-    
+
     @Test
     public void testAddTask () {
         Project parent = new Project ();
         Task child = new Task ();
-        
+
         parent.add(child);
         assertEquals (1, parent.getTasks().size());
         assertTrue (parent.getTasks().contains(child));
-        assertSame (parent, child.getProject());
+        assertSame (parent, child.getParent());
     }
-    
+
     @Test
     public void testAddTaskDisconnectsFromPrevious () {
         Project parent1 = new Project ();
         Task child = new Task ();
-        
+
         Task root = new Task ();
         root.add(child);
-        
+
         parent1.add(child);
         assertEquals (1, parent1.getTasks().size());
         assertTrue (parent1.getTasks().contains(child));
-        assertSame (parent1, child.getProject());
-        
-        assertNull (child.getParent());
+        assertSame (parent1, child.getParent());
+
         assertFalse (root.getTasks().contains(child));
-        
+
         Project parent2 = new Project ();
         parent2.add(child);
         assertEquals (1, parent2.getTasks().size());
         assertTrue (parent2.getTasks().contains(child));
-        assertSame (parent2, child.getProject());
-        
+        assertSame (parent2, child.getParent());
+
         assertTrue (parent1.getTasks().isEmpty());
     }
 }

@@ -39,11 +39,10 @@ public class Task extends CommonProjectAndTaskAttributes {
 
     private String parentTaskId;
     private String contextId;
-    private Task parent;
+    private CommonProjectAndTaskAttributes parent;
     private Project project;
     private boolean blocked = false;
     private boolean inInbox;
-
     private boolean isProject;
 
     public Task() {
@@ -99,11 +98,11 @@ public class Task extends CommonProjectAndTaskAttributes {
     }
 
     @JsonIgnore
-    public Task getParent() {
+    public CommonProjectAndTaskAttributes getParent() {
         return parent;
     }
 
-    public void setParent(Task parent) {
+    public void setParent(CommonProjectAndTaskAttributes parent) {
         this.parent = parent;
     }
 
@@ -121,17 +120,8 @@ public class Task extends CommonProjectAndTaskAttributes {
         }
     }
 
-    @JsonIgnore
-    public Project getProject() {
-        return project;
-    }
-
-    public void setProject(Project project) {
-        this.project = project;
-    }
-
     public void add(Task child) {
-        Task oldParent = child.getParent();
+        CommonProjectAndTaskAttributes oldParent = child.getParent();
         if (oldParent != null) {
             oldParent.getTasks().remove(child);
         }
@@ -143,13 +133,36 @@ public class Task extends CommonProjectAndTaskAttributes {
     @Override
     @ExprAttribute(help = "item is available.")
     public boolean isAvailable() {
-        return !isCompleted() && !isBlocked();
+        boolean available = !isCompleted() && !isBlocked();
+
+        if (available && parent != null) {
+            available = available && parent.isAvailable();
+        }
+
+        if (available && context != null) {
+            available = available && context.isAvailable();
+        }
+
+        return available;
     }
+
+    @Override
+    public void setAvailable(boolean ignored) {
+        // Dummy setter for derived value since
+        // we want the exported/imported value in the json/xml
+    }
+
 
     @Override
     @ExprAttribute(help = "item is remaining.")
     public boolean isRemaining() {
         return !isCompleted();
+    }
+
+    @Override
+    public void setRemaining(boolean ignored) {
+        // Dummy setter for derived value since
+        // we want the exported/imported value in the json/xml
     }
 
     @JsonIgnore

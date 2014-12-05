@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 /**
  * @author psidnell
  *
- * Represents an OmniFocus Context.
+ *         Represents an OmniFocus Context.
  *
  */
 public class Context extends Node {
@@ -41,9 +41,9 @@ public class Context extends Node {
 
     private Context parent;
 
-    private boolean active;
+    private boolean active = true;
 
-    private boolean allowsNextAction;
+    private boolean allowsNextAction = true;
 
     public Context() {
     }
@@ -107,7 +107,8 @@ public class Context extends Node {
     }
 
     @SQLiteProperty
-    //@ExprAttribute(help = "true if context is active.") doesn't do what I think it does
+    // @ExprAttribute(help = "true if context is active.") doesn't do what I think it does, always
+    // true - vestigial?
     public boolean getActive() {
         return active;
     }
@@ -117,7 +118,6 @@ public class Context extends Node {
     }
 
     @SQLiteProperty
-    //@ExprAttribute(help = "true if context allows next action") doesn't do what I think it does
     public boolean getAllowsNextAction() {
         return allowsNextAction;
     }
@@ -157,5 +157,21 @@ public class Context extends Node {
 
         tasks.add(child);
         child.setContext(this);
+    }
+
+    @Override
+    @ExprAttribute(help = "context is available.")
+    public boolean isAvailable() {
+        boolean available = allowsNextAction;
+
+        /*
+         * Contexts don't seem to inherit his in OF.
+         * if (available && parent != null) { available = available && parent.isAvailable();}
+         */
+        return available;
+    }
+
+    public void setAvailable(boolean dummy) {
+        // Dummy method to allow Jackson deserialisation
     }
 }

@@ -181,4 +181,6 @@ public abstract class Node extends ExpressionFunctions {
     public String toString() {
         return getType() + ":'" + name + "'";
     }
+
+    public abstract boolean isAvailable ();
 }

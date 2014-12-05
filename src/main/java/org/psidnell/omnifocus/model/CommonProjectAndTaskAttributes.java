@@ -57,19 +57,14 @@ public abstract class CommonProjectAndTaskAttributes extends Node {
         this.tasks = tasks;
     }
 
+    @Override
     public abstract boolean isAvailable();
 
-    public void setAvailable(boolean ignored) {
-        // Dummy setter for derived value since
-        // we want the exported/imported value in the json/xml
-    }
+    public abstract void setAvailable(boolean ignored);
 
     public abstract boolean isRemaining();
 
-    public void setRemaining(boolean ignored) {
-        // Dummy setter for derived value since
-        // we want the exported/imported value in the json/xml
-    }
+    public abstract void setRemaining(boolean ignored);
 
     @ExprAttribute(help = "the context name or null.")
     @JsonIgnore

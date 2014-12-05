@@ -35,7 +35,7 @@ public class Project extends CommonProjectAndTaskAttributes {
 
     public static final String TYPE = "Project";
     private Folder folder;
-    private String status;
+    private String status = "active";
 
     public Project() {
     }
@@ -59,6 +59,7 @@ public class Project extends CommonProjectAndTaskAttributes {
             add(childOfRootTask);
         }
         rootTask.setIsProjectTask(true);
+        rootTask.setParent(this);
     }
 
     @Override
@@ -93,30 +94,36 @@ public class Project extends CommonProjectAndTaskAttributes {
     }
 
     public void add(Task child) {
-        Project oldProject = child.getProject();
-        Task oldParent = child.getParent();
-        child.setParent(null);
-        if (oldProject != null) {
-            oldProject.getTasks().remove(child);
-        }
+        CommonProjectAndTaskAttributes oldParent = child.getParent();
         if (oldParent != null) {
             oldParent.getTasks().remove(child);
         }
 
-        child.setProject(this);
+        child.setParent(this);
         tasks.add(child);
-
     }
 
     @Override
     @ExprAttribute(help = "item is available.")
     public boolean isAvailable() {
-        return !isCompleted() && "Active".equals(status);
+        return !isCompleted() && "active".equals(status);
+    }
+
+    @Override
+    public void setAvailable(boolean ignored) {
+        // Dummy setter for derived value since
+        // we want the exported/imported value in the json/xml
     }
 
     @Override
     @ExprAttribute(help = "item is remaining.")
     public boolean isRemaining() {
-        return !isCompleted() && !"Done".equals(getStatus());
+        return !isCompleted() && !"done".equals(getStatus());
+    }
+
+    @Override
+    public void setRemaining(boolean ignored) {
+        // Dummy setter for derived value since
+        // we want the exported/imported value in the json/xml
     }
 }

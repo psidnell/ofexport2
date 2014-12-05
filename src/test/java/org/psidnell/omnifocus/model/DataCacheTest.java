@@ -17,7 +17,6 @@ package org.psidnell.omnifocus.model;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -27,7 +26,7 @@ import java.util.stream.Collectors;
 import org.junit.Test;
 
 public class DataCacheTest {
-    
+
     @Test
     public void testConstruction() {
         DataCache dataCache = new DataCache();
@@ -68,7 +67,7 @@ public class DataCacheTest {
 
         assertTrue(dataCache.getProjects().isEmpty());
         assertTrue(dataCache.getFolders().isEmpty());
-        
+
         assertEquals(1, dataCache.getContexts().size());
         Context noContext = dataCache.getContexts().values().iterator().next();
         assertEquals ("No Context", noContext.getName());
@@ -210,7 +209,7 @@ public class DataCacheTest {
 
         assertTrue(dataCache.getTasks().isEmpty());
         assertTrue(dataCache.getFolders().isEmpty());
-        
+
         assertEquals(1, dataCache.getContexts().size());
         Context noContext = dataCache.getContexts().values().iterator().next();
         assertEquals ("No Context", noContext.getName());
@@ -246,16 +245,15 @@ public class DataCacheTest {
 
         assertEquals(1, dataCache.getTasks().size());
         assertSame(child, dataCache.getTasks().get(id));
-        assertSame(project, child.getProject());
-        assertNull(child.getParent());
+        assertSame(project, child.getParent());
         assertEquals (1, project.getTasks().size());
         assertTrue (project.getTasks().contains(child));
 
         assertEquals("[rootTask, child]", child.getProjectPath().stream().map((x) -> x.getName()).collect(Collectors.toList()).toString());
         assertEquals("[No Context, child]", child.getContextPath().stream().map((x) -> x.getName()).collect(Collectors.toList()).toString());
-        
+
         assertTrue(dataCache.getFolders().isEmpty());
-        
+
         assertEquals(1, dataCache.getContexts().size());
         Context noContext = dataCache.getContexts().values().iterator().next();
         assertEquals ("No Context", noContext.getName());
@@ -293,17 +291,17 @@ public class DataCacheTest {
         assertTrue(project.getTasks().isEmpty());
         assertEquals(1, dataCache.getFolders().size());
         assertSame(parent, dataCache.getFolders().get(folderId));
-        
+
         assertEquals ("[parent, rootTask]", project.getProjectPath().stream().map((x)->x.getName()).collect(Collectors.toList()).toString());
         assertEquals ("[rootTask]", project.getContextPath().stream().map((x)->x.getName()).collect(Collectors.toList()).toString());
 
         assertTrue(dataCache.getTasks().isEmpty());
-        
+
         assertEquals(1, dataCache.getContexts().size());
         Context noContext = dataCache.getContexts().values().iterator().next();
         assertEquals ("No Context", noContext.getName());
     }
-    
+
     @Test
     public void testInbox () {
 
@@ -318,11 +316,11 @@ public class DataCacheTest {
 
         assertEquals(1, dataCache.getTasks().size());
         assertSame(child, dataCache.getTasks().get(child.getId()));
-        
+
         assertEquals (1, dataCache.getProjects().size());
         Project inbox = dataCache.getProjects().values().iterator().next();
-        
-        assertSame(inbox, child.getProject());
+
+        assertSame(inbox, child.getParent());
         assertEquals(1, inbox.getTasks().size());
         assertTrue(inbox.getTasks().contains(child));
 
@@ -330,12 +328,12 @@ public class DataCacheTest {
         assertEquals("[No Context, child]", child.getContextPath().stream().map((x) -> x.getName()).collect(Collectors.toList()).toString());
 
         assertTrue(dataCache.getFolders().isEmpty());
-        
+
         assertEquals(1, dataCache.getContexts().size());
         Context noContext = dataCache.getContexts().values().iterator().next();
-        assertEquals ("No Context", noContext.getName());  
+        assertEquals ("No Context", noContext.getName());
     }
-    
+
     @Test
     public void testNoContext() {
 

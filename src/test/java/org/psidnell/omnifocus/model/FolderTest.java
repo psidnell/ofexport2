@@ -1,8 +1,11 @@
 package org.psidnell.omnifocus.model;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+
+import java.util.Date;
 
 import org.junit.Test;
 
@@ -28,59 +31,80 @@ public class FolderTest {
     public void testAddFolder () {
         Folder parent = new Folder ();
         Folder child = new Folder ();
-        
+
         parent.add(child);
         assertEquals (1, parent.getFolders().size());
         assertTrue (parent.getFolders().contains(child));
         assertSame (parent, child.getParent());
     }
-    
+
     @Test
     public void testAddFolderDisconnectsFromPrevious () {
         Folder parent1 = new Folder ();
         Folder child = new Folder ();
-        
+
         parent1.add(child);
         assertEquals (1, parent1.getFolders().size());
         assertTrue (parent1.getFolders().contains(child));
         assertSame (parent1, child.getParent());
-        
+
         Folder parent2 = new Folder ();
         parent2.add(child);
         assertEquals (1, parent2.getFolders().size());
         assertTrue (parent2.getFolders().contains(child));
         assertSame (parent2, child.getParent());
-        
+
         assertTrue (parent1.getFolders().isEmpty());
     }
-    
+
     @Test
     public void testAddProject () {
         Folder parent = new Folder ();
         Project child = new Project ();
-        
+
         parent.add(child);
         assertEquals (1, parent.getProjects().size());
         assertTrue (parent.getProjects().contains(child));
         assertSame (parent, child.getFolder());
     }
-    
+
     @Test
     public void testAddProjectDisconnectsFromPrevious () {
         Folder parent1 = new Folder ();
         Project child = new Project ();
-        
+
         parent1.add(child);
         assertEquals (1, parent1.getProjects().size());
         assertTrue (parent1.getProjects().contains(child));
         assertSame (parent1, child.getFolder());
-        
+
         Folder parent2 = new Folder ();
         parent2.add(child);
         assertEquals (1, parent2.getProjects().size());
         assertTrue (parent2.getProjects().contains(child));
         assertSame (parent2, child.getFolder());
-        
+
         assertTrue (parent1.getProjects().isEmpty());
+    }
+
+    @Test public void testAvailability () {
+
+        Folder f = new Folder ("f");
+        assertTrue (f.isAvailable());
+
+        f.setActive(false);
+        assertFalse (f.isAvailable());
+    }
+
+    @Test public void testAvailabilityInheritedFromParentFolder () {
+
+        Folder parent = new Folder ("parent");
+        Folder child = new Folder ("child");
+        parent.add(child);
+
+        assertTrue (child.isAvailable());
+
+        parent.setActive(false);
+        assertFalse (child.isAvailable());
     }
 }
