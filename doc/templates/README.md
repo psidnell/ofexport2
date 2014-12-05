@@ -384,10 +384,6 @@ All available tasks but organised by context:
 
     of2 -c -ti available
 
-All available tasks organised by context but excluding the projects themselves:
-
-    of2 -c -ti available -tx projectTask
-
 All flagged and available tasks (two forms):
 
     of2 -ti flagged -ti available

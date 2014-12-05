@@ -1,6 +1,6 @@
 # OFEXPORT2
 
-*Updated 2014-12-04.*
+*Updated 2014-12-05.*
 
 [Release Notes](doc/RELEASE-NOTES.md)
 
@@ -43,7 +43,7 @@ Support:
 
 Before proceeding, please select the required version of this document:
 
-- [Latest Stable Release: 1.0.5](https://github.com/psidnell/ofexport2/blob/ofexport-v2-1.0.5/README.md)
+- [Latest Stable Release: 1.0.6](https://github.com/psidnell/ofexport2/blob/ofexport-v2-1.0.6/README.md)
 - [Development Version](https://github.com/psidnell/ofexport2/blob/master/README.md)
 
 This is an early version and at the time of writing I'm making major changes. If you need something reliable and with good documentation then the original [ofexport](https://github.com/psidnell/ofexport/blob/master/DOCUMENTATION.md) is stable and functional.
@@ -102,7 +102,7 @@ You should see output similar to:
 
 To get the required files, (in increasing order of danger) either:
 
-- Download the latest stable version: [ofexport-v2-1.0.5.zip](https://github.com/psidnell/ofexport2/archive/ofexport-v2-1.0.5.zip)
+- Download the latest stable version: [ofexport-v2-1.0.6.zip](https://github.com/psidnell/ofexport2/archive/ofexport-v2-1.0.6.zip)
 - Download the current development version: [master.zip](https://github.com/psidnell/ofexport2/archive/master.zip)
 - If you want to stay on the bleeding edge, check out this git repository so you can take updates as you wish.
 
@@ -383,10 +383,6 @@ All available tasks:
 All available tasks but organised by context:
 
     of2 -c -ti available
-
-All available tasks organised by context but excluding the projects themselves:
-
-    of2 -c -ti available -tx projectTask
 
 All flagged and available tasks (two forms):
 
