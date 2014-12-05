@@ -1,5 +1,9 @@
 # OFEXPORT2 Release Notes
 
+## 1.0.8 (?????)
+
+- Flagged now works hierarchically
+
 ## 1.0.7 (2014-12-05)
 
 - Fixed prune bug

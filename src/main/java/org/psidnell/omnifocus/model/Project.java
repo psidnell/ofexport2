@@ -55,6 +55,7 @@ public class Project extends CommonProjectAndTaskAttributes {
         setNote(rootTask.getNote());
         setRank(rootTask.getRank());
         setSequential(rootTask.isSequential());
+        setEstimatedMinutes(rootTask.getEstimatedMinutes());
         status = projInfo.getStatus();
         singleActionList = projInfo.isSingleActionList();
         for (Task childOfRootTask : new LinkedList<>(rootTask.getTasks())) {

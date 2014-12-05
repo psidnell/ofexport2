@@ -40,6 +40,7 @@ public abstract class CommonProjectAndTaskAttributes extends Node {
     private Date completionDate;
     private boolean sequential = false;
     private boolean flagged = false;
+    protected int estimatedMinutes = -1;
     protected List<Task> tasks = new LinkedList<>();
 
     @ExprAttribute(help = "number of tasks.")
@@ -103,7 +104,7 @@ public abstract class CommonProjectAndTaskAttributes extends Node {
         this.note = note;
     }
 
-    @SQLiteProperty(name = "dateToStart")
+    @SQLiteProperty(name = "effectiveDateToStart")
     @ExprAttribute(help = "date item is to start or null.")
     public Date getDeferDate() {
         return deferDate;
@@ -113,7 +114,7 @@ public abstract class CommonProjectAndTaskAttributes extends Node {
         this.deferDate = roundToDay(deferDate);
     }
 
-    @SQLiteProperty(name = "dateDue")
+    @SQLiteProperty(name = "effectiveDateDue")
     @ExprAttribute(help = "date item is due or null.")
     public Date getDueDate() {
         return dueDate;
@@ -149,7 +150,7 @@ public abstract class CommonProjectAndTaskAttributes extends Node {
         this.sequential = sequential;
     }
 
-    @SQLiteProperty
+    @SQLiteProperty (name="effectiveFlagged")
     @ExprAttribute(help = "item is flagged.")
     public boolean isFlagged() {
         return flagged;
@@ -157,6 +158,16 @@ public abstract class CommonProjectAndTaskAttributes extends Node {
 
     public void setFlagged(boolean flagged) {
         this.flagged = flagged;
+    }
+
+    @SQLiteProperty
+    @ExprAttribute(help="estimated minutes.")
+    public Integer getEstimatedMinutes () {
+        return estimatedMinutes;
+    }
+
+    public void setEstimatedMinutes (Integer estimatedMinutes) {
+        this.estimatedMinutes = estimatedMinutes == null ? -1 : estimatedMinutes;
     }
 
     @Override
