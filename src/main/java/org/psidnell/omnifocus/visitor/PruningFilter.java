@@ -18,17 +18,17 @@ package org.psidnell.omnifocus.visitor;
 import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Project;
-import org.psidnell.omnifocus.model.Task;
 
 /**
  * @author psidnell
  *
- * Filter out all nodes who's include flag is false.
+ *         Filter out all nodes who's include flag is false.
  *
  */
-public class IncludedFilter implements Visitor {
+public class PruningFilter implements Visitor {
 
-    private static final VisitorDescriptor WHAT = new VisitorDescriptor().visitAll().filterAll();
+    private static final VisitorDescriptor WHAT = new VisitorDescriptor().visit(Folder.class, Project.class, Context.class).filter(Folder.class,
+            Project.class, Context.class);
 
     @Override
     public VisitorDescriptor getWhat() {
@@ -36,27 +36,22 @@ public class IncludedFilter implements Visitor {
     }
 
     @Override
-    public boolean includeDown(Context c) {
-        return c.isIncluded();
+    public boolean includeUp(Context c) {
+        return c.getTaskCount() != 0 || c.getContextCount() != 0;
     }
 
     @Override
-    public boolean includeDown(Folder f) {
-        return f.isIncluded();
+    public boolean includeUp(Folder f) {
+        return f.getFolderCount() != 0 || f.getProjectCount() != 0;
     }
 
     @Override
-    public boolean includeDown(Project p) {
-        return p.isIncluded();
-    }
-
-    @Override
-    public boolean includeDown(Task t) {
-        return t.isIncluded();
+    public boolean includeUp(Project p) {
+        return p.getTaskCount() != 0;
     }
 
     @Override
     public String toString() {
-        return "IncludedFilter";
+        return "PruningFilter";
     }
 }

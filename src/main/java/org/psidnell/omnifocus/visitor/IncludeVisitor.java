@@ -68,4 +68,9 @@ public class IncludeVisitor implements Visitor {
         LOGGER.debug("Including task include={} {}", include, node);
         node.setIncluded(include);
     }
+
+    @Override
+    public String toString() {
+        return "IncludeVisitor: " + include;
+    }
 }

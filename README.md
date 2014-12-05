@@ -43,7 +43,7 @@ Support:
 
 Before proceeding, please select the required version of this document:
 
-- [Latest Stable Release: 1.0.6](https://github.com/psidnell/ofexport2/blob/ofexport-v2-1.0.6/README.md)
+- [Latest Stable Release: 1.0.7](https://github.com/psidnell/ofexport2/blob/ofexport-v2-1.0.7/README.md)
 - [Development Version](https://github.com/psidnell/ofexport2/blob/master/README.md)
 
 This is an early version and at the time of writing I'm making major changes. If you need something reliable and with good documentation then the original [ofexport](https://github.com/psidnell/ofexport/blob/master/DOCUMENTATION.md) is stable and functional.
@@ -102,7 +102,7 @@ You should see output similar to:
 
 To get the required files, (in increasing order of danger) either:
 
-- Download the latest stable version: [ofexport-v2-1.0.6.zip](https://github.com/psidnell/ofexport2/archive/ofexport-v2-1.0.6.zip)
+- Download the latest stable version: [ofexport-v2-1.0.7.zip](https://github.com/psidnell/ofexport2/archive/ofexport-v2-1.0.7.zip)
 - Download the current development version: [master.zip](https://github.com/psidnell/ofexport2/archive/master.zip)
 - If you want to stay on the bleeding edge, check out this git repository so you can take updates as you wish.
 
@@ -376,11 +376,15 @@ All projects and contexts are moved to the root level, and sub tasks moved up to
 
 ### Examples ###
 
-All available tasks:
+All available tasks. We want to see available tasks, but not their completed sub tasks, hence the two filters:
 
-    of2 -ti available
+    of2 -ti available -tx '!available'
 
-All available tasks but organised by context:
+All available tasks. A different approach, exclude all non available tasks and prune out remeaining empty projects:
+
+    of2 -tx '!available' -p
+
+All available tasks but organised by context, task hierarchies don't exist in context mode so one filter will do:
 
     of2 -c -ti available
 
@@ -389,6 +393,11 @@ All flagged and available tasks (two forms):
     of2 -ti flagged -ti available
     of2 -ti 'flagged && available'
 
+
+All remaining tasks:
+
+    of2 -ti remaining
+    
 All available tasks due within the next week:
 
     of2 -ti 'available && within(dueDate,"today","7d")'

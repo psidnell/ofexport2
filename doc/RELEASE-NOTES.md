@@ -1,9 +1,13 @@
 # OFEXPORT2 Release Notes
 
+## 1.0.7 (2014-12-05)
+
+- Fixed prune bug
+
 ## 1.0.6 (2014-12-05)
 
 - Fixed bugs relating to cascading availability flag.
-- Fixed bug affecting visibility of availabe projects in context mode.
+- Fixed bug affecting visibility of available projects in context mode.
 
 ## 1.0.5 (2014-12-04)
 

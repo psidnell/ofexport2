@@ -41,12 +41,14 @@ public class ExprVisitor implements Visitor {
     protected VisitorDescriptor applyToWhat;
     protected Expression expr;
     protected String exprString;
+    private boolean onEnter;
 
-    public ExprVisitor(String expr, VisitorDescriptor visitWhat, VisitorDescriptor applyToWhat) {
+    public ExprVisitor(String expr, boolean onEnter, VisitorDescriptor visitWhat, VisitorDescriptor applyToWhat) {
         this.expr = new Expression(expr);
         this.exprString = expr;
         this.visitWhat = visitWhat;
         this.applyToWhat = applyToWhat;
+        this.onEnter = onEnter;
     }
 
     @Override
@@ -56,28 +58,56 @@ public class ExprVisitor implements Visitor {
 
     @Override
     public void enter(Context node) throws Exception {
-        if (applyToWhat.getVisitContexts()) {
+        if (onEnter && applyToWhat.getVisitContexts()) {
+            evaluate(node);
+        }
+    }
+
+    @Override
+    public void exit(Context node) throws Exception {
+        if (!onEnter && applyToWhat.getVisitContexts()) {
             evaluate(node);
         }
     }
 
     @Override
     public void enter(Folder node) throws Exception {
-        if (applyToWhat.getVisitFolders()) {
+        if (onEnter && applyToWhat.getVisitFolders()) {
+            evaluate(node);
+        }
+    }
+
+    @Override
+    public void exit(Folder node) throws Exception {
+        if (!onEnter && applyToWhat.getVisitFolders()) {
             evaluate(node);
         }
     }
 
     @Override
     public void enter(Project node) throws Exception {
-        if (applyToWhat.getVisitProjects()) {
+        if (onEnter && applyToWhat.getVisitProjects()) {
+            evaluate(node);
+        }
+    }
+
+    @Override
+    public void exit(Project node) throws Exception {
+        if (!onEnter && applyToWhat.getVisitProjects()) {
             evaluate(node);
         }
     }
 
     @Override
     public void enter(Task node) throws Exception {
-        if (applyToWhat.getVisitTasks()) {
+        if (onEnter && applyToWhat.getVisitTasks()) {
+            evaluate(node);
+        }
+    }
+
+    @Override
+    public void exit(Task node) throws Exception {
+        if (!onEnter && applyToWhat.getVisitTasks()) {
             evaluate(node);
         }
     }

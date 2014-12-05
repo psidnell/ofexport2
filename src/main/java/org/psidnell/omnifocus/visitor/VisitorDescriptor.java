@@ -71,8 +71,8 @@ public class VisitorDescriptor {
         return this;
     }
 
-    @SuppressWarnings("unchecked")
-    public VisitorDescriptor filter(Class<? extends Node>... classes) {
+    @SafeVarargs
+    public final VisitorDescriptor filter(Class<? extends Node>... classes) {
         for (Class<? extends Node> clazz : classes) {
             switch (clazz.getSimpleName()) {
                 case "Folder":

@@ -31,6 +31,7 @@ import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
 import org.psidnell.omnifocus.visitor.IncludeVisitor;
 import org.psidnell.omnifocus.visitor.IncludedFilter;
+import org.psidnell.omnifocus.visitor.PruningFilter;
 import org.psidnell.omnifocus.visitor.SortingFilter;
 import org.psidnell.omnifocus.visitor.Traverser;
 import org.psidnell.omnifocus.visitor.Visitor;
@@ -43,15 +44,15 @@ import freemarker.template.TemplateException;
 /**
  * @author psidnell
  *
- * The main processing class.
+ *         The main processing class.
  *
- * 1. Model objects are added to the root project/context.
+ *         1. Model objects are added to the root project/context.
  *
- * 2. Filter expressions are added to reduce the tree.
+ *         2. Filter expressions are added to reduce the tree.
  *
- * 3. Sorting comparators are added to control the output ordering
+ *         3. Sorting comparators are added to control the output ordering
  *
- * 4. Finally the tree is processed to produce the output.
+ *         4. Finally the tree is processed to produce the output.
  *
  */
 public class OFExport {
@@ -80,10 +81,14 @@ public class OFExport {
     public void process() throws Exception {
 
         if (projectMode) {
-            filters.stream().forEachOrdered((f) -> Traverser.traverse(f, projectRoot));
+            for (Visitor filter : filters) {
+                Traverser.traverse(filter, projectRoot);
+            }
             Traverser.traverse(sortingFilter, projectRoot);
         } else {
-            filters.stream().forEachOrdered((f) -> Traverser.traverse(f, contextRoot));
+            for (Visitor filter : filters) {
+                Traverser.traverse(filter, contextRoot);
+            }
             Traverser.traverse(sortingFilter, contextRoot);
         }
     }
@@ -119,52 +124,50 @@ public class OFExport {
         return (Formatter) Class.forName(formatterClassName).newInstance();
     }
 
-    public void addProjectExpression(String expression, boolean includeMode) {
+    public void addProjectExpression(String expression, boolean onEnter, boolean includeMode) {
         if (!projectMode) {
             throw new IllegalArgumentException("project filters only valid in project mode");
         }
         VisitorDescriptor visitwhat = new VisitorDescriptor().visit(Folder.class, Project.class);
         VisitorDescriptor applyToWhat = new VisitorDescriptor().visit(Project.class);
-        ExprIncludeVisitor filter = new ExprIncludeVisitor(expression, projectMode, includeMode, visitwhat, applyToWhat);
+        ExprIncludeVisitor filter = new ExprIncludeVisitor(expression, onEnter, projectMode, includeMode, visitwhat, applyToWhat);
         addExpressionFilter(filter);
     }
 
-
-
-    public void addFolderExpression(String expression, boolean includeMode) {
+    public void addFolderExpression(String expression, boolean onEnter, boolean includeMode) {
         if (!projectMode) {
             throw new IllegalArgumentException("project filters only valid in project mode");
         }
         VisitorDescriptor visitWhat = new VisitorDescriptor().visit(Folder.class);
         VisitorDescriptor applyToWhat = new VisitorDescriptor().visit(Folder.class);
-        addExpressionFilter(new ExprIncludeVisitor(expression, projectMode, includeMode, visitWhat, applyToWhat));
+        addExpressionFilter(new ExprIncludeVisitor(expression, onEnter, projectMode, includeMode, visitWhat, applyToWhat));
     }
 
-    public void addTaskExpression(String expression, boolean includeMode) {
+    public void addTaskExpression(String expression, boolean onEnter, boolean includeMode) {
         if (projectMode) {
             VisitorDescriptor visitWhat = new VisitorDescriptor().visit(Folder.class, Project.class, Task.class);
             VisitorDescriptor applyToWhat = new VisitorDescriptor().visit(Task.class);
-            addExpressionFilter(new ExprIncludeVisitor(expression, projectMode, includeMode, visitWhat, applyToWhat));
+            addExpressionFilter(new ExprIncludeVisitor(expression, onEnter, projectMode, includeMode, visitWhat, applyToWhat));
         } else {
             VisitorDescriptor visitWhat = new VisitorDescriptor().visit(Context.class, Task.class);
             VisitorDescriptor applyToWhat = new VisitorDescriptor().visit(Task.class);
-            addExpressionFilter(new ExprIncludeVisitor(expression, projectMode, includeMode, visitWhat, applyToWhat));
+            addExpressionFilter(new ExprIncludeVisitor(expression, onEnter, projectMode, includeMode, visitWhat, applyToWhat));
         }
     }
 
-    public void addContextExpression(String expression, boolean includeMode) {
+    public void addContextExpression(String expression, boolean onEnter, boolean includeMode) {
         if (projectMode) {
             throw new IllegalArgumentException("context filters only valid in context mode");
         }
         VisitorDescriptor visitWhat = new VisitorDescriptor().visit(Context.class);
         VisitorDescriptor applyToWhat = new VisitorDescriptor().visit(Context.class);
-        addExpressionFilter(new ExprIncludeVisitor(expression, projectMode, includeMode, visitWhat, applyToWhat));
+        addExpressionFilter(new ExprIncludeVisitor(expression, onEnter, projectMode, includeMode, visitWhat, applyToWhat));
     }
 
-    public void addExpression(String expression, boolean includeMode) {
+    public void addExpression(String expression, boolean onEnter, boolean includeMode) {
         VisitorDescriptor visitWhat = new VisitorDescriptor().visitAll();
         VisitorDescriptor applyToWhat = new VisitorDescriptor().visitAll();
-        addExpressionFilter(new ExprIncludeVisitor(expression, projectMode, includeMode, visitWhat, applyToWhat));
+        addExpressionFilter(new ExprIncludeVisitor(expression, onEnter, projectMode, includeMode, visitWhat, applyToWhat));
     }
 
     private void addExpressionFilter(ExprIncludeVisitor filter) {
@@ -179,17 +182,11 @@ public class OFExport {
     public void addModifyExpression(String expression) {
         VisitorDescriptor visitWhat = new VisitorDescriptor().visitAll();
         VisitorDescriptor applyToWhat = new VisitorDescriptor().visitAll();
-        addFilter(new ExprVisitor(expression, visitWhat, applyToWhat));
+        addFilter(new ExprVisitor(expression, true, visitWhat, applyToWhat));
     }
 
     public void addPruneFilter() {
-        // Go bottom up
-        if (projectMode) {
-            addProjectExpression("taskCount == 0", false);
-            addFolderExpression("folderCount == 0 && projectCount == 0", false);
-        } else {
-            addContextExpression("contextCount == 0 && taskCount == 0", false);
-        }
+        filters.add(new PruningFilter());
     }
 
     public boolean isProjectMode() {
