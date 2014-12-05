@@ -1,5 +1,10 @@
 # OFEXPORT2 Release Notes
 
+## 1.0.6 (2014-12-05)
+
+- Fixed bugs relating to cascading availability flag.
+- Fixed bug affecting visibility of availabe projects in context mode.
+
 ## 1.0.5 (2014-12-04)
 
 - Added diagnostic template (debug.ftl).
