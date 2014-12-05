@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 /**
  * @author psidnell
  *
- * Represents an OmniFocus Folder
+ *         Represents an OmniFocus Folder
  */
 public class Folder extends Node {
 
@@ -137,7 +137,7 @@ public class Folder extends Node {
     }
 
     @Override
-    @ExprAttribute(help="folder is available.")
+    @ExprAttribute(help = "folder is available.")
     public boolean isAvailable() {
         boolean available = active;
 
@@ -147,16 +147,16 @@ public class Folder extends Node {
         return available;
     }
 
-    public void setAvailable (boolean dummy) {
+    public void setAvailable(boolean dummy) {
         // Dummy method to allow Jackson deserialisation
     }
 
     @SQLiteProperty
-    public boolean isActive () {
+    public boolean isActive() {
         return active;
     }
 
-    public void setActive (boolean active) {
+    public void setActive(boolean active) {
         this.active = active;
     }
 }

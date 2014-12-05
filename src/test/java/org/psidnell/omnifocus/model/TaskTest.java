@@ -121,4 +121,64 @@ public class TaskTest {
         parent.setAllowsNextAction(false);
         assertFalse (child.isAvailable());
     }
+
+    @Test public void testRootTaskAvailabilityAsSequentialProject () {
+
+        Task rootTask = new Task ("root");
+        rootTask.setSequential(true);
+        ProjectInfo pi = new ProjectInfo();
+        pi.setSingleActionList(false);
+        pi.setStatus("active");
+
+        Project parent = new Project (pi, rootTask);
+
+        assertTrue (rootTask.isAvailable());
+
+        Task child = new Task ("x");
+        parent.add(child);
+
+        assertFalse (rootTask.isAvailable());
+
+        child.setCompletionDate(new Date ());
+
+        assertTrue (rootTask.isAvailable());
+    }
+
+    @Test public void testRootTaskAvailabilityAsSingleActionListProject () {
+
+        Task rootTask = new Task ("root");
+        rootTask.setSequential(true);
+        ProjectInfo pi = new ProjectInfo();
+        pi.setSingleActionList(true);
+        pi.setStatus("active");
+
+        Project parent = new Project (pi, rootTask);
+
+        assertFalse (rootTask.isAvailable());
+
+        Task child = new Task ("x");
+        parent.add(child);
+
+        assertFalse (rootTask.isAvailable());
+
+        child.setCompletionDate(new Date ());
+
+        assertFalse (rootTask.isAvailable());
+    }
+
+    @Test
+    public void testUncompletedTaskCount () {
+        Task parent = new Task ("parent");
+
+        assertEquals (0, parent.getUncompletedTaskCount());
+
+        Task child = new Task ("child");
+        parent.add(child);
+
+        assertEquals (1, parent.getUncompletedTaskCount());
+
+        child.setCompletionDate(new Date ());
+
+        assertEquals (0, parent.getUncompletedTaskCount());
+    }
 }

@@ -48,6 +48,18 @@ public abstract class CommonProjectAndTaskAttributes extends Node {
         return tasks.size();
     }
 
+    @ExprAttribute(help = "number of uncompleted tasks.")
+    @JsonIgnore
+    public int getUncompletedTaskCount() {
+        int count = 0;
+        for (Task child : tasks) {
+            if (!child.isCompleted()) {
+                count++;
+            }
+        }
+        return count;
+    }
+
     @ExprAttribute(help = "the sub tasks.")
     public List<Task> getTasks() {
         return tasks;

@@ -20,15 +20,16 @@ import org.psidnell.omnifocus.sqlite.SQLiteProperty;
 /**
  * @author psidnell
  *
- * Represents data loaded from the ProjectInfo table.
+ *         Represents data loaded from the ProjectInfo table.
  *
- * Projects are constructed from this and their root task.
+ *         Projects are constructed from this and their root task.
  */
 public class ProjectInfo {
 
     private String task;
     private String folderId;
     private String status;
+    private boolean singleActionList = false;
 
     @SQLiteProperty(name = "status")
     public String getStatus() {
@@ -55,5 +56,14 @@ public class ProjectInfo {
 
     public void setRootTaskId(String task) {
         this.task = task;
+    }
+
+    @SQLiteProperty(name = "containsSingletonActions")
+    public boolean isSingleActionList() {
+        return singleActionList;
+    }
+
+    public void setSingleActionList(boolean singleActionList) {
+        this.singleActionList = singleActionList;
     }
 }

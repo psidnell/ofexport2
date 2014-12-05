@@ -40,7 +40,6 @@ public class Task extends CommonProjectAndTaskAttributes {
     private String parentTaskId;
     private String contextId;
     private CommonProjectAndTaskAttributes parent;
-    private Project project;
     private boolean blocked = false;
     private boolean inInbox;
     private boolean isProject;
@@ -111,8 +110,6 @@ public class Task extends CommonProjectAndTaskAttributes {
     public List<Node> getProjectPath() {
         if (parent != null) {
             return getProjectPath(parent);
-        } else if (project != null) {
-            return getProjectPath(project);
         } else {
             LinkedList<Node> result = new LinkedList<>();
             result.add(this);
@@ -139,6 +136,17 @@ public class Task extends CommonProjectAndTaskAttributes {
             available = available && parent.isAvailable();
         }
 
+        if (available && isProject) {
+            // Should only ever be seeing the root tasks from context mode and single action
+            // lists don't show up in context mode. All of this tasks subtasks have been moved
+            // to the project
+            if (((Project) parent).getUncompletedTaskCount() == 0 && !((Project) parent).isSingleActionList()) {
+                available = true;
+            } else {
+                available = false;
+            }
+        }
+
         if (available && context != null) {
             available = available && context.isAvailable();
         }
@@ -151,7 +159,6 @@ public class Task extends CommonProjectAndTaskAttributes {
         // Dummy setter for derived value since
         // we want the exported/imported value in the json/xml
     }
-
 
     @Override
     @ExprAttribute(help = "item is remaining.")

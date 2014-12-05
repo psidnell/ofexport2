@@ -36,6 +36,7 @@ public class Project extends CommonProjectAndTaskAttributes {
     public static final String TYPE = "Project";
     private Folder folder;
     private String status = "active";
+    private boolean singleActionList;
 
     public Project() {
     }
@@ -55,6 +56,7 @@ public class Project extends CommonProjectAndTaskAttributes {
         setRank(rootTask.getRank());
         setSequential(rootTask.isSequential());
         status = projInfo.getStatus();
+        singleActionList = projInfo.isSingleActionList();
         for (Task childOfRootTask : new LinkedList<>(rootTask.getTasks())) {
             add(childOfRootTask);
         }
@@ -125,5 +127,14 @@ public class Project extends CommonProjectAndTaskAttributes {
     public void setRemaining(boolean ignored) {
         // Dummy setter for derived value since
         // we want the exported/imported value in the json/xml
+    }
+
+    @ExprAttribute(help = "true if it's a sinle action list")
+    public boolean isSingleActionList() {
+        return singleActionList;
+    }
+
+    public void setSingleActionList(boolean singleActionList) {
+        this.singleActionList = singleActionList;
     }
 }
