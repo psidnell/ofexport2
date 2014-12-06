@@ -22,6 +22,7 @@ import org.psidnell.omnifocus.expr.ExprAttribute;
 import org.psidnell.omnifocus.sqlite.SQLiteProperty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
  * @author psidnell
@@ -29,6 +30,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  *         Represents an OmniFocus Context.
  *
  */
+@JsonPropertyOrder(alphabetic=true)
 public class Context extends Node {
 
     public static final String TYPE = "Context";

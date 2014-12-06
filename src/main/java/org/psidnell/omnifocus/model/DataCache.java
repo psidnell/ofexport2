@@ -39,6 +39,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -54,6 +55,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  *
  *
  */
+@JsonPropertyOrder(alphabetic=true)
 public class DataCache implements BeanFactoryAware {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DataCache.class);

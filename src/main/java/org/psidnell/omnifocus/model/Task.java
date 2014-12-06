@@ -22,6 +22,7 @@ import org.psidnell.omnifocus.expr.ExprAttribute;
 import org.psidnell.omnifocus.sqlite.SQLiteProperty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
  * @author psidnell
@@ -33,6 +34,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  *         When the model is build a Project is made from the root task which takes ownership of the
  *         tasks children.
  */
+@JsonPropertyOrder(alphabetic=true)
 public class Task extends CommonProjectAndTaskAttributes {
 
     public static final String TYPE = "Task";

@@ -22,12 +22,14 @@ import org.psidnell.omnifocus.expr.ExprAttribute;
 import org.psidnell.omnifocus.sqlite.SQLiteProperty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
  * @author psidnell
  *
  *         Represents an OmniFocus Folder
  */
+@JsonPropertyOrder(alphabetic=true)
 public class Folder extends Node {
 
     public static final String TYPE = "Folder";

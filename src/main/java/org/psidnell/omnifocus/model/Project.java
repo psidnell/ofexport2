@@ -21,6 +21,7 @@ import java.util.List;
 import org.psidnell.omnifocus.expr.ExprAttribute;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
  * @author psidnell
@@ -31,6 +32,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  *
  *         The database has a ProjectInfo and a root task, the union of which make up a Project.
  */
+@JsonPropertyOrder(alphabetic=true)
 public class Project extends CommonProjectAndTaskAttributes {
 
     public static final String TYPE = "Project";
