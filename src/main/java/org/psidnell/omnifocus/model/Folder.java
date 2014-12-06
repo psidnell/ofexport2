@@ -139,12 +139,7 @@ public class Folder extends Node {
     @Override
     @ExprAttribute(help = "folder is available.")
     public boolean isAvailable() {
-        boolean available = active;
-
-        if (available && parent != null) {
-            available = parent.isAvailable();
-        }
-        return available;
+        return active;
     }
 
     public void setAvailable(boolean dummy) {

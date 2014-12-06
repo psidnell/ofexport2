@@ -69,20 +69,20 @@ public class CommandLine {
                 (m,o)->m.printAdditionalInfo (),
                 BEFORE_LOAD));
 
-//        OPTIONS.addOption(new ActiveOption<CommandLine> (
-//                "available", false, "show available items.",
-//                (m,o)->m.ofexport.addAvailableFilter (),
-//                BEFORE_LOAD));
-
         // PROJECT
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
-                "pi", true, "include items where project expression is true.",
+                "pc", true, "include and cascade: projects and all beneath where expression is true.",
                 (m,o)->m.ofexport.addProjectExpression(o.nextValue(), true, true),
                 AFTER_LOAD));
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
-                "px", true, "exclude items where project expression is true.",
+                "pi", true, "include: projects where expression is true.",
+                (m,o)->m.ofexport.addProjectExpression(o.nextValue(), true, false),
+                AFTER_LOAD));
+
+        OPTIONS.addOption(new ActiveOption<CommandLine>(
+                "px", true, "exclude: projects where expression is true.",
                 (m,o)->m.ofexport.addProjectExpression(o.nextValue(), false, true),
                 AFTER_LOAD));
 
@@ -100,12 +100,17 @@ public class CommandLine {
         // FOLDER
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
-                "fi", true, "include items where folder expression is true.",
+                "fc", true, "include and cascade: folders and all beneath where expression is true.",
                 (m,o)->m.ofexport.addFolderExpression (o.nextValue(), true, true),
                 AFTER_LOAD));
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
-                "fx", true, "exclude items where folder expression is true.",
+                "fi", true, "include: folders where expression is true.",
+                (m,o)->m.ofexport.addFolderExpression (o.nextValue(), true, false),
+                AFTER_LOAD));
+
+        OPTIONS.addOption(new ActiveOption<CommandLine>(
+                "fx", true, "exclude: folders where expression is true.",
                 (m,o)->m.ofexport.addFolderExpression (o.nextValue(), false, true),
                 AFTER_LOAD));
 
@@ -122,12 +127,18 @@ public class CommandLine {
         // TASK
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
-                "ti", true, "include items where task expression is true.",
+                "tc", true, "include and cascade: tasks and all beneath where expression is true.",
                 (m,o)->m.ofexport.addTaskExpression(o.nextValue(), true, true),
                 AFTER_LOAD));
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
-                "tx", true, "include items where task expression is true.",
+                "ti", true, "include: tasks where expression is true.",
+                (m,o)->m.ofexport.addTaskExpression(o.nextValue(), true, false),
+                AFTER_LOAD));
+
+
+        OPTIONS.addOption(new ActiveOption<CommandLine>(
+                "tx", true, "exclude: tasks where expression is true.",
                 (m,o)->m.ofexport.addTaskExpression(o.nextValue(), false, true),
                 AFTER_LOAD));
 
@@ -145,12 +156,17 @@ public class CommandLine {
         // CONTEXT
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
-                "ci", true, "include items where context expression is true.",
+                "cc", true, "include and cascade: contexts and all beneath where expression is true.",
                 (m,o)->m.ofexport.addContextExpression(o.nextValue(), true, true),
                 AFTER_LOAD));
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
-                "cx", true, "include contexts specified by name.",
+                "ci", true, "include: contexts where expression is true.",
+                (m,o)->m.ofexport.addContextExpression(o.nextValue(), true, false),
+                AFTER_LOAD));
+
+        OPTIONS.addOption(new ActiveOption<CommandLine>(
+                "cx", true, "exclude: contexts where expression is true.",
                 (m,o)->m.ofexport.addContextExpression("name==\"" + escape(o.nextValue()) + "\"", true, true),
                 AFTER_LOAD));
 
@@ -167,12 +183,17 @@ public class CommandLine {
         // GENERAL
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
-                "ai", true, "include items (any type) where context expression is true.",
+                "ac", true, "include and cascade: items and all beneath where expression is true.",
                 (m,o)->m.ofexport.addExpression(o.nextValue(), true, true),
                 AFTER_LOAD));
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
-                "ax", true, "exclude items (any type) where context expression is true.",
+                "ai", true, "include: items where expression is true.",
+                (m,o)->m.ofexport.addExpression(o.nextValue(), true, false),
+                AFTER_LOAD));
+
+        OPTIONS.addOption(new ActiveOption<CommandLine>(
+                "ax", true, "exclude: items where expression is true.",
                 (m,o)->m.ofexport.addExpression(o.nextValue(), false, true),
                 AFTER_LOAD));
 
@@ -180,6 +201,7 @@ public class CommandLine {
                 "m", true, "modify a node value.",
                 (m,o)->m.ofexport.addModifyExpression(o.nextValue()),
                 AFTER_LOAD));
+        // MODES
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "p", false, "prune empty folders, projects and contexts.",
@@ -187,31 +209,30 @@ public class CommandLine {
                 AFTER_LOAD));
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
-                "F", false, "Flatten hierarchies",
+                "F", false, "Flatten hierarchies.",
                 (m,o)->m.ofexport.addFilter (new FlattenFilter()),
                 AFTER_LOAD));
 
-        // MODES
 
         OPTIONS.addOption(new ActiveOption<CommandLine> (
-                "c", false, "display context hierarchy instead of project hierarchy).",
+                "c", false, "context mode: filter and display context hierarchy instead of project hierarchy.",
                 (m,o)->m.ofexport.setProjectMode(false),
                 BEFORE_LOAD));
 
         // OUTPUT
 
         OPTIONS.addOption(new ActiveOption<CommandLine> (
-                "f", true, "output in this format",
+                "f", true, "output in this format.",
                 (m,o)->m.format = o.nextValue(),
                 AFTER_LOAD));
 
         OPTIONS.addOption(new ActiveOption<CommandLine> (
-                "o", true, "write output to the file",
+                "o", true, "write output to the file.",
                 (m,o)->m.outputFile = o.nextValue(),
                 BEFORE_LOAD));
 
         OPTIONS.addOption(new ActiveOption<CommandLine> (
-                "O", true, "write output to the file and open it",
+                "O", true, "write output to the file and open it.",
                 (m,o)->{m.outputFile = o.nextValue(); m.open=true;},
                 BEFORE_LOAD));
 

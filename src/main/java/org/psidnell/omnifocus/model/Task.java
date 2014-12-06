@@ -149,17 +149,13 @@ public class Task extends CommonProjectAndTaskAttributes {
             // Should only ever be seeing the root tasks from context mode and single action
             // lists don't show up in context mode. All of this tasks subtasks have been moved
             // to the project
-            if (project.getUncompletedTaskCount() == 0 && !project.isSingleActionList()) {
-                return true;
-            } else {
-                return false;
-            }
+            return project.getUncompletedTaskCount() == 0 && !project.isSingleActionList();
         }
 
         return true;
     }
 
-    private Project getEnclosingProject () {
+    private Project getEnclosingProject() {
         CommonProjectAndTaskAttributes node = parent;
         while (node != null && node instanceof Task) {
             node = ((Task) node).getParent();

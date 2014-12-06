@@ -22,8 +22,6 @@ import java.util.UUID;
 import org.psidnell.omnifocus.expr.ExprAttribute;
 import org.psidnell.omnifocus.expr.ExpressionFunctions;
 import org.psidnell.omnifocus.sqlite.SQLiteProperty;
-import org.psidnell.omnifocus.visitor.IncludeVisitor;
-import org.psidnell.omnifocus.visitor.Traverser;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -37,8 +35,6 @@ public abstract class Node extends ExpressionFunctions {
     protected String name;
 
     private String id = UUID.randomUUID().toString();
-
-    private boolean included = true;
 
     private int rank;
 
@@ -76,41 +72,6 @@ public abstract class Node extends ExpressionFunctions {
 
     @JsonIgnore
     public abstract String getType();
-
-    @JsonIgnore
-    @ExprAttribute(help = "true during filtering an expression when a parent item has already matched.")
-    public boolean isIncluded() {
-        return included;
-    }
-
-    public void setIncluded(boolean included) {
-        this.included = included;
-    }
-
-    public void include(boolean projectPath) {
-        if (!included) {
-            // Include this node and all children
-            Traverser.traverse(new IncludeVisitor(true), this);
-
-            // Include path to root
-            if (projectPath) {
-                for (Node node : getProjectPath()) {
-                    node.setIncluded(true);
-                }
-            } else {
-                for (Node node : getContextPath()) {
-                    node.setIncluded(true);
-                }
-            }
-        }
-    }
-
-    public void exclude() {
-        if (included) {
-            // Include this node and all children
-            Traverser.traverse(new IncludeVisitor(false), this);
-        }
-    }
 
     @Override
     public int hashCode() {
@@ -185,15 +146,15 @@ public abstract class Node extends ExpressionFunctions {
     }
 
     @JsonIgnore
-    public boolean isMarked () {
+    public boolean isMarked() {
         return marked;
     }
 
-    public void setMarked (boolean marked) {
+    public void setMarked(boolean marked) {
         this.marked = marked;
     }
 
-    public abstract void cascadeMarked ();
+    public abstract void cascadeMarked();
 
     public abstract boolean isAvailable();
 }

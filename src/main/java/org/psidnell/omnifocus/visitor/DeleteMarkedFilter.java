@@ -20,6 +20,11 @@ import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
 
+/**
+ * @author psidnell
+ *
+ * Delete marked items.
+ */
 public class DeleteMarkedFilter implements Visitor {
 
     private static final VisitorDescriptor WHAT = new VisitorDescriptor().visitAll().filterAll();

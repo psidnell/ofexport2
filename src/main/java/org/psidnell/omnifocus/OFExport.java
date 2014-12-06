@@ -58,7 +58,7 @@ import freemarker.template.TemplateException;
  */
 public class OFExport {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(OFExport.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(OFExport.class);
 
     protected String format = "txt";
     protected boolean projectMode = true;
@@ -179,8 +179,7 @@ public class OFExport {
         // Keep/Remove marked items, depending on filter mode
         if (filter.isIncludeMode()) {
             addFilter(new KeepMarkedVisitor(projectMode, cascade));
-        }
-        else {
+        } else {
             addFilter(new DeleteMarkedFilter());
         }
     }

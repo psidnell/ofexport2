@@ -95,16 +95,4 @@ public class FolderTest {
         f.setActive(false);
         assertFalse (f.isAvailable());
     }
-
-    @Test public void testAvailabilityInheritedFromParentFolder () {
-
-        Folder parent = new Folder ("parent");
-        Folder child = new Folder ("child");
-        parent.add(child);
-
-        assertTrue (child.isAvailable());
-
-        parent.setActive(false);
-        assertFalse (child.isAvailable());
-    }
 }

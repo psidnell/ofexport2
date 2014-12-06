@@ -101,6 +101,7 @@ public class ActiveOptionProcessor<P> {
         System.out.println();
 
         HelpFormatter formatter = new HelpFormatter();
+        formatter.setWidth(200);
         // Output in the order I specify
         formatter.setOptionComparator((x, y) -> ((ActiveOption<P>) x).getOrder() - ((ActiveOption<P>) y).getOrder());
         formatter.printHelp(progName, options);

@@ -23,7 +23,7 @@ $$$$$$$$$$$$$$$$$
 <@doIndent indent=depth/>Folder id:${folder.id} depth:${depth}
 <@doIndent indent=depth/>. -name:${folder.name}
 <@doIndent indent=depth/>. -folderCount:${folder.folderCount}
-<@doIndent indent=depth/>. -included:${folder.included?c}
+<@doIndent indent=depth/>. -available:${folder.available?c}
 <@doIndent indent=depth/>. -projectCount:${folder.projectCount}
 <@doIndent indent=depth/>. -type:${folder.type}
 <#list folder.folders as f><@doFolder folder=f depth=(depth+1)/></#list>
@@ -45,7 +45,7 @@ $$$$$$$$$$$$$$$$$$
 <@doIndent indent=depth/>. -dueDate:<#if (project.dueDate)??>${project.dueDate?string[config.template_date_format]}<#else>null</#if>
 <@doIndent indent=depth/>. -estimatedMinutes:${project.estimatedMinutes}
 <@doIndent indent=depth/>. -flagged:${project.flagged?c}
-<@doIndent indent=depth/>. -included:${project.included?c}
+<@doIndent indent=depth/>. -available:${project.available?c}
 <@doIndent indent=depth/>. -remaining:${project.remaining?c}
 <@doIndent indent=depth/>. -sequential:${project.sequential?c}
 <@doIndent indent=depth/>. -status:${project.status}
@@ -72,7 +72,7 @@ $$$$$$$$$$$$$$$
 <@doIndent indent=depth/>. -dueDate:<#if (task.dueDate)??>${task.dueDate?string[config.template_date_format]}<#else>null</#if>
 <@doIndent indent=depth/>. -estimatedMinutes:${task.estimatedMinutes}
 <@doIndent indent=depth/>. -flagged:${task.flagged?c}
-<@doIndent indent=depth/>. -included:${task.included?c}
+<@doIndent indent=depth/>. -available:${task.available?c}
 <@doIndent indent=depth/>. -projectTask:${task.projectTask?c}
 <@doIndent indent=depth/>. -remaining:${task.remaining?c}
 <@doIndent indent=depth/>. -sequential:${task.sequential?c}
@@ -91,7 +91,7 @@ $$$$$$$$$$$$$$$$$$
 <@doIndent indent=depth/>Task id:${context.id} depth:${depth}
 <@doIndent indent=depth/>. -name:${context.name}
 <@doIndent indent=depth/>. -contextCount:${context.taskCount}
-<@doIndent indent=depth/>. -included:${context.included?c}
+<@doIndent indent=depth/>. -available:${context.available?c}
 <@doIndent indent=depth/>. -taskCount:${context.taskCount}
 <@doIndent indent=depth/>. -type:${context.type}
 <#list context.contexts as c><@doContext context=c depth=depth+1/></#list>

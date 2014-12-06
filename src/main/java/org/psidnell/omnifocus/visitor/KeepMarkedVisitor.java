@@ -21,6 +21,11 @@ import org.psidnell.omnifocus.model.Node;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
 
+/**
+ * @author psidnell
+ *
+ * Keep marked items, delete others.
+ */
 public class KeepMarkedVisitor implements Visitor {
 
     private static final VisitorDescriptor WHAT = new VisitorDescriptor().visitAll().filterAll();
@@ -77,7 +82,7 @@ public class KeepMarkedVisitor implements Visitor {
         return t.isMarked();
     }
 
-    private void markPath (Node node) {
+    private void markPath (Node node) { // NOPMD it's confused and thinks it's unused
         if (node.isMarked()) {
             if (projectMode) {
                 node.getProjectPath().stream().forEach((n)->n.setMarked(true));

@@ -12,5 +12,8 @@
     <suppress files="DataCache\.java" checks="TreeWalker"/>
     <suppress files="StringUtils\.java" checks="TreeWalker"/>
     <suppress files="CompoundComparator\.java" checks="TreeWalker"/>
+    <suppress files="CommonProjectAndTaskAttributes\.java" checks="TreeWalker"/>
+    <suppress files="Context\.java" checks="TreeWalker"/>
+    <suppress files="Folder\.java" checks="TreeWalker"/>
     <suppress files="Visitor\.java" checks="TreeWalker"/>
 </suppressions>

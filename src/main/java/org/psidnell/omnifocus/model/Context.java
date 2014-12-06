@@ -162,7 +162,6 @@ public class Context extends Node {
     @Override
     @ExprAttribute(help = "context is available.")
     public boolean isAvailable() {
-        // Contexts don't seem to inherit his in OF
         return allowsNextAction;
     }
 
