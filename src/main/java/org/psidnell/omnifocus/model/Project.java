@@ -97,7 +97,7 @@ public class Project extends CommonProjectAndTaskAttributes {
     }
 
     public void add(Task child) {
-        CommonProjectAndTaskAttributes oldParent = child.getParent();
+        CommonProjectAndTaskAttributes oldParent = (CommonProjectAndTaskAttributes) child.getProjectModeParent();
         if (oldParent != null) {
             oldParent.getTasks().remove(child);
         }
@@ -137,6 +137,12 @@ public class Project extends CommonProjectAndTaskAttributes {
 
     public void setSingleActionList(boolean singleActionList) {
         this.singleActionList = singleActionList;
+    }
+
+    @Override
+    @JsonIgnore
+    public Node getProjectModeParent() {
+        return folder;
     }
 
 }

@@ -31,6 +31,9 @@ import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.sqlite.SQLiteDAO;
 import org.psidnell.omnifocus.util.IOUtils;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.context.ApplicationContext;
 
 /**
@@ -38,15 +41,17 @@ import org.springframework.context.ApplicationContext;
  *
  *         The main(...) of the program. There had to be one somewhere. Well here it is.
  */
-public class Main extends CommandLine {
+public class Main extends CommandLine implements BeanFactoryAware {
 
     private DataCache data;
 
     private SQLiteDAO sqliteDAO;
 
+    private BeanFactory beanFactory;
+
     private void loadData() throws IllegalAccessException, InvocationTargetException, InstantiationException, SQLException, IOException {
         if (jsonInputFile != null) {
-            data = DataCache.importData(new File(jsonInputFile));
+            data = DataCache.importData(new File(jsonInputFile), beanFactory);
         } else {
             data = sqliteDAO.load();
         }
@@ -57,7 +62,7 @@ public class Main extends CommandLine {
             Folder projectRoot = ofexport.getProjectRoot();
             // Add root projects/folders to the fabricated root folder
             for (Folder child : data.getFolders().values()) {
-                if (child.getParent() == null) {
+                if (child.getProjectModeParent() == null) {
                     projectRoot.getFolders().add(child);
                 }
             }
@@ -141,5 +146,10 @@ public class Main extends CommandLine {
 
     public void setSqliteDAO(SQLiteDAO sqliteDAO) {
         this.sqliteDAO = sqliteDAO;
+    }
+
+    @Override
+    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+        this.beanFactory = beanFactory;
     }
 }

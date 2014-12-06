@@ -15,6 +15,7 @@ limitations under the License.
  */
 package org.psidnell.omnifocus.model;
 
+import org.psidnell.omnifocus.ConfigParams;
 import org.psidnell.omnifocus.sqlite.SQLiteProperty;
 
 /**
@@ -65,5 +66,8 @@ public class ProjectInfo {
 
     public void setSingleActionList(boolean singleActionList) {
         this.singleActionList = singleActionList;
+    }
+
+    public void setConfigParams (ConfigParams config) {
     }
 }

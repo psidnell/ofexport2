@@ -175,4 +175,16 @@ public class Context extends Node {
         tasks.stream().forEach((t) -> t.setMarked(true));
         contexts.stream().forEach((c) -> c.cascadeMarked());
     }
+
+    @Override
+    @JsonIgnore
+    public boolean isCompleted() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    @JsonIgnore
+    public Node getProjectModeParent() {
+        throw new UnsupportedOperationException();
+    }
 }

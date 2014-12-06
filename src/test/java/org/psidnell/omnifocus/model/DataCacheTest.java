@@ -24,12 +24,13 @@ import static org.junit.Assert.fail;
 import java.util.stream.Collectors;
 
 import org.junit.Test;
+import org.psidnell.omnifocus.ApplicationContextFactory;
 
 public class DataCacheTest {
 
     @Test
     public void testConstruction() {
-        DataCache dataCache = new DataCache();
+        DataCache dataCache = new DataCache(ApplicationContextFactory.getContext());
 
         assertTrue(dataCache.getContexts().isEmpty());
         assertTrue(dataCache.getProjects().isEmpty());
@@ -41,7 +42,7 @@ public class DataCacheTest {
     public void testTaskHierarchy() {
         final String parentId = "zzz";
 
-        DataCache dataCache = new DataCache();
+        DataCache dataCache = new DataCache(ApplicationContextFactory.getContext());
 
         Task child = new Task();
         child.setName("child");
@@ -58,7 +59,7 @@ public class DataCacheTest {
         assertEquals(2, dataCache.getTasks().size());
         assertSame(child, dataCache.getTasks().get(child.getId()));
         assertSame(parent, dataCache.getTasks().get(parent.getId()));
-        assertSame(parent, child.getParent());
+        assertSame(parent, child.getProjectModeParent());
         assertEquals(1, parent.getTasks().size());
         assertTrue(parent.getTasks().contains(child));
 
@@ -77,7 +78,7 @@ public class DataCacheTest {
     public void testFolderHierarchy() {
         final String parentId = "zzz";
 
-        DataCache dataCache = new DataCache();
+        DataCache dataCache = new DataCache(ApplicationContextFactory.getContext());
 
         Folder child = new Folder();
         child.setName("child");
@@ -94,7 +95,7 @@ public class DataCacheTest {
         assertEquals(2, dataCache.getFolders().size());
         assertSame(child, dataCache.getFolders().get(child.getId()));
         assertSame(parent, dataCache.getFolders().get(parent.getId()));
-        assertSame(parent, child.getParent());
+        assertSame(parent, child.getProjectModeParent());
         assertEquals(1, parent.getFolders().size());
         assertTrue(parent.getFolders().contains(child));
 
@@ -114,7 +115,7 @@ public class DataCacheTest {
     public void testContextHierarchy() {
         final String parentId = "zzz";
 
-        DataCache dataCache = new DataCache();
+        DataCache dataCache = new DataCache(ApplicationContextFactory.getContext());
 
         Context child = new Context();
         child.setName("child");
@@ -151,7 +152,7 @@ public class DataCacheTest {
     public void testContextTaskHierarchy() {
         final String parentId = "zzz";
 
-        DataCache dataCache = new DataCache();
+        DataCache dataCache = new DataCache(ApplicationContextFactory.getContext());
 
         Task child = new Task();
         child.setName("child");
@@ -184,7 +185,7 @@ public class DataCacheTest {
     public void testProjectCreatedFromRootTask() {
         final String id = "zzz";
 
-        DataCache dataCache = new DataCache();
+        DataCache dataCache = new DataCache(ApplicationContextFactory.getContext());
 
         Task rootTask = new Task();
         rootTask.setName("rootTask");
@@ -220,7 +221,7 @@ public class DataCacheTest {
         final String rootId = "zzz";
         final String id = "xxx";
 
-        DataCache dataCache = new DataCache();
+        DataCache dataCache = new DataCache(ApplicationContextFactory.getContext());
 
         Task rootTask = new Task();
         rootTask.setName("rootTask");
@@ -245,7 +246,7 @@ public class DataCacheTest {
 
         assertEquals(1, dataCache.getTasks().size());
         assertSame(child, dataCache.getTasks().get(id));
-        assertSame(project, child.getParent());
+        assertSame(project, child.getProjectModeParent());
         assertEquals (1, project.getTasks().size());
         assertTrue (project.getTasks().contains(child));
 
@@ -264,7 +265,7 @@ public class DataCacheTest {
         final String id = "zzz";
         final String folderId = "xxx";
 
-        DataCache dataCache = new DataCache();
+        DataCache dataCache = new DataCache(ApplicationContextFactory.getContext());
 
         Task rootTask = new Task();
         rootTask.setName("rootTask");
@@ -305,7 +306,7 @@ public class DataCacheTest {
     @Test
     public void testInbox () {
 
-        DataCache dataCache = new DataCache();
+        DataCache dataCache = new DataCache(ApplicationContextFactory.getContext());
 
         Task child = new Task();
         child.setName("child");
@@ -320,7 +321,7 @@ public class DataCacheTest {
         assertEquals (1, dataCache.getProjects().size());
         Project inbox = dataCache.getProjects().values().iterator().next();
 
-        assertSame(inbox, child.getParent());
+        assertSame(inbox, child.getProjectModeParent());
         assertEquals(1, inbox.getTasks().size());
         assertTrue(inbox.getTasks().contains(child));
 
@@ -337,7 +338,7 @@ public class DataCacheTest {
     @Test
     public void testNoContext() {
 
-        DataCache dataCache = new DataCache();
+        DataCache dataCache = new DataCache(ApplicationContextFactory.getContext());
 
         Task child = new Task();
         child.setName("child");

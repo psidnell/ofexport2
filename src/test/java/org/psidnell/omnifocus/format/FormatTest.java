@@ -18,63 +18,69 @@ package org.psidnell.omnifocus.format;
 import java.text.ParseException;
 
 import org.junit.Before;
+import org.psidnell.omnifocus.ApplicationContextFactory;
 import org.psidnell.omnifocus.expr.ExpressionFunctions;
 import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Node;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
+import org.springframework.context.ApplicationContext;
 
 public abstract class FormatTest {
 
     protected Folder f1;
     protected Context c1;
 
+    private ApplicationContext applicationContex;
+
     @Before
     public void setUp () throws ParseException {
-        c1 = new Context ("c1");
+        applicationContex = ApplicationContextFactory.getContext();
+        c1 = newContext ("c1");
+
         setId (c1);
 
-        Context c2 = new Context ("c2");
+        Context c2 = newContext ("c2");
         setId(c2);
         c1.add(c2);
 
-        f1 = new Folder ("f1");
+        f1 = newFolder ("f1");
         setId(f1);
 
-        Project p1 = new Project ("p1");
+        Project p1 = newProject ("p1");
         p1.setStatus("status");
         setId(p1);
         f1.add(p1);
 
-        Task t1 = new Task("t1");
+        Task t1 = newTask("t1");
         setId(t1);
         t1.setDeferDate(new ExpressionFunctions().date("2014-11-27"));
         t1.setFlagged(true);
         p1.add(t1);
 
-        Task t2 = new Task("t2");
+        Task t2 = newTask("t2");
         setId(t2);
         t2.setDueDate(new ExpressionFunctions().date("2014-11-27"));
         t2.setNote("line1\nline2");
         c1.add(t2);
         p1.add(t2);
 
-        Task t3 = new Task("t3");
+        Task t3 = newTask("t3");
         setId(t3);
         t3.setCompletionDate(new ExpressionFunctions().date("2014-11-27"));
         t3.setNote("line1\nline2");
         c2.add(t3);
         p1.add(t3);
 
-        Task t4 = new Task("t4");
+        Task t4 = newTask("t4");
         setId(t4);
         t4.setCompletionDate(new ExpressionFunctions().date("2014-11-27"));
         t4.setNote("line1\nline2");
         c2.add(t4);
         t3.add(t4);
 
-        Project p2 = new Project ("p2");
+        Project p2 = newProject ("p2");
         p2.setStatus("status");
         setId(p2);
         p2.setFlagged(true);
@@ -82,11 +88,35 @@ public abstract class FormatTest {
         f1.add(p2);
         p2.setNote("line1\nline2");
 
-        Project p3 = new Project ("p3");
+        Project p3 = newProject ("p3");
         p3.setStatus("status");
         setId(p3);
         p2.setCompletionDate(new ExpressionFunctions().date("2014-11-27"));
         f1.add(p3);
+    }
+
+    private Context newContext(String name) {
+        Context c = applicationContex.getBean("context", Context.class);
+        c.setName(name);
+        return c;
+    }
+
+    private Folder newFolder(String name) {
+        Folder f = applicationContex.getBean("folder", Folder.class);
+        f.setName(name);
+        return f;
+    }
+
+    private Project newProject(String name) {
+        Project p = applicationContex.getBean("project", Project.class);
+        p.setName(name);
+        return p;
+    }
+
+    private Task newTask(String name) {
+        Task t = applicationContex.getBean("task", Task.class);
+        t.setName(name);
+        return t;
     }
 
     private void setId(Node n) {

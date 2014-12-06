@@ -37,18 +37,23 @@ import org.psidnell.omnifocus.model.ProjectInfo;
 import org.psidnell.omnifocus.model.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
 
 /**
  * @author psidnell
  *
  * The main SQLite data access object.
  */
-public class SQLiteDAO {
+public class SQLiteDAO implements BeanFactoryAware {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SQLiteDAO.class);
 
     private static final int THREE = 3;
     private String[] possibleDBLocations;
+
+    private BeanFactory beanFactory;
 
     public String getDriverURL() throws SQLException {
         for (String location : possibleDBLocations) {
@@ -105,7 +110,7 @@ public class SQLiteDAO {
             LOGGER.info("Loaded {} contexts", contexts.size());
             LOGGER.info("Loaded {} tasks", tasks.size());
 
-            return new DataCache(folders, projInfos, tasks, contexts);
+            return new DataCache(folders, projInfos, tasks, contexts, beanFactory);
         }
     }
 
@@ -115,7 +120,7 @@ public class SQLiteDAO {
             PreparedStatement stmt = c.prepareStatement("select " + desc.getColumnsForSelect() + " from " + desc.getTableName())) {
             try (
                 ResultSet rs = stmt.executeQuery()) {
-                return desc.load(rs);
+                return desc.load(rs, beanFactory);
             }
         }
     }
@@ -165,5 +170,10 @@ public class SQLiteDAO {
 
     public void setPossibleDBLocations(String[] possibleDBLocations) {
         this.possibleDBLocations = possibleDBLocations;
+    }
+
+    @Override
+    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+        this.beanFactory = beanFactory;
     }
 }

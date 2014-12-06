@@ -35,7 +35,7 @@ public class FolderTest {
         parent.add(child);
         assertEquals (1, parent.getFolders().size());
         assertTrue (parent.getFolders().contains(child));
-        assertSame (parent, child.getParent());
+        assertSame (parent, child.getProjectModeParent());
     }
 
     @Test
@@ -46,13 +46,13 @@ public class FolderTest {
         parent1.add(child);
         assertEquals (1, parent1.getFolders().size());
         assertTrue (parent1.getFolders().contains(child));
-        assertSame (parent1, child.getParent());
+        assertSame (parent1, child.getProjectModeParent());
 
         Folder parent2 = new Folder ();
         parent2.add(child);
         assertEquals (1, parent2.getFolders().size());
         assertTrue (parent2.getFolders().contains(child));
-        assertSame (parent2, child.getParent());
+        assertSame (parent2, child.getProjectModeParent());
 
         assertTrue (parent1.getFolders().isEmpty());
     }

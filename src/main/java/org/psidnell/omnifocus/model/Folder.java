@@ -95,8 +95,9 @@ public class Folder extends Node {
         return TYPE;
     }
 
+    @Override
     @JsonIgnore
-    public Folder getParent() {
+    public Folder getProjectModeParent() {
         return parent;
     }
 
@@ -127,7 +128,7 @@ public class Folder extends Node {
     }
 
     public void add(Folder child) {
-        Folder oldParent = child.getParent();
+        Folder oldParent = child.getProjectModeParent();
         if (oldParent != null) {
             oldParent.getFolders().remove(child);
         }
@@ -147,6 +148,7 @@ public class Folder extends Node {
     }
 
     @SQLiteProperty
+    @ExprAttribute (help="true if active")
     public boolean isActive() {
         return active;
     }
@@ -161,5 +163,13 @@ public class Folder extends Node {
         projects.stream().forEach((p) -> p.cascadeMarked());
         folders.stream().forEach((f) -> f.cascadeMarked());
 
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isCompleted() {
+        // It doesn't have a completion date but if dropped
+        // then due items within it arn't really due.
+        return !isActive();
     }
 }

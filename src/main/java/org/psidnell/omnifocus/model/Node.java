@@ -19,6 +19,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
+import org.psidnell.omnifocus.ConfigParams;
 import org.psidnell.omnifocus.expr.ExprAttribute;
 import org.psidnell.omnifocus.expr.ExpressionFunctions;
 import org.psidnell.omnifocus.sqlite.SQLiteProperty;
@@ -31,6 +32,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  *         The root class for all nodes in the object tree.
  */
 public abstract class Node extends ExpressionFunctions {
+
+    protected ConfigParams config;
 
     protected String name;
 
@@ -157,4 +160,12 @@ public abstract class Node extends ExpressionFunctions {
     public abstract void cascadeMarked();
 
     public abstract boolean isAvailable();
+
+    public abstract boolean isCompleted();
+
+    public abstract Node getProjectModeParent ();
+
+    public void setConfigParams (ConfigParams config) {
+        this.config = config;
+    }
 }

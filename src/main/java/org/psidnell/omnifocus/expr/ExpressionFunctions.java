@@ -288,4 +288,5 @@ public class ExpressionFunctions {
     public static Date roundToDay(Date d) {
         return d == null ? null : new Date(DAY * (d.getTime() / DAY));
     }
+
 }

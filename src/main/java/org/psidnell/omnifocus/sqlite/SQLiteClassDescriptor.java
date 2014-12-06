@@ -24,6 +24,8 @@ import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
 
+import org.springframework.beans.factory.BeanFactory;
+
 /**
  * @author psidnell
  *
@@ -83,10 +85,10 @@ public class SQLiteClassDescriptor<T> {
         return Character.toLowerCase(methodName.charAt(prefixLen)) + methodName.substring(prefixLen + 1);
     }
 
-    public Collection<T> load(ResultSet rs) throws SQLException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    public Collection<T> load(ResultSet rs, BeanFactory beanFactory) throws SQLException, InvocationTargetException, InstantiationException, IllegalAccessException {
         LinkedList<T> tasks = new LinkedList<>();
         while (rs.next()) {
-            T instance = clazz.newInstance();
+            T instance = beanFactory.getBean(clazz.getSimpleName().toLowerCase(), clazz);
             for (SQLITEPropertyDescriptor desc : properties) {
                 Object rawValue = getValue(rs, desc);
                 Object value = rawValue;

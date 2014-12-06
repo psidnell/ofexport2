@@ -15,6 +15,7 @@ limitations under the License.
  */
 package org.psidnell.omnifocus.model;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -127,6 +128,8 @@ public abstract class CommonProjectAndTaskAttributes extends Node {
     @SQLiteProperty(name = "dateCompleted")
     @ExprAttribute(help = "date item was completed or null.")
     public Date getCompletionDate() {
+        // We don't have an "effective" completion date, a parent item
+        // might be completed but we'd still have a null completionDate.
         return completionDate;
     }
 
@@ -134,9 +137,21 @@ public abstract class CommonProjectAndTaskAttributes extends Node {
         this.completionDate = roundToDay(completionDate);
     }
 
+    @Override
     @JsonIgnore
     @ExprAttribute(help = "item is complete.")
     public boolean isCompleted() {
+        // No effectiveCompleted db field, completion
+        // may
+        if (completionDate != null) {
+            return true;
+        }
+
+        Node parent = getProjectModeParent();
+        while (parent != null) {
+            parent = parent.getProjectModeParent ();
+        }
+
         return completionDate != null;
     }
 
@@ -206,5 +221,14 @@ public abstract class CommonProjectAndTaskAttributes extends Node {
     public void cascadeMarked() {
         setMarked(true);
         tasks.stream().forEach((t) -> t.cascadeMarked());
+    }
+
+    @ExprAttribute (help="due soon.")
+    public boolean isDueSoon () throws ParseException {
+        return completionDate == null && dueDate != null && (dueDate.getTime() <= date (config.getDueSoon()).getTime());
+    }
+
+    public void setDueSoon (boolean dummy) {
+        // To satisfy Jackson
     }
 }

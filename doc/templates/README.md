@@ -145,6 +145,16 @@ Simply delete the ofexport2 folder and remove the lines you added to your .bash_
 
 ### Overview ###
 
+Basic usage of the tool is fairly straight-forward. If you're familiar with omnifocus you can probably guess what these commands will show:
+
+    of2 -ti available
+    of2 -ti remaining
+    of2 -ti flagged
+    of2 -ti completed
+    of2 -ti dueSoon
+
+GOT HERE
+
 To print the contents of a named project (In this case I have a project called ofexport2, you should supply your own) type:
 
     of2 -pn 'ofexport2'

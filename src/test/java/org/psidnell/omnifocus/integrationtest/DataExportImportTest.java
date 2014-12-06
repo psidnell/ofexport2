@@ -56,10 +56,10 @@ public class DataExportImportTest {
 
         // Export
         File file = new File("target/test1.json");
-        DataCache.exportData(file, (n)->true, sqliteDAO);
+        DataCache.exportData(file, (n)->true, sqliteDAO, ApplicationContextFactory.getContext());
 
         // Import
-        DataCache dataCache = DataCache.importData (file);
+        DataCache dataCache = DataCache.importData (file, ApplicationContextFactory.getContext());
         ObjectMapper mapper = new ObjectMapper();
 
         // Just check we've loaded something, other tests will

@@ -28,5 +28,31 @@
 		<property name="ofexport" ref="ofexport" />
 		<property name="sqliteDAO" ref="sqlitedao" />
 	</bean>
+	
+	<bean name="configparams" class="org.psidnell.omnifocus.ConfigParams">
+		<property name="dueSoon" value="${dueSoon}"/>
+	</bean>
+	
+	<!-- Node Types -->
+	
+	<bean name="folder" class="org.psidnell.omnifocus.model.Folder" scope="prototype">
+		<property name="configParams" ref="configparams"/>
+	</bean>
+	
+	<bean name="project" class="org.psidnell.omnifocus.model.Project" scope="prototype">
+		<property name="configParams" ref="configparams"/>
+	</bean>
+	
+	<bean name="projectinfo" class="org.psidnell.omnifocus.model.ProjectInfo" scope="prototype">
+		<property name="configParams" ref="configparams"/>
+	</bean>
+	
+	<bean name="task" class="org.psidnell.omnifocus.model.Task" scope="prototype">
+		<property name="configParams" ref="configparams"/>
+	</bean>
+	
+	<bean name="context" class="org.psidnell.omnifocus.model.Context" scope="prototype">
+		<property name="configParams" ref="configparams"/>
+	</bean>
 
 </beans>

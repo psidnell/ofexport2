@@ -31,7 +31,7 @@ public class TaskTest {
         parent.add(child);
         assertEquals (1, parent.getTasks().size());
         assertTrue (parent.getTasks().contains(child));
-        assertSame (parent, child.getParent());
+        assertSame (parent, child.getProjectModeParent());
     }
 
     @Test
@@ -42,13 +42,13 @@ public class TaskTest {
         parent1.add(child);
         assertEquals (1, parent1.getTasks().size());
         assertTrue (parent1.getTasks().contains(child));
-        assertSame (parent1, child.getParent());
+        assertSame (parent1, child.getProjectModeParent());
 
         Task parent2 = new Task ();
         parent2.add(child);
         assertEquals (1, parent2.getTasks().size());
         assertTrue (parent2.getTasks().contains(child));
-        assertSame (parent2, child.getParent());
+        assertSame (parent2, child.getProjectModeParent());
 
         assertTrue (parent1.getTasks().isEmpty());
     }

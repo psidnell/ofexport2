@@ -96,8 +96,9 @@ public class Task extends CommonProjectAndTaskAttributes {
         return TYPE;
     }
 
+    @Override
     @JsonIgnore
-    public CommonProjectAndTaskAttributes getParent() {
+    public Node getProjectModeParent() {
         return parent;
     }
 
@@ -118,7 +119,7 @@ public class Task extends CommonProjectAndTaskAttributes {
     }
 
     public void add(Task child) {
-        CommonProjectAndTaskAttributes oldParent = child.getParent();
+        CommonProjectAndTaskAttributes oldParent = (CommonProjectAndTaskAttributes) child.getProjectModeParent();
         if (oldParent != null) {
             oldParent.getTasks().remove(child);
         }
@@ -156,9 +157,9 @@ public class Task extends CommonProjectAndTaskAttributes {
     }
 
     private Project getEnclosingProject() {
-        CommonProjectAndTaskAttributes node = parent;
+        Node node = parent;
         while (node != null && node instanceof Task) {
-            node = ((Task) node).getParent();
+            node = ((Task) node).getProjectModeParent();
         }
         return (Project) node;
     }
