@@ -43,6 +43,7 @@ $$$$$$$$$$$$$$$$$$
 <@doIndent indent=depth/>. -contextName:<#if (project.contextName)??>${project.contextName}<#else>null></#if>
 <@doIndent indent=depth/>. -deferDate:<#if (project.deferDate)??>${project.deferDate?string[config.template_date_format]}<#else>null</#if>
 <@doIndent indent=depth/>. -dueDate:<#if (project.dueDate)??>${project.dueDate?string[config.template_date_format]}<#else>null</#if>
+<@doIndent indent=depth/>. -estimatedMinutes:${project.estimatedMinutes}
 <@doIndent indent=depth/>. -flagged:${project.flagged?c}
 <@doIndent indent=depth/>. -included:${project.included?c}
 <@doIndent indent=depth/>. -remaining:${project.remaining?c}
@@ -69,6 +70,7 @@ $$$$$$$$$$$$$$$
 <@doIndent indent=depth/>. -contextName:<#if (task.contextName)??>${task.contextName}<#else>null></#if>
 <@doIndent indent=depth/>. -deferDate:<#if (task.deferDate)??>${task.deferDate?string[config.template_date_format]}<#else>null</#if>
 <@doIndent indent=depth/>. -dueDate:<#if (task.dueDate)??>${task.dueDate?string[config.template_date_format]}<#else>null</#if>
+<@doIndent indent=depth/>. -estimatedMinutes:${task.estimatedMinutes}
 <@doIndent indent=depth/>. -flagged:${task.flagged?c}
 <@doIndent indent=depth/>. -included:${task.included?c}
 <@doIndent indent=depth/>. -projectTask:${task.projectTask?c}

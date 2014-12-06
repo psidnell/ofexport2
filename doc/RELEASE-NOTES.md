@@ -2,11 +2,12 @@
 
 ## 1.0.8 (?????)
 
-- Flagged now works hierarchically
+- Flagged now works hierarchically.
+- Added estimatedMinutes.
 
 ## 1.0.7 (2014-12-05)
 
-- Fixed prune bug
+- Fixed prune bug.
 
 ## 1.0.6 (2014-12-05)
 

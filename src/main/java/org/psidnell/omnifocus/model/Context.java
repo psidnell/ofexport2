@@ -109,7 +109,7 @@ public class Context extends Node {
     @SQLiteProperty
     // @ExprAttribute(help = "true if context is active.") doesn't do what I think it does, always
     // true - vestigial?
-    public boolean getActive() {
+    public boolean isActive() {
         return active;
     }
 
@@ -162,13 +162,8 @@ public class Context extends Node {
     @Override
     @ExprAttribute(help = "context is available.")
     public boolean isAvailable() {
-        boolean available = allowsNextAction;
-
-        /*
-         * Contexts don't seem to inherit his in OF.
-         * if (available && parent != null) { available = available && parent.isAvailable();}
-         */
-        return available;
+        //Contexts don't seem to inherit his in OF
+        return allowsNextAction;
     }
 
     public void setAvailable(boolean dummy) {

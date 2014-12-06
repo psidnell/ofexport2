@@ -130,28 +130,41 @@ public class Task extends CommonProjectAndTaskAttributes {
     @Override
     @ExprAttribute(help = "item is available.")
     public boolean isAvailable() {
-        boolean available = !isCompleted() && !isBlocked();
 
-        if (available && parent != null) {
-            available = available && parent.isAvailable();
+        if (isCompleted() || isBlocked()) {
+            return false;
         }
 
-        if (available && isProject) {
+        if (context != null && !context.isAvailable()) {
+            return false;
+        }
+
+        Project project = getEnclosingProject();
+
+        if (project != null && !project.isAvailable()) {
+            return false;
+        }
+
+        if (project != null && isProject) {
             // Should only ever be seeing the root tasks from context mode and single action
             // lists don't show up in context mode. All of this tasks subtasks have been moved
             // to the project
-            if (((Project) parent).getUncompletedTaskCount() == 0 && !((Project) parent).isSingleActionList()) {
-                available = true;
+            if (project.getUncompletedTaskCount() == 0 && !project.isSingleActionList()) {
+                return true;
             } else {
-                available = false;
+                return false;
             }
         }
 
-        if (available && context != null) {
-            available = available && context.isAvailable();
-        }
+        return true;
+    }
 
-        return available;
+    private Project getEnclosingProject () {
+        CommonProjectAndTaskAttributes node = parent;
+        while (node != null && node instanceof Task) {
+            node = ((Task) node).getParent();
+        }
+        return (Project) node;
     }
 
     @Override

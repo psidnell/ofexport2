@@ -35,9 +35,9 @@ public class ExprIncludeVisitor extends ExprVisitor {
 
     private boolean includeMode = true;
 
-    public ExprIncludeVisitor(String expr, boolean onEnter, boolean projectMode, boolean includeMode, VisitorDescriptor visitWhat,
+    public ExprIncludeVisitor(String expr, boolean projectMode, boolean includeMode, VisitorDescriptor visitWhat,
             VisitorDescriptor applyToWhat) {
-        super(expr, onEnter, visitWhat, applyToWhat);
+        super(expr, visitWhat, applyToWhat);
         this.projectMode = projectMode;
         this.includeMode = includeMode;
     }

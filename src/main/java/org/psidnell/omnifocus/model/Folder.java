@@ -142,7 +142,7 @@ public class Folder extends Node {
         boolean available = active;
 
         if (available && parent != null) {
-            available = available && parent.isAvailable();
+            available = parent.isAvailable();
         }
         return available;
     }

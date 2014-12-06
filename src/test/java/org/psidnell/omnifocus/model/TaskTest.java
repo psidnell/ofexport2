@@ -70,7 +70,7 @@ public class TaskTest {
         assertFalse (t.isAvailable());
     }
 
-    @Test public void testAvailabilityInheritedFromParentTask () {
+    @Test public void testAvailabilityNotInheritedFromParentTask () {
 
         Task parent = new Task ("parent");
         Task child = new Task ("child");
@@ -79,15 +79,15 @@ public class TaskTest {
         assertTrue (child.isAvailable());
 
         parent.setBlocked(true);
-        assertFalse (child.isAvailable());
+        assertTrue (child.isAvailable());
 
         parent.setBlocked(false);
         parent.setCompletionDate(new Date());
-        assertFalse (child.isAvailable());
+        assertTrue (child.isAvailable());
 
         parent.setBlocked(true);
         parent.setCompletionDate(null);
-        assertFalse (child.isAvailable());
+        assertTrue (child.isAvailable());
     }
 
     @Test public void testAvailabilityInheritedFromParentProject () {
