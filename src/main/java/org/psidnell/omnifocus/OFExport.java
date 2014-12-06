@@ -20,17 +20,18 @@ import java.io.Writer;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.psidnell.omnifocus.expr.ExprIncludeVisitor;
-import org.psidnell.omnifocus.expr.ExpressionComparator;
+import org.psidnell.omnifocus.expr.ExprMarkVisitor;
 import org.psidnell.omnifocus.expr.ExprVisitor;
+import org.psidnell.omnifocus.expr.ExpressionComparator;
 import org.psidnell.omnifocus.format.Formatter;
 import org.psidnell.omnifocus.format.FreeMarkerFormatter;
 import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
-import org.psidnell.omnifocus.visitor.IncludeVisitor;
-import org.psidnell.omnifocus.visitor.IncludedFilter;
+import org.psidnell.omnifocus.visitor.ClearMarkedVisitor;
+import org.psidnell.omnifocus.visitor.DeleteMarkedFilter;
+import org.psidnell.omnifocus.visitor.KeepMarkedVisitor;
 import org.psidnell.omnifocus.visitor.PruningFilter;
 import org.psidnell.omnifocus.visitor.SortingFilter;
 import org.psidnell.omnifocus.visitor.Traverser;
@@ -124,59 +125,64 @@ public class OFExport {
         return (Formatter) Class.forName(formatterClassName).newInstance();
     }
 
-    public void addProjectExpression(String expression, boolean includeMode) {
+    public void addProjectExpression(String expression, boolean includeMode, boolean cascade) {
         if (!projectMode) {
             throw new IllegalArgumentException("project filters only valid in project mode");
         }
         VisitorDescriptor visitwhat = new VisitorDescriptor().visit(Folder.class, Project.class);
         VisitorDescriptor applyToWhat = new VisitorDescriptor().visit(Project.class);
-        ExprIncludeVisitor filter = new ExprIncludeVisitor(expression, projectMode, includeMode, visitwhat, applyToWhat);
-        addExpressionFilter(filter);
+        ExprMarkVisitor filter = new ExprMarkVisitor(expression, includeMode, visitwhat, applyToWhat);
+        addExpressionFilter(filter, cascade);
     }
 
-    public void addFolderExpression(String expression, boolean includeMode) {
+    public void addFolderExpression(String expression, boolean includeMode, boolean cascade) {
         if (!projectMode) {
             throw new IllegalArgumentException("project filters only valid in project mode");
         }
         VisitorDescriptor visitWhat = new VisitorDescriptor().visit(Folder.class);
         VisitorDescriptor applyToWhat = new VisitorDescriptor().visit(Folder.class);
-        addExpressionFilter(new ExprIncludeVisitor(expression, projectMode, includeMode, visitWhat, applyToWhat));
+        addExpressionFilter(new ExprMarkVisitor(expression, includeMode, visitWhat, applyToWhat), cascade);
     }
 
-    public void addTaskExpression(String expression, boolean includeMode) {
+    public void addTaskExpression(String expression, boolean includeMode, boolean cascade) {
         if (projectMode) {
             VisitorDescriptor visitWhat = new VisitorDescriptor().visit(Folder.class, Project.class, Task.class);
             VisitorDescriptor applyToWhat = new VisitorDescriptor().visit(Task.class);
-            addExpressionFilter(new ExprIncludeVisitor(expression, projectMode, includeMode, visitWhat, applyToWhat));
+            addExpressionFilter(new ExprMarkVisitor(expression, includeMode, visitWhat, applyToWhat), cascade);
         } else {
             VisitorDescriptor visitWhat = new VisitorDescriptor().visit(Context.class, Task.class);
             VisitorDescriptor applyToWhat = new VisitorDescriptor().visit(Task.class);
-            addExpressionFilter(new ExprIncludeVisitor(expression, projectMode, includeMode, visitWhat, applyToWhat));
+            addExpressionFilter(new ExprMarkVisitor(expression, includeMode, visitWhat, applyToWhat), cascade);
         }
     }
 
-    public void addContextExpression(String expression, boolean includeMode) {
+    public void addContextExpression(String expression, boolean includeMode, boolean cascade) {
         if (projectMode) {
             throw new IllegalArgumentException("context filters only valid in context mode");
         }
         VisitorDescriptor visitWhat = new VisitorDescriptor().visit(Context.class);
         VisitorDescriptor applyToWhat = new VisitorDescriptor().visit(Context.class);
-        addExpressionFilter(new ExprIncludeVisitor(expression, projectMode, includeMode, visitWhat, applyToWhat));
+        addExpressionFilter(new ExprMarkVisitor(expression, includeMode, visitWhat, applyToWhat), cascade);
     }
 
-    public void addExpression(String expression, boolean includeMode) {
+    public void addExpression(String expression, boolean includeMode, boolean cascade) {
         VisitorDescriptor visitWhat = new VisitorDescriptor().visitAll();
         VisitorDescriptor applyToWhat = new VisitorDescriptor().visitAll();
-        addExpressionFilter(new ExprIncludeVisitor(expression, projectMode, includeMode, visitWhat, applyToWhat));
+        addExpressionFilter(new ExprMarkVisitor(expression, includeMode, visitWhat, applyToWhat), cascade);
     }
 
-    private void addExpressionFilter(ExprIncludeVisitor filter) {
-        // If the filter is an include filter then we exclude everything first and vice versa.
-        addFilter(new IncludeVisitor(!filter.isIncludeMode()));
-        // Then the filter is run
+    private void addExpressionFilter(ExprMarkVisitor filter, boolean cascade) {
+        // Clear the marked flag
+        addFilter(new ClearMarkedVisitor());
+        // Set the marked flag with the expression
         addFilter(filter);
-        // Finally we eliminate anything not included
-        addFilter(new IncludedFilter());
+        // Keep/Remove marked items, depending on filter mode
+        if (filter.isIncludeMode()) {
+            addFilter(new KeepMarkedVisitor(projectMode, cascade));
+        }
+        else {
+            addFilter(new DeleteMarkedFilter());
+        }
     }
 
     public void addModifyExpression(String expression) {
@@ -223,25 +229,5 @@ public class OFExport {
 
     public void addContextComparator(String expr) {
         sortingFilter.addContextComparator(new ExpressionComparator<>(expr, Context.class));
-    }
-
-    public void addAvailableFilter() {
-        if (projectMode) {
-            addFolderExpression("!available", false);
-
-            addProjectExpression("!available", false);
-
-            addTaskExpression("available", false);
-            addTaskExpression("!available", true);
-        }
-        else {
-            addContextExpression("available", true);
-            addFolderExpression("!available", false);
-
-            addProjectExpression("available", true);
-
-            addTaskExpression("available", false);
-            addTaskExpression("!available", true);
-        }
     }
 }

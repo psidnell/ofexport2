@@ -194,5 +194,4 @@ public class Task extends CommonProjectAndTaskAttributes {
     public void setIsProjectTask(boolean isProject) {
         this.isProject = isProject;
     }
-
 }

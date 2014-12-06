@@ -138,4 +138,5 @@ public class Project extends CommonProjectAndTaskAttributes {
     public void setSingleActionList(boolean singleActionList) {
         this.singleActionList = singleActionList;
     }
+
 }

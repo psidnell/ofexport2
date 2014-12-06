@@ -77,4 +77,9 @@ public class FlattenFilter implements Visitor {
             node.add(child);
         }
     }
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName();
+    }
 }

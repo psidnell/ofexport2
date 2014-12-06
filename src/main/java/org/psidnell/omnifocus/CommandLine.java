@@ -69,27 +69,27 @@ public class CommandLine {
                 (m,o)->m.printAdditionalInfo (),
                 BEFORE_LOAD));
 
-        OPTIONS.addOption(new ActiveOption<CommandLine> (
-                "available", false, "show available items.",
-                (m,o)->m.ofexport.addAvailableFilter (),
-                BEFORE_LOAD));
+//        OPTIONS.addOption(new ActiveOption<CommandLine> (
+//                "available", false, "show available items.",
+//                (m,o)->m.ofexport.addAvailableFilter (),
+//                BEFORE_LOAD));
 
         // PROJECT
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "pi", true, "include items where project expression is true.",
-                (m,o)->m.ofexport.addProjectExpression(o.nextValue(), true),
+                (m,o)->m.ofexport.addProjectExpression(o.nextValue(), true, true),
                 AFTER_LOAD));
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "px", true, "exclude items where project expression is true.",
-                (m,o)->m.ofexport.addProjectExpression(o.nextValue(), false),
+                (m,o)->m.ofexport.addProjectExpression(o.nextValue(), false, true),
                 AFTER_LOAD));
 
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "pn", true, "include project specified by name.",
-                (m,o)->m.ofexport.addProjectExpression("name==\"" + escape(o.nextValue()) + "\"", true),
+                (m,o)->m.ofexport.addProjectExpression("name==\"" + escape(o.nextValue()) + "\"", true, true),
                 AFTER_LOAD));
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
@@ -101,17 +101,17 @@ public class CommandLine {
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "fi", true, "include items where folder expression is true.",
-                (m,o)->m.ofexport.addFolderExpression (o.nextValue(), true),
+                (m,o)->m.ofexport.addFolderExpression (o.nextValue(), true, true),
                 AFTER_LOAD));
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "fx", true, "exclude items where folder expression is true.",
-                (m,o)->m.ofexport.addFolderExpression (o.nextValue(), false),
+                (m,o)->m.ofexport.addFolderExpression (o.nextValue(), false, true),
                 AFTER_LOAD));
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "fn", true, "include folder specified by name.",
-                (m,o)->m.ofexport.addFolderExpression("name==\"" + escape(o.nextValue()) + "\"", true),
+                (m,o)->m.ofexport.addFolderExpression("name==\"" + escape(o.nextValue()) + "\"", true, true),
                 AFTER_LOAD));
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
@@ -123,18 +123,18 @@ public class CommandLine {
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "ti", true, "include items where task expression is true.",
-                (m,o)->m.ofexport.addTaskExpression(o.nextValue(), true),
+                (m,o)->m.ofexport.addTaskExpression(o.nextValue(), true, true),
                 AFTER_LOAD));
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "tx", true, "include items where task expression is true.",
-                (m,o)->m.ofexport.addTaskExpression(o.nextValue(), false),
+                (m,o)->m.ofexport.addTaskExpression(o.nextValue(), false, true),
                 AFTER_LOAD));
 
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "tn", true, "include tasks specified by name.",
-                (m,o)->m.ofexport.addTaskExpression("name==\"" + escape(o.nextValue()) + "\"" , true),
+                (m,o)->m.ofexport.addTaskExpression("name==\"" + escape(o.nextValue()) + "\"" , true, true),
                 AFTER_LOAD));
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
@@ -146,17 +146,17 @@ public class CommandLine {
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "ci", true, "include items where context expression is true.",
-                (m,o)->m.ofexport.addContextExpression(o.nextValue(), true),
+                (m,o)->m.ofexport.addContextExpression(o.nextValue(), true, true),
                 AFTER_LOAD));
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "cx", true, "include contexts specified by name.",
-                (m,o)->m.ofexport.addContextExpression("name==\"" + escape(o.nextValue()) + "\"", true),
+                (m,o)->m.ofexport.addContextExpression("name==\"" + escape(o.nextValue()) + "\"", true, true),
                 AFTER_LOAD));
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "cn", true, "include contexts specified by name.",
-                (m,o)->m.ofexport.addContextExpression("name==\"" + escape(o.nextValue()) + "\"" , true),
+                (m,o)->m.ofexport.addContextExpression("name==\"" + escape(o.nextValue()) + "\"" , true, true),
                 AFTER_LOAD));
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
@@ -168,12 +168,12 @@ public class CommandLine {
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "ai", true, "include items (any type) where context expression is true.",
-                (m,o)->m.ofexport.addExpression(o.nextValue(), true),
+                (m,o)->m.ofexport.addExpression(o.nextValue(), true, true),
                 AFTER_LOAD));
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "ax", true, "exclude items (any type) where context expression is true.",
-                (m,o)->m.ofexport.addExpression(o.nextValue(), false),
+                (m,o)->m.ofexport.addExpression(o.nextValue(), false, true),
                 AFTER_LOAD));
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(

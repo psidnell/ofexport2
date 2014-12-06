@@ -18,17 +18,17 @@ package org.psidnell.omnifocus.visitor;
 import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Project;
+import org.psidnell.omnifocus.model.Task;
 
 /**
  * @author psidnell
  *
- *         Filter out all nodes who's include flag is false.
+ * Filter out all nodes who's include flag is false.
  *
  */
-public class PruningFilter implements Visitor {
+public class ClearMarkedVisitor implements Visitor {
 
-    private static final VisitorDescriptor WHAT = new VisitorDescriptor().visit(Folder.class, Project.class, Context.class).filter(Folder.class,
-            Project.class, Context.class);
+    private static final VisitorDescriptor WHAT = new VisitorDescriptor().visitAll();
 
     @Override
     public VisitorDescriptor getWhat() {
@@ -36,18 +36,23 @@ public class PruningFilter implements Visitor {
     }
 
     @Override
-    public boolean includeUp(Context c) {
-        return c.getTaskCount() != 0 || c.getContextCount() != 0;
+    public void enter(Context node) throws Exception {
+        node.setMarked(false);
     }
 
     @Override
-    public boolean includeUp(Folder f) {
-        return f.getFolderCount() != 0 || f.getProjectCount() != 0;
+    public void enter(Project node) throws Exception {
+        node.setMarked(false);
     }
 
     @Override
-    public boolean includeUp(Project p) {
-        return p.getTaskCount() != 0;
+    public void enter(Folder node) throws Exception {
+        node.setMarked(false);
+    }
+
+    @Override
+    public void enter(Task node) throws Exception {
+        node.setMarked(false);
     }
 
     @Override

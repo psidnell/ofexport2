@@ -159,4 +159,12 @@ public class Folder extends Node {
     public void setActive(boolean active) {
         this.active = active;
     }
+
+    @Override
+    public void cascadeMarked() {
+        setMarked(true);
+        projects.stream().forEach((p) -> p.cascadeMarked());
+        folders.stream().forEach((f) -> f.cascadeMarked());
+
+    }
 }

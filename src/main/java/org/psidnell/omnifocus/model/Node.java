@@ -44,6 +44,8 @@ public abstract class Node extends ExpressionFunctions {
 
     private boolean isRoot;
 
+    private boolean marked = false;
+
     @SQLiteProperty
     @ExprAttribute(help = "item name/text.")
     public String getName() {
@@ -181,6 +183,17 @@ public abstract class Node extends ExpressionFunctions {
     public String toString() {
         return getType() + ":'" + name + "'";
     }
+
+    @JsonIgnore
+    public boolean isMarked () {
+        return marked;
+    }
+
+    public void setMarked (boolean marked) {
+        this.marked = marked;
+    }
+
+    public abstract void cascadeMarked ();
 
     public abstract boolean isAvailable();
 }

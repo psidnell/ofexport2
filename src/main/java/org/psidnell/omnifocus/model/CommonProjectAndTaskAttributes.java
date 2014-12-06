@@ -200,4 +200,11 @@ public abstract class CommonProjectAndTaskAttributes extends Node {
         String delimiter = eol + indentChars;
         return StringUtils.join(lines, delimiter, indentChars, eol);
     }
+
+
+    @Override
+    public void cascadeMarked() {
+        setMarked(true);
+        tasks.stream().forEach((t) -> t.cascadeMarked());
+    }
 }

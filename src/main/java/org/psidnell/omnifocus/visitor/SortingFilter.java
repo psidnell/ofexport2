@@ -84,4 +84,9 @@ public class SortingFilter implements Visitor {
         projects.sort(projectComparator);
         return projects;
     }
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName();
+    }
 }

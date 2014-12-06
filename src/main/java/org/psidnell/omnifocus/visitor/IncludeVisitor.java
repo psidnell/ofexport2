@@ -71,6 +71,6 @@ public class IncludeVisitor implements Visitor {
 
     @Override
     public String toString() {
-        return "IncludeVisitor: " + include;
+        return this.getClass().getSimpleName() + ":" + include;
     }
 }

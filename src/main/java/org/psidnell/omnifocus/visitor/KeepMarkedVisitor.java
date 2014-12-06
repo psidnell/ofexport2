@@ -12,74 +12,84 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
- */
+*/
 package org.psidnell.omnifocus.visitor;
-
-import java.util.HashSet;
-import java.util.Set;
 
 import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.Folder;
+import org.psidnell.omnifocus.model.Node;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
 
-/**
- * @author psidnell
- *
- *         Visits a tree collecting all the enclosed nodes by type
- */
-public class CollectingVisitor implements Visitor {
+public class KeepMarkedVisitor implements Visitor {
 
-    private final VisitorDescriptor what;
+    private static final VisitorDescriptor WHAT = new VisitorDescriptor().visitAll().filterAll();
+    private boolean projectMode;
+    private boolean cascade;
 
-    private HashSet<Project> projects = new HashSet<>();
-    private HashSet<Task> tasks = new HashSet<>();
-    private HashSet<Folder> folders = new HashSet<>();
-    private HashSet<Context> contexts = new HashSet<>();
-
-    public CollectingVisitor(VisitorDescriptor what) {
-        this.what = what;
+    public KeepMarkedVisitor (boolean projectMode, boolean cascade) {
+        this.projectMode = projectMode;
+        this.cascade = cascade;
     }
 
     @Override
     public VisitorDescriptor getWhat() {
-        return what;
+        return WHAT;
     }
 
     @Override
     public void enter(Context node) throws Exception {
-        contexts.add(node);
+        markPath(node);
     }
 
     @Override
     public void enter(Folder node) throws Exception {
-        folders.add(node);
+        markPath(node);
     }
 
     @Override
     public void enter(Project node) throws Exception {
-        projects.add(node);
+        markPath(node);
     }
 
     @Override
     public void enter(Task node) throws Exception {
-        tasks.add(node);
+        markPath(node);
     }
 
-    public Set<Folder> getFolders() {
-        return folders;
+    @Override
+    public boolean includeUp(Context c) {
+        return c.isMarked();
     }
 
-    public Set<Project> getProjects() {
-        return projects;
+    @Override
+    public boolean includeUp(Folder f) {
+        return f.isMarked();
     }
 
-    public Set<Task> getTasks() {
-        return tasks;
+    @Override
+    public boolean includeUp(Project p) {
+        return p.isMarked();
     }
 
-    public Set<Context> getContexts() {
-        return contexts;
+    @Override
+    public boolean includeUp(Task t) {
+        return t.isMarked();
+    }
+
+    private void markPath (Node node) {
+        if (node.isMarked()) {
+            if (projectMode) {
+                node.getProjectPath().stream().forEach((n)->n.setMarked(true));
+            }
+            else {
+                node.getContextPath().stream().forEach((n)->n.setMarked(true));
+            }
+
+            if (cascade) {
+                node.cascadeMarked();
+            }
+        }
     }
 
     @Override

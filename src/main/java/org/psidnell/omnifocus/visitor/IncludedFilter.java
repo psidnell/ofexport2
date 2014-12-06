@@ -57,6 +57,6 @@ public class IncludedFilter implements Visitor {
 
     @Override
     public String toString() {
-        return "IncludedFilter";
+        return this.getClass().getSimpleName();
     }
 }
