@@ -44,7 +44,7 @@ Support:
 
 Before proceeding, please select the required version of this document:
 
-- [Latest Stable Release: 1.0.8](https://github.com/psidnell/ofexport2/blob/ofexport-v2-1.0.8/README.md)
+- [Latest Stable Release: 1.0.9](https://github.com/psidnell/ofexport2/blob/ofexport-v2-1.0.9/README.md)
 - [Development Version](https://github.com/psidnell/ofexport2/blob/master/README.md)
 
 This is an early version and at the time of writing I'm making major changes. If you need something reliable and with good documentation then the original [ofexport](https://github.com/psidnell/ofexport/blob/master/DOCUMENTATION.md) is stable and functional.
@@ -103,7 +103,7 @@ You should see output similar to:
 
 To get the required files, (in increasing order of danger) either:
 
-- Download the latest stable version: [ofexport-v2-1.0.8.zip](https://github.com/psidnell/ofexport2/archive/ofexport-v2-1.0.8.zip)
+- Download the latest stable version: [ofexport-v2-1.0.9.zip](https://github.com/psidnell/ofexport2/archive/ofexport-v2-1.0.9.zip)
 - Download the current development version: [master.zip](https://github.com/psidnell/ofexport2/archive/master.zip)
 - If you want to stay on the bleeding edge, check out this git repository so you can take updates as you wish.
 
