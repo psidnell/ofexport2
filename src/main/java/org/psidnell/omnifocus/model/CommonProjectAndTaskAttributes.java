@@ -77,9 +77,12 @@ public abstract class CommonProjectAndTaskAttributes extends NodeImpl implements
     public abstract void setRemaining(boolean remaining);
 
     @ExprAttribute(help = "the context name or null.")
-    @JsonIgnore
     public String getContextName() {
         return context == null ? null : context.getName();
+    }
+
+    public void setContextName (String dummy) {
+        // Keep Jackson happy.
     }
 
     @JsonIgnore
@@ -155,6 +158,12 @@ public abstract class CommonProjectAndTaskAttributes extends NodeImpl implements
         this.flagged = flagged;
     }
 
+    @JsonIgnore
+    @ExprAttribute(help = "item is not flagged.")
+    public boolean isUnflagged () {
+        return !flagged;
+    }
+
     @SQLiteProperty
     @ExprAttribute(help="estimated minutes.")
     public Integer getEstimatedMinutes () {
@@ -209,7 +218,7 @@ public abstract class CommonProjectAndTaskAttributes extends NodeImpl implements
             return false;
         }
 
-        return dueDate != null && (dueDate.getTime() <= date (config.getDueSoon()).getTime());
+        return dueDate != null && dueDate.getTime() < date (config.getDueSoon()).getTime();
     }
 
     public void setDueSoon (boolean dummy) {
@@ -228,4 +237,37 @@ public abstract class CommonProjectAndTaskAttributes extends NodeImpl implements
     }
 
     public abstract boolean isCompleted ();
+
+    @ExprAttribute(args={"date"}, help="true if date matches.")
+    public boolean dueDateIs (String dateStr) throws ParseException {
+        Date date = date(dateStr);
+        return dueDate != null && dueDate.equals(date);
+    }
+
+    @ExprAttribute(args={"dateFrom", "dateTo"}, help="true if date within range.")
+    public boolean dueDateBetween (String from, String to) throws ParseException {
+        return within(dueDate, from, to);
+    }
+
+    @ExprAttribute(args={"date"}, help="true if date matches.")
+    public boolean completionDateIs (String dateStr) throws ParseException {
+        Date date = date(dateStr);
+        return completionDate != null && completionDate.equals(date);
+    }
+
+    @ExprAttribute(args={"dateFrom", "dateTo"}, help="true if date within range.")
+    public boolean completionDateBetween (String from, String to) throws ParseException {
+        return within(completionDate, from, to);
+    }
+
+    @ExprAttribute(args={"date"}, help="true if date matches.")
+    public boolean deferDateIs (String dateStr) throws ParseException {
+        Date date = date(dateStr);
+        return deferDate != null && deferDate.equals(date);
+    }
+
+    @ExprAttribute(args={"dateFrom", "dateTo"}, help="true if date within range.")
+    public boolean deferDateBetween (String from, String to) throws ParseException {
+        return within(deferDate, from, to);
+    }
 }

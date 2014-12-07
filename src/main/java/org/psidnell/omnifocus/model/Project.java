@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  *
  *         The database has a ProjectInfo and a root task, the union of which make up a Project.
  */
-@JsonPropertyOrder(alphabetic=true)
+@JsonPropertyOrder(alphabetic = true)
 public class Project extends CommonProjectAndTaskAttributes {
 
     public static final String ONHOLD = "inactive";
@@ -66,7 +66,7 @@ public class Project extends CommonProjectAndTaskAttributes {
         for (Task childOfRootTask : new LinkedList<>(rootTask.getTasks())) {
             add(childOfRootTask);
         }
-        rootTask.setIsProjectTask(true);
+        rootTask.setProjectTask(true);
         rootTask.setProjectModeParent(this);
     }
 
@@ -86,7 +86,7 @@ public class Project extends CommonProjectAndTaskAttributes {
     @ExprAttribute(help = "the items status: '" + ACTIVE + "', '" + ONHOLD + "', '" + COMPLETED + " or '" + DROPPED + "'.")
     public String getStatus() {
         // OmniFocus doesn't cascade folder state for us
-        if (parent!= null && !((Folder)parent).isActive()) {
+        if (parent != null && !((Folder) parent).isActive()) {
             return DROPPED;
         }
 
@@ -97,12 +97,12 @@ public class Project extends CommonProjectAndTaskAttributes {
         this.status = status;
     }
 
-    @ExprAttribute (help="project status is active.")
-    public boolean isActive () {
+    @ExprAttribute(help = "project status is active.")
+    public boolean isActive() {
         return ACTIVE.equals(getStatus());
     }
 
-    public void setActive (boolean dummy) {
+    public void setActive(boolean dummy) {
         // Keep jackson happy
     }
 
@@ -143,25 +143,25 @@ public class Project extends CommonProjectAndTaskAttributes {
         return COMPLETED.equals(getStatus());
     }
 
-    public void setIsCompleted (boolean dummy) {
+    public void setIsCompleted(boolean dummy) {
         // Keep Jackson happy
     }
 
-    @ExprAttribute (help="project status is on hold.")
-    public boolean isOnHold () {
+    @ExprAttribute(help = "project status is on hold.")
+    public boolean isOnHold() {
         return ONHOLD.equals(getStatus());
     }
 
-    public void setOnHold (boolean dummy) {
+    public void setOnHold(boolean dummy) {
         // Keep Jackson happy
     }
 
-    @ExprAttribute(help="project is dropped.")
-    public boolean isDropped () {
+    @ExprAttribute(help = "project is dropped.")
+    public boolean isDropped() {
         return DROPPED.equals(getStatus());
     }
 
-    public void setDropped (boolean dummy) {
+    public void setDropped(boolean dummy) {
         // Keep Jackson happy
     }
 }

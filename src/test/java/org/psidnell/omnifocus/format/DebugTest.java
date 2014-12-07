@@ -32,8 +32,6 @@ public class DebugTest extends FormatTest {
         StringWriter out = new StringWriter();
         ofExport.write(out);
 
-        System.out.println (out);
-
         Diff.diff (new String[]
             {
                 "Folder id:__%%RootFolder depth:0",
@@ -189,8 +187,6 @@ public class DebugTest extends FormatTest {
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
-
-        System.out.println (out);
 
         Diff.diff (new String[]
             {

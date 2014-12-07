@@ -16,4 +16,6 @@
     <suppress files="Context\.java" checks="TreeWalker"/>
     <suppress files="Folder\.java" checks="TreeWalker"/>
     <suppress files="Visitor\.java" checks="TreeWalker"/>
+    <suppress files="ContextHierarchyNode\.java" checks="TreeWalker"/>
+    <suppress files="ProjectHierarchyNode\.java" checks="TreeWalker"/>
 </suppressions>

@@ -27,4 +27,5 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ExprAttribute {
     String help();
+    String[] args() default {};
 }

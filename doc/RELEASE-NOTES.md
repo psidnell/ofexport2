@@ -1,9 +1,11 @@
 # OFEXPORT2 Release Notes
 
-## 1.0.8 (?????)
+## 1.0.8 (2014-12-07)
 
 - Flagged now works hierarchically.
 - Added estimatedMinutes.
+- Big simplification of filter usage.
+- Updated documentation.
 
 ## 1.0.7 (2014-12-05)
 

@@ -34,7 +34,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  *         When the model is build a Project is made from the root task which takes ownership of the
  *         tasks children.
  */
-@JsonPropertyOrder(alphabetic=true)
+@JsonPropertyOrder(alphabetic = true)
 public class Task extends CommonProjectAndTaskAttributes {
 
     public static final String TYPE = "Task";
@@ -171,18 +171,16 @@ public class Task extends CommonProjectAndTaskAttributes {
         // we want the exported/imported value in the json/xml
     }
 
-    @JsonIgnore
     @ExprAttribute(help = "true if task represents a project.")
     public boolean isProjectTask() {
         return isProject;
     }
 
-    public void setIsProjectTask(boolean isProject) {
+    public void setProjectTask(boolean isProject) {
         this.isProject = isProject;
     }
 
     @Override
-    @JsonIgnore
     @ExprAttribute(help = "item is complete.")
     public boolean isCompleted() {
         // Omnifocus doesn't cascade completionDate
@@ -192,13 +190,17 @@ public class Task extends CommonProjectAndTaskAttributes {
 
         if (parent != null) {
             if (parent instanceof Task) {
-                return ((Task)parent).isCompleted();
+                return ((Task) parent).isCompleted();
             }
             if (parent instanceof Project) {
-                return ((Project)parent).isCompleted() || ((Project)parent).isDropped();
+                return ((Project) parent).isCompleted() || ((Project) parent).isDropped();
             }
         }
 
         return false;
+    }
+
+    public void setCompleted(boolean dummy) {
+        // Keep Jackson happy
     }
 }

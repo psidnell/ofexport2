@@ -32,8 +32,6 @@ public class OPMLTest extends FormatTest {
         StringWriter out = new StringWriter();
         ofExport.write(out);
 
-        System.out.println (out);
-
         Diff.diff (new String[]
             {
                 "<opml version=\"1.0\">",

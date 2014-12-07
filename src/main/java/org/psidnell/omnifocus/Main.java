@@ -25,13 +25,13 @@ import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 
+import org.psidnell.omnifocus.cli.ActiveOptionProcessor;
 import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.DataCache;
 import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.sqlite.SQLiteDAO;
 import org.psidnell.omnifocus.util.IOUtils;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.context.ApplicationContext;
@@ -114,9 +114,9 @@ public class Main extends CommandLine implements BeanFactoryAware {
         }
     }
 
-    private boolean procesPreLoadOptions(String[] args) throws Exception {
+    private void procesPreLoadOptions(String[] args) throws Exception {
         // Load initial switches, help etc
-        return processor.processOptions(this, args, BEFORE_LOAD) && !exitBeforeLoad;
+        processor.processOptions(this, args, BEFORE_LOAD);
     }
 
     private void processPostLoadOptions(String[] args) throws Exception {
@@ -126,14 +126,26 @@ public class Main extends CommandLine implements BeanFactoryAware {
 
     public static void main(String[] args) throws Exception {
 
+        ActiveOptionProcessor<CommandLine> processor = new ActiveOptionProcessor<>(PROG, OPTIONS);
+
+        boolean cmdLineFailure = !processor.processOptions(null, args, STARTUP);
+
         ApplicationContext appContext = ApplicationContextFactory.getContext();
 
         Main main = appContext.getBean("main", Main.class);
+        main.setProcessor(processor);
 
-        if (!main.procesPreLoadOptions(args)) {
-            LOGGER.debug("Exiting");
+        if (cmdLineFailure || "true".equals(System.getProperty(CommandLine.PRINT_HELP))) {
+            main.printHelp();
             return;
         }
+
+        if ("true".equals(System.getProperty(CommandLine.PRINT_INFO))) {
+            main.printAdditionalInfo();
+            return;
+        }
+
+        main.procesPreLoadOptions(args);
 
         main.loadData();
 
@@ -149,7 +161,7 @@ public class Main extends CommandLine implements BeanFactoryAware {
     }
 
     @Override
-    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+    public void setBeanFactory(BeanFactory beanFactory) {
         this.beanFactory = beanFactory;
     }
 }

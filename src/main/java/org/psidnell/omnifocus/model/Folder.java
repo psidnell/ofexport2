@@ -135,7 +135,7 @@ public class Folder extends NodeImpl implements ProjectHierarchyNode {
     }
 
     @SQLiteProperty
-    @ExprAttribute(help = "true if active")
+    @ExprAttribute(help = "true if active.")
     public boolean isActive() {
         // OmniFocus doesn't cascade this status for us
         if (!active) {
@@ -153,7 +153,7 @@ public class Folder extends NodeImpl implements ProjectHierarchyNode {
         this.active = active;
     }
 
-    @ExprAttribute(help="true if dropped")
+    @ExprAttribute(help="true if dropped.")
     public boolean isDropped() {
         return !isActive();
     }

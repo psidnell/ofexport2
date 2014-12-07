@@ -16,9 +16,10 @@ limitations under the License.
 package org.psidnell.omnifocus.expr;
 
 import java.lang.reflect.Method;
-import java.util.TreeSet;
+import java.util.TreeMap;
 
 import org.psidnell.omnifocus.model.NodeImpl;
+import org.psidnell.omnifocus.util.StringUtils;
 
 /**
  * @author psidnell
@@ -27,8 +28,20 @@ import org.psidnell.omnifocus.model.NodeImpl;
  */
 public class ExprAttributePrinter {
 
+    private static class Line {
+        private String type;
+        private String nameAndArgs;
+        private String help;
+
+        Line (String type, String nameAndArgs, String help) {
+            this.type = type;
+            this.nameAndArgs = nameAndArgs;
+            this.help = help;
+        }
+    }
+
     public static void print(Class<? extends NodeImpl> clazz) {
-        TreeSet<String> info = new TreeSet<>();
+        TreeMap<String,Line> info = new TreeMap<>();
         for (Method m : clazz.getMethods()) {
 
             ExprAttribute attrib = m.getAnnotation(ExprAttribute.class);
@@ -39,16 +52,52 @@ public class ExprAttributePrinter {
                 } else if (m.getName().startsWith("get")) {
                     name = m.getName().replaceAll("^get", "");
                 }
-                if (name != null) {
-                    name = Character.toLowerCase(name.charAt(0)) + name.substring(1);
-                    String type = m.getReturnType().getSimpleName().toLowerCase();
-                    info.add("    " + name + " (" + type + "): " + attrib.help());
+                else {
+                    name = m.getName();
                 }
+                name = Character.toLowerCase(name.charAt(0)) + name.substring(1);
+                String type = m.getReturnType().getSimpleName().toLowerCase();
+
+                String nameAndArgs = name + processArgs(attrib);
+                info.put(nameAndArgs, new Line(type, nameAndArgs, attrib.help()));
             }
         }
+
+        int maxTypeLen = 0;
+        int maxNameAndArgsLen = 0;
+
         System.out.println(clazz.getSimpleName() + ":");
-        for (String line : info) {
-            System.out.println(line);
+        for (Line line : info.values()) {
+            maxTypeLen = Math.max(maxTypeLen, line.type.length());
+            maxNameAndArgsLen = Math.max(maxNameAndArgsLen, line.nameAndArgs.length());
+        }
+        for (Line line : info.values()) {
+            System.out.println ("    " + padL(line.type, maxTypeLen) + " " + padR(line.nameAndArgs, 1 + maxNameAndArgsLen) + ": " + line.help);
+        }
+    }
+
+    private static String padL(String val, int pad) {
+        String result = val;
+        while (result.length() < pad) {
+            result = " " + result;
+        }
+        return result;
+    }
+
+    private static String padR(String val, int pad) {
+        String result = val;
+        while (result.length() < pad) {
+            result = result + " ";
+        }
+        return result;
+    }
+
+    private static String processArgs(ExprAttribute attrib) {
+        if (attrib.args().length == 0) {
+            return "";
+        }
+        else {
+            return StringUtils.join(attrib.args(), ",", " (",")");
         }
     }
 }

@@ -29,6 +29,7 @@ Support:
     - [Sorting](#sorting)
     - [Pruning](#pruning)
     - [Flattening](#flattening)
+    - [Configuration](#configuration)
     - [Examples](#examples)
     - [Tips](#tips)
     - [Writing a Template](#writing-a-template)
@@ -147,15 +148,24 @@ Simply delete the ofexport2 folder and remove the lines you added to your .bash_
 
 Basic usage of the tool is fairly straight-forward. If you're familiar with omnifocus you can probably guess what these commands will show:
 
+    of2 -ti all
     of2 -ti available
     of2 -ti remaining
     of2 -ti flagged
     of2 -ti completed
     of2 -ti dueSoon
 
-GOT HERE
+The above will show tasks with the selected attributes (**filtering**) in their project hierarchy. To see them in their context hierarchy add the "-c" option, e.g.
 
-To print the contents of a named project (In this case I have a project called ofexport2, you should supply your own) type:
+    of2 -c -ti dueSoon
+
+These attributes you select on can be combined, for example:
+
+    of2 -ti dueSoon -ti available
+
+This will display tasks that are both due soon and available.
+
+To print the contents of a named project (In this case I have a project called ofexport2) type:
 
     of2 -pn 'ofexport2'
 
@@ -183,14 +193,17 @@ The default output format is a simple text list where uncompleted tasks are pref
 
 The tool has searched all the projects for those that have the exact name "ofexport2" (-pn specifies project name). For any project that matches it shows all the items directly above it (in this case my "Home" folder) and any items beneath it.
 
-The "-pn" specifies a filter (project name) and the text after it ('ofexport2') is it's argument. The single quotes around the argument aren't strictly necessary here but stop bash from attempting to interpret the contents. It's good practice to put single quotes around filter arguments since in more advanced examples they're going to contain spaces and all manner of characters from the 2nd row of your keyboard that would otherwise get bash very excited indeeed.  
+The "-pn" specifies a filter (by project name) and the text after it ('ofexport2') is it's argument. The single quotes around the argument aren't strictly necessary here but stop bash from attempting to interpret the contents. It's good practice to put single quotes around filter arguments since in more advanced examples they're going to contain spaces and all manner of special characters that would otherwise confuse bash.  
 
 ### Filtering ###
+
+Advanced queries can be assembled with filters:
 
 - Filters are expressions used to limit what Folders, Projects, Tasks or Contexts appear in the output.
 - Filters can be simple like a text search.
 - Filters can be complex expressions that make use of various attributes of an item.
 - Filters can either include items of interest or exclude unwanted items.
+- Filters can select a node, or a node and all those beneath it.
 - Any number of filters can be used.
 - Filters are executed in order, each filter is run on the results of the last, thus filters can only reduce what appears in the output.
 
@@ -255,13 +268,21 @@ There are include/exclude options for each node type. To see all the options typ
     
 You will see -fn, -fi and -fx for Folders, -tn, -ti and -tx for Tasks etc.
 
+There are also variants of these commands such as -fc, -tc etc. that are similar to -fi, -fc... except that they "cascade". That
+is that when the filter expression matches a node then you'll see the node and everything beneath it. The -pn option actually cascades
+because when you filter for a Project you probably want to see all the tasks beneath it. Try the following to see the difference:
+
+    of2 -pi 'name=="YourProject'
+    of2 -pc 'name=="YourProject'
+
 Folders, Projects, Tasks and Contexts all have attributes that you can use in filters. To get a complete list of the attributes currently available you can type:
 
     of2 -i
     
-This will print all the attributes for all the types, for example here are some of the Task attributes:
+This will print all the attributes for all the types, for example here are some of the Task attributes that can be used with "-ti":
 
-    Task:
+      Task:
+        all (boolean): true for all nodes.
         available (boolean): item is available.
         blocked (boolean): item is blocked.
         completed (boolean): item is complete.
@@ -269,12 +290,23 @@ This will print all the attributes for all the types, for example here are some 
         contextName (string): the context name or null.
         deferDate (date): date item is to start or null.
         dueDate (date): date item is due or null.
+        dueSoon (boolean): due soon.
+        estimatedMinutes (integer): estimated minutes.
         flagged (boolean): item is flagged.
-        etc ...
+        name (string): item name/text.
+        note (string): note text.
+        projectTask (boolean): true if task represents a project.
+        remaining (boolean): item is remaining.
+        sequential (boolean): item is sequential.
+        taskCount (int): number of tasks.
+        tasks (list): the sub tasks.
+        type (string): the items type: 'Task'.
+        uncompletedTaskCount (int): number of uncompleted tasks.
+        unflagged (boolean): item is not flagged.
 
 Any number of expressions can be provided and filtering expressions can be any valid OGNL expression. These can be complex logical expressions:
 
-    of2 -pi 'flagged && !available && taskCount > 1'
+    of2 -ti 'flagged && !available && taskCount > 1'
 
 Using filter expressions it's possible to get fine grained control of what's printed.
 
@@ -296,6 +328,7 @@ The supported suffixes are:
 - opml: OPML format
 - csv: CSV format
 - html: HTML format
+- debug: A text format that contains all attributes of nodes
 
 If you want to specify a format different from the one derived from the output file (or are printing to the console) you can use "-f fmt".
 
@@ -328,19 +361,23 @@ a great deal of flexibility in what can be achieved in the expressions.
 
 #### Date Filters ####
 
-There are various ways to match on dates, for example:
+Tasks and Projects have several dates:
 
-    of2 -te 'completed && completionDate > date("2014-11-26")'
-    of2 -te 'completionDate==date("today")'
-    of2 -te 'within(completionDate,"25th","yesterday")'
+- completionDate
+- deferDate
+- dueDate
+- completionDate
+
+There are various ways to match on dates and dateRanges:
+
+    of2 -ti 'completionDateIs("2014-11-26")'
+    of2 -ti 'completionDateBetween("yesterday","tomorrow")'
+    of2 -ti 'completionDate != null && completionDate > date("today")'
+    of2 -ti dueSoon
  
-We're making use of some special custom functions here:
-
-- **date** takes a date in string form and converts it to a Date object for use in the expression.
-- **within** expressions takes 3 arguments (attrib, fromString, toString) and returns true if the date attribute is within the range.
-
 The strings formats of dates that are accepted are:
 
+- **"yesterday"**,**"today"**,**"tomorrow"**
 - **"2014-11-19"**: specific date (yyyy-mm-dd).
 - **"Mon"**, **"mon"**, **"Monday"**, **"monday"**: the monday of this week (weeks start on Monday).
 - **"-mon"**: the monday of last week.
@@ -384,53 +421,90 @@ The **-F** option flattens nested the hierarchy to just Folder/Projects/Contexts
 
 All projects and contexts are moved to the root level, and sub tasks moved up to the level of their parent.
 
+### Configuration ###
+
+Configuration files you might need to modify are:
+
+    /config
+    /config/templates/... - FreeMarker templates.
+    /config/config.properties - Config values for the application and templates.
+    /config/config.xml - contains the possible locations for the OmniFocus database.
+
+It's possible to override values in config.properties from the command line, for example reducing the dueSoon time to 2 days:
+
+    of2 -D 'dueSoon=2d' -ti dueSoon
+    
 ### Examples ###
 
-All available tasks. We want to see available tasks, but not their completed sub tasks, hence the two filters:
+Filtering **Tasks/Projects** on **status**:
 
-    of2 -ti available -tx '!available'
+    of2 -ti flagged
+    of2 -ti unflagged
+    of2 -ti '!flagged
+    of2 -tx flagged
+    of2 -pi flagged
+    of2 -pi unflagged
+    of2 -pc flagged
 
-All available tasks. A different approach, exclude all non available tasks and prune out remeaining empty projects:
+Filtering **Tasks/Projects** on **availability**:
 
-    of2 -tx '!available' -p
-
-All available tasks but organised by context, task hierarchies don't exist in context mode so one filter will do:
-
-    of2 -c -ti available
-
-All flagged and available tasks (two forms):
-
-    of2 -ti flagged -ti available
-    of2 -ti 'flagged && available'
-
-
-All remaining tasks:
-
+    of2 -ti all
+    of2 -ti available
     of2 -ti remaining
-    
-All available tasks due within the next week:
+    of2 -ti completed
+    of2 -pi remaining
+    of2 -pc available
 
-    of2 -ti 'available && within(dueDate,"today","7d")'
+Filtering **Tasks/Projects** on **duration**:
 
-All contexts that have no tasks or sub contexts:
+    of2 -ti 'estimatedMinutes > 20'
+    of2 -ti 'estimatedMinutes==-1' (unestimated)
+    of2 -pi 'estimatedMinutes > 5 && estimatedMinutes < 10'
 
-    of2 -c -ci 'taskCount==0 && contextCount==0'
+Filtering **Projects** on their **status**:
 
-All completed projects, but not their tasks:
+    of2 -pi active
+    of2 -pc onHold
+    of2 -px completed
+    of2 -pi dropped
 
-    of2 -pi completed -tx true
+*Note: stalled and pending are not yet supported*
 
-Anything (folder, project task - because we're in project mode) that contains "spark plug" in upper or lower case:
+Filtering items by their **text**/**note**:
 
-    of2 -ai 'name.toLowerCase().contains("spark plug")'
+    of2 -c -cn 'exact name of context'
+    of2 -pc 'name.contains("text in folder name")'
+    of2 -fc 'name.matches(".*regularExpressionOnFolderName.*")'
+    of2 -ti 'note!=null && note.contains("stuff")'
 
-Any task with a note containing "towel":
+Filtering **Tasks**/**Projects** by **dates**:
 
-    of2 -ti 'note!=null && note.contains("towel")'
+    of2 -ti dueSoon
+    of2 -ti 'dueDateIs("today")'
+    of2 -ti 'deferDateIs("tomorrow")'
+    of2 -ti 'completionDateBetween("mon","fri")'
+    of2 -ti 'dueDate != null && dueDate < date("tomorrow")'
+
+Filtering **Folders** by **status**:
+
+     of2 -fi active
+     of2 -fx dropped
+
+Filtering **Contexts** by **status**:
+
+    of2 -c -ci active
+    of2 -c -cc onHold
+    of2 -c -cx dropped
+
+Useful Combinations:
+
+    of2 -ti 'available && deferDateIs("today")'
+    of2 -ti 'available && (dueSoon || flagged)'
+    of2 -ti 'completionDateBetween("mon","today")'
 
 What I do to generate weekly reports. I want a flattened list of work tasks completed this week:
 
-    of2 -fn 'Work' -ti 'completed && completionDate >= date("mon")' -p -F -f report -o ~/Desktop/Report.taskpaper
+    of2 -fn 'Work' -px 'name.contains("Routine")' -ti 'completionDateBetween("mon","today")' -p -F -f report -O ~/Desktop/Report.taskpaper
 
 ### Tips ###
 
@@ -442,29 +516,25 @@ Generate a report containing projects whose note contains "#report#".
 
 #### Save Useful Commands as Scripts ####
 
-Here's my "today" script. It creates a TaskPaper file on my desktop that contains everything I've completed today (excluding routine maintenance tasks) and then opens TaskPaper on the file. To be able to do this is pretty much why I wrote the tool.
+Keeping any more complex commands you use frequently as scripts saves a lot of time.
 
-    !/bin/bash
+Here's one of my base scripts as an example.
+
+    #!/bin/bash
     
     FOLDER="$1"
-    
-    if [ -z "$FOLDER" ]; then
-        FOLDER="Work"
-    fi
+    WHEN="$2"
     
     FILE="$HOME/Desktop/REPORT-$FOLDER-`date +"%Y-W%V-%h-%d"`.taskpaper"
     
     ofexport2 \
-     -fi "name==\"$FOLDER\"" \
-     -fx 'name=="Routine Maint"' \
-     -ti 'completed && completionDate >= date("today")' \
-     -F -p \
+     -ac "(type==\"Folder\" && name.matches(\"$FOLDER|Anywhere\")) || (type==\"Project\" && name==\"Inbox\")" \
+     -fx 'name.contains("Routine Maint")' \
+     -F \
+     -ti "completed && completionDate >= date(\"$WHEN\")" \
+     -p \
      -f report \
-     -o "$FILE"
-    
-    open $FILE
-
-I have an almost identical script called "thisweek" where the "today" is replaced with "mon".
+     -O "$FILE"
 
 ### Writing a Template ###
 

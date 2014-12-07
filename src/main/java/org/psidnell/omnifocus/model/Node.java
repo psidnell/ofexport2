@@ -17,6 +17,11 @@ package org.psidnell.omnifocus.model;
 
 import org.psidnell.omnifocus.ConfigParams;
 
+/**
+ * @author psidnell
+ *
+ * Root node interface.
+ */
 public interface Node {
 
     String getName();

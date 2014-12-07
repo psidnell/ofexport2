@@ -134,8 +134,14 @@ public abstract class NodeImpl extends ExpressionFunctions implements Node {
         this.marked = marked;
     }
 
+    @ExprAttribute(help="true for all nodes.")
+    @JsonIgnore
+    public boolean isAll () {
+        return true;
+    }
+
     @Override
-    public void setConfigParams (ConfigParams config) {
+    public void setConfigParams(ConfigParams config) {
         this.config = config;
     }
 }

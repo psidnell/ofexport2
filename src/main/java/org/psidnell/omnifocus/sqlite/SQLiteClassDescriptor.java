@@ -31,10 +31,9 @@ import org.springframework.beans.factory.BeanFactory;
  *
  * @param <T>
  *
- * Describes a class used for storing data extracted from SQLite.
+ *            Describes a class used for storing data extracted from SQLite.
  *
- * The class is searched for annotated getter methods to determine
- * the mapping.
+ *            The class is searched for annotated getter methods to determine the mapping.
  */
 public class SQLiteClassDescriptor<T> {
     private static final int TWO_THOUSAND_AND_ONE = 2001;
@@ -85,7 +84,8 @@ public class SQLiteClassDescriptor<T> {
         return Character.toLowerCase(methodName.charAt(prefixLen)) + methodName.substring(prefixLen + 1);
     }
 
-    public Collection<T> load(ResultSet rs, BeanFactory beanFactory) throws SQLException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    public Collection<T> load(ResultSet rs, BeanFactory beanFactory) throws SQLException, InvocationTargetException, InstantiationException,
+            IllegalAccessException {
         LinkedList<T> tasks = new LinkedList<>();
         while (rs.next()) {
             T instance = beanFactory.getBean(clazz.getSimpleName().toLowerCase(), clazz);

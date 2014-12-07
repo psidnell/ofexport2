@@ -38,18 +38,21 @@ import org.slf4j.LoggerFactory;
  */
 public class CommandLine {
 
+    protected static final String PRINT_HELP = "printHelp";
+    protected static final String PRINT_INFO = "printInfo";
+
     protected final static Logger LOGGER = LoggerFactory.getLogger(CommandLine.class);
 
     final static Options OPTIONS = new Options();
 
-    protected static final int BEFORE_LOAD = 0;
-    protected static final int AFTER_LOAD = 1;
+    protected static final int STARTUP = 0;
+    protected static final int BEFORE_LOAD = 1;
+    protected static final int AFTER_LOAD = 2;
 
     public static final String PROG = "ofexport2";
 
-    protected ActiveOptionProcessor<CommandLine> processor = new ActiveOptionProcessor<>(PROG, OPTIONS);
+    protected ActiveOptionProcessor<CommandLine> processor;
     protected String jsonInputFile = null;
-    protected boolean exitBeforeLoad = false;
     protected String outputFile = null;
     protected OFExport ofexport = null;
     protected String format = null;
@@ -61,13 +64,13 @@ public class CommandLine {
 
         OPTIONS.addOption(new ActiveOption<CommandLine> (
                 "h", false, "print help.",
-                (m,o)->m.printHelp (),
-                BEFORE_LOAD));
+                (m,o)->System.setProperty(PRINT_HELP, "true"),
+                STARTUP));
 
         OPTIONS.addOption(new ActiveOption<CommandLine> (
                 "i", false, "print additional help information.",
-                (m,o)->m.printAdditionalInfo (),
-                BEFORE_LOAD));
+                (m,o)->System.setProperty(PRINT_INFO, "true"),
+                STARTUP));
 
         // PROJECT
 
@@ -236,10 +239,15 @@ public class CommandLine {
                 (m,o)->{m.outputFile = o.nextValue(); m.open=true;},
                 BEFORE_LOAD));
 
-        // DEBUG/DEV
+        // DEBUG/DEV/CONFIG
 
         OPTIONS.addOption(new ActiveOption<CommandLine> (
-                "l", "load", true, "load data from JSON file instead of database (for testing).",
+                "D", true, "set property: name=value.",
+                (m,o)->setSystemProperty (o.nextValue()),
+                STARTUP));
+
+        OPTIONS.addOption(new ActiveOption<CommandLine> (
+                "l", true, "load data from JSON file instead of database (for testing).",
                 (m,o)->m.jsonInputFile = o.nextValue(),
                 BEFORE_LOAD));
 
@@ -249,20 +257,14 @@ public class CommandLine {
                 BEFORE_LOAD));
     }
 
-    protected void printHelp() throws IOException {
-        processor.printHelp();
-        exitBeforeLoad = true;
-    }
-
-    protected void printAdditionalInfo() {
-        ExprAttributePrinter.print(Folder.class);
-        System.out.println();
-        ExprAttributePrinter.print(Project.class);
-        System.out.println();
-        ExprAttributePrinter.print(Context.class);
-        System.out.println();
-        ExprAttributePrinter.print(Task.class);
-        exitBeforeLoad = true;
+    private static void setSystemProperty(String attribValue) {
+        int index = attribValue.indexOf('=');
+        if (index == -1) {
+            throw new IllegalArgumentException("Expected attrib=value, got:" + attribValue);
+        }
+        String attrib = attribValue.substring(0, index);
+        String value = attribValue.substring(index + 1);
+        System.setProperty(attrib, value);
     }
 
     protected void setLogLevel(String logLevel) {
@@ -285,11 +287,29 @@ public class CommandLine {
         LOGGER.debug("Log level is " + logLevel);
     }
 
+    protected void printHelp() throws IOException {
+        processor.printHelp();
+    }
+
+    protected void printAdditionalInfo() {
+        ExprAttributePrinter.print(Folder.class);
+        System.out.println();
+        ExprAttributePrinter.print(Project.class);
+        System.out.println();
+        ExprAttributePrinter.print(Context.class);
+        System.out.println();
+        ExprAttributePrinter.print(Task.class);
+    }
+
     private static String escape(String val) {
         return val.replaceAll("'", "\'");
     }
 
     public void setOfexport(OFExport ofexport) {
         this.ofexport = ofexport;
+    }
+
+    public void setProcessor (ActiveOptionProcessor<CommandLine> processor) {
+        this.processor = processor;
     }
 }

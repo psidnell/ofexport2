@@ -68,6 +68,6 @@ public class ProjectInfo {
         this.singleActionList = singleActionList;
     }
 
-    public void setConfigParams (ConfigParams config) {
+    public void setConfigParams(ConfigParams config) {
     }
 }
