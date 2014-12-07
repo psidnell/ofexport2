@@ -18,7 +18,7 @@ package org.psidnell.omnifocus.expr;
 import java.lang.reflect.Method;
 import java.util.TreeSet;
 
-import org.psidnell.omnifocus.model.Node;
+import org.psidnell.omnifocus.model.NodeImpl;
 
 /**
  * @author psidnell
@@ -27,7 +27,7 @@ import org.psidnell.omnifocus.model.Node;
  */
 public class ExprAttributePrinter {
 
-    public static void print(Class<? extends Node> clazz) {
+    public static void print(Class<? extends NodeImpl> clazz) {
         TreeSet<String> info = new TreeSet<>();
         for (Method m : clazz.getMethods()) {
 

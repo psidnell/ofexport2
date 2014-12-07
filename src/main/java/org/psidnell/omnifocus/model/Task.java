@@ -41,7 +41,6 @@ public class Task extends CommonProjectAndTaskAttributes {
 
     private String parentTaskId;
     private String contextId;
-    private CommonProjectAndTaskAttributes parent;
     private boolean blocked = false;
     private boolean inInbox;
     private boolean isProject;
@@ -100,21 +99,11 @@ public class Task extends CommonProjectAndTaskAttributes {
 
     @Override
     @JsonIgnore
-    public Node getProjectModeParent() {
-        return parent;
-    }
-
-    public void setParent(CommonProjectAndTaskAttributes parent) {
-        this.parent = parent;
-    }
-
-    @Override
-    @JsonIgnore
-    public List<Node> getProjectPath() {
+    public List<ProjectHierarchyNode> getProjectPath() {
         if (parent != null) {
             return getProjectPath(parent);
         } else {
-            LinkedList<Node> result = new LinkedList<>();
+            LinkedList<ProjectHierarchyNode> result = new LinkedList<>();
             result.add(this);
             return result;
         }
@@ -126,11 +115,10 @@ public class Task extends CommonProjectAndTaskAttributes {
             oldParent.getTasks().remove(child);
         }
 
-        child.setParent(this);
+        child.setProjectModeParent(this);
         tasks.add(child);
     }
 
-    @Override
     @ExprAttribute(help = "item is available.")
     public boolean isAvailable() {
 
@@ -138,13 +126,13 @@ public class Task extends CommonProjectAndTaskAttributes {
             return false;
         }
 
-        if (context != null && !context.isAvailable()) {
+        if (context != null && !context.isActive()) {
             return false;
         }
 
         Project project = getEnclosingProject();
 
-        if (project != null && !project.isAvailable()) {
+        if (project != null && !project.isActive()) {
             return false;
         }
 
@@ -166,8 +154,7 @@ public class Task extends CommonProjectAndTaskAttributes {
         return (Project) node;
     }
 
-    @Override
-    public void setAvailable(boolean ignored) {
+    public void setAvailable(boolean dummy) {
         // Dummy setter for derived value since
         // we want the exported/imported value in the json/xml
     }
@@ -179,7 +166,7 @@ public class Task extends CommonProjectAndTaskAttributes {
     }
 
     @Override
-    public void setRemaining(boolean ignored) {
+    public void setRemaining(boolean dummy) {
         // Dummy setter for derived value since
         // we want the exported/imported value in the json/xml
     }
@@ -192,5 +179,26 @@ public class Task extends CommonProjectAndTaskAttributes {
 
     public void setIsProjectTask(boolean isProject) {
         this.isProject = isProject;
+    }
+
+    @Override
+    @JsonIgnore
+    @ExprAttribute(help = "item is complete.")
+    public boolean isCompleted() {
+        // Omnifocus doesn't cascade completionDate
+        if (completionDate != null) {
+            return true;
+        }
+
+        if (parent != null) {
+            if (parent instanceof Task) {
+                return ((Task)parent).isCompleted();
+            }
+            if (parent instanceof Project) {
+                return ((Project)parent).isCompleted() || ((Project)parent).isDropped();
+            }
+        }
+
+        return false;
     }
 }

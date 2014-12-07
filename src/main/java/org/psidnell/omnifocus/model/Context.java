@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  *
  */
 @JsonPropertyOrder(alphabetic=true)
-public class Context extends Node {
+public class Context extends NodeImpl implements ContextHierarchyNode{
 
     public static final String TYPE = "Context";
 
@@ -100,23 +100,59 @@ public class Context extends Node {
     }
 
     @JsonIgnore
-    public Context getParent() {
+    @Override
+    public Context getContextModeParent() {
         return parent;
     }
 
-    public void setParent(Context parent) {
+    @Override
+    public void setContextModeParent(Context parent) {
         this.parent = parent;
     }
 
-    @SQLiteProperty
-    // @ExprAttribute(help = "true if context is active.") doesn't do what I think it does, always
-    // true - vestigial?
-    public boolean isActive() {
+    @SQLiteProperty(name="active")
+    public boolean isActiveFlag() {
         return active;
     }
 
-    public void setActive(boolean active) {
+    public void setActiveFlag(boolean active) {
         this.active = active;
+    }
+
+    @ExprAttribute(help = "true if context is active.")
+    public boolean isActive() {
+        return active && allowsNextAction;
+    }
+
+    public void setActive(boolean dummy) {
+        // To keep jackson happy
+    }
+
+    @ExprAttribute(help = "true if context is on hold.")
+    public boolean isOnHold () {
+        return active && !allowsNextAction;
+    }
+
+    public void setOnHold (boolean dummy) {
+        // Keep Jackson happy
+    }
+
+    @ExprAttribute(help = "true if context is dropped.")
+    public boolean isDropped () {
+        // Unlike the other statuses dropped does cascade
+        if (!active) {
+            return true;
+        }
+
+        if (parent != null) {
+            return parent.isDropped();
+        }
+
+        return false;
+    }
+
+    public void setDropped (boolean dummy) {
+        // Keep Jackson happy
     }
 
     @SQLiteProperty
@@ -130,45 +166,29 @@ public class Context extends Node {
 
     @Override
     @JsonIgnore
-    public List<Node> getProjectPath() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    @JsonIgnore
-    public List<Node> getContextPath() {
+    public List<ContextHierarchyNode> getContextPath() {
         return getContextPath(parent);
     }
 
     public void add(Context child) {
-        Context oldParent = child.getParent();
+        Context oldParent = child.getContextModeParent();
         if (oldParent != null) {
             oldParent.getContexts().remove(child);
         }
 
         contexts.add(child);
-        child.setParent(this);
+        child.setContextModeParent(this);
 
     }
 
     public void add(Task child) {
-        Context oldParent = child.getContext();
+        Context oldParent = child.getContextModeParent();
         if (oldParent != null) {
             oldParent.getTasks().remove(child);
         }
 
         tasks.add(child);
-        child.setContext(this);
-    }
-
-    @Override
-    @ExprAttribute(help = "context is available.")
-    public boolean isAvailable() {
-        return allowsNextAction;
-    }
-
-    public void setAvailable(boolean dummy) {
-        // Dummy method to allow Jackson deserialisation
+        child.setContextModeParent(this);
     }
 
     @Override
@@ -176,17 +196,5 @@ public class Context extends Node {
         setMarked(true);
         tasks.stream().forEach((t) -> t.setMarked(true));
         contexts.stream().forEach((c) -> c.cascadeMarked());
-    }
-
-    @Override
-    @JsonIgnore
-    public boolean isCompleted() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    @JsonIgnore
-    public Node getProjectModeParent() {
-        throw new UnsupportedOperationException();
     }
 }

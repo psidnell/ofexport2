@@ -35,9 +35,12 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonPropertyOrder(alphabetic=true)
 public class Project extends CommonProjectAndTaskAttributes {
 
+    public static final String ONHOLD = "inactive";
+    public static final String ACTIVE = "active";
+    public static final String COMPLETED = "done";
+    public static final String DROPPED = "dropped";
     public static final String TYPE = "Project";
-    private Folder folder;
-    private String status = "active";
+    private String status = ACTIVE;
     private boolean singleActionList;
 
     public Project() {
@@ -64,7 +67,7 @@ public class Project extends CommonProjectAndTaskAttributes {
             add(childOfRootTask);
         }
         rootTask.setIsProjectTask(true);
-        rootTask.setParent(this);
+        rootTask.setProjectModeParent(this);
     }
 
     @Override
@@ -76,26 +79,31 @@ public class Project extends CommonProjectAndTaskAttributes {
 
     @Override
     @JsonIgnore
-    public List<Node> getProjectPath() {
-        return getProjectPath(folder);
+    public List<ProjectHierarchyNode> getProjectPath() {
+        return getProjectPath(parent);
     }
 
-    @JsonIgnore
-    public Folder getFolder() {
-        return folder;
-    }
-
-    public void setFolder(Folder folder) {
-        this.folder = folder;
-    }
-
-    @ExprAttribute(help = "the items status: 'active', 'inactive' or 'done'.")
+    @ExprAttribute(help = "the items status: '" + ACTIVE + "', '" + ONHOLD + "', '" + COMPLETED + " or '" + DROPPED + "'.")
     public String getStatus() {
+        // OmniFocus doesn't cascade folder state for us
+        if (parent!= null && !((Folder)parent).isActive()) {
+            return DROPPED;
+        }
+
         return status;
     }
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    @ExprAttribute (help="project status is active.")
+    public boolean isActive () {
+        return ACTIVE.equals(getStatus());
+    }
+
+    public void setActive (boolean dummy) {
+        // Keep jackson happy
     }
 
     public void add(Task child) {
@@ -104,26 +112,14 @@ public class Project extends CommonProjectAndTaskAttributes {
             oldParent.getTasks().remove(child);
         }
 
-        child.setParent(this);
+        child.setProjectModeParent(this);
         tasks.add(child);
-    }
-
-    @Override
-    @ExprAttribute(help = "item is available.")
-    public boolean isAvailable() {
-        return !isCompleted() && "active".equals(status);
-    }
-
-    @Override
-    public void setAvailable(boolean ignored) {
-        // Dummy setter for derived value since
-        // we want the exported/imported value in the json/xml
     }
 
     @Override
     @ExprAttribute(help = "item is remaining.")
     public boolean isRemaining() {
-        return !isCompleted() && !"done".equals(getStatus());
+        return !isCompleted() && !COMPLETED.equals(getStatus());
     }
 
     @Override
@@ -142,9 +138,30 @@ public class Project extends CommonProjectAndTaskAttributes {
     }
 
     @Override
-    @JsonIgnore
-    public Node getProjectModeParent() {
-        return folder;
+    @ExprAttribute(help = "item is complete.")
+    public boolean isCompleted() {
+        return COMPLETED.equals(getStatus());
     }
 
+    public void setIsCompleted (boolean dummy) {
+        // Keep Jackson happy
+    }
+
+    @ExprAttribute (help="project status is on hold.")
+    public boolean isOnHold () {
+        return ONHOLD.equals(getStatus());
+    }
+
+    public void setOnHold (boolean dummy) {
+        // Keep Jackson happy
+    }
+
+    @ExprAttribute(help="project is dropped.")
+    public boolean isDropped () {
+        return DROPPED.equals(getStatus());
+    }
+
+    public void setDropped (boolean dummy) {
+        // Keep Jackson happy
+    }
 }

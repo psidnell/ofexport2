@@ -143,7 +143,7 @@ public class DataCache implements BeanFactoryAware {
             if (contextId != null) {
                 Context context = contexts.get(contextId);
                 context.getTasks().add(task);
-                task.setContext(context);
+                task.setContextModeParent(context);
             }
         }
 
@@ -257,7 +257,7 @@ public class DataCache implements BeanFactoryAware {
      * @throws JsonMappingException
      * @throws IOException
      */
-    public static void exportData(File file, Predicate<Node> filterFn, SQLiteDAO sqliteDAO, BeanFactory beanFactory) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+    public static void exportData(File file, Predicate<NodeImpl> filterFn, SQLiteDAO sqliteDAO, BeanFactory beanFactory) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
             InstantiationException, SQLException, JsonGenerationException, JsonMappingException, IOException {
 
         try (

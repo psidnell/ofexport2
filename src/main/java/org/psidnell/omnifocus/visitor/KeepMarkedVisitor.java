@@ -16,9 +16,11 @@ limitations under the License.
 package org.psidnell.omnifocus.visitor;
 
 import org.psidnell.omnifocus.model.Context;
+import org.psidnell.omnifocus.model.ContextHierarchyNode;
 import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Node;
 import org.psidnell.omnifocus.model.Project;
+import org.psidnell.omnifocus.model.ProjectHierarchyNode;
 import org.psidnell.omnifocus.model.Task;
 
 /**
@@ -85,10 +87,10 @@ public class KeepMarkedVisitor implements Visitor {
     private void markPath (Node node) { // NOPMD it's confused and thinks it's unused
         if (node.isMarked()) {
             if (projectMode) {
-                node.getProjectPath().stream().forEach((n)->n.setMarked(true));
+                ((ProjectHierarchyNode)node).getProjectPath().stream().forEach((n)->n.setMarked(true));
             }
             else {
-                node.getContextPath().stream().forEach((n)->n.setMarked(true));
+                ((ContextHierarchyNode)node).getContextPath().stream().forEach((n)->n.setMarked(true));
             }
 
             if (cascade) {

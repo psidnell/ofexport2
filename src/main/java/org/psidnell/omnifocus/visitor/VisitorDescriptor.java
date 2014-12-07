@@ -15,7 +15,7 @@ limitations under the License.
  */
 package org.psidnell.omnifocus.visitor;
 
-import org.psidnell.omnifocus.model.Node;
+import org.psidnell.omnifocus.model.NodeImpl;
 
 /**
  * @author psidnell
@@ -49,8 +49,8 @@ public class VisitorDescriptor {
     }
 
     @SafeVarargs
-    public final VisitorDescriptor visit(Class<? extends Node>... classes) {
-        for (Class<? extends Node> clazz : classes) {
+    public final VisitorDescriptor visit(Class<? extends NodeImpl>... classes) {
+        for (Class<? extends NodeImpl> clazz : classes) {
             switch (clazz.getSimpleName()) {
                 case "Folder":
                     visitFolders = true;
@@ -72,8 +72,8 @@ public class VisitorDescriptor {
     }
 
     @SafeVarargs
-    public final VisitorDescriptor filter(Class<? extends Node>... classes) {
-        for (Class<? extends Node> clazz : classes) {
+    public final VisitorDescriptor filter(Class<? extends NodeImpl>... classes) {
+        for (Class<? extends NodeImpl> clazz : classes) {
             switch (clazz.getSimpleName()) {
                 case "Folder":
                     filterFolders = true;

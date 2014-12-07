@@ -32,16 +32,17 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * Represents the attributes shared between a Project and a Task.
  *
  */
-public abstract class CommonProjectAndTaskAttributes extends Node {
+public abstract class CommonProjectAndTaskAttributes extends NodeImpl implements ProjectHierarchyNode, ContextHierarchyNode{
 
     protected Context context;
     private String note;
     private Date deferDate;
     private Date dueDate;
-    private Date completionDate;
+    protected Date completionDate;
     private boolean sequential = false;
     private boolean flagged = false;
     protected int estimatedMinutes = -1;
+    protected ProjectHierarchyNode parent;
     protected List<Task> tasks = new LinkedList<>();
 
     @ExprAttribute(help = "number of tasks.")
@@ -71,14 +72,9 @@ public abstract class CommonProjectAndTaskAttributes extends Node {
         this.tasks = tasks;
     }
 
-    @Override
-    public abstract boolean isAvailable();
-
-    public abstract void setAvailable(boolean ignored);
-
     public abstract boolean isRemaining();
 
-    public abstract void setRemaining(boolean ignored);
+    public abstract void setRemaining(boolean remaining);
 
     @ExprAttribute(help = "the context name or null.")
     @JsonIgnore
@@ -87,11 +83,13 @@ public abstract class CommonProjectAndTaskAttributes extends Node {
     }
 
     @JsonIgnore
-    public Context getContext() {
+    @Override
+    public Context getContextModeParent() {
         return context;
     }
 
-    public void setContext(Context context) {
+    @Override
+    public void setContextModeParent(Context context) {
         this.context = context;
     }
 
@@ -137,24 +135,6 @@ public abstract class CommonProjectAndTaskAttributes extends Node {
         this.completionDate = roundToDay(completionDate);
     }
 
-    @Override
-    @JsonIgnore
-    @ExprAttribute(help = "item is complete.")
-    public boolean isCompleted() {
-        // No effectiveCompleted db field, completion
-        // may
-        if (completionDate != null) {
-            return true;
-        }
-
-        Node parent = getProjectModeParent();
-        while (parent != null) {
-            parent = parent.getProjectModeParent ();
-        }
-
-        return completionDate != null;
-    }
-
     @SQLiteProperty
     @ExprAttribute(help = "item is sequential.")
     public boolean isSequential() {
@@ -187,7 +167,7 @@ public abstract class CommonProjectAndTaskAttributes extends Node {
 
     @Override
     @JsonIgnore
-    public List<Node> getContextPath() {
+    public List<ContextHierarchyNode> getContextPath() {
         return getContextPath(context);
     }
 
@@ -225,10 +205,27 @@ public abstract class CommonProjectAndTaskAttributes extends Node {
 
     @ExprAttribute (help="due soon.")
     public boolean isDueSoon () throws ParseException {
-        return completionDate == null && dueDate != null && (dueDate.getTime() <= date (config.getDueSoon()).getTime());
+        if (isCompleted()) {
+            return false;
+        }
+
+        return dueDate != null && (dueDate.getTime() <= date (config.getDueSoon()).getTime());
     }
 
     public void setDueSoon (boolean dummy) {
         // To satisfy Jackson
     }
+
+    @Override
+    @JsonIgnore
+    public ProjectHierarchyNode getProjectModeParent() {
+        return parent;
+    }
+
+    @Override
+    public void setProjectModeParent(ProjectHierarchyNode node) {
+        this.parent = node;
+    }
+
+    public abstract boolean isCompleted ();
 }

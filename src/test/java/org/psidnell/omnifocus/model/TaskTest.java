@@ -17,9 +17,11 @@ package org.psidnell.omnifocus.model;
 
 import static org.junit.Assert.*;
 
+import java.text.ParseException;
 import java.util.Date;
 
 import org.junit.Test;
+import org.psidnell.omnifocus.ConfigParams;
 
 public class TaskTest {
 
@@ -70,7 +72,7 @@ public class TaskTest {
         assertFalse (t.isAvailable());
     }
 
-    @Test public void testAvailabilityNotInheritedFromParentTask () {
+    @Test public void testAvailabilityInheritedFromParentTask () {
 
         Task parent = new Task ("parent");
         Task child = new Task ("child");
@@ -83,7 +85,8 @@ public class TaskTest {
 
         parent.setBlocked(false);
         parent.setCompletionDate(new Date());
-        assertTrue (child.isAvailable());
+        // but completion does cascade
+        assertFalse (child.isAvailable());
 
         parent.setBlocked(true);
         parent.setCompletionDate(null);
@@ -99,14 +102,6 @@ public class TaskTest {
         assertTrue (child.isAvailable());
 
         parent.setStatus("inactive");
-        assertFalse (child.isAvailable());
-
-        parent.setStatus("active");
-        parent.setCompletionDate(new Date());
-        assertFalse (child.isAvailable());
-
-        parent.setStatus("inactive");
-        parent.setCompletionDate(null);
         assertFalse (child.isAvailable());
     }
 
@@ -180,5 +175,108 @@ public class TaskTest {
         child.setCompletionDate(new Date ());
 
         assertEquals (0, parent.getUncompletedTaskCount());
+    }
+
+    @Test
+    public void testIsComplete () {
+
+        Folder f = new Folder ("f");
+
+        Project p = new Project ("p");
+        f.add(p);
+
+        Task t1 = new Task ("t1");
+        p.add(t1);
+
+        Task t2 = new Task ("t2");
+        t1.add(t2);
+
+        assertFalse (t2.isCompleted());
+        t2.setCompletionDate(new Date());
+        assertTrue(t2.isCompleted());
+        t2.setCompletionDate(null);
+
+        assertFalse (t2.isCompleted());
+        t1.setCompletionDate(new Date());
+        assertTrue(t2.isCompleted());
+        t1.setCompletionDate(null);
+
+        assertFalse (t2.isCompleted());
+        p.setStatus(Project.COMPLETED);
+        assertTrue (t2.isCompleted());
+        p.setStatus(Project.ACTIVE);
+
+        assertFalse (t2.isCompleted());
+        p.setStatus(Project.DROPPED);
+        assertTrue (t2.isCompleted());
+        p.setStatus(Project.ACTIVE);
+
+        assertFalse (t2.isCompleted());
+        f.setActive(false);
+        assertTrue (t2.isCompleted());
+    }
+
+    @Test
+    public void testIsDueSoon () throws ParseException {
+
+        ConfigParams config = new ConfigParams();
+        config.setDueSoon("1d");
+
+        Folder f = new Folder ("f");
+
+        Project p = new Project ("p");
+        p.setConfigParams(config);
+        f.add(p);
+
+        Task t = new Task ("t");
+        t.setConfigParams(config);
+        p.add(t);
+
+        assertFalse (t.isDueSoon());
+        t.setDueDate(new Date());
+        assertTrue(t.isDueSoon());
+        t.setDueDate(null);
+
+        assertFalse (t.isDueSoon());
+        p.setDueDate(new Date());
+        assertFalse (t.isDueSoon()); // this is cascaded by omnifocus
+        p.setDueDate(null);
+
+        assertFalse (t.isDueSoon());
+        p.setStatus(Project.COMPLETED);
+        p.setDueDate(new Date());
+        assertFalse (t.isDueSoon());
+        p.setStatus(Project.ACTIVE);
+
+        assertFalse (t.isDueSoon());
+        p.setDueDate(new Date());
+        f.setActive(false);
+        assertFalse (t.isDueSoon());
+    }
+
+    @Test
+    public void testIsAvailable () throws ParseException {
+
+        Folder f = new Folder ("f");
+
+        Project p = new Project ("p");
+        f.add(p);
+
+        Task t = new Task ("t");
+        p.add(t);
+
+        assertTrue (t.isAvailable());
+        t.setCompletionDate(new Date());
+        assertFalse(t.isAvailable());
+        t.setCompletionDate(null);
+
+        assertTrue (t.isAvailable());
+        p.setStatus(Project.COMPLETED);
+        assertFalse (t.isAvailable());
+        p.setStatus(Project.ACTIVE);
+
+        assertTrue (t.isAvailable());
+        f.setActive(false);
+        assertFalse (t.isAvailable());
     }
 }

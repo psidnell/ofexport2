@@ -33,7 +33,7 @@ public class ContextTest {
         parent.add(child);
         assertEquals (1, parent.getContexts().size());
         assertTrue (parent.getContexts().contains(child));
-        assertSame (parent, child.getParent());
+        assertSame (parent, child.getContextModeParent());
     }
 
     @Test
@@ -44,13 +44,13 @@ public class ContextTest {
         parent1.add(child);
         assertEquals (1, parent1.getContexts().size());
         assertTrue (parent1.getContexts().contains(child));
-        assertSame (parent1, child.getParent());
+        assertSame (parent1, child.getContextModeParent());
 
         Context parent2 = new Context ();
         parent2.add(child);
         assertEquals (1, parent2.getContexts().size());
         assertTrue (parent2.getContexts().contains(child));
-        assertSame (parent2, child.getParent());
+        assertSame (parent2, child.getContextModeParent());
 
         assertTrue (parent1.getContexts().isEmpty());
     }
@@ -63,7 +63,7 @@ public class ContextTest {
         parent.add(child);
         assertEquals (1, parent.getTasks().size());
         assertTrue (parent.getTasks().contains(child));
-        assertSame (parent, child.getContext());
+        assertSame (parent, child.getContextModeParent());
     }
 
     @Test
@@ -74,36 +74,58 @@ public class ContextTest {
         parent1.add(child);
         assertEquals (1, parent1.getTasks().size());
         assertTrue (parent1.getTasks().contains(child));
-        assertSame (parent1, child.getContext());
+        assertSame (parent1, child.getContextModeParent());
 
         Context parent2 = new Context ();
         parent2.add(child);
         assertEquals (1, parent2.getTasks().size());
         assertTrue (parent2.getTasks().contains(child));
-        assertSame (parent2, child.getContext());
+        assertSame (parent2, child.getContextModeParent());
 
         assertTrue (parent1.getTasks().isEmpty());
     }
 
-    @Test public void testAvailability () {
+    @Test
+    public void testActive () {
+        Context c = new Context ("c");
 
-        Context c = new Context ("parent");
+        assertTrue (c.isActive());
+        c.setActiveFlag(false);
+        assertFalse(c.isActive());
+        c.setActiveFlag(true);
 
-        assertTrue (c.isAvailable());
-
+        assertTrue (c.isActive());
         c.setAllowsNextAction(false);
-        assertFalse (c.isAvailable());
+        assertFalse(c.isActive());
     }
 
-    @Test public void testAvailabilityNotInheritedFromParent () {
+    @Test
+    public void testOnHold () {
+        Context c = new Context ("c");
 
+        assertFalse (c.isOnHold());
+        c.setAllowsNextAction(false);
+        assertTrue(c.isOnHold());
+    }
+
+    @Test
+    public void testDropped () {
+        Context c = new Context ("c");
+
+        assertFalse (c.isDropped());
+        c.setActiveFlag(false);
+        assertTrue(c.isDropped());
+    }
+
+    @Test
+    public void testDroppedInheritedFromParentContext () {
         Context parent = new Context ("parent");
+
         Context child = new Context ("child");
         parent.add(child);
 
-        assertTrue (child.isAvailable());
-
-        parent.setAllowsNextAction(false);
-        assertTrue (child.isAvailable());
+        assertFalse (child.isDropped());
+        parent.setActiveFlag(false);
+        assertTrue(child.isDropped());
     }
 }

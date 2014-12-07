@@ -68,7 +68,7 @@ public class Main extends CommandLine implements BeanFactoryAware {
             }
 
             for (Project child : data.getProjects().values()) {
-                if (child.getFolder() == null) {
+                if (child.getProjectModeParent() == null) {
                     projectRoot.getProjects().add(child);
                 }
             }
@@ -76,7 +76,7 @@ public class Main extends CommandLine implements BeanFactoryAware {
             Context contextRoot = ofexport.getContextRoot();
             // Add root contexts to the fabricated root context
             for (Context child : data.getContexts().values()) {
-                if (child.getParent() == null) {
+                if (child.getContextModeParent() == null) {
                     contextRoot.getContexts().add(child);
                 }
             }

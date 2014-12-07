@@ -59,4 +59,70 @@ public class ProjectTest {
 
         assertTrue (parent1.getTasks().isEmpty());
     }
+
+    @Test public void testStatusInheritedFromParentFolder () {
+
+        Folder parent = new Folder ("parent");
+        Project child = new Project ("child");
+        parent.add(child);
+
+        assertEquals ("active", child.getStatus());
+
+        parent.setActive(false);
+        assertEquals ("dropped", child.getStatus());
+    }
+
+    @Test public void testIsActiveInheritedFromParentFolder () {
+
+        Folder parent = new Folder ("parent");
+        Project child = new Project ("child");
+        parent.add(child);
+
+        assertTrue(child.isActive());
+
+        parent.setActive(false);
+        assertFalse(child.isActive());
+    }
+
+    @Test public void testIsDroppedInheritedFromParentFolder () {
+
+        Folder parent = new Folder ("parent");
+        Project child = new Project ("child");
+        parent.add(child);
+
+        assertFalse(child.isDropped());
+        child.setStatus(Project.DROPPED);
+        assertTrue(child.isDropped());
+
+        parent.setActive(false);
+        assertTrue(child.isDropped());
+    }
+
+    @Test public void testIsCompletedInheritedFromParentFolder () {
+
+        Folder parent = new Folder ("parent");
+        Project child = new Project ("child");
+        parent.add(child);
+
+        assertFalse(child.isCompleted());
+        child.setStatus(Project.COMPLETED);
+        assertTrue(child.isCompleted());
+
+        parent.setActive(false);
+        assertFalse(child.isCompleted());
+    }
+
+    @Test public void testOnHoldInheritedFromParentFolder () {
+
+        Folder parent = new Folder ("parent");
+        Project child = new Project ("child");
+        parent.add(child);
+
+        assertFalse(child.isOnHold());
+        child.setStatus(Project.ONHOLD);
+        assertTrue(child.isOnHold());
+
+        parent.setActive(false);
+        assertFalse(child.isOnHold());
+    }
 }

@@ -19,7 +19,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.util.stream.Collectors;
 
@@ -100,11 +99,6 @@ public class DataCacheTest {
         assertTrue(parent.getFolders().contains(child));
 
         assertEquals("[parent, child]", child.getProjectPath().stream().map((x) -> x.getName()).collect(Collectors.toList()).toString());
-        try {
-            child.getContextPath();
-            fail();
-        } catch (UnsupportedOperationException e) {
-        }
 
         assertTrue(dataCache.getContexts().isEmpty());
         assertTrue(dataCache.getProjects().isEmpty());
@@ -132,15 +126,10 @@ public class DataCacheTest {
         assertEquals(2, dataCache.getContexts().size());
         assertSame(child, dataCache.getContexts().get(child.getId()));
         assertSame(parent, dataCache.getContexts().get(parent.getId()));
-        assertSame(parent, child.getParent());
+        assertSame(parent, child.getContextModeParent());
         assertEquals(1, parent.getContexts().size());
         assertTrue(parent.getContexts().contains(child));
 
-        try {
-            child.getProjectPath();
-            fail();
-        } catch (UnsupportedOperationException e) {
-        }
         assertEquals("[parent, child]", child.getContextPath().stream().map((x) -> x.getName()).collect(Collectors.toList()).toString());
 
         assertTrue(dataCache.getFolders().isEmpty());
@@ -170,7 +159,7 @@ public class DataCacheTest {
         assertSame(child, dataCache.getTasks().get(child.getId()));
         assertEquals(1, dataCache.getContexts().size());
         assertSame(parent, dataCache.getContexts().get(parent.getId()));
-        assertSame(parent, child.getContext());
+        assertSame(parent, child.getContextModeParent());
         assertEquals(1, parent.getTasks().size());
         assertTrue(parent.getTasks().contains(child));
 
@@ -351,7 +340,7 @@ public class DataCacheTest {
         assertEquals(1, dataCache.getContexts().size());
         assertEquals (1, dataCache.getContexts().size());
         Context noContext = dataCache.getContexts().values().iterator().next();
-        assertSame(noContext, child.getContext());
+        assertSame(noContext, child.getContextModeParent());
         assertEquals(1, noContext.getTasks().size());
         assertTrue(noContext.getTasks().contains(child));
 

@@ -29,8 +29,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  *
  *         Represents an OmniFocus Folder
  */
-@JsonPropertyOrder(alphabetic=true)
-public class Folder extends Node {
+@JsonPropertyOrder(alphabetic = true)
+public class Folder extends NodeImpl implements ProjectHierarchyNode {
 
     public static final String TYPE = "Folder";
 
@@ -103,30 +103,25 @@ public class Folder extends Node {
         return parent;
     }
 
-    public void setParent(Folder parent) {
-        this.parent = parent;
+    @Override
+    public void setProjectModeParent(ProjectHierarchyNode node) {
+        this.parent = (Folder) node;
     }
 
     @Override
     @JsonIgnore
-    public List<Node> getProjectPath() {
+    public List<ProjectHierarchyNode> getProjectPath() {
         return getProjectPath(parent);
     }
 
-    @Override
-    @JsonIgnore
-    public List<Node> getContextPath() {
-        throw new UnsupportedOperationException();
-    }
-
     public void add(Project child) {
-        Folder parent = child.getFolder();
+        Folder parent = (Folder) child.getProjectModeParent();
         if (parent != null) {
             parent.getProjects().remove(child);
         }
 
         projects.add(child);
-        child.setFolder(this);
+        child.setProjectModeParent(this);
     }
 
     public void add(Folder child) {
@@ -136,27 +131,35 @@ public class Folder extends Node {
         }
 
         folders.add(child);
-        child.setParent(this);
-    }
-
-    @Override
-    @ExprAttribute(help = "folder is available.")
-    public boolean isAvailable() {
-        return active;
-    }
-
-    public void setAvailable(boolean dummy) {
-        // Dummy method to allow Jackson deserialisation
+        child.setProjectModeParent(this);
     }
 
     @SQLiteProperty
-    @ExprAttribute (help="true if active")
+    @ExprAttribute(help = "true if active")
     public boolean isActive() {
+        // OmniFocus doesn't cascade this status for us
+        if (!active) {
+            return active;
+        }
+
+        if (parent != null) {
+            return parent.isActive();
+        }
+
         return active;
     }
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    @ExprAttribute(help="true if dropped")
+    public boolean isDropped() {
+        return !isActive();
+    }
+
+    public void setDropped (boolean dummy) {
+        // Keep Jackson happy.
     }
 
     @Override
@@ -165,13 +168,5 @@ public class Folder extends Node {
         projects.stream().forEach((p) -> p.cascadeMarked());
         folders.stream().forEach((f) -> f.cascadeMarked());
 
-    }
-
-    @Override
-    @JsonIgnore
-    public boolean isCompleted() {
-        // It doesn't have a completion date but if dropped
-        // then due items within it arn't really due.
-        return !isActive();
     }
 }

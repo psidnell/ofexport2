@@ -15,157 +15,34 @@ limitations under the License.
  */
 package org.psidnell.omnifocus.model;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.UUID;
-
 import org.psidnell.omnifocus.ConfigParams;
-import org.psidnell.omnifocus.expr.ExprAttribute;
-import org.psidnell.omnifocus.expr.ExpressionFunctions;
-import org.psidnell.omnifocus.sqlite.SQLiteProperty;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+public interface Node {
 
-/**
- * @author psidnell
- *
- *         The root class for all nodes in the object tree.
- */
-public abstract class Node extends ExpressionFunctions {
+    String getName();
 
-    protected ConfigParams config;
+    void setName(String name);
 
-    protected String name;
+    String getId();
 
-    private String id = UUID.randomUUID().toString();
+    void setId(String id);
 
-    private int rank;
+    int getRank();
 
-    private boolean isRoot;
+    void setRank(int rank);
 
-    private boolean marked = false;
+    String getType();
 
-    @SQLiteProperty
-    @ExprAttribute(help = "item name/text.")
-    public String getName() {
-        return name;
-    }
+    boolean isRoot();
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    void setIsRoot(boolean isRoot);
 
-    @SQLiteProperty(name = "persistentIdentifier")
-    public String getId() {
-        return id;
-    }
+    boolean isMarked();
 
-    public void setId(String id) {
-        this.id = id;
-    }
+    void setMarked(boolean marked);
 
-    @SQLiteProperty
-    public int getRank() {
-        return rank;
-    }
+    void cascadeMarked();
 
-    public void setRank(int rank) {
-        this.rank = rank;
-    }
+    void setConfigParams(ConfigParams config);
 
-    @JsonIgnore
-    public abstract String getType();
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        return result;
-    }
-
-    public abstract List<Node> getProjectPath();
-
-    public abstract List<Node> getContextPath();
-
-    @JsonIgnore
-    protected List<Node> getProjectPath(Node parent) {
-        List<Node> path;
-        if (parent != null) {
-            path = parent.getProjectPath();
-        } else {
-            path = new LinkedList<>();
-        }
-        path.add(this);
-        return path;
-    }
-
-    @JsonIgnore
-    protected List<Node> getContextPath(Node parent) {
-        List<Node> path;
-        if (parent != null) {
-            path = parent.getContextPath();
-        } else {
-            path = new LinkedList<>();
-        }
-        path.add(this);
-        return path;
-    }
-
-    @JsonIgnore
-    public boolean isRoot() {
-        return isRoot;
-    }
-
-    public void setIsRoot(boolean isRoot) {
-        this.isRoot = isRoot;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        Node other = (Node) obj;
-        if (id == null) {
-            if (other.id != null) {
-                return false;
-            }
-        } else if (!id.equals(other.id)) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return getType() + ":'" + name + "'";
-    }
-
-    @JsonIgnore
-    public boolean isMarked() {
-        return marked;
-    }
-
-    public void setMarked(boolean marked) {
-        this.marked = marked;
-    }
-
-    public abstract void cascadeMarked();
-
-    public abstract boolean isAvailable();
-
-    public abstract boolean isCompleted();
-
-    public abstract Node getProjectModeParent ();
-
-    public void setConfigParams (ConfigParams config) {
-        this.config = config;
-    }
 }

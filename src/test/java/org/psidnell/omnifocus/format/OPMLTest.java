@@ -22,7 +22,7 @@ import org.psidnell.omnifocus.OFExport;
 import org.psidnell.omnifocus.integrationtest.Diff;
 
 public class OPMLTest extends FormatTest {
-    
+
     @Test
     public void testProjectMode () throws Exception {
         OFExport ofExport = new OFExport();
@@ -31,7 +31,9 @@ public class OPMLTest extends FormatTest {
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
-                
+
+        System.out.println (out);
+
         Diff.diff (new String[]
             {
                 "<opml version=\"1.0\">",
@@ -50,7 +52,7 @@ public class OPMLTest extends FormatTest {
                 "      </outline>",
                 "    </outline>",
                 "  </outline>",
-                "  <outline text=\"p2\" completed=\"2014-11-27\" flagged=\"flagged\" _note=\"line1&#10;line2\">",
+                "  <outline text=\"p2\" flagged=\"flagged\" _note=\"line1&#10;line2\">",
                 "  </outline>",
                 "  <outline text=\"p3\">",
                 "  </outline>",
@@ -59,7 +61,7 @@ public class OPMLTest extends FormatTest {
                 "</opml>",
             }, out.toString().split("\n"));
     }
-    
+
     @Test
     public void testContextMode () throws Exception {
         OFExport ofExport = new OFExport();
@@ -69,7 +71,7 @@ public class OPMLTest extends FormatTest {
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
-                
+
         Diff.diff (new String[]
             {
                 "<opml version=\"1.0\">",

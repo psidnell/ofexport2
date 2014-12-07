@@ -16,14 +16,9 @@ limitations under the License.
 
 package org.psidnell.omnifocus.model;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
-
-
 
 public class FolderTest {
 
@@ -65,7 +60,7 @@ public class FolderTest {
         parent.add(child);
         assertEquals (1, parent.getProjects().size());
         assertTrue (parent.getProjects().contains(child));
-        assertSame (parent, child.getFolder());
+        assertSame (parent, child.getProjectModeParent());
     }
 
     @Test
@@ -76,23 +71,26 @@ public class FolderTest {
         parent1.add(child);
         assertEquals (1, parent1.getProjects().size());
         assertTrue (parent1.getProjects().contains(child));
-        assertSame (parent1, child.getFolder());
+        assertSame (parent1, child.getProjectModeParent());
 
         Folder parent2 = new Folder ();
         parent2.add(child);
         assertEquals (1, parent2.getProjects().size());
         assertTrue (parent2.getProjects().contains(child));
-        assertSame (parent2, child.getFolder());
+        assertSame (parent2, child.getProjectModeParent());
 
         assertTrue (parent1.getProjects().isEmpty());
     }
 
-    @Test public void testAvailability () {
+    @Test
+    public void testIsActiveInheritsFromParentProject () {
+        Folder parent = new Folder ();
+        Folder child = new Folder ();
+        parent.add(child);
 
-        Folder f = new Folder ("f");
-        assertTrue (f.isAvailable());
+        assertTrue (parent.isActive());
 
-        f.setActive(false);
-        assertFalse (f.isAvailable());
+        parent.setActive(false);
+        assertFalse (child.isActive());
     }
 }
