@@ -22,8 +22,9 @@ $$$$$$$$$$$$$$$$$
 <#macro doFolder folder depth>
 <@doIndent indent=depth/>Folder id:${folder.id} depth:${depth}
 <@doIndent indent=depth/>. -name:${folder.name}
-<@doIndent indent=depth/>. -folderCount:${folder.folderCount}
 <@doIndent indent=depth/>. -active:${folder.active?c}
+<@doIndent indent=depth/>. -dropped:${folder.dropped?c}
+<@doIndent indent=depth/>. -folderCount:${folder.folderCount}
 <@doIndent indent=depth/>. -projectCount:${folder.projectCount}
 <@doIndent indent=depth/>. -type:${folder.type}
 <#list folder.folders as f><@doFolder folder=f depth=(depth+1)/></#list>
@@ -37,18 +38,25 @@ $$$$$$$$$$$$$$$$$$
 <#macro doProject project depth>
 <@doIndent indent=depth/>Project id:${project.id} depth:${depth}
 <@doIndent indent=depth/>. -name:${project.name}
+<@doIndent indent=depth/>. -active${project.active?c}
 <@doIndent indent=depth/>. -completed${project.completed?c}
 <@doIndent indent=depth/>. -completionDate:<#if (project.completionDate)??>${project.completionDate?string[config.template_date_format]}<#else>null</#if>
 <@doIndent indent=depth/>. -contextName:<#if (project.contextName)??>${project.contextName}<#else>null></#if>
 <@doIndent indent=depth/>. -deferDate:<#if (project.deferDate)??>${project.deferDate?string[config.template_date_format]}<#else>null</#if>
+<@doIndent indent=depth/>. -dropped${project.dropped?c}
 <@doIndent indent=depth/>. -dueDate:<#if (project.dueDate)??>${project.dueDate?string[config.template_date_format]}<#else>null</#if>
+<@doIndent indent=depth/>. -dueSoon${project.dueSoon?c}
 <@doIndent indent=depth/>. -estimatedMinutes:${project.estimatedMinutes}
 <@doIndent indent=depth/>. -flagged:${project.flagged?c}
+<@doIndent indent=depth/>. -onHold${project.onHold?c}
 <@doIndent indent=depth/>. -remaining:${project.remaining?c}
 <@doIndent indent=depth/>. -sequential:${project.sequential?c}
+<@doIndent indent=depth/>. -singleActionList:${project.singleActionList?c}
 <@doIndent indent=depth/>. -status:${project.status}
 <@doIndent indent=depth/>. -taskCount:${project.taskCount}
 <@doIndent indent=depth/>. -type:${project.type}
+<@doIndent indent=depth/>. -uncompletedTaskCount:${project.uncompletedTaskCount}
+<@doIndent indent=depth/>. -unflagged:${project.unflagged?c}
 <@doIndent indent=depth/>. -note:<#if (project.note)??>
 ${project.formatNote(depth, "  ")}<#else>null</#if>
 <#list project.tasks as t><@doTask task=t depth=depth+1 projectMode=true/></#list>
@@ -68,6 +76,7 @@ $$$$$$$$$$$$$$$
 <@doIndent indent=depth/>. -contextName:<#if (task.contextName)??>${task.contextName}<#else>null></#if>
 <@doIndent indent=depth/>. -deferDate:<#if (task.deferDate)??>${task.deferDate?string[config.template_date_format]}<#else>null</#if>
 <@doIndent indent=depth/>. -dueDate:<#if (task.dueDate)??>${task.dueDate?string[config.template_date_format]}<#else>null</#if>
+<@doIndent indent=depth/>. -dueSoon${task.dueSoon?c}
 <@doIndent indent=depth/>. -estimatedMinutes:${task.estimatedMinutes}
 <@doIndent indent=depth/>. -flagged:${task.flagged?c}
 <@doIndent indent=depth/>. -available:${task.available?c}
@@ -76,6 +85,7 @@ $$$$$$$$$$$$$$$
 <@doIndent indent=depth/>. -sequential:${task.sequential?c}
 <@doIndent indent=depth/>. -taskCount:${task.taskCount}
 <@doIndent indent=depth/>. -type:${task.type}
+<@doIndent indent=depth/>. -uncompletedTaskCount:${task.uncompletedTaskCount}
 <@doIndent indent=depth/>. -note:<#if (task.note)??>
 ${task.formatNote(depth, "  ")}<#else>null</#if>
 <#if projectMode><#list task.tasks as t><@doTask task=t depth=depth+1  projectMode=projectMode/></#list></#if>
@@ -88,12 +98,14 @@ $$$$$$$$$$$$$$$$$$
 <#macro doContext context depth>
 <@doIndent indent=depth/>Task id:${context.id} depth:${depth}
 <@doIndent indent=depth/>. -name:${context.name}
-<@doIndent indent=depth/>. -contextCount:${context.taskCount}
 <@doIndent indent=depth/>. -active:${context.active?c}
+<@doIndent indent=depth/>. -contextCount:${context.taskCount}
+<@doIndent indent=depth/>. -dropped:${context.dropped?c}
 <@doIndent indent=depth/>. -onHold:${context.onHold?c}
 <@doIndent indent=depth/>. -dropped:${context.dropped?c}
 <@doIndent indent=depth/>. -taskCount:${context.taskCount}
 <@doIndent indent=depth/>. -type:${context.type}
+<@doIndent indent=depth/>. -uncompletedTaskCount:${context.uncompletedTaskCount}
 <#list context.contexts as c><@doContext context=c depth=depth+1/></#list>
 <#list context.tasks as t><@doTask task=t depth=depth+1 projectMode=false/></#list>
 </#macro>

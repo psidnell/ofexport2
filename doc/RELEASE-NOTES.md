@@ -2,6 +2,8 @@
 
 ## 1.0.9 (?????????)
 
+- Added some missing attributes to the debug template.
+
 ## 1.0.8 (2014-12-07)
 
 - Flagged now works hierarchically.
