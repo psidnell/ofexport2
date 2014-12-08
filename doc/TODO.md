@@ -26,7 +26,6 @@
 > completed: status="done"
 > dropped: status="dropped"
 
-- append help and info to doc
 - debug format missing some options
 - Bugs
   - none
@@ -37,6 +36,6 @@
   - How to simulate focus
   - Jackson read only variables?
   - Should the date logic not ignore time or does OF help out with blocked flag?
-  - 
+  - Date format in config
 
 

@@ -1,6 +1,6 @@
 # OFEXPORT2
 
-*Updated 2014-12-07.*
+*Updated 2014-12-08.*
 
 [Release Notes](doc/RELEASE-NOTES.md)
 
@@ -146,6 +146,10 @@ Simply delete the ofexport2 folder and remove the lines you added to your .bash_
 
 ### Overview ###
 
+To see the [full list of options](doc/Options.md), type:
+
+    of2 -h
+
 Basic usage of the tool is fairly straight-forward. If you're familiar with omnifocus you can probably guess what these commands will show:
 
     of2 -ti all
@@ -262,7 +266,7 @@ is actually shorthand for use of the "name" attribute that all nodes have, it's 
 
     of2 -pi 'name=="ofexport2"'
 
-There are include/exclude options for each node type. To see all the options type:
+There are include/exclude options for each node type. To see [all the options](doc/Options.md) type:
 
     of2 -h
     
@@ -279,7 +283,7 @@ Folders, Projects, Tasks and Contexts all have attributes that you can use in fi
 
     of2 -i
     
-This will print all the attributes for all the types, for example here are some of the Task attributes that can be used with "-ti":
+This will print all the [attributes for all the types](doc/Attributes.md), for example here are some of the Task attributes that can be used with "-ti":
 
       Task:
         all (boolean): true for all nodes.

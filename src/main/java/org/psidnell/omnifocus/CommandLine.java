@@ -292,13 +292,7 @@ public class CommandLine {
     }
 
     protected void printAdditionalInfo() {
-        ExprAttributePrinter.print(Folder.class);
-        System.out.println();
-        ExprAttributePrinter.print(Project.class);
-        System.out.println();
-        ExprAttributePrinter.print(Context.class);
-        System.out.println();
-        ExprAttributePrinter.print(Task.class);
+        new ExprAttributePrinter (Folder.class, Project.class, Task.class, Context.class).print();
     }
 
     private static String escape(String val) {

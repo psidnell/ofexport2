@@ -85,7 +85,6 @@ public class ActiveOptionProcessor<P> {
     @SuppressWarnings("unchecked")
     public void printHelp() throws IOException {
 
-        System.out.println();
         System.out.println (progName.toUpperCase());
         System.out.println();
 

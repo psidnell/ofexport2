@@ -18,7 +18,7 @@ package org.psidnell.omnifocus.expr;
 import java.lang.reflect.Method;
 import java.util.TreeMap;
 
-import org.psidnell.omnifocus.model.NodeImpl;
+import org.psidnell.omnifocus.model.Node;
 import org.psidnell.omnifocus.util.StringUtils;
 
 /**
@@ -28,22 +28,48 @@ import org.psidnell.omnifocus.util.StringUtils;
  */
 public class ExprAttributePrinter {
 
-    private static class Line {
-        private String type;
-        private String nameAndArgs;
-        private String help;
+    private int maxTypeLen = 0;
+    private int maxNameAndArgsLen = 0;
+    private Class<? extends Node>[] classes;
 
-        Line (String type, String nameAndArgs, String help) {
-            this.type = type;
-            this.nameAndArgs = nameAndArgs;
-            this.help = help;
+    @SafeVarargs
+    public ExprAttributePrinter (Class<? extends Node> ... classes) {
+        this.classes = classes;
+        walkAttribs ((type, nameAndArgs,help)->maxTypeLen=Math.max(maxTypeLen, type.length()));
+        walkAttribs ((type, nameAndArgs,help)->maxNameAndArgsLen=Math.max(maxNameAndArgsLen, type.length()));
+    }
+
+    public void print() {
+        for (Class<? extends Node> clazz : classes) {
+            TreeMap<String,Line> info = new TreeMap<>();
+
+            walkAttribs (clazz, (type, nameAndArgs,help)->info.put(nameAndArgs, new Line(type, nameAndArgs, help)));
+
+            System.out.println(clazz.getSimpleName() + ":");
+
+            System.out.println();
+
+            for (Line line : info.values()) {
+                maxTypeLen = Math.max(maxTypeLen, line.type.length());
+                maxNameAndArgsLen = Math.max(maxNameAndArgsLen, line.nameAndArgs.length());
+            }
+
+            for (Line line : info.values()) {
+                System.out.println ("  " + padL(line.type, maxTypeLen) + " " + padR(line.nameAndArgs, 1 + maxNameAndArgsLen) + ": " + line.help);
+            }
+
+            System.out.println();
         }
     }
 
-    public static void print(Class<? extends NodeImpl> clazz) {
-        TreeMap<String,Line> info = new TreeMap<>();
-        for (Method m : clazz.getMethods()) {
+    public void walkAttribs(LineVisitor v) {
+        for (Class<? extends Node> clazz : classes) {
+            walkAttribs(clazz, v);
+        }
+    }
 
+    private void walkAttribs(Class<? extends Node> clazz, LineVisitor v) {
+        for (Method m : clazz.getMethods()) {
             ExprAttribute attrib = m.getAnnotation(ExprAttribute.class);
             if (attrib != null) {
                 String name = null;
@@ -59,20 +85,9 @@ public class ExprAttributePrinter {
                 String type = m.getReturnType().getSimpleName().toLowerCase();
 
                 String nameAndArgs = name + processArgs(attrib);
-                info.put(nameAndArgs, new Line(type, nameAndArgs, attrib.help()));
+
+                v.process(type, nameAndArgs, attrib.help());
             }
-        }
-
-        int maxTypeLen = 0;
-        int maxNameAndArgsLen = 0;
-
-        System.out.println(clazz.getSimpleName() + ":");
-        for (Line line : info.values()) {
-            maxTypeLen = Math.max(maxTypeLen, line.type.length());
-            maxNameAndArgsLen = Math.max(maxNameAndArgsLen, line.nameAndArgs.length());
-        }
-        for (Line line : info.values()) {
-            System.out.println ("    " + padL(line.type, maxTypeLen) + " " + padR(line.nameAndArgs, 1 + maxNameAndArgsLen) + ": " + line.help);
         }
     }
 
@@ -98,6 +113,22 @@ public class ExprAttributePrinter {
         }
         else {
             return StringUtils.join(attrib.args(), ",", " (",")");
+        }
+    }
+
+    interface LineVisitor {
+        void process (String type, String nameAndArgs, String help);
+    }
+
+    private static class Line {
+        private String type;
+        private String nameAndArgs;
+        private String help;
+
+        Line (String type, String nameAndArgs, String help) {
+            this.type = type;
+            this.nameAndArgs = nameAndArgs;
+            this.help = help;
         }
     }
 }
