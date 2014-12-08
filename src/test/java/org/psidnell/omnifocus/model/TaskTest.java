@@ -15,13 +15,15 @@ limitations under the License.
 */
 package org.psidnell.omnifocus.model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import java.text.ParseException;
 import java.util.Date;
 
 import org.junit.Test;
-import org.psidnell.omnifocus.ConfigParams;
 
 public class TaskTest {
 
@@ -214,44 +216,6 @@ public class TaskTest {
         assertFalse (t2.isCompleted());
         f.setActive(false);
         assertTrue (t2.isCompleted());
-    }
-
-    @Test
-    public void testIsDueSoon () throws ParseException {
-
-        ConfigParams config = new ConfigParams();
-        config.setDueSoon("1d");
-
-        Folder f = new Folder ("f");
-
-        Project p = new Project ("p");
-        p.setConfigParams(config);
-        f.add(p);
-
-        Task t = new Task ("t");
-        t.setConfigParams(config);
-        p.add(t);
-
-        assertFalse (t.isDueSoon());
-        t.setDueDate(new Date());
-        assertTrue(t.isDueSoon());
-        t.setDueDate(null);
-
-        assertFalse (t.isDueSoon());
-        p.setDueDate(new Date());
-        assertFalse (t.isDueSoon()); // this is cascaded by omnifocus
-        p.setDueDate(null);
-
-        assertFalse (t.isDueSoon());
-        p.setStatus(Project.COMPLETED);
-        p.setDueDate(new Date());
-        assertFalse (t.isDueSoon());
-        p.setStatus(Project.ACTIVE);
-
-        assertFalse (t.isDueSoon());
-        p.setDueDate(new Date());
-        f.setActive(false);
-        assertFalse (t.isDueSoon());
     }
 
     @Test

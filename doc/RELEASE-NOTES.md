@@ -1,8 +1,9 @@
 # OFEXPORT2 Release Notes
 
-## 1.0.9 (?????????)
+## 1.0.9 (2014-12-08)
 
 - Added some missing attributes to the debug template.
+- Major re-working of date logic to simplify expressions.
 
 ## 1.0.8 (2014-12-07)
 

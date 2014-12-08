@@ -15,7 +15,6 @@ limitations under the License.
  */
 package org.psidnell.omnifocus.model;
 
-import java.text.ParseException;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -212,15 +211,6 @@ public abstract class CommonProjectAndTaskAttributes extends NodeImpl implements
         tasks.stream().forEach((t) -> t.cascadeMarked());
     }
 
-    @ExprAttribute (help="due soon.")
-    public boolean isDueSoon () throws ParseException {
-        if (isCompleted()) {
-            return false;
-        }
-
-        return dueDate != null && dueDate.getTime() < date (config.getDueSoon()).getTime();
-    }
-
     public void setDueSoon (boolean dummy) {
         // To satisfy Jackson
     }
@@ -238,36 +228,21 @@ public abstract class CommonProjectAndTaskAttributes extends NodeImpl implements
 
     public abstract boolean isCompleted ();
 
-    @ExprAttribute(args={"date"}, help="true if date matches.")
-    public boolean dueDateIs (String dateStr) throws ParseException {
-        Date date = date(dateStr);
-        return dueDate != null && dueDate.equals(date);
+    @ExprAttribute(help="completion date.")
+    @JsonIgnore
+    public org.psidnell.omnifocus.expr.Date getCompletion () {
+        return new org.psidnell.omnifocus.expr.Date(completionDate, config);
     }
 
-    @ExprAttribute(args={"dateFrom", "dateTo"}, help="true if date within range.")
-    public boolean dueDateBetween (String from, String to) throws ParseException {
-        return within(dueDate, from, to);
+    @ExprAttribute(help="defer date.")
+    @JsonIgnore
+    public org.psidnell.omnifocus.expr.Date getDefer () {
+        return new org.psidnell.omnifocus.expr.Date(deferDate, config);
     }
 
-    @ExprAttribute(args={"date"}, help="true if date matches.")
-    public boolean completionDateIs (String dateStr) throws ParseException {
-        Date date = date(dateStr);
-        return completionDate != null && completionDate.equals(date);
-    }
-
-    @ExprAttribute(args={"dateFrom", "dateTo"}, help="true if date within range.")
-    public boolean completionDateBetween (String from, String to) throws ParseException {
-        return within(completionDate, from, to);
-    }
-
-    @ExprAttribute(args={"date"}, help="true if date matches.")
-    public boolean deferDateIs (String dateStr) throws ParseException {
-        Date date = date(dateStr);
-        return deferDate != null && deferDate.equals(date);
-    }
-
-    @ExprAttribute(args={"dateFrom", "dateTo"}, help="true if date within range.")
-    public boolean deferDateBetween (String from, String to) throws ParseException {
-        return within(deferDate, from, to);
+    @ExprAttribute(help="due date.")
+    @JsonIgnore
+    public org.psidnell.omnifocus.expr.Date getDue () {
+        return new org.psidnell.omnifocus.expr.Date(dueDate, config);
     }
 }

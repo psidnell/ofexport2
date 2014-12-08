@@ -86,7 +86,7 @@ $$$$$$$$$$$$$$$
 Using Java SimpleDateFormat conversion
 -->
 <#macro doAttribs node>
-<#if node.completed> completed="${node.completionDate?string[config.template_date_format]}"</#if><#if node.flagged> flagged="flagged"</#if><#if (node.contextName)??> context="${node.contextName?xml}"</#if><#if (node.note)??> _note="${escape(node.note)}"</#if></#macro>
+<#if node.completed> completed="${node.completion.getDate()?string[config.template_date_format]}"</#if><#if node.flagged> flagged="flagged"</#if><#if (node.contextName)??> context="${node.contextName?xml}"</#if><#if (node.note)??> _note="${escape(node.note)}"</#if></#macro>
 <#--
 $$$$$$$$$$$$$$
 $ FUNCTION: escape

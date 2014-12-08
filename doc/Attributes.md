@@ -17,18 +17,14 @@
 - boolean **active** : project status is active.
 - boolean **all** : true for all nodes.
 - boolean **completed** : item is complete.
+- date **completion** : completion date.
 - date **completionDate** : date item was completed or null.
-- boolean **completionDateBetween** (dateFrom,dateTo) : true if date within range.
-- boolean **completionDateIs** (date) : true if date matches.
 - string **contextName** : the context name or null.
+- date **defer** : defer date.
 - date **deferDate** : date item is to start or null.
-- boolean **deferDateBetween** (dateFrom,dateTo) : true if date within range.
-- boolean **deferDateIs** (date) : true if date matches.
 - boolean **dropped** : project is dropped.
+- date **due** : due date.
 - date **dueDate** : date item is due or null.
-- boolean **dueDateBetween** (dateFrom,dateTo) : true if date within range.
-- boolean **dueDateIs** (date) : true if date matches.
-- boolean **dueSoon** : due soon.
 - integer **estimatedMinutes** : estimated minutes.
 - boolean **flagged** : item is flagged.
 - string **name** : item name/text.
@@ -50,17 +46,13 @@
 - boolean **available** : item is available.
 - boolean **blocked** : item is blocked.
 - boolean **completed** : item is complete.
+- date **completion** : completion date.
 - date **completionDate** : date item was completed or null.
-- boolean **completionDateBetween** (dateFrom,dateTo) : true if date within range.
-- boolean **completionDateIs** (date) : true if date matches.
 - string **contextName** : the context name or null.
+- date **defer** : defer date.
 - date **deferDate** : date item is to start or null.
-- boolean **deferDateBetween** (dateFrom,dateTo) : true if date within range.
-- boolean **deferDateIs** (date) : true if date matches.
+- date **due** : due date.
 - date **dueDate** : date item is due or null.
-- boolean **dueDateBetween** (dateFrom,dateTo) : true if date within range.
-- boolean **dueDateIs** (date) : true if date matches.
-- boolean **dueSoon** : due soon.
 - integer **estimatedMinutes** : estimated minutes.
 - boolean **flagged** : item is flagged.
 - string **name** : item name/text.

@@ -367,19 +367,26 @@ a great deal of flexibility in what can be achieved in the expressions.
 
 Tasks and Projects have several dates:
 
-- completionDate
-- deferDate
-- dueDate
-- completionDate
+- completion
+- defer
+- due
 
 There are various ways to match on dates and dateRanges:
 
-    of2 -ti 'completionDateIs("2014-11-26")'
-    of2 -ti 'completionDateBetween("yesterday","tomorrow")'
-    of2 -ti 'completionDate != null && completionDate > date("today")'
-    of2 -ti dueSoon
- 
-The strings formats of dates that are accepted are:
+    of2 -ti 'completion.is("today")'
+    of2 -ti 'completion.between("5th","today")'
+    of2 -ti '!completed && defer.is("today")'
+    of2 -ti '!completed && due.after("2015-01-01")'
+    of2 -ti '!completed && due.onOrAfter("2015-01-01")'
+    of2 -ti '!completed && due.before("2015-01-01")'
+    of2 -ti '!completed && due.onOrBefore("2015-01-01")'
+    of2 -ti '!completed && due.soon'
+
+Some of the above filters also include a check that the item is not completed (**!completed**). This is completed items retain their defer and due dates, and typically when we want to know what's due or starting, we're not interested in what we've already done. However if you did want to see them just remove the check.
+
+Note that when using '**.soon**', the value is set in the dueSoon configuration variable see [Configuration](#configuration).
+
+The strings formats of dates that are accepted in these filters:
 
 - **"yesterday"**,**"today"**,**"tomorrow"**
 - **"2014-11-19"**: specific date (yyyy-mm-dd).
@@ -483,11 +490,14 @@ Filtering items by their **text**/**note**:
 
 Filtering **Tasks**/**Projects** by **dates**:
 
-    of2 -ti dueSoon
-    of2 -ti 'dueDateIs("today")'
-    of2 -ti 'deferDateIs("tomorrow")'
-    of2 -ti 'completionDateBetween("mon","fri")'
-    of2 -ti 'dueDate != null && dueDate < date("tomorrow")'
+    of2 -ti 'completion.is("today")'
+    of2 -ti 'completion.between("5th","today")'
+    of2 -ti '!completed && defer.is("today")'
+    of2 -ti '!completed && due.after("2015-01-01")'
+    of2 -ti '!completed && due.onOrAfter("2015-01-01")'
+    of2 -ti '!completed && due.before("2015-01-01")'
+    of2 -ti '!completed && due.onOrBefore("2015-01-01")'
+    of2 -ti '!completed && due.soon'
 
 Filtering **Folders** by **status**:
 
@@ -520,7 +530,7 @@ Generate a report containing projects whose note contains "#report#".
 
 #### Save Useful Commands as Scripts ####
 
-Keeping any more complex commands you use frequently as scripts saves a lot of time.
+Keep regularly used commands as scripts to save time.
 
 Here's one of my base scripts as an example.
 
@@ -535,7 +545,7 @@ Here's one of my base scripts as an example.
      -ac "(type==\"Folder\" && name.matches(\"$FOLDER|Anywhere\")) || (type==\"Project\" && name==\"Inbox\")" \
      -fx 'name.contains("Routine Maint")' \
      -F \
-     -ti "completed && completionDate >= date(\"$WHEN\")" \
+     -ti "completion.onOrAfter(\"$WHEN\")" \
      -p \
      -f report \
      -O "$FILE"

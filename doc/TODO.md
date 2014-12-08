@@ -26,16 +26,19 @@
 > completed: status="done"
 > dropped: status="dropped"
 
-- debug format missing some options
+- Documentation
+  - recheck scripts (documended and mine)
+  - Images/examples
+- Mention debug template in tips
 - Bugs
   - none
 - Longer Term
   - Filter Projects: stalled
   - Filter Projects: pending
   - Filter Availability: first
-  - How to simulate focus
-  - Jackson read only variables?
   - Should the date logic not ignore time or does OF help out with blocked flag?
   - Date format in config
+  - How to simulate focus
+  - Jackson read only variables?
 
 

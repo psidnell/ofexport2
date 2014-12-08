@@ -51,7 +51,7 @@ $$$$$$$$$$$$$$$
 -->
 <#macro doTask task depth, projectMode>
 <@doIndent indent=depth/>
-- ${task.name}<#if task.completed><@doDateTag task.completionDate/></#if>
+- ${task.name}<#if task.completed><@doDateTag task.completion.getDate()/></#if>
 <#if projectMode><#list task.tasks as t><@doTask task=t depth=depth+1  projectMode=projectMode/></#list></#if>
 </#macro>
 <#--

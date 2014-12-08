@@ -134,9 +134,9 @@ public abstract class NodeImpl extends ExpressionFunctions implements Node {
         this.marked = marked;
     }
 
-    @ExprAttribute(help="true for all nodes.")
+    @ExprAttribute(help = "true for all nodes.")
     @JsonIgnore
-    public boolean isAll () {
+    public boolean isAll() {
         return true;
     }
 

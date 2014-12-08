@@ -18,4 +18,5 @@
     <suppress files="Visitor\.java" checks="TreeWalker"/>
     <suppress files="ContextHierarchyNode\.java" checks="TreeWalker"/>
     <suppress files="ProjectHierarchyNode\.java" checks="TreeWalker"/>
+    <suppress files="ExprAttributePrinter\.java" checks="TreeWalker"/>
 </suppressions>
