@@ -1,25 +1,16 @@
 # OFEXPORT2
 
-*Updated 2014-12-09.*
-
-[Release Notes](doc/RELEASE-NOTES.md)
+[Release Notes](RELEASE-NOTES.md)
 
 Export from OmniFocus to various other formats:
 
 ![](doc/images/Diagram.png)
 
-Jump To:
+## Support:
 
-- [Latest Stable Release: 1.0.10](https://github.com/psidnell/ofexport2/blob/ofexport-v2-1.0.10/README.md)
-- [Development Version](https://github.com/psidnell/ofexport2/blob/master/README.md)
-
-Support:
-
-- [Bugs](https://github.com/psidnell/ofexport2/issues)
+- [Open a Bug](https://github.com/psidnell/ofexport2/issues)
 - [Blog: Poor Signal](http://poor-signal.blogspot.co.uk)
 - [Twitter: @psidnell](http://twitter.com/psidnell)
-
-----
 
 ## Table of Contents
 
@@ -111,9 +102,9 @@ You should see output similar to:
 
 To get the required files, either:
 
-- Download the latest stable version: [ofexport-v2-1.0.10.zip](https://github.com/psidnell/ofexport2/archive/ofexport-v2-1.0.10.zip)
+- Download a stable version from a link in the [Release Notes](RELEASE-NOTES.md).
 - Download the current development version: [master.zip](https://github.com/psidnell/ofexport2/archive/master.zip)
-- Check out this git repository so you can take updates as you wish with git.
+- Check out the current development so you can take updates with git.
 
 If you downloaded a zip, unzip it and move/rename the root folder as you wish.
 

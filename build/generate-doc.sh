@@ -7,14 +7,6 @@ NEXT_VERSION=`grep '<version>' pom.xml | head -1 | sed -e 's/.*<version>//' -e '
 
 echo \$NEXT_VERSION=$NEXT_VERSION
 
-echo Generating Doc
-for TEMPLATE in `ls doc/templates/*.md`
-do
-        FILE=`echo $TEMPLATE | sed -e 's/\/templates//'`
-        cat doc/templates/$TEMPLATE | sed -e "s/\$VERSION/$NEXT_VERSION/g" -e "s/\$DATE/$DATE/g" > $FILE
-done
-mv doc/README.md README.md
-
 echo Generating Options.md
 echo '# Options' > doc/Options.md
 echo >> doc/Options.md
