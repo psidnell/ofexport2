@@ -406,9 +406,9 @@ Filtering **Contexts** by **status**:
 
 Useful Combinations:
 
-    of2 -ti 'available && deferDateIs("today")'
-    of2 -ti 'available && (dueSoon || flagged)'
-    of2 -ti 'completionDateBetween("mon","today")'
+    of2 -ti 'available && defer.is("today")'
+    of2 -ti 'available && (due.soon || flagged)'
+    of2 -ti 'completion.between("mon","today")'
 
 What I do to generate weekly reports. I want a flattened list of work tasks completed this week:
 
