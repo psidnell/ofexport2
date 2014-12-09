@@ -170,7 +170,7 @@ The above will show tasks with the selected attributes (**filtering**) in their 
 
     of2 -c -ti available
 
-These attributes you select on can be combined by chaining filters:
+The attributes you select on can be combined by chaining filters:
 
     of2 -c -ti remaining -ti due.soon
 
@@ -178,7 +178,7 @@ Or by creating filters with [OGNL](http://commons.apache.org/proper/commons-ognl
 
     of2 -c -ti 'remaining && due.soon'
 
-It's possible to isolate specific Folders, Projects etc. For example to print the contents of a named project (In this case I have a project called ofexport2):
+It's possible to isolate specific Folders, Projects etc. For example to print the contents of a named project, in this case I have a project called ofexport2:
 
     of2 -pn 'ofexport2'
 
@@ -231,7 +231,7 @@ It's an error to try and use a project filter in context mode and vice versa.
 
 #### Filtering by Text
 
-To search for an items with a specific exact names:
+To search for items with a specific exact names:
 
     of2 -fn "My Folder"
     of2 -pn "My Project"
@@ -243,7 +243,7 @@ These name filters are actually a convienient shorthand for an expression that u
 
     of2 -fc 'name=="My Folder"'
 
-By using the attribute in your own expressions, much more sophisticated filters can be used.
+By using the attribute in your own expressions, much more sophisticated filters can be created.
 
 To search for a task that contains text:
 
@@ -252,7 +252,7 @@ To search for a task that contains text:
     of2 -tc 'name.equalsIgnoreCase("ofexpoRt2")'
     of2 -tc 'name.toLowerCase().contains("x")'
 
-(The functions (methods) available in these expressions are from the [Java String class](https://docs.oracle.com/javase/8/docs/api/java/lang/String.html)).
+(The functions/methods available in these expressions are from the [Java String class](https://docs.oracle.com/javase/8/docs/api/java/lang/String.html)).
     
 To use regular expressions:
 
@@ -321,7 +321,7 @@ There are various ways to match on dates and dateRanges:
 
 Some of the above filters also include a check that the item is not completed (**!completed**). This is because completed items retain their defer and due dates. Typically when we want to know what's due or starting we're not interested in what we've already done. However if you did want to see them just remove the check.
 
-Note that when using '**.soon**', the value is set in the dueSoon configuration variable see [Configuration](#configuration). This can be applied to any of the dates but clearly makes no sense for the completed attribute!.
+Note that when using '**.soon**', the value is set in the dueSoon configuration variable see [Configuration](#configuration). This can be applied to any of the dates but clearly makes no sense for the completion attribute!.
 
 The strings formats of dates that are accepted in these filters are:
 
@@ -338,6 +338,13 @@ The strings formats of dates that are accepted in these filters are:
 - **"1m"**,"**+1month"**,**"-2months"**: months in the future/past.
 - **"1y"**,"**+1year"**,**"-2years"**: months in the future/past.
 - **"1st"**,"**2nd"**,**"23rd"**: day of this month.
+
+Note that there are two attributes with similar names:
+
+- **completion**: The date an item was completed.
+- **completed**: true if the item is completed, false otherwise.
+
+Not all "completed" items have a completion date - this is the way OmniFocus works. For example if a Folder is dropped then the the Projects/Tasks within it can reasonably be said to be completed (i.e. neither available or remaining), but OmniFocus does not give them a completion date. The reason is probably so that the Folder status can be later changed back to active and the sub items will return from the dead.
 
 #### Useful Filtering Attributes ####
 
@@ -460,7 +467,7 @@ This sorts items by their completion date, and for those with the same date it t
 
 Note that items are sorted at a particular level. If a task has subtasks then the subtasks will be sorted but they will stay in their position beneath their parent task (see [Flattening](#flattening)).
 
-It's possible to sort by any attribute, including flagged status. The following displays flagged irems above unflagged ones, and within that sorts by due:
+It's possible to sort by any attribute, including flagged status. The following displays flagged items above unflagged ones, and within that sorts by due:
 
     of2 -ti 'remaining && due.soon' -ts r:flagged -ts due
 
@@ -474,11 +481,11 @@ Using the **-p** option eliminates them.
 
 Sometimes what is a useful Folder/Context hierarchy in OmniFocus ends up making reports look cluttered.
 
-The **-F** option flattens nested the hierarchy to just Folder/Projects/Contexts and lifts sub tasks up to the level of their parent.
+The **-F** option flattens nested the hierarchy to just leaf Folder/Projects/Contexts and lifts sub tasks up to the level of their parent.
 
 All projects and contexts are moved to the root level, and sub tasks moved up to the level of their parent.
 
-This can make sorting more useful, compare the following:
+This can make sorting more useful. If you have a deeply nested hierarchy, compare the following:
 
     of2 -ti 'remaining && due.soon' -ts r:flagged -ts due
     of2 -ti 'remaining && due.soon' -ts r:flagged -ts due -F

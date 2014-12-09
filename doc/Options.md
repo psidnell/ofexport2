@@ -2,7 +2,7 @@
 
     OFEXPORT2
     
-    Version: 1.0.10
+    Version: 1.0.11
     Build Date: 2014-12-09
     
     usage: ofexport2
