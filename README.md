@@ -135,7 +135,10 @@ When done reload your environment by typing:
 
     . ~/.bash_profile
 
-Finally verify everything has worked by typing **ofexport2** (or **of2**) and ensuring it prints it's command line options.
+Finally verify everything has worked by typing either:
+
+    ofexport2 -h
+    of2 -h
 
 ## Uninstallation ###
 
