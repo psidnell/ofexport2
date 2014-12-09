@@ -10,7 +10,7 @@ Export from OmniFocus to various other formats:
 
 Jump To:
 
-- [Latest Stable Release: 1.0.11](https://github.com/psidnell/ofexport2/blob/ofexport-v2-1.0.11/README.md)
+- [Latest Stable Release: 1.0.10](https://github.com/psidnell/ofexport2/blob/ofexport-v2-1.0.10/README.md)
 - [Development Version](https://github.com/psidnell/ofexport2/blob/master/README.md)
 
 Support:
@@ -111,7 +111,7 @@ You should see output similar to:
 
 To get the required files, either:
 
-- Download the latest stable version: [ofexport-v2-1.0.11.zip](https://github.com/psidnell/ofexport2/archive/ofexport-v2-1.0.11.zip)
+- Download the latest stable version: [ofexport-v2-1.0.10.zip](https://github.com/psidnell/ofexport2/archive/ofexport-v2-1.0.10.zip)
 - Download the current development version: [master.zip](https://github.com/psidnell/ofexport2/archive/master.zip)
 - Check out this git repository so you can take updates as you wish with git.
 
