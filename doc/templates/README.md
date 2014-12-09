@@ -36,7 +36,7 @@ Support:
         - [Include or Exclude](#include-or-exclude)
         - [Cascading](#cascading)
         - [Filtering by Date](#filtering-by-date)
-        - [Useful Filtering Attributes](#useful-filtering-attribues)
+        - [Useful Filtering Attributes](#useful-filtering-attributes)
     - [Output and Formats](#output-and-formats)
     - [Sorting](#sorting)
     - [Pruning](#pruning)
