@@ -2,8 +2,8 @@
 
     OFEXPORT2
     
-    Version: 1.0.9
-    Build Date: 2014-12-08
+    Version: 1.0.10
+    Build Date: 2014-12-09
     
     usage: ofexport2
      -h                print help.
@@ -31,6 +31,7 @@
      -ac <arg>         include and cascade: items and all beneath where expression is true.
      -ai <arg>         include: items where expression is true.
      -ax <arg>         exclude: items where expression is true.
+     -an <arg>         include items specified by name.
      -m <arg>          modify a node value.
      -p                prune empty folders, projects and contexts.
      -F                Flatten hierarchies.

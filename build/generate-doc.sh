@@ -7,8 +7,13 @@ NEXT_VERSION=`grep '<version>' pom.xml | head -1 | sed -e 's/.*<version>//' -e '
 
 echo \$NEXT_VERSION=$NEXT_VERSION
 
-echo Generating README.md
-cat doc/templates/README.md | sed -e "s/\$VERSION/$NEXT_VERSION/g" -e "s/\$DATE/$DATE/g" > README.md
+echo Generating Doc
+for TEMPLATE in `ls doc/templates/*.md`
+do
+        FILE=`echo $TEMPLATE | sed -e 's/\/templates//'`
+        cat doc/templates/$TEMPLATE | sed -e "s/\$VERSION/$NEXT_VERSION/g" -e "s/\$DATE/$DATE/g" > $FILE
+done
+mv doc/README.md README.md
 
 echo Generating Options.md
 echo '# Options' > doc/Options.md
@@ -23,11 +28,3 @@ ofexport2 -i | sed -E -e 's/^[PFCT]/## &/' -e 's/( +[a-zA-Z]+ )([a-zA-Z]+)/-\1\*
 echo Generating version.properties
 echo "version:$NEXT_VERSION" > config/version.properties
 echo "date:$DATE" >> config/version.properties
-
-echo Generating TODO.md
-ofexport2 -pn ofexport2 -ti '!completed' -o doc/TODO.md
-
-echo Generating DONE-$DATE.md
-DATE=`date "+%Y-%m"`
-ofexport2 -pn ofexport2 -ti 'completed && completionDate >= date("1st")' -o doc/DONE-$DATE.md
-

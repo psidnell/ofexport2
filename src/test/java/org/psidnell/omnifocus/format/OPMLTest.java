@@ -50,7 +50,7 @@ public class OPMLTest extends FormatTest {
                 "      </outline>",
                 "    </outline>",
                 "  </outline>",
-                "  <outline text=\"p2\" flagged=\"flagged\" _note=\"line1&#10;line2\">",
+                "  <outline text=\"p2\" completed=\"2014-11-27\" flagged=\"flagged\" _note=\"line1&#10;line2\">",
                 "  </outline>",
                 "  <outline text=\"p3\">",
                 "  </outline>",

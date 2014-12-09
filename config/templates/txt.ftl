@@ -50,7 +50,7 @@ $$$$$$$$$$$$$$$
 -->
 <#macro doTask task depth projectMode>
 <@doIndent indent=depth/>
-<#if task.completed>[X]<#else>[ ]</#if> ${task.name}<@doAttribs task/>
+<#if (task.completion.getDate())??>[X]<#else>[ ]</#if> ${task.name}<@doAttribs task/>
 <#if projectMode><#list task.tasks as t><@doTask task=t depth=depth+1  projectMode=projectMode/></#list></#if>
 </#macro>
 <#--

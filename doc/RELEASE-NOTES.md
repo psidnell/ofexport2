@@ -1,5 +1,10 @@
 # OFEXPORT2 Release Notes
 
+## 1.0.10 (2014-12-09)
+
+- Documentation improvements.
+- Template fixes (null pointer exception).
+
 ## 1.0.9 (2014-12-08)
 
 - Added some missing attributes to the debug template.

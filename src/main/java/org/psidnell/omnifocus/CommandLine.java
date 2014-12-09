@@ -201,6 +201,11 @@ public class CommandLine {
                 AFTER_LOAD));
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
+                "an", true, "include items specified by name.",
+                (m,o)->m.ofexport.addExpression("name==\"" + escape(o.nextValue()) + "\"" , true, true),
+                AFTER_LOAD));
+
+        OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "m", true, "modify a node value.",
                 (m,o)->m.ofexport.addModifyExpression(o.nextValue()),
                 AFTER_LOAD));
