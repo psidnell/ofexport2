@@ -10,7 +10,7 @@ Export from OmniFocus to various other formats:
 
 Jump To:
 
-- [Latest Stable Release: 1.0.10](https://github.com/psidnell/ofexport2/blob/ofexport-v2-1.0.10/README.md)
+- [Latest Stable Release: 1.0.11](https://github.com/psidnell/ofexport2/blob/ofexport-v2-1.0.11/README.md)
 - [Development Version](https://github.com/psidnell/ofexport2/blob/master/README.md)
 
 Support:
@@ -36,16 +36,18 @@ Support:
         - [Include or Exclude](#include-or-exclude)
         - [Cascading](#cascading)
         - [Filtering by Date](#filtering-by-date)
-        - [Useful Filtering Attributes](#useful-attribues)
+        - [Useful Filtering Attributes](#useful-filtering-attribues)
     - [Output and Formats](#output-and-formats)
     - [Sorting](#sorting)
     - [Pruning](#pruning)
     - [Flattening](#flattening) 
     - [Inbox and No Context](#inbox-and-no-context)
-    - [Configuration](#configuration)
-    - [Tips](#tips)
-    - [Writing a Template](#writing-a-template)
-    - [Building it Yourself](#building-it-yourself)
+    - [Command Line Options](#command-line-options)
+    - [Full Attribute List](#full-attribute-list)
+  - [Configuration](#configuration)
+  - [Tips](#tips)
+  - [Writing a Template](#writing-a-template)
+  - [Building it Yourself](#building-it-yourself)
 - [ofexport vs ofexport2](#ofexport-vs-ofexport2)
 - [Other Approaches Considered](#other-approaches-considered)
 - [Known Issues](#known-issues)
@@ -109,7 +111,7 @@ You should see output similar to:
 
 To get the required files, either:
 
-- Download the latest stable version: [ofexport-v2-1.0.10.zip](https://github.com/psidnell/ofexport2/archive/ofexport-v2-1.0.10.zip)
+- Download the latest stable version: [ofexport-v2-1.0.11.zip](https://github.com/psidnell/ofexport2/archive/ofexport-v2-1.0.11.zip)
 - Download the current development version: [master.zip](https://github.com/psidnell/ofexport2/archive/master.zip)
 - Check out this git repository so you can take updates as you wish with git.
 
@@ -483,9 +485,25 @@ This can make sorting more useful, compare the following:
 
 ### Inbox and No Context
 
-OmniFocus has special pseudo items **Inbox** and **No Context**. The ofexport2 tool displays both of these as if they were a normal Project and Context so they can be used in filters and templates. 
+OmniFocus has special pseudo items **Inbox** and **No Context**. The ofexport2 tool displays both of these as if they were a normal Project and Context so they can be used in filters and templates.
 
-### Configuration ###
+### Command Line Options
+
+The full options list be displayed by typing:
+
+    of2 -h
+
+or [here](doc/Options.md).
+
+### Full Attribute List
+
+The full list of attributes that can be used in expressions or filters can be displayed by typing:
+
+    of2 -i
+
+or [here](doc/Attributes.md).
+
+## Configuration ##
 
 Configuration files you might need to modify are:
 
@@ -532,7 +550,7 @@ Here's one of my base scripts as an example.
 - Add filters one at time until you get the required output.
 - Use the **-f debug** to use the debug format that lists all attributes of an item.
 
-### Writing a Template ###
+## Writing a Template ##
 
 - The templates are written in [FreeMarker](http://freemarker.org) syntax.
 - The templates live in **config/templates**.
@@ -541,7 +559,7 @@ Here's one of my base scripts as an example.
 
 Copying and experimenting on an existing template is the best way to start.
 
-### Building It Yourself ###
+## Building It Yourself ##
 
 The build is a straight forward java [maven 3](http://maven.apache.org) build.
 
