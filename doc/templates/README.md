@@ -412,7 +412,7 @@ Useful Combinations:
 
 What I do to generate weekly reports. I want a flattened list of work tasks completed this week:
 
-    of2 -fn 'Work' -px 'name.contains("Routine")' -ti 'completionDateBetween("mon","today")' -p -F -f report -O ~/Desktop/Report.taskpaper
+    of2 -fn 'Work' -px 'name.contains("Routine")' -ti 'completion.between("mon","today")' -p -F -f report -O ~/Desktop/Report.taskpaper
 
 ### Output and Formats ###
 
