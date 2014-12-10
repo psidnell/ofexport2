@@ -63,6 +63,7 @@ public class CommandLine implements BeanFactoryAware {
     protected String format = null;
     protected boolean open = false;
     private ConfigParams config; // NOPMD it can't see into lambdas
+    protected String exportFile;
 
     static {
 
@@ -263,7 +264,12 @@ public class CommandLine implements BeanFactoryAware {
                 STARTUP));
 
         OPTIONS.addOption(new ActiveOption<CommandLine> (
-                "l", true, "load data from JSON file instead of database (for testing).",
+                "export", true, "export data to JSON file (for testing).",
+                (m,o)->m.exportFile = o.nextValue (),
+                BEFORE_LOAD));
+
+        OPTIONS.addOption(new ActiveOption<CommandLine> (
+                "import", true, "import data from JSON file instead of database (for testing).",
                 (m,o)->m.jsonInputFile = o.nextValue(),
                 BEFORE_LOAD));
 

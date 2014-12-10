@@ -1,0 +1,40 @@
+Mars
+  On Earth
+    Buy
+      [ ] Buy Parts FLAGGED
+      [ ] Buy Space Suit - 34" Waist (eBay?, Amazon?)
+      [ ] Buy Orbital Mechanics For Dummies
+      [ ] Buy Rocket Ship Kit FLAGGED
+      [ ] Buy Engineering For Dummies
+      [ ] Buy Supplies
+      [ ] Buy Glue FLAGGED
+      [ ] Buy Pop-Tarts (approx 2000)
+      [ ] Buy Tea - Earl Grey (Hot)
+    [ ] Learn Engineering
+    [ ] Learn Orbital Mechanics
+    [ ] Light blue touch-paper due:2025-12-01
+    [ ] Prepare For Launch
+    [ ] Read Orbital Mechanics For Dummies
+    [ ] Get in due:2025-12-01
+    [ ] Launch due:2025-12-01
+    [ ] Build Ship
+    [ ] Read Engineering For Dummies
+    [ ] Assemble Parts
+    [ ] Close door due:2025-12-01
+    [ ] Load Supplies
+    [ ] Let Glue Dry
+    [ ] Aim at Mars
+    [ ] Apply Decals
+  In Flight
+    [ ] Give ships computer a name (Dave? Mother?)
+    [ ] Enter hyper-sleep
+    [ ] Flight
+    [ ] Wake up
+    [ ] Check date, location
+    [ ] Ignore any distress signals, don't land on Monkey planets
+  OnMars
+    [ ] AAAAAAARGH! due:2027-12-01
+    [ ] Say something profound due:2027-12-01
+    [ ] Plant flag due:2027-12-01
+    [ ] See if rocks made of polystyrene due:2027-12-01
+    [ ] Landing due:2027-12-01

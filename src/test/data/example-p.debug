@@ -1,0 +1,707 @@
+Folder id:__%%RootFolder depth:0
+. -name:RootFolder
+. -active:true
+. -dropped:false
+. -folderCount:1
+. -projectCount:0
+. -type:Folder
+. Folder id:hgN2j19gJZp depth:1
+. . -name:Get to Mars
+. . -active:true
+. . -dropped:false
+. . -folderCount:2
+. . -projectCount:2
+. . -type:Folder
+. . Folder id:eQ6NcVeCPWs depth:2
+. . . -name:Build a Rocket Ship
+. . . -active:true
+. . . -dropped:false
+. . . -folderCount:0
+. . . -projectCount:3
+. . . -type:Folder
+. . . Project id:oRdaIkmRUJH depth:3
+. . . . -name:Learn Engineering
+. . . . -activetrue
+. . . . -completedfalse
+. . . . -completionDate:null
+. . . . -contextName:null>
+. . . . -deferDate:2010-12-01
+. . . . -droppedfalse
+. . . . -dueDate:null
+. . . . -estimatedMinutes:-1
+. . . . -flagged:false
+. . . . -onHoldfalse
+. . . . -remaining:true
+. . . . -sequential:true
+. . . . -singleActionList:false
+. . . . -status:active
+. . . . -taskCount:2
+. . . . -type:Project
+. . . . -uncompletedTaskCount:2
+. . . . -unflagged:true
+. . . . -note:null
+. . . . Task id:bVfu4eyfBhr depth:4
+. . . . . -name:Buy Engineering For Dummies
+. . . . . -available:true
+. . . . . -blocked:false
+. . . . . -completed:false
+. . . . . -completionDate:null
+. . . . . -contextName:Buy
+. . . . . -deferDate:2010-12-01
+. . . . . -dueDate:null
+. . . . . -estimatedMinutes:-1
+. . . . . -flagged:false
+. . . . . -available:true
+. . . . . -projectTask:false
+. . . . . -remaining:true
+. . . . . -sequential:false
+. . . . . -taskCount:0
+. . . . . -type:Task
+. . . . . -uncompletedTaskCount:0
+. . . . . -note:null
+. . . . Task id:nIXOutftfbj depth:4
+. . . . . -name:Read Engineering For Dummies
+. . . . . -available:false
+. . . . . -blocked:true
+. . . . . -completed:false
+. . . . . -completionDate:null
+. . . . . -contextName:On Earth
+. . . . . -deferDate:2010-12-01
+. . . . . -dueDate:null
+. . . . . -estimatedMinutes:-1
+. . . . . -flagged:false
+. . . . . -available:false
+. . . . . -projectTask:false
+. . . . . -remaining:true
+. . . . . -sequential:false
+. . . . . -taskCount:0
+. . . . . -type:Task
+. . . . . -uncompletedTaskCount:0
+. . . . . -note:null
+. . . Project id:iZIlrSr9bIp depth:3
+. . . . -name:Learn Orbital Mechanics
+. . . . -activetrue
+. . . . -completedfalse
+. . . . -completionDate:null
+. . . . -contextName:null>
+. . . . -deferDate:null
+. . . . -droppedfalse
+. . . . -dueDate:null
+. . . . -estimatedMinutes:-1
+. . . . -flagged:false
+. . . . -onHoldfalse
+. . . . -remaining:true
+. . . . -sequential:false
+. . . . -singleActionList:false
+. . . . -status:active
+. . . . -taskCount:2
+. . . . -type:Project
+. . . . -uncompletedTaskCount:2
+. . . . -unflagged:true
+. . . . -note:null
+. . . . Task id:bKbN026PfHS depth:4
+. . . . . -name:Buy Orbital Mechanics For Dummies
+. . . . . -available:true
+. . . . . -blocked:false
+. . . . . -completed:false
+. . . . . -completionDate:null
+. . . . . -contextName:Buy
+. . . . . -deferDate:null
+. . . . . -dueDate:null
+. . . . . -estimatedMinutes:-1
+. . . . . -flagged:false
+. . . . . -available:true
+. . . . . -projectTask:false
+. . . . . -remaining:true
+. . . . . -sequential:false
+. . . . . -taskCount:0
+. . . . . -type:Task
+. . . . . -uncompletedTaskCount:0
+. . . . . -note:null
+. . . . Task id:p8QFrZltWq7 depth:4
+. . . . . -name:Read Orbital Mechanics For Dummies
+. . . . . -available:true
+. . . . . -blocked:false
+. . . . . -completed:false
+. . . . . -completionDate:null
+. . . . . -contextName:On Earth
+. . . . . -deferDate:null
+. . . . . -dueDate:null
+. . . . . -estimatedMinutes:-1
+. . . . . -flagged:false
+. . . . . -available:true
+. . . . . -projectTask:false
+. . . . . -remaining:true
+. . . . . -sequential:false
+. . . . . -taskCount:0
+. . . . . -type:Task
+. . . . . -uncompletedTaskCount:0
+. . . . . -note:null
+. . . Project id:eNm12pdvUr3 depth:3
+. . . . -name:Build Ship
+. . . . -activetrue
+. . . . -completedfalse
+. . . . -completionDate:null
+. . . . -contextName:null>
+. . . . -deferDate:null
+. . . . -droppedfalse
+. . . . -dueDate:null
+. . . . -estimatedMinutes:-1
+. . . . -flagged:false
+. . . . -onHoldfalse
+. . . . -remaining:true
+. . . . -sequential:true
+. . . . -singleActionList:false
+. . . . -status:active
+. . . . -taskCount:4
+. . . . -type:Project
+. . . . -uncompletedTaskCount:4
+. . . . -unflagged:true
+. . . . -note:null
+. . . . Task id:naH_W8m2-wo depth:4
+. . . . . -name:Buy Parts
+. . . . . -available:false
+. . . . . -blocked:true
+. . . . . -completed:false
+. . . . . -completionDate:null
+. . . . . -contextName:Buy
+. . . . . -deferDate:2024-12-01
+. . . . . -dueDate:null
+. . . . . -estimatedMinutes:-1
+. . . . . -flagged:true
+. . . . . -available:false
+. . . . . -projectTask:false
+. . . . . -remaining:true
+. . . . . -sequential:false
+. . . . . -taskCount:2
+. . . . . -type:Task
+. . . . . -uncompletedTaskCount:2
+. . . . . -note:null
+. . . . . Task id:f3K2ksOMIew depth:5
+. . . . . . -name:Buy Rocket Ship Kit
+. . . . . . -available:false
+. . . . . . -blocked:true
+. . . . . . -completed:false
+. . . . . . -completionDate:null
+. . . . . . -contextName:Buy
+. . . . . . -deferDate:2024-12-01
+. . . . . . -dueDate:null
+. . . . . . -estimatedMinutes:-1
+. . . . . . -flagged:true
+. . . . . . -available:false
+. . . . . . -projectTask:false
+. . . . . . -remaining:true
+. . . . . . -sequential:false
+. . . . . . -taskCount:0
+. . . . . . -type:Task
+. . . . . . -uncompletedTaskCount:0
+. . . . . . -note:null
+. . . . . Task id:ahKwVm67p4y depth:5
+. . . . . . -name:Buy Glue
+. . . . . . -available:false
+. . . . . . -blocked:true
+. . . . . . -completed:false
+. . . . . . -completionDate:null
+. . . . . . -contextName:Buy
+. . . . . . -deferDate:2024-12-01
+. . . . . . -dueDate:null
+. . . . . . -estimatedMinutes:-1
+. . . . . . -flagged:true
+. . . . . . -available:false
+. . . . . . -projectTask:false
+. . . . . . -remaining:true
+. . . . . . -sequential:false
+. . . . . . -taskCount:0
+. . . . . . -type:Task
+. . . . . . -uncompletedTaskCount:0
+. . . . . . -note:null
+. . . . Task id:mK6N8b_vo8n depth:4
+. . . . . -name:Assemble Parts
+. . . . . -available:false
+. . . . . -blocked:true
+. . . . . -completed:false
+. . . . . -completionDate:null
+. . . . . -contextName:On Earth
+. . . . . -deferDate:null
+. . . . . -dueDate:null
+. . . . . -estimatedMinutes:-1
+. . . . . -flagged:false
+. . . . . -available:false
+. . . . . -projectTask:false
+. . . . . -remaining:true
+. . . . . -sequential:false
+. . . . . -taskCount:0
+. . . . . -type:Task
+. . . . . -uncompletedTaskCount:0
+. . . . . -note:null
+. . . . Task id:cQ6l5wh5lqG depth:4
+. . . . . -name:Let Glue Dry
+. . . . . -available:false
+. . . . . -blocked:true
+. . . . . -completed:false
+. . . . . -completionDate:null
+. . . . . -contextName:On Earth
+. . . . . -deferDate:null
+. . . . . -dueDate:null
+. . . . . -estimatedMinutes:-1
+. . . . . -flagged:false
+. . . . . -available:false
+. . . . . -projectTask:false
+. . . . . -remaining:true
+. . . . . -sequential:false
+. . . . . -taskCount:0
+. . . . . -type:Task
+. . . . . -uncompletedTaskCount:0
+. . . . . -note:null
+. . . . Task id:d_68UPzENx_ depth:4
+. . . . . -name:Apply Decals
+. . . . . -available:false
+. . . . . -blocked:true
+. . . . . -completed:false
+. . . . . -completionDate:null
+. . . . . -contextName:On Earth
+. . . . . -deferDate:null
+. . . . . -dueDate:null
+. . . . . -estimatedMinutes:-1
+. . . . . -flagged:false
+. . . . . -available:false
+. . . . . -projectTask:false
+. . . . . -remaining:true
+. . . . . -sequential:false
+. . . . . -taskCount:0
+. . . . . -type:Task
+. . . . . -uncompletedTaskCount:0
+. . . . . -note:null
+. . Folder id:aCsVUSRu7ib depth:2
+. . . -name:Launch Rocket Ship
+. . . -active:true
+. . . -dropped:false
+. . . -folderCount:0
+. . . -projectCount:2
+. . . -type:Folder
+. . . Project id:bRsFIjNwZbJ depth:3
+. . . . -name:Prepare For Launch
+. . . . -activetrue
+. . . . -completedfalse
+. . . . -completionDate:null
+. . . . -contextName:null>
+. . . . -deferDate:null
+. . . . -droppedfalse
+. . . . -dueDate:null
+. . . . -estimatedMinutes:-1
+. . . . -flagged:false
+. . . . -onHoldfalse
+. . . . -remaining:true
+. . . . -sequential:true
+. . . . -singleActionList:false
+. . . . -status:active
+. . . . -taskCount:3
+. . . . -type:Project
+. . . . -uncompletedTaskCount:3
+. . . . -unflagged:true
+. . . . -note:null
+. . . . Task id:nS1r64c-vc1 depth:4
+. . . . . -name:Buy Supplies
+. . . . . -available:false
+. . . . . -blocked:true
+. . . . . -completed:false
+. . . . . -completionDate:null
+. . . . . -contextName:Buy
+. . . . . -deferDate:null
+. . . . . -dueDate:null
+. . . . . -estimatedMinutes:-1
+. . . . . -flagged:false
+. . . . . -available:false
+. . . . . -projectTask:false
+. . . . . -remaining:true
+. . . . . -sequential:false
+. . . . . -taskCount:3
+. . . . . -type:Task
+. . . . . -uncompletedTaskCount:3
+. . . . . -note:null
+. . . . . Task id:o3gAKpDzVl_ depth:5
+. . . . . . -name:Buy Space Suit - 34" Waist (eBay?, Amazon?)
+. . . . . . -available:true
+. . . . . . -blocked:false
+. . . . . . -completed:false
+. . . . . . -completionDate:null
+. . . . . . -contextName:Buy
+. . . . . . -deferDate:null
+. . . . . . -dueDate:null
+. . . . . . -estimatedMinutes:-1
+. . . . . . -flagged:false
+. . . . . . -available:true
+. . . . . . -projectTask:false
+. . . . . . -remaining:true
+. . . . . . -sequential:false
+. . . . . . -taskCount:0
+. . . . . . -type:Task
+. . . . . . -uncompletedTaskCount:0
+. . . . . . -note:null
+. . . . . Task id:aKfI5xfBuvP depth:5
+. . . . . . -name:Buy Pop-Tarts (approx 2000)
+. . . . . . -available:true
+. . . . . . -blocked:false
+. . . . . . -completed:false
+. . . . . . -completionDate:null
+. . . . . . -contextName:Buy
+. . . . . . -deferDate:null
+. . . . . . -dueDate:null
+. . . . . . -estimatedMinutes:-1
+. . . . . . -flagged:false
+. . . . . . -available:true
+. . . . . . -projectTask:false
+. . . . . . -remaining:true
+. . . . . . -sequential:false
+. . . . . . -taskCount:0
+. . . . . . -type:Task
+. . . . . . -uncompletedTaskCount:0
+. . . . . . -note:null
+. . . . . Task id:keJVgAldMJM depth:5
+. . . . . . -name:Buy Tea - Earl Grey (Hot)
+. . . . . . -available:true
+. . . . . . -blocked:false
+. . . . . . -completed:false
+. . . . . . -completionDate:null
+. . . . . . -contextName:Buy
+. . . . . . -deferDate:null
+. . . . . . -dueDate:null
+. . . . . . -estimatedMinutes:-1
+. . . . . . -flagged:false
+. . . . . . -available:true
+. . . . . . -projectTask:false
+. . . . . . -remaining:true
+. . . . . . -sequential:false
+. . . . . . -taskCount:0
+. . . . . . -type:Task
+. . . . . . -uncompletedTaskCount:0
+. . . . . . -note:null
+. . . . Task id:klPUJCl2UHi depth:4
+. . . . . -name:Load Supplies
+. . . . . -available:false
+. . . . . -blocked:true
+. . . . . -completed:false
+. . . . . -completionDate:null
+. . . . . -contextName:On Earth
+. . . . . -deferDate:null
+. . . . . -dueDate:null
+. . . . . -estimatedMinutes:-1
+. . . . . -flagged:false
+. . . . . -available:false
+. . . . . -projectTask:false
+. . . . . -remaining:true
+. . . . . -sequential:false
+. . . . . -taskCount:0
+. . . . . -type:Task
+. . . . . -uncompletedTaskCount:0
+. . . . . -note:null
+. . . . Task id:bTykoCKa7wT depth:4
+. . . . . -name:Aim at Mars
+. . . . . -available:false
+. . . . . -blocked:true
+. . . . . -completed:false
+. . . . . -completionDate:null
+. . . . . -contextName:On Earth
+. . . . . -deferDate:null
+. . . . . -dueDate:null
+. . . . . -estimatedMinutes:-1
+. . . . . -flagged:false
+. . . . . -available:false
+. . . . . -projectTask:false
+. . . . . -remaining:true
+. . . . . -sequential:false
+. . . . . -taskCount:0
+. . . . . -type:Task
+. . . . . -uncompletedTaskCount:0
+. . . . . -note:null
+. . . Project id:cjyoX1RTVjv depth:3
+. . . . -name:Launch
+. . . . -activetrue
+. . . . -completedfalse
+. . . . -completionDate:null
+. . . . -contextName:null>
+. . . . -deferDate:null
+. . . . -droppedfalse
+. . . . -dueDate:2025-12-01
+. . . . -estimatedMinutes:-1
+. . . . -flagged:false
+. . . . -onHoldfalse
+. . . . -remaining:true
+. . . . -sequential:true
+. . . . -singleActionList:false
+. . . . -status:active
+. . . . -taskCount:3
+. . . . -type:Project
+. . . . -uncompletedTaskCount:3
+. . . . -unflagged:true
+. . . . -note:null
+. . . . Task id:iRQNsA4IjhV depth:4
+. . . . . -name:Light blue touch-paper
+. . . . . -available:true
+. . . . . -blocked:false
+. . . . . -completed:false
+. . . . . -completionDate:null
+. . . . . -contextName:On Earth
+. . . . . -deferDate:null
+. . . . . -dueDate:2025-12-01
+. . . . . -estimatedMinutes:-1
+. . . . . -flagged:false
+. . . . . -available:true
+. . . . . -projectTask:false
+. . . . . -remaining:true
+. . . . . -sequential:false
+. . . . . -taskCount:0
+. . . . . -type:Task
+. . . . . -uncompletedTaskCount:0
+. . . . . -note:null
+. . . . Task id:gMCmskF4WSB depth:4
+. . . . . -name:Get in
+. . . . . -available:false
+. . . . . -blocked:true
+. . . . . -completed:false
+. . . . . -completionDate:null
+. . . . . -contextName:On Earth
+. . . . . -deferDate:null
+. . . . . -dueDate:2025-12-01
+. . . . . -estimatedMinutes:-1
+. . . . . -flagged:false
+. . . . . -available:false
+. . . . . -projectTask:false
+. . . . . -remaining:true
+. . . . . -sequential:false
+. . . . . -taskCount:0
+. . . . . -type:Task
+. . . . . -uncompletedTaskCount:0
+. . . . . -note:null
+. . . . Task id:i4g-FDfTfjD depth:4
+. . . . . -name:Close door
+. . . . . -available:false
+. . . . . -blocked:true
+. . . . . -completed:false
+. . . . . -completionDate:null
+. . . . . -contextName:On Earth
+. . . . . -deferDate:null
+. . . . . -dueDate:2025-12-01
+. . . . . -estimatedMinutes:-1
+. . . . . -flagged:false
+. . . . . -available:false
+. . . . . -projectTask:false
+. . . . . -remaining:true
+. . . . . -sequential:false
+. . . . . -taskCount:0
+. . . . . -type:Task
+. . . . . -uncompletedTaskCount:0
+. . . . . -note:null
+. . Project id:hyftpdomj2t depth:2
+. . . -name:Flight
+. . . -activetrue
+. . . -completedfalse
+. . . -completionDate:null
+. . . -contextName:null>
+. . . -deferDate:null
+. . . -droppedfalse
+. . . -dueDate:null
+. . . -estimatedMinutes:-1
+. . . -flagged:false
+. . . -onHoldfalse
+. . . -remaining:true
+. . . -sequential:true
+. . . -singleActionList:false
+. . . -status:active
+. . . -taskCount:5
+. . . -type:Project
+. . . -uncompletedTaskCount:5
+. . . -unflagged:true
+. . . -note:null
+. . . Task id:ihgPCuXPmJw depth:3
+. . . . -name:Give ships computer a name (Dave? Mother?)
+. . . . -available:true
+. . . . -blocked:false
+. . . . -completed:false
+. . . . -completionDate:null
+. . . . -contextName:In Flight
+. . . . -deferDate:null
+. . . . -dueDate:null
+. . . . -estimatedMinutes:-1
+. . . . -flagged:false
+. . . . -available:true
+. . . . -projectTask:false
+. . . . -remaining:true
+. . . . -sequential:false
+. . . . -taskCount:0
+. . . . -type:Task
+. . . . -uncompletedTaskCount:0
+. . . . -note:null
+. . . Task id:nnF53Z-wyis depth:3
+. . . . -name:Enter hyper-sleep
+. . . . -available:false
+. . . . -blocked:true
+. . . . -completed:false
+. . . . -completionDate:null
+. . . . -contextName:In Flight
+. . . . -deferDate:null
+. . . . -dueDate:null
+. . . . -estimatedMinutes:-1
+. . . . -flagged:false
+. . . . -available:false
+. . . . -projectTask:false
+. . . . -remaining:true
+. . . . -sequential:false
+. . . . -taskCount:0
+. . . . -type:Task
+. . . . -uncompletedTaskCount:0
+. . . . -note:null
+. . . Task id:mHvgvcHg6pT depth:3
+. . . . -name:Wake up
+. . . . -available:false
+. . . . -blocked:true
+. . . . -completed:false
+. . . . -completionDate:null
+. . . . -contextName:In Flight
+. . . . -deferDate:null
+. . . . -dueDate:null
+. . . . -estimatedMinutes:-1
+. . . . -flagged:false
+. . . . -available:false
+. . . . -projectTask:false
+. . . . -remaining:true
+. . . . -sequential:false
+. . . . -taskCount:0
+. . . . -type:Task
+. . . . -uncompletedTaskCount:0
+. . . . -note:null
+. . . Task id:a5GndYV4FCW depth:3
+. . . . -name:Check date, location
+. . . . -available:false
+. . . . -blocked:true
+. . . . -completed:false
+. . . . -completionDate:null
+. . . . -contextName:In Flight
+. . . . -deferDate:null
+. . . . -dueDate:null
+. . . . -estimatedMinutes:-1
+. . . . -flagged:false
+. . . . -available:false
+. . . . -projectTask:false
+. . . . -remaining:true
+. . . . -sequential:false
+. . . . -taskCount:0
+. . . . -type:Task
+. . . . -uncompletedTaskCount:0
+. . . . -note:null
+. . . Task id:abrI9J-CbKT depth:3
+. . . . -name:Ignore any distress signals, don't land on Monkey planets
+. . . . -available:false
+. . . . -blocked:true
+. . . . -completed:false
+. . . . -completionDate:null
+. . . . -contextName:In Flight
+. . . . -deferDate:null
+. . . . -dueDate:null
+. . . . -estimatedMinutes:-1
+. . . . -flagged:false
+. . . . -available:false
+. . . . -projectTask:false
+. . . . -remaining:true
+. . . . -sequential:false
+. . . . -taskCount:0
+. . . . -type:Task
+. . . . -uncompletedTaskCount:0
+. . . . -note:null
+. . Project id:cIoTLyW40r0 depth:2
+. . . -name:Landing
+. . . -activetrue
+. . . -completedfalse
+. . . -completionDate:null
+. . . -contextName:null>
+. . . -deferDate:null
+. . . -droppedfalse
+. . . -dueDate:2027-12-01
+. . . -estimatedMinutes:-1
+. . . -flagged:false
+. . . -onHoldfalse
+. . . -remaining:true
+. . . -sequential:true
+. . . -singleActionList:false
+. . . -status:active
+. . . -taskCount:4
+. . . -type:Project
+. . . -uncompletedTaskCount:4
+. . . -unflagged:true
+. . . -note:null
+. . . Task id:gViYTFGgIkF depth:3
+. . . . -name:AAAAAAARGH!
+. . . . -available:true
+. . . . -blocked:false
+. . . . -completed:false
+. . . . -completionDate:null
+. . . . -contextName:OnMars
+. . . . -deferDate:null
+. . . . -dueDate:2027-12-01
+. . . . -estimatedMinutes:-1
+. . . . -flagged:false
+. . . . -available:true
+. . . . -projectTask:false
+. . . . -remaining:true
+. . . . -sequential:false
+. . . . -taskCount:0
+. . . . -type:Task
+. . . . -uncompletedTaskCount:0
+. . . . -note:null
+. . . Task id:pf8w56yhkD1 depth:3
+. . . . -name:Say something profound
+. . . . -available:false
+. . . . -blocked:true
+. . . . -completed:false
+. . . . -completionDate:null
+. . . . -contextName:OnMars
+. . . . -deferDate:null
+. . . . -dueDate:2027-12-01
+. . . . -estimatedMinutes:-1
+. . . . -flagged:false
+. . . . -available:false
+. . . . -projectTask:false
+. . . . -remaining:true
+. . . . -sequential:false
+. . . . -taskCount:0
+. . . . -type:Task
+. . . . -uncompletedTaskCount:0
+. . . . -note:null
+. . . Task id:bGjzsUQkoJ4 depth:3
+. . . . -name:Plant flag
+. . . . -available:false
+. . . . -blocked:true
+. . . . -completed:false
+. . . . -completionDate:null
+. . . . -contextName:OnMars
+. . . . -deferDate:null
+. . . . -dueDate:2027-12-01
+. . . . -estimatedMinutes:-1
+. . . . -flagged:false
+. . . . -available:false
+. . . . -projectTask:false
+. . . . -remaining:true
+. . . . -sequential:false
+. . . . -taskCount:0
+. . . . -type:Task
+. . . . -uncompletedTaskCount:0
+. . . . -note:null
+. . . Task id:gbY4kQUv3JM depth:3
+. . . . -name:See if rocks made of polystyrene
+. . . . -available:false
+. . . . -blocked:true
+. . . . -completed:false
+. . . . -completionDate:null
+. . . . -contextName:OnMars
+. . . . -deferDate:null
+. . . . -dueDate:2027-12-01
+. . . . -estimatedMinutes:-1
+. . . . -flagged:false
+. . . . -available:false
+. . . . -projectTask:false
+. . . . -remaining:true
+. . . . -sequential:false
+. . . . -taskCount:0
+. . . . -type:Task
+. . . . -uncompletedTaskCount:0
+. . . . -note:null

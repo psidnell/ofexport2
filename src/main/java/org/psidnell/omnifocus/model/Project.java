@@ -143,7 +143,7 @@ public class Project extends CommonProjectAndTaskAttributes {
         return COMPLETED.equals(getStatus());
     }
 
-    public void setIsCompleted(boolean dummy) {
+    public void setCompleted(boolean dummy) {
         // Keep Jackson happy
     }
 

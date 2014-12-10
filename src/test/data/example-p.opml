@@ -1,0 +1,83 @@
+<opml version="1.0">
+  <head>
+    <title>OmniFocus</title>
+  </head>
+  <body>
+<outline text="Get to Mars">
+  <outline text="Build a Rocket Ship">
+    <outline text="Learn Engineering">
+      <outline text="Buy Engineering For Dummies" context="Buy">
+      </outline>
+      <outline text="Read Engineering For Dummies" context="On Earth">
+      </outline>
+    </outline>
+    <outline text="Learn Orbital Mechanics">
+      <outline text="Buy Orbital Mechanics For Dummies" context="Buy">
+      </outline>
+      <outline text="Read Orbital Mechanics For Dummies" context="On Earth">
+      </outline>
+    </outline>
+    <outline text="Build Ship">
+      <outline text="Buy Parts" flagged="flagged" context="Buy">
+        <outline text="Buy Rocket Ship Kit" flagged="flagged" context="Buy">
+        </outline>
+        <outline text="Buy Glue" flagged="flagged" context="Buy">
+        </outline>
+      </outline>
+      <outline text="Assemble Parts" context="On Earth">
+      </outline>
+      <outline text="Let Glue Dry" context="On Earth">
+      </outline>
+      <outline text="Apply Decals" context="On Earth">
+      </outline>
+    </outline>
+  </outline>
+  <outline text="Launch Rocket Ship">
+    <outline text="Prepare For Launch">
+      <outline text="Buy Supplies" context="Buy">
+        <outline text="Buy Space Suit - 34&quot; Waist (eBay?, Amazon?)" context="Buy">
+        </outline>
+        <outline text="Buy Pop-Tarts (approx 2000)" context="Buy">
+        </outline>
+        <outline text="Buy Tea - Earl Grey (Hot)" context="Buy">
+        </outline>
+      </outline>
+      <outline text="Load Supplies" context="On Earth">
+      </outline>
+      <outline text="Aim at Mars" context="On Earth">
+      </outline>
+    </outline>
+    <outline text="Launch">
+      <outline text="Light blue touch-paper" context="On Earth">
+      </outline>
+      <outline text="Get in" context="On Earth">
+      </outline>
+      <outline text="Close door" context="On Earth">
+      </outline>
+    </outline>
+  </outline>
+  <outline text="Flight">
+    <outline text="Give ships computer a name (Dave? Mother?)" context="In Flight">
+    </outline>
+    <outline text="Enter hyper-sleep" context="In Flight">
+    </outline>
+    <outline text="Wake up" context="In Flight">
+    </outline>
+    <outline text="Check date, location" context="In Flight">
+    </outline>
+    <outline text="Ignore any distress signals, don&apos;t land on Monkey planets" context="In Flight">
+    </outline>
+  </outline>
+  <outline text="Landing">
+    <outline text="AAAAAAARGH!" context="OnMars">
+    </outline>
+    <outline text="Say something profound" context="OnMars">
+    </outline>
+    <outline text="Plant flag" context="OnMars">
+    </outline>
+    <outline text="See if rocks made of polystyrene" context="OnMars">
+    </outline>
+  </outline>
+</outline>
+  </body>
+</opml>

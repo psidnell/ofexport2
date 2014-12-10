@@ -1,0 +1,38 @@
+Get to Mars:
+	Build a Rocket Ship:
+		Learn Engineering:
+			- Buy Engineering For Dummies @Buy
+			- Read Engineering For Dummies @On Earth
+		Learn Orbital Mechanics:
+			- Buy Orbital Mechanics For Dummies @Buy
+			- Read Orbital Mechanics For Dummies @On Earth
+		Build Ship:
+			- Buy Parts @flagged @Buy
+				- Buy Rocket Ship Kit @flagged @Buy
+				- Buy Glue @flagged @Buy
+			- Assemble Parts @On Earth
+			- Let Glue Dry @On Earth
+			- Apply Decals @On Earth
+	Launch Rocket Ship:
+		Prepare For Launch:
+			- Buy Supplies @Buy
+				- Buy Space Suit - 34" Waist (eBay?, Amazon?) @Buy
+				- Buy Pop-Tarts (approx 2000) @Buy
+				- Buy Tea - Earl Grey (Hot) @Buy
+			- Load Supplies @On Earth
+			- Aim at Mars @On Earth
+		Launch: @done(2025-12-01)
+			- Light blue touch-paper @done(2025-12-01) @On Earth
+			- Get in @done(2025-12-01) @On Earth
+			- Close door @done(2025-12-01) @On Earth
+	Flight:
+		- Give ships computer a name (Dave? Mother?) @In Flight
+		- Enter hyper-sleep @In Flight
+		- Wake up @In Flight
+		- Check date, location @In Flight
+		- Ignore any distress signals, don't land on Monkey planets @In Flight
+	Landing: @done(2027-12-01)
+		- AAAAAAARGH! @done(2027-12-01) @OnMars
+		- Say something profound @done(2027-12-01) @OnMars
+		- Plant flag @done(2027-12-01) @OnMars
+		- See if rocks made of polystyrene @done(2027-12-01) @OnMars

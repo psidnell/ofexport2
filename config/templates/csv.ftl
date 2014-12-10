@@ -68,6 +68,6 @@ $ MACRO: doRow
 $$$$$$$$$$$$$$$$$$
 -->
 <#macro doRow node>
-"${node.name?replace("\"","'")}"<#if (node.flagged)??>,"FLAGGED"<#else>,</#if><#if (node.defer.getDate())??>,"${node.defer.getDate()?string[config.template_date_format]}"<#else>,</#if><#if (node.due.getDate())??>,"${node.due.getDate()?string[config.template_date_format]}"<#else>,</#if><#if (node.completion.getDate())??>,"${node.completion.getDate()?string[config.template_date_format]}"<#else>,</#if><#if (node.note)??>,"${node.note?replace("\"","'")?replace("\n"," ")}"</#if>
+"${node.name?replace("\"","'")}"<#if (node.flagged)?? && node.flagged>,"FLAGGED"<#else>,</#if><#if (node.defer.getDate())??>,"${node.defer.getDate()?string[config.template_date_format]}"<#else>,</#if><#if (node.due.getDate())??>,"${node.due.getDate()?string[config.template_date_format]}"<#else>,</#if><#if (node.completion.getDate())??>,"${node.completion.getDate()?string[config.template_date_format]}"<#else>,</#if><#if (node.note)??>,"${node.note?replace("\"","'")?replace("\n"," ")}"</#if>
 </#macro>
  

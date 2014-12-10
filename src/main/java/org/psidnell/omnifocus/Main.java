@@ -143,6 +143,12 @@ public class Main extends CommandLine {
 
         main.procesPreLoadOptions(args);
 
+        if (main.exportFile != null) {
+            SQLiteDAO dao = appContext.getBean("sqlitedao", SQLiteDAO.class);
+            DataCache.exportData(new File(main.exportFile), (f)->true, dao, appContext);
+            return;
+        }
+
         main.loadData();
 
         main.processPostLoadOptions(args);

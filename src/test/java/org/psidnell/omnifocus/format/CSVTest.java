@@ -22,7 +22,7 @@ import org.psidnell.omnifocus.OFExport;
 import org.psidnell.omnifocus.integrationtest.Diff;
 
 public class CSVTest extends FormatTest {
-    
+
     @Test
     public void testProjectMode () throws Exception {
         OFExport ofExport = new OFExport();
@@ -31,20 +31,20 @@ public class CSVTest extends FormatTest {
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
-                
+
         Diff.diff (new String[]
             {
                 "\"f1\",,,,",
-                "\"p1\",\"FLAGGED\",,,",
+                "\"p1\",,,,",
                 "\"t1\",\"FLAGGED\",\"2014-11-27\",,",
-                "\"t2\",\"FLAGGED\",,\"2014-11-27\",,\"line1 line2\"",
-                "\"t3\",\"FLAGGED\",,,\"2014-11-27\",\"line1 line2\"",
-                "\"t4\",\"FLAGGED\",,,\"2014-11-27\",\"line1 line2\"",
+                "\"t2\",,,\"2014-11-27\",,\"line1 line2\"",
+                "\"t3\",,,,\"2014-11-27\",\"line1 line2\"",
+                "\"t4\",,,,\"2014-11-27\",\"line1 line2\"",
                 "\"p2\",\"FLAGGED\",,\"2014-11-27\",\"2014-11-27\",\"line1 line2\"",
-                "\"p3\",\"FLAGGED\",,,",
+                "\"p3\",,,,",
             }, out.toString().split("\n"));
     }
-    
+
     @Test
     public void testContextMode () throws Exception {
         OFExport ofExport = new OFExport();
@@ -54,14 +54,14 @@ public class CSVTest extends FormatTest {
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
-                
+
         Diff.diff (new String[]
             {
                 "\"c1\",,,,",
                 "\"c2\",,,,",
-                "\"t3\",\"FLAGGED\",,,\"2014-11-27\",\"line1 line2\"",
-                "\"t4\",\"FLAGGED\",,,\"2014-11-27\",\"line1 line2\"",
-                "\"t2\",\"FLAGGED\",,\"2014-11-27\",,\"line1 line2\"",
+                "\"t3\",,,,\"2014-11-27\",\"line1 line2\"",
+                "\"t4\",,,,\"2014-11-27\",\"line1 line2\"",
+                "\"t2\",,,\"2014-11-27\",,\"line1 line2\"",
             }, out.toString().split("\n"));
     }
 }
