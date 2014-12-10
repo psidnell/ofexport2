@@ -32,8 +32,6 @@ import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.sqlite.SQLiteDAO;
 import org.psidnell.omnifocus.util.IOUtils;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.context.ApplicationContext;
 
 /**
@@ -41,13 +39,11 @@ import org.springframework.context.ApplicationContext;
  *
  *         The main(...) of the program. There had to be one somewhere. Well here it is.
  */
-public class Main extends CommandLine implements BeanFactoryAware {
+public class Main extends CommandLine {
 
     private DataCache data;
 
     private SQLiteDAO sqliteDAO;
-
-    private BeanFactory beanFactory;
 
     private void loadData() throws IllegalAccessException, InvocationTargetException, InstantiationException, SQLException, IOException {
         if (jsonInputFile != null) {
@@ -63,13 +59,13 @@ public class Main extends CommandLine implements BeanFactoryAware {
             // Add root projects/folders to the fabricated root folder
             for (Folder child : data.getFolders().values()) {
                 if (child.getProjectModeParent() == null) {
-                    projectRoot.getFolders().add(child);
+                    projectRoot.add(child);
                 }
             }
 
             for (Project child : data.getProjects().values()) {
                 if (child.getProjectModeParent() == null) {
-                    projectRoot.getProjects().add(child);
+                    projectRoot.add(child);
                 }
             }
         } else {
@@ -77,7 +73,7 @@ public class Main extends CommandLine implements BeanFactoryAware {
             // Add root contexts to the fabricated root context
             for (Context child : data.getContexts().values()) {
                 if (child.getContextModeParent() == null) {
-                    contextRoot.getContexts().add(child);
+                    contextRoot.add(child);
                 }
             }
         }
@@ -158,10 +154,5 @@ public class Main extends CommandLine implements BeanFactoryAware {
 
     public void setSqliteDAO(SQLiteDAO sqliteDAO) {
         this.sqliteDAO = sqliteDAO;
-    }
-
-    @Override
-    public void setBeanFactory(BeanFactory beanFactory) {
-        this.beanFactory = beanFactory;
     }
 }

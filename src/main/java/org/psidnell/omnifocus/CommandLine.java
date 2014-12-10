@@ -26,9 +26,12 @@ import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
+import org.psidnell.omnifocus.visitor.SimplifyFilter;
 import org.psidnell.omnifocus.visitor.FlattenFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
 
 /**
  * @author psidnell
@@ -36,12 +39,14 @@ import org.slf4j.LoggerFactory;
  * Command line processing. Contains the options themselves and the values
  * the options affect.
  */
-public class CommandLine {
+public class CommandLine implements BeanFactoryAware {
 
     protected static final String PRINT_HELP = "printHelp";
     protected static final String PRINT_INFO = "printInfo";
 
     protected final static Logger LOGGER = LoggerFactory.getLogger(CommandLine.class);
+
+    protected BeanFactory beanFactory;
 
     final static Options OPTIONS = new Options();
 
@@ -57,6 +62,7 @@ public class CommandLine {
     protected OFExport ofexport = null;
     protected String format = null;
     protected boolean open = false;
+    private ConfigParams config; // NOPMD it can't see into lambdas
 
     static {
 
@@ -209,6 +215,7 @@ public class CommandLine {
                 "m", true, "modify a node value.",
                 (m,o)->m.ofexport.addModifyExpression(o.nextValue()),
                 AFTER_LOAD));
+
         // MODES
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
@@ -217,10 +224,14 @@ public class CommandLine {
                 AFTER_LOAD));
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
-                "F", false, "Flatten hierarchies.",
-                (m,o)->m.ofexport.addFilter (new FlattenFilter()),
+                "S", false, "Simplify hierarchies.",
+                (m,o)->m.ofexport.addFilter (new SimplifyFilter()),
                 AFTER_LOAD));
 
+        OPTIONS.addOption(new ActiveOption<CommandLine>(
+                "F", false, "Flatten hierarchies.",
+                (m,o)->m.ofexport.addFilter (new FlattenFilter(m.config)),
+                AFTER_LOAD));
 
         OPTIONS.addOption(new ActiveOption<CommandLine> (
                 "c", false, "context mode: filter and display context hierarchy instead of project hierarchy.",
@@ -310,5 +321,11 @@ public class CommandLine {
 
     public void setProcessor (ActiveOptionProcessor<CommandLine> processor) {
         this.processor = processor;
+    }
+
+    @Override
+    public void setBeanFactory(BeanFactory beanFactory) {
+        this.beanFactory = beanFactory;
+        config = beanFactory.getBean("configparams", ConfigParams.class);
     }
 }

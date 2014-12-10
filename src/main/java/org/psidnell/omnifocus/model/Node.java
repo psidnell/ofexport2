@@ -40,8 +40,6 @@ public interface Node {
 
     boolean isRoot();
 
-    void setIsRoot(boolean isRoot);
-
     boolean isMarked();
 
     void setMarked(boolean marked);

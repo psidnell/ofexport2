@@ -31,6 +31,7 @@ Export from OmniFocus to various other formats:
     - [Output and Formats](#output-and-formats)
     - [Sorting](#sorting)
     - [Pruning](#pruning)
+    - [Simplifying](#simplifying) 
     - [Flattening](#flattening) 
     - [Inbox and No Context](#inbox-and-no-context)
     - [Command Line Options](#command-line-options)
@@ -471,18 +472,58 @@ Sometimes the output is cluttered with empty Contexts, Folders or Projects that 
 
 Using the **-p** option eliminates them.
 
-### Flattening ###
+### Simplifying ###
 
 Sometimes what is a useful Folder/Context hierarchy in OmniFocus ends up making reports look cluttered.
 
-The **-F** option flattens nested the hierarchy to just leaf Folder/Projects/Contexts and lifts sub tasks up to the level of their parent.
+The **-S** option simplifies the nested the hierarchy to just leaf Folder/Projects/Contexts and lifts sub tasks up to the level of their parent.
 
 All projects and contexts are moved to the root level, and sub tasks moved up to the level of their parent.
+
+For example if you have:
+
+    FolderF1
+      FolderF2
+        ProjectP
+          TaskT1
+            TaskT2
+            TaskT3
+
+You will get:
+
+    ProjectP
+      TaskT1
+      TaskT2
+      TaskT3
 
 This can make sorting more useful. If you have a deeply nested hierarchy, compare the following:
 
     of2 -ti 'remaining && due.soon' -ts r:flagged -ts due
-    of2 -ti 'remaining && due.soon' -ts r:flagged -ts due -F
+    of2 -ti 'remaining && due.soon' -ts r:flagged -ts due -S
+
+### Flattening
+
+Flattening with **-F** is an extreme form of simplifying.
+
+For example if you have:
+
+    FolderF1
+      FolderF2
+        ProjectP
+          TaskT1
+            TaskT2
+            TaskT3
+        ProjectP2
+          TaskT4
+
+You will get:
+
+    Tasks
+      TaskT1
+      TaskT2
+      TaskT3
+
+The name of the resultant root node can be modified by changing the **flattenedRootName** configuration value.
 
 ### Inbox and No Context
 
@@ -597,6 +638,8 @@ a large export rather than about a second when accessing the database directly. 
 
 ## Known Issues ##
 
-- Task/Project notes are stripped back to ASCII on export because wide characters seem corrupted when I retrieve them. This could be down to the encoding OmniFocus uses or it could be an issue with the SQLite Java driver. I experimented with various obvious specific encodings but that didn't help.
+- Task/Project notes are stripped back to ASCII on export because wide characters seem corrupted when I retrieve them. This could be down to the encoding OmniFocus uses or it could be an issue with the SQLite Java driver.
 - Perspective data is something I haven't managed to decode.
 - In  OmniFocus, child Contexts/Tasks are interleaved, as are child Projects/Folders. In ofexport they are not.
+- There is no way to detect if Projects are **stalled** or **pending**.
+- The **modified** and **added** times are missing from the attributes. 

@@ -24,6 +24,7 @@ package org.psidnell.omnifocus;
 public class ConfigParams {
 
     private String dueSoon;
+    private String flattenedRootName;
 
     public void setDueSoon(String dueSoon) {
         this.dueSoon = dueSoon;
@@ -31,5 +32,13 @@ public class ConfigParams {
 
     public String getDueSoon() {
         return dueSoon;
+    }
+
+    public void setFlattenedRootName(String name) {
+        this.flattenedRootName = name;
+    }
+
+    public String getFlattenedRootName() {
+        return flattenedRootName;
     }
 }

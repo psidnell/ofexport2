@@ -17,7 +17,6 @@ package org.psidnell.omnifocus.visitor;
 
 import java.util.Set;
 
-import org.psidnell.omnifocus.ConfigParams;
 import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Project;
@@ -28,15 +27,9 @@ import org.psidnell.omnifocus.model.Task;
  *
  *         Flatten node hierarchies to improve readability.
  */
-public class FlattenFilter implements Visitor {
+public class SimplifyFilter implements Visitor {
 
     private static final VisitorDescriptor WHAT = new VisitorDescriptor().visit(Folder.class, Project.class, Context.class);
-
-    private ConfigParams config;
-
-    public FlattenFilter(ConfigParams config) {
-        this.config = config;
-    }
 
     @Override
     public VisitorDescriptor getWhat() {
@@ -46,36 +39,42 @@ public class FlattenFilter implements Visitor {
     @Override
     public void enter(Folder node) {
 
-        if (node.isRoot()) {
-            CollectingVisitor collector = new CollectingVisitor(new VisitorDescriptor().visitAll());
-            Traverser.traverse(collector, node);
+        CollectingVisitor collector = new CollectingVisitor(new VisitorDescriptor().visit(Folder.class, Project.class));
+        Traverser.traverse(collector, node);
 
-            node.getProjects().clear();
-            node.getFolders().clear();
-            Set<Task> projects = collector.getTasks();
-            Project newParent = new Project(config.getFlattenedRootName());
-            node.add(newParent);
-            for (Task child : projects) {
-                newParent.add(child);
-            }
+        Set<Project> projects = collector.getProjects();
+        node.getProjects().clear();
+        for (Project child : projects) {
+            node.add(child);
+        }
+
+        node.getFolders().clear();
+    }
+
+    @Override
+    public void enter(Project node) {
+
+        CollectingVisitor collector = new CollectingVisitor(new VisitorDescriptor().visit(Project.class, Task.class));
+        Traverser.traverse(collector, node);
+
+        Set<Task> tasks = collector.getTasks();
+        node.getTasks().clear();
+        for (Task child : tasks) {
+            node.add(child);
         }
     }
 
     @Override
     public void enter(Context node) {
 
-        if (node.isRoot()) {
-            CollectingVisitor collector = new CollectingVisitor(new VisitorDescriptor().visitAll());
-            Traverser.traverse(collector, node);
+        CollectingVisitor collector = new CollectingVisitor(new VisitorDescriptor().visit(Context.class));
+        Traverser.traverse(collector, node);
 
-            Set<Task> tasks = collector.getTasks();
-            node.getContexts().clear();
-            node.getTasks().clear();
-            Context newParent = new Context(config.getFlattenedRootName());
-            node.add(newParent);
-            for (Task child : tasks) {
-                newParent.add(child);
-            }
+        Set<Context> contexts = collector.getContexts();
+        contexts.remove(node);
+        node.getContexts().clear();
+        for (Context child : contexts) {
+            node.add(child);
         }
     }
 

@@ -24,6 +24,8 @@ import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
 import org.psidnell.omnifocus.visitor.FlattenFilter;
+import org.psidnell.omnifocus.visitor.SimplifyFilter;
+import org.springframework.context.ApplicationContext;
 
 public class OFExportTest {
 
@@ -636,7 +638,7 @@ public class OFExportTest {
     }
 
     @Test
-    public void testFlattenFolders () throws Exception {
+    public void testSimplifyFolders () throws Exception {
         OFExport ofExport = new OFExport();
 
         Folder f1 = new Folder ("f1");
@@ -655,7 +657,7 @@ public class OFExportTest {
         ofExport.getProjectRoot().add(f1);
         ofExport.getProjectRoot().add(p2);
 
-        ofExport.addFilter(new FlattenFilter());
+        ofExport.addFilter(new SimplifyFilter());
         ofExport.addProjectComparator("name");
         ofExport.addTaskComparator("name");
         ofExport.process();
@@ -672,7 +674,7 @@ public class OFExportTest {
     }
 
     @Test
-    public void testFlattenContexts () throws Exception {
+    public void testSimplifyContexts () throws Exception {
         OFExport ofExport = new OFExport();
         ofExport.setProjectMode(false);
 
@@ -697,7 +699,7 @@ public class OFExportTest {
         ofExport.getContextRoot().add(c);
         ofExport.addContextComparator("name");
         ofExport.addTaskComparator("name");
-        ofExport.addFilter(new FlattenFilter());
+        ofExport.addFilter(new SimplifyFilter());
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
@@ -800,5 +802,85 @@ public class OFExportTest {
                     "    [ ] t2",
                 }, out.toString().split("\n"));
     }
+
+    @Test
+    public void testFlattenFolders () throws Exception {
+        ApplicationContext appContext = ApplicationContextFactory.getContext();
+        ConfigParams config = appContext.getBean("configparams", ConfigParams.class);
+
+        OFExport ofExport = new OFExport();
+
+        Folder f1 = new Folder ("f1");
+
+        Project p1 = new Project ("p1");
+        f1.add(p1);
+
+        Task t1 = new Task ("t1");
+        p1.add(t1);
+
+        Task t2 = new Task ("t2");
+        t1.add (t2);
+
+        Project p2 = new Project ("p2");
+
+        ofExport.getProjectRoot().add(f1);
+        ofExport.getProjectRoot().add(p2);
+
+        ofExport.addFilter(new FlattenFilter(config));
+        ofExport.addProjectComparator("name");
+        ofExport.addTaskComparator("name");
+        ofExport.process();
+        StringWriter out = new StringWriter();
+        ofExport.write(out);
+
+        Diff.diff (new String[]
+            {
+                "Tasks",
+                "  [ ] t1",
+                "  [ ] t2",
+            }, out.toString().split("\n"));
+    }
+
+    @Test
+    public void testFlattenContexts () throws Exception {
+        ApplicationContext appContext = ApplicationContextFactory.getContext();
+        ConfigParams config = appContext.getBean("configparams", ConfigParams.class);
+
+        OFExport ofExport = new OFExport();
+        ofExport.setProjectMode(false);
+
+        Context c1 = new Context ("c1");
+        c1.setRank(2);
+        Context c2 = new Context ("c2");
+        c2.setRank(1);
+        Context c3 = new Context ("c3");
+        c3.setRank(3);
+
+        Context c = new Context ("c");
+        c.add(c1);
+        c.add(c2);
+        c.add(c3);
+
+        Task t1 = new Task ("t1");
+        c2.add(t1);
+        Task t2 = new Task ("t2");
+        c2.add(t2);
+
+        ofExport.getContextRoot().add(c);
+        ofExport.addContextComparator("name");
+        ofExport.addTaskComparator("name");
+        ofExport.addFilter(new FlattenFilter(config));
+        ofExport.process();
+        StringWriter out = new StringWriter();
+        ofExport.write(out);
+
+        Diff.diff (new String[]
+                {
+                    "Tasks",
+                    "  [ ] t1",
+                    "  [ ] t2",
+                }, out.toString().split("\n"));
+    }
+
 
 }

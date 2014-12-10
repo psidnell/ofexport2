@@ -39,8 +39,6 @@ public abstract class NodeImpl extends ExpressionFunctions implements Node {
 
     private int rank;
 
-    private boolean isRoot;
-
     private boolean marked = false;
 
     @Override
@@ -88,12 +86,12 @@ public abstract class NodeImpl extends ExpressionFunctions implements Node {
     @Override
     @JsonIgnore
     public boolean isRoot() {
-        return isRoot;
-    }
-
-    @Override
-    public void setIsRoot(boolean isRoot) {
-        this.isRoot = isRoot;
+        if (getType().equals(Folder.TYPE) && ((Folder) this).getProjectModeParent() == null) {
+            return true;
+        } else if (getType().equals(Context.TYPE) && ((Context) this).getContextModeParent() == null) {
+            return true;
+        }
+        return false;
     }
 
     @Override

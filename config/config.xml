@@ -31,7 +31,9 @@
 	</bean>
 	
 	<bean name="configparams" class="org.psidnell.omnifocus.ConfigParams">
+	    <!-- Copy values we need from property file into the bean -->
 		<property name="dueSoon" value="${dueSoon}"/>
+		<property name="flattenedRootName" value="${flattenedRootName}"/>
 	</bean>
 	
 	<!-- Node Types -->
