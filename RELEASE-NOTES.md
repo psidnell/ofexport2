@@ -2,6 +2,8 @@
 
 **[Development Version](https://github.com/psidnell/ofexport2/archive/master.zip)**
 
+**[1.0.11 (2014-12-10)](https://github.com/psidnell/ofexport2/archive/ofexport-v2-1.0.11.zip)**
+
 - Documentation Improvements
 - Provided two variants of Flatten filter, -S and -F.
 
