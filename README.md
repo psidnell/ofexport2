@@ -503,7 +503,7 @@ This can make sorting more useful. If you have a deeply nested hierarchy, compar
 
 ### Flattening
 
-Flattening with **-F** is an extreme form of simplifying.
+Flattening with **-F** is an extreme form of simplifying. All existing hierachies are erased leaving a flat list of tasks under a new Project/Context called "Tasks".
 
 For example if you have:
 
@@ -522,6 +522,7 @@ You will get:
       TaskT1
       TaskT2
       TaskT3
+      TaskT4
 
 The name of the resultant root node can be modified by changing the **flattenedRootName** configuration value.
 
