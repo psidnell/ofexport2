@@ -374,9 +374,11 @@ The third shows only the matching folders and nothing beneath them.
 
 Tasks and Projects have several dates:
 
-- completion
-- defer
-- due
+- **completion** - when the item was completed. 
+- **defer** - When the item becomes available.
+- **due** - when the item is due.
+- **modified** - when the item was last modified.
+- **added** - when the item was added.
 
 There are various ways to match on dates and dateRanges:
 
