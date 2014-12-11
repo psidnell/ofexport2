@@ -5,7 +5,7 @@ $$$$$$$$$$$$$$$$$$
 -->
 <#global INDENT="\t">
 <#global TODAY=root.date("today")>
-${config.report_ftl_title} ${TODAY?string[config.report_date_format]}:
+${config.reportTitle} ${TODAY?string[config.reportDateFormat]}:
 <#--
 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 $ Walk over items in root node
@@ -76,6 +76,6 @@ $ MACRO: doDateTag
 $$$$$$$$$$$$$$$$$$
 Using Java SimpleDateFormat conversion
 -->
-<#macro doDateTag date> @${date?string[config.report_date_format]}</#macro>
+<#macro doDateTag date> @${date?string[config.reportDateFormat]}</#macro>
  
  

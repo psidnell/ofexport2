@@ -70,7 +70,7 @@ $$$$$$$$$$$$$$$
 Using Java SimpleDateFormat conversion
 -->
 <#macro doAttribs node>
-<#if (node.completion.getDate())??> done:${node.completion.getDate()?string[config.template_date_format]}</#if><#if (node.due.getDate())??> due:${node.due.getDate()?string[config.template_date_format]}</#if><#if node.flagged> FLAGGED</#if></#macro> 
+<#if (node.completion.getDate())??> done:${node.completion.getDate()?string[config.templateDateFormat]}</#if><#if (node.due.getDate())??> due:${node.due.getDate()?string[config.templateDateFormat]}</#if><#if node.flagged> FLAGGED</#if></#macro> 
 <#--
 $$$$$$$$$$$$$$$$$$
 $ MACRO: doIndent

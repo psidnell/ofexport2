@@ -78,7 +78,7 @@ $$$$$$$$$$$$$$$
 Using Java SimpleDateFormat conversion
 -->
 <#macro doTags node>
-<#if (node.completion.getDate())??> @done(${node.completion.getDate()?string[config.template_date_format]})</#if><#if node.flagged> @flagged</#if><#if (node.due.getDate())??> @due(${node.due.getDate()?string["yyyy-MM-dd"]})</#if><#if (node.contextName)??> @${node.contextName?replace(" ","")?replace(",","")?replace("@","")?replace(".","")}</#if></#macro> 
+<#if (node.completion.getDate())??> @done(${node.completion.getDate()?string[config.templateDateFormat]})</#if><#if node.flagged> @flagged</#if><#if (node.due.getDate())??> @due(${node.due.getDate()?string["yyyy-MM-dd"]})</#if><#if (node.contextName)??> @${node.contextName?replace(" ","")?replace(",","")?replace("@","")?replace(".","")}</#if></#macro> 
 <#--
 $$$$$$$$$$$$$$$
 $ MACRO: doNote

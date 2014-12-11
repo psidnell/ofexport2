@@ -171,7 +171,7 @@ $$$$$$$$$$$$$$$
 Using Java SimpleDateFormat conversion
 -->
 <#macro doAttribs node>
-<span class="Attrib"><#if (node.flagged)??> <span class="AFlagged">FLAGGED</span></#if><#if (node.defer.getDate())??> <span class="AStart">${node.defer.getDate()?string[config.template_date_format]}</span></#if><#if (node.due.getDate())??> <span class="ADue">${node.due.getDate()?string[config.template_date_format]}</span></#if><#if (node.completion.getDate())??> <span class="AComplete">${node.completion.getDate()?string[config.template_date_format]}</span></#if></span></#macro>
+<span class="Attrib"><#if (node.flagged)??> <span class="AFlagged">FLAGGED</span></#if><#if (node.defer.getDate())??> <span class="AStart">${node.defer.getDate()?string[config.templateDateFormat]}</span></#if><#if (node.due.getDate())??> <span class="ADue">${node.due.getDate()?string[config.templateDateFormat]}</span></#if><#if (node.completion.getDate())??> <span class="AComplete">${node.completion.getDate()?string[config.templateDateFormat]}</span></#if></span></#macro>
 <#--
 $$$$$$$$$$$$$$$
 $ MACRO: doNote
