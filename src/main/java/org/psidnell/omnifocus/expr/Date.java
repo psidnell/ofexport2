@@ -113,10 +113,10 @@ public class Date extends ExpressionFunctions implements Comparable<Date> {
             return 0;
         }
         if (date == null && o.date != null) {
-            return -1;
+            return 1;
         }
         if (date != null && o.date == null) {
-            return 1;
+            return -1;
         }
         return date.compareTo(o.date);
     }

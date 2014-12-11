@@ -2,6 +2,10 @@
 
 **[Development Version](https://github.com/psidnell/ofexport2/archive/master.zip)**
 
+- Adjusted date sort so items with date appear above those without by default.
+- Considering items complete if folder dropped.
+- Fixed missing colons in debug template.
+
 **[1.0.12 (2014-12-11)](https://github.com/psidnell/ofexport2/archive/ofexport-v2-1.0.12.zip)**
 
 - Fixed bug in CSV template that marked all items as flagged.

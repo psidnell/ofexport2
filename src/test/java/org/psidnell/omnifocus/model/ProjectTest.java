@@ -109,7 +109,7 @@ public class ProjectTest {
         assertTrue(child.isCompleted());
 
         parent.setActive(false);
-        assertFalse(child.isCompleted());
+        assertTrue(child.isCompleted());
     }
 
     @Test public void testOnHoldInheritedFromParentFolder () {

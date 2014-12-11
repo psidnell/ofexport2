@@ -38,16 +38,16 @@ $$$$$$$$$$$$$$$$$$
 <#macro doProject project depth>
 <@doIndent indent=depth/>Project id:${project.id} depth:${depth}
 <@doIndent indent=depth/>. -name:${project.name}
-<@doIndent indent=depth/>. -active${project.active?c}
-<@doIndent indent=depth/>. -completed${project.completed?c}
+<@doIndent indent=depth/>. -active:${project.active?c}
+<@doIndent indent=depth/>. -completed:${project.completed?c}
 <@doIndent indent=depth/>. -completionDate:<#if (project.completion.getDate())??>${project.completion.getDate()?string[config.template_date_format]}<#else>null</#if>
 <@doIndent indent=depth/>. -contextName:<#if (project.contextName)??>${project.contextName}<#else>null></#if>
 <@doIndent indent=depth/>. -deferDate:<#if (project.defer.getDate())??>${project.defer.getDate()?string[config.template_date_format]}<#else>null</#if>
-<@doIndent indent=depth/>. -dropped${project.dropped?c}
+<@doIndent indent=depth/>. -dropped:${project.dropped?c}
 <@doIndent indent=depth/>. -dueDate:<#if (project.due.getDate())??>${project.due.getDate()?string[config.template_date_format]}<#else>null</#if>
 <@doIndent indent=depth/>. -estimatedMinutes:${project.estimatedMinutes}
 <@doIndent indent=depth/>. -flagged:${project.flagged?c}
-<@doIndent indent=depth/>. -onHold${project.onHold?c}
+<@doIndent indent=depth/>. -onHold:${project.onHold?c}
 <@doIndent indent=depth/>. -remaining:${project.remaining?c}
 <@doIndent indent=depth/>. -sequential:${project.sequential?c}
 <@doIndent indent=depth/>. -singleActionList:${project.singleActionList?c}

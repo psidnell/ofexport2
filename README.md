@@ -16,7 +16,7 @@ These above example files (and more) can be found here:
 - [OPML](src/test/data/example-p.opml)
 - [TaskPaper](src/test/data/example-p.taskpaper)
 - [Report (a compact variant of Taskpaper)](src/test/data/example-p.report)
-- [text](src/test/data/example-p.txt)
+- [Text](src/test/data/example-p.txt)
 - [XML](src/test/data/example-p.xml)
 - [JSON](src/test/data/example-p.json)
 
@@ -79,6 +79,8 @@ You're going to have to know [where your towel is](http://hitchhikers.wikia.com/
 1. The tool reads the entire OmniFocus SQLite database.
 2. Various command line filters are applied to eliminate unwanted data, sort items, etc.
 3. The remaining data is printed to the console or saved to a file in some specific format.
+
+The Omnifocus database is read but **never modified**, the filters and modifications work only on the tools copy of the OmniFocus data.
 
 Currently supported export formats are:
 
@@ -375,11 +377,12 @@ The third shows only the matching folders and nothing beneath them.
 
 Tasks and Projects have several dates:
 
-- **completion** - when the item was completed. 
-- **defer** - When the item becomes available.
-- **due** - when the item is due.
-- **modified** - when the item was last modified.
-- **added** - when the item was added.
+- **completion** - date when the item was completed.
+- **completed** - true if item is complete.
+- **defer** - date when the item becomes available.
+- **due** - date when the item is due.
+- **modified** - date when the item was last modified.
+- **added** - date when the item was added.
 
 There are various ways to match on dates and dateRanges:
 
@@ -391,10 +394,15 @@ There are various ways to match on dates and dateRanges:
     of2 -ti '!completed && due.before("2015-01-01")'
     of2 -ti '!completed && due.onOrBefore("2015-01-01")'
     of2 -ti '!completed && due.soon'
+    of2 -ti 'due.set'
 
 Some of the above filters also include a check that the item is not completed (**!completed**). This is because completed items retain their defer and due dates. Typically when we want to know what's due or starting we're not interested in what we've already done. However if you did want to see them just remove the check.
 
+Not all "completed" items have a completion date - this is the way OmniFocus works. For example if a Folder is dropped then the the Projects/Tasks within it can reasonably be said to be completed (i.e. neither available or remaining), but OmniFocus does not give them a completion date or delete them. The reason is probably so that the Folder status can be later changed back to active and the sub items will return from the dead.
+
 When using '**.soon**', the value is set in the dueSoon configuration variable see [Configuration](#configuration). This can be applied to any of the dates but clearly makes no sense for the completion attribute!.
+
+The '**.set**' is a way of determining if the item has the date set at all.
 
 The strings formats of dates that are accepted in these filters are:
 
@@ -411,13 +419,6 @@ The strings formats of dates that are accepted in these filters are:
 - **"1m"**,"**+1month"**,**"-2months"**: months in the future/past.
 - **"1y"**,"**+1year"**,**"-2years"**: months in the future/past.
 - **"1st"**,"**2nd"**,**"23rd"**: day of this month.
-
-There are two attributes with similar names:
-
-- **completion**: The **date** an item was completed.
-- **completed**: **true** if the item is completed, **false** otherwise.
-
-Not all "completed" items have a completion date - this is the way OmniFocus works. For example if a Folder is dropped then the the Projects/Tasks within it can reasonably be said to be completed (i.e. neither available or remaining), but OmniFocus does not give them a completion date. The reason is probably so that the Folder status can be later changed back to active and the sub items will return from the dead.
 
 #### Useful Filtering Attributes ####
 
@@ -484,11 +485,12 @@ Filtering **Contexts** by **status**:
     of2 -c -cc onHold
     of2 -c -cx dropped
 
-Useful Combinations:
+Useful **Combinations**:
 
     of2 -ti 'available && defer.is("today")'
     of2 -ti 'available && (due.soon || flagged)'
     of2 -ti 'completion.between("mon","today")'
+    of2 -ti 'due.set && remaining' -F -ts due
 
 What I do to generate weekly reports. I want a flattened list of work tasks completed this week:
 
@@ -708,6 +710,16 @@ Here's one of my base scripts as an example.
 
 - Add filters one at time until you get the required output.
 - Use the **-f debug** to use the debug format that lists all attributes of an item.
+
+#### Modifying Node Values
+
+Suppose you want a report but don't want to see Task notes:
+
+    of2 -m 'type=="Task" && note=null'
+
+Note the use of the single '=' in the second part of the expression, this actually modifies (deletes) the note. All manner of lunacy is possible:
+
+    of2 -m 'name.contains("Fight Club") && name=name.replaceAll("Fight", "XXXXX")'
 
 ## Writing a Template ##
 

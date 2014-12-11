@@ -140,7 +140,15 @@ public class Project extends CommonProjectAndTaskAttributes {
     @Override
     @ExprAttribute(help = "item is complete.")
     public boolean isCompleted() {
-        return COMPLETED.equals(getStatus());
+        if (COMPLETED.equals(getStatus())) {
+            return true;
+        }
+
+        if (parent != null && ((Folder)parent).isDropped()){
+            return true;
+        }
+
+        return false;
     }
 
     public void setCompleted(boolean dummy) {

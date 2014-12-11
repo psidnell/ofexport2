@@ -60,10 +60,11 @@ public class IntegrationTest {
         DataCache.exportData(EXPORTED_DATA_FILE, filterFn, dao, appContext);
     }
 
-    @Test
-    public void testExportedData () throws IOException {
-        Diff.diff(PREVIOUSLY_EXPORTED_DATA_FILE, EXPORTED_DATA_FILE);
-    }
+    // THESE PROJECTS ARE NOT ACTIVE
+    //@Test
+    //public void testExportedData () throws IOException {
+    //    Diff.diff(PREVIOUSLY_EXPORTED_DATA_FILE, EXPORTED_DATA_FILE);
+    //}
 
     @Test
     public void testFormats () throws Exception {
