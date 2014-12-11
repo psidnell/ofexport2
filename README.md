@@ -15,6 +15,7 @@ These above example files (and more) can be found here:
 - [Markdown](src/test/data/example-p.md)
 - [OPML](src/test/data/example-p.opml)
 - [TaskPaper](src/test/data/example-p.taskpaper)
+- [Report (a compact variant of Taskpaper)](src/test/data/example-p.report)
 - [text](src/test/data/example-p.txt)
 - [XML](src/test/data/example-p.xml)
 - [JSON](src/test/data/example-p.json)
