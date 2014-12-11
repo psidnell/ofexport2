@@ -10,14 +10,14 @@ Export from OmniFocus to various other formats:
 
 These above example files (and more) can be found here:
 
+- [HTML (violently coloured)](http://htmlpreview.github.io/?https://github.com/psidnell/ofexport2/blob/master/src/test/data/example-p.html)
 - [CSV](src/test/data/example-p.csv)
-- [HTML](http://htmlpreview.github.io/?https://github.com/psidnell/ofexport2/blob/master/src/test/data/example-p.html)
-- [JSON](src/test/data/example-p.json)
 - [Markdown](src/test/data/example-p.md)
 - [OPML](src/test/data/example-p.opml)
 - [TaskPaper](src/test/data/example-p.taskpaper)
 - [text](src/test/data/example-p.txt)
 - [XML](src/test/data/example-p.xml)
+- [JSON](src/test/data/example-p.json)
 
 ## Support:
 
