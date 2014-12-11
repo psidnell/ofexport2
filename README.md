@@ -8,7 +8,16 @@ Export from OmniFocus to various other formats:
 
 ![](doc/images/Screen.png)
 
-These (and other) example files can be found [here](src/test/data):
+These above example files (and more) can be found here:
+
+- [CSV](src/test/data/example-p.csv)
+- [HTML](src/test/data/example-p.html)
+- [JSON](src/test/data/example-p.json)
+- [Markdown](src/test/data/example-p.md)
+- [OPML](src/test/data/example-p.opml)
+- [TaskPaper](src/test/data/example-p.taskpaper)
+- [text](src/test/data/example-p.txt)
+- [XML](src/test/data/example-p.xml)
 
 ## Support:
 

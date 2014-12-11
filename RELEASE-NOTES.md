@@ -2,6 +2,8 @@
 
 **[Development Version](https://github.com/psidnell/ofexport2/archive/master.zip)**
 
+**[1.0.12 (2014-12-11)](https://github.com/psidnell/ofexport2/archive/ofexport-v2-1.0.12.zip)**
+
 - Fixed bug in CSV template that marked all items as flagged.
 - Fixed a ranking bug that caused items to appear in the wrong order in Context mode or after flattening.
 - Improved Markdown formatting.
