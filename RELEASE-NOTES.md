@@ -5,6 +5,7 @@
 - Adjusted date sort so items with date appear above those without by default.
 - Considering items complete if folder dropped.
 - Fixed missing colons in debug template.
+- Made naming of config properties consistent.
 
 **[1.0.12 (2014-12-11)](https://github.com/psidnell/ofexport2/archive/ofexport-v2-1.0.12.zip)**
 
