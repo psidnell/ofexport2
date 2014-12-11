@@ -393,7 +393,7 @@ There are various ways to match on dates and dateRanges:
 
 Some of the above filters also include a check that the item is not completed (**!completed**). This is because completed items retain their defer and due dates. Typically when we want to know what's due or starting we're not interested in what we've already done. However if you did want to see them just remove the check.
 
-Note that when using '**.soon**', the value is set in the dueSoon configuration variable see [Configuration](#configuration). This can be applied to any of the dates but clearly makes no sense for the completion attribute!.
+When using '**.soon**', the value is set in the dueSoon configuration variable see [Configuration](#configuration). This can be applied to any of the dates but clearly makes no sense for the completion attribute!.
 
 The strings formats of dates that are accepted in these filters are:
 
@@ -411,10 +411,10 @@ The strings formats of dates that are accepted in these filters are:
 - **"1y"**,"**+1year"**,**"-2years"**: months in the future/past.
 - **"1st"**,"**2nd"**,**"23rd"**: day of this month.
 
-Note that there are two attributes with similar names:
+There are two attributes with similar names:
 
-- **completion**: The date an item was completed.
-- **completed**: true if the item is completed, false otherwise.
+- **completion**: The **date** an item was completed.
+- **completed**: **true** if the item is completed, **false** otherwise.
 
 Not all "completed" items have a completion date - this is the way OmniFocus works. For example if a Folder is dropped then the the Projects/Tasks within it can reasonably be said to be completed (i.e. neither available or remaining), but OmniFocus does not give them a completion date. The reason is probably so that the Folder status can be later changed back to active and the sub items will return from the dead.
 
@@ -537,7 +537,7 @@ It's possible to have chain the sorts much like filters:
 
 This sorts items by their completion date, and for those with the same date it then sorts by name.
 
-Note that items are sorted at a particular level. If a task has subtasks then the subtasks will be sorted but they will stay in their position beneath their parent task (see [Flattening](#flattening)).
+Items are sorted at a particular level. If a task has subtasks then the subtasks will be sorted but they will stay in their position beneath their parent task. This can be overcome by [Simplifying](#simplifying) or [Flattening](#flattening) the hierarchy.
 
 It's possible to sort by any attribute, including flagged status. The following displays flagged items above unflagged ones, and within that sorts by due:
 
