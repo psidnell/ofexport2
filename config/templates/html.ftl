@@ -153,9 +153,9 @@ $ MACRO: doContext
 $$$$$$$$$$$$$$$$$$
 -->
 <#macro doContext context depth>
-<@doIndent indent=depth/><H${depth+1} class="Context"><a href="omnifocus:///context/${context.id}">${escape(context.name)}</a><@doAttribs context/></H${depth+1}>
-<#list context.contexts as c><@doContext context=c depth=depth+1/></#list>
+<@doIndent indent=depth/><H${depth+1} class="Context"><a href="omnifocus:///context/${context.id}">${escape(context.name)}</a><@doAttribs context/></H${depth+1}><ul>
 <#list context.tasks as t><@doTask task=t depth=depth+1 projectMode=false/></#list>
+<#list context.contexts as c><@doContext context=c depth=depth+1/></#list>
 <@doIndent indent=depth/></ul>
 </#macro>
 <#--

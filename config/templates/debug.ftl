@@ -104,8 +104,8 @@ $$$$$$$$$$$$$$$$$$
 <@doIndent indent=depth/>. -taskCount:${context.taskCount}
 <@doIndent indent=depth/>. -type:${context.type}
 <@doIndent indent=depth/>. -uncompletedTaskCount:${context.uncompletedTaskCount}
-<#list context.contexts as c><@doContext context=c depth=depth+1/></#list>
 <#list context.tasks as t><@doTask task=t depth=depth+1 projectMode=false/></#list>
+<#list context.contexts as c><@doContext context=c depth=depth+1/></#list>
 </#macro>
 <#--
 $$$$$$$$$$$$$$$$$$

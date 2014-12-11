@@ -84,8 +84,8 @@ public class OFExport {
         // rank to give a robust sort order after any re-arrangements we make.
         Traverser.traverse(new SortingFilter(), projectRoot);
         Traverser.traverse(new SortingFilter(), contextRoot);
-        Traverser.traverse(new ReRankingVisitor(projectMode), projectRoot);
-        Traverser.traverse(new ReRankingVisitor(projectMode), contextRoot);
+        Traverser.traverse(new ReRankingVisitor(true), projectRoot);
+        Traverser.traverse(new ReRankingVisitor(false), contextRoot);
 
         if (projectMode) {
             for (Visitor filter : filters) {

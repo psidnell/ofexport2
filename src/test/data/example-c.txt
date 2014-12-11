@@ -1,37 +1,37 @@
-
+Example Context
   On Earth
-    Buy
-      [ ] Buy Parts FLAGGED
-      [ ] Buy Space Suit - 34" Waist (eBay?, Amazon?)
-      [ ] Buy Orbital Mechanics For Dummies
-      [ ] Buy Rocket Ship Kit FLAGGED
-      [ ] Buy Engineering For Dummies
-      [ ] Buy Supplies
-      [ ] Buy Glue FLAGGED
-      [ ] Buy Pop-Tarts (approx 2000)
-      [ ] Buy Tea - Earl Grey (Hot)
     [ ] Learn Engineering
     [ ] Learn Orbital Mechanics
-    [ ] Light blue touch-paper due:2025-12-01
     [ ] Prepare For Launch
+    [ ] Read Engineering For Dummies
     [ ] Read Orbital Mechanics For Dummies
+    [ ] Assemble Parts
+    [ ] Let Glue Dry
+    [ ] Apply Decals
+    [ ] Load Supplies
+    [ ] Aim at Mars
+    [ ] Light blue touch-paper due:2025-12-01
     [ ] Get in due:2025-12-01
+    [ ] Close door due:2025-12-01
     [ ] Launch due:2025-12-01
     [ ] Build Ship
-    [ ] Read Engineering For Dummies
-    [ ] Assemble Parts
-    [ ] Close door due:2025-12-01
-    [ ] Load Supplies
-    [ ] Let Glue Dry
-    [ ] Aim at Mars
-    [ ] Apply Decals
+    Buy
+      [ ] Buy Engineering For Dummies
+      [ ] Buy Orbital Mechanics For Dummies
+      [ ] Buy Parts FLAGGED
+      [ ] Buy Rocket Ship Kit FLAGGED
+      [ ] Buy Glue FLAGGED
+      [ ] Buy Supplies
+      [ ] Buy Space Suit - 34" Waist (eBay?, Amazon?)
+      [ ] Buy Pop-Tarts (approx 2000)
+      [ ] Buy Tea - Earl Grey (Hot)
   In Flight
     [ ] Give ships computer a name (Dave? Mother?)
     [ ] Enter hyper-sleep
-    [ ] Flight
     [ ] Wake up
     [ ] Check date, location
     [ ] Ignore any distress signals, don't land on Monkey planets
+    [ ] Flight
   OnMars
     [ ] AAAAAAARGH! due:2027-12-01
     [ ] Say something profound due:2027-12-01

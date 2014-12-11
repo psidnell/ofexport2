@@ -20,7 +20,7 @@ import org.psidnell.omnifocus.ConfigParams;
 /**
  * @author psidnell
  *
- * Root node interface.
+ *         Root node interface.
  */
 public interface Node {
 
@@ -48,4 +48,15 @@ public interface Node {
 
     void setConfigParams(ConfigParams config);
 
+    java.util.Date getDateAdded();
+
+    void setDateAdded(java.util.Date date);
+
+    org.psidnell.omnifocus.expr.Date getAdded();
+
+    java.util.Date getDateModified();
+
+    void setDateModified(java.util.Date date);
+
+    org.psidnell.omnifocus.expr.Date getModified();
 }

@@ -15,6 +15,8 @@ limitations under the License.
 */
 package org.psidnell.omnifocus.integrationtest;
 
+import static org.junit.Assert.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -65,6 +67,11 @@ public class IntegrationTest {
 
     @Test
     public void testFormats () throws Exception {
+
+        // IF THE TEST FAILS because you've changed a template, set doDiff=false
+        // and copy the generated files over the test files.
+        boolean doDiff = true;
+
         String[] suffixes = {
             "csv",
             "debug",
@@ -73,23 +80,29 @@ public class IntegrationTest {
             "opml",
             "report",
             "taskpaper",
-            "txt"
+            "txt",
+            "json",
+            "xml"
         };
 
         for (String suffix : suffixes) {
             LOGGER.warn("Suffix:" + suffix);
-            runMainAndDiff("example-p." + suffix, new String[0]);
-            runMainAndDiff("example-c." + suffix, new String[]{"-c"});
+            runMainAndDiff("example-p." + suffix, new String[0], doDiff);
+            runMainAndDiff("example-c." + suffix, new String[]{"-c"}, doDiff);
         }
+
+        assertTrue ("Turn this back on", doDiff);
     }
 
-    private void runMainAndDiff(final String name, String[] extraArgs) throws Exception, IOException {
+    private void runMainAndDiff(final String name, String[] extraArgs, boolean doDiff) throws Exception, IOException {
         File tmp = new File (tmpDataDir, name);
         String[] args = {"-import", PREVIOUSLY_EXPORTED_DATA_FILE.getPath(), "-o", tmp.getPath()};
         LinkedList<String> combinedArgs = new LinkedList<>();
         combinedArgs.addAll(Arrays.asList(args));
         combinedArgs.addAll(Arrays.asList(extraArgs));
         Main.main(combinedArgs.toArray(new String[combinedArgs.size()]));
-        Diff.diff(new File("src/test/data/" + name), tmp);
+        if (doDiff) {
+            Diff.diff(new File("src/test/data/" + name), tmp);
+        }
     }
 }

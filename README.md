@@ -6,6 +6,10 @@ Export from OmniFocus to various other formats:
 
 ![](doc/images/Diagram.png)
 
+![](doc/images/Screen.png)
+
+These (and other) example files can be found [here](src/test/data):
+
 ## Support:
 
 - [Open a Bug](https://github.com/psidnell/ofexport2/issues)

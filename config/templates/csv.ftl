@@ -59,8 +59,8 @@ $$$$$$$$$$$$$$$$$$
 -->
 <#macro doContext context>
 <@doRow context/>
-<#list context.contexts as c><@doContext context=c/></#list>
 <#list context.tasks as t><@doTask task=t projectMode=false/></#list>
+<#list context.contexts as c><@doContext context=c/></#list>
 </#macro>
 <#--
 $$$$$$$$$$$$$$$$$$

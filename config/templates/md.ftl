@@ -76,8 +76,8 @@ $$$$$$$$$$$$$$$$$$
 <@doHeading indent=headingDepth/>${context.name}
 <#assign blankline=true>
 
-<#list context.contexts as c><@doContext context=c headingDepth=headingDepth+1/></#list>
 <#list context.tasks as t><@doTask task=t textDepth=0 projectMode=false/></#list>
+<#list context.contexts as c><@doContext context=c headingDepth=headingDepth+1/></#list>
 <@doSmartBlankline/>
 </#macro>
 <#--

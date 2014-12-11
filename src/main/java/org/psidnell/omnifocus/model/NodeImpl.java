@@ -15,6 +15,7 @@ limitations under the License.
  */
 package org.psidnell.omnifocus.model;
 
+import java.util.Date;
 import java.util.UUID;
 
 import org.psidnell.omnifocus.ConfigParams;
@@ -40,6 +41,10 @@ public abstract class NodeImpl extends ExpressionFunctions implements Node {
     private int rank;
 
     private boolean marked = false;
+
+    private Date dateAdded;
+
+    private Date dateModified;
 
     @Override
     @SQLiteProperty
@@ -142,5 +147,41 @@ public abstract class NodeImpl extends ExpressionFunctions implements Node {
     @Override
     public void setConfigParams(ConfigParams config) {
         this.config = config;
+    }
+
+    @Override
+    @SQLiteProperty
+    public Date getDateAdded() {
+        return dateAdded;
+    }
+
+    @Override
+    public void setDateAdded(Date date) {
+        this.dateAdded = date;
+    }
+
+    @Override
+    @SQLiteProperty
+    public Date getDateModified() {
+        return dateModified;
+    }
+
+    @Override
+    public void setDateModified(Date date) {
+        this.dateModified = date;
+    }
+
+    @ExprAttribute(help="added date.")
+    @JsonIgnore
+    @Override
+    public org.psidnell.omnifocus.expr.Date getAdded () {
+        return new org.psidnell.omnifocus.expr.Date(dateAdded, config);
+    }
+
+    @ExprAttribute(help="modified date.")
+    @JsonIgnore
+    @Override
+    public org.psidnell.omnifocus.expr.Date getModified () {
+        return new org.psidnell.omnifocus.expr.Date(dateModified, config);
     }
 }

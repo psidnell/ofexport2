@@ -54,27 +54,24 @@ public class Main extends CommandLine {
 
         data.build();
 
-        if (ofexport.isProjectMode()) {
-            Folder projectRoot = ofexport.getProjectRoot();
-            // Add root projects/folders to the fabricated root folder
-            for (Folder child : data.getFolders().values()) {
-                if (child.getProjectModeParent() == null) {
-                    projectRoot.add(child);
-                }
+        Folder projectRoot = ofexport.getProjectRoot();
+        // Add root projects/folders to the fabricated root folder
+        for (Folder child : data.getFolders().values()) {
+            if (child.getProjectModeParent() == null) {
+                projectRoot.add(child);
             }
+        }
 
-            for (Project child : data.getProjects().values()) {
-                if (child.getProjectModeParent() == null) {
-                    projectRoot.add(child);
-                }
+        for (Project child : data.getProjects().values()) {
+            if (child.getProjectModeParent() == null) {
+                projectRoot.add(child);
             }
-        } else {
-            Context contextRoot = ofexport.getContextRoot();
-            // Add root contexts to the fabricated root context
-            for (Context child : data.getContexts().values()) {
-                if (child.getContextModeParent() == null) {
-                    contextRoot.add(child);
-                }
+        }
+        Context contextRoot = ofexport.getContextRoot();
+        // Add root contexts to the fabricated root context
+        for (Context child : data.getContexts().values()) {
+            if (child.getContextModeParent() == null) {
+                contextRoot.add(child);
             }
         }
     }
@@ -145,7 +142,7 @@ public class Main extends CommandLine {
 
         if (main.exportFile != null) {
             SQLiteDAO dao = appContext.getBean("sqlitedao", SQLiteDAO.class);
-            DataCache.exportData(new File(main.exportFile), (f)->true, dao, appContext);
+            DataCache.exportData(new File(main.exportFile), (f) -> true, dao, appContext);
             return;
         }
 

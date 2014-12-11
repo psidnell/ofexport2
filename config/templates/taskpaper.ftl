@@ -62,8 +62,8 @@ $$$$$$$$$$$$$$$$$$
 -->
 <#macro doContext context depth>
 <@doIndent indent=depth/>${context.name}:
-<#list context.contexts as c><@doContext context=c depth=depth+1/></#list>
 <#list context.tasks as t><@doTask task=t depth=depth+1 projectMode=false/></#list>
+<#list context.contexts as c><@doContext context=c depth=depth+1/></#list>
 </#macro>
 <#--
 $$$$$$$$$$$$$$$$$$
@@ -78,7 +78,7 @@ $$$$$$$$$$$$$$$
 Using Java SimpleDateFormat conversion
 -->
 <#macro doTags node>
-<#if (node.completion.getDate())??> @done(${node.completion.getDate()?string[config.template_date_format]})</#if><#if node.flagged> @flagged</#if><#if (node.due.getDate())??> @done(${node.due.getDate()?string["yyyy-MM-dd"]})</#if><#if (node.contextName)??> @${node.contextName}</#if></#macro> 
+<#if (node.completion.getDate())??> @done(${node.completion.getDate()?string[config.template_date_format]})</#if><#if node.flagged> @flagged</#if><#if (node.due.getDate())??> @due(${node.due.getDate()?string["yyyy-MM-dd"]})</#if><#if (node.contextName)??> @${node.contextName?replace(" ","")?replace(",","")?replace("@","")?replace(".","")}</#if></#macro> 
 <#--
 $$$$$$$$$$$$$$$
 $ MACRO: doNote

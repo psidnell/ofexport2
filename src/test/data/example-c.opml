@@ -3,57 +3,57 @@
     <title>OmniFocus</title>
   </head>
   <body>
-<outline text="">
+<outline text="Example Context">
   <outline text="On Earth">
-    <outline text="Buy">
-      <outline text="Buy Parts" flagged="flagged" context="Buy">
-      </outline>
-      <outline text="Buy Space Suit - 34&quot; Waist (eBay?, Amazon?)" context="Buy">
-      </outline>
-      <outline text="Buy Orbital Mechanics For Dummies" context="Buy">
-      </outline>
-      <outline text="Buy Rocket Ship Kit" flagged="flagged" context="Buy">
-      </outline>
-      <outline text="Buy Engineering For Dummies" context="Buy">
-      </outline>
-      <outline text="Buy Supplies" context="Buy">
-      </outline>
-      <outline text="Buy Glue" flagged="flagged" context="Buy">
-      </outline>
-      <outline text="Buy Pop-Tarts (approx 2000)" context="Buy">
-      </outline>
-      <outline text="Buy Tea - Earl Grey (Hot)" context="Buy">
-      </outline>
-    </outline>
     <outline text="Learn Engineering" context="On Earth">
     </outline>
     <outline text="Learn Orbital Mechanics" context="On Earth">
     </outline>
-    <outline text="Light blue touch-paper" context="On Earth">
-    </outline>
     <outline text="Prepare For Launch" context="On Earth">
+    </outline>
+    <outline text="Read Engineering For Dummies" context="On Earth">
     </outline>
     <outline text="Read Orbital Mechanics For Dummies" context="On Earth">
     </outline>
+    <outline text="Assemble Parts" context="On Earth">
+    </outline>
+    <outline text="Let Glue Dry" context="On Earth">
+    </outline>
+    <outline text="Apply Decals" context="On Earth">
+    </outline>
+    <outline text="Load Supplies" context="On Earth">
+    </outline>
+    <outline text="Aim at Mars" context="On Earth">
+    </outline>
+    <outline text="Light blue touch-paper" context="On Earth">
+    </outline>
     <outline text="Get in" context="On Earth">
+    </outline>
+    <outline text="Close door" context="On Earth">
     </outline>
     <outline text="Launch" context="On Earth">
     </outline>
     <outline text="Build Ship" context="On Earth">
     </outline>
-    <outline text="Read Engineering For Dummies" context="On Earth">
-    </outline>
-    <outline text="Assemble Parts" context="On Earth">
-    </outline>
-    <outline text="Close door" context="On Earth">
-    </outline>
-    <outline text="Load Supplies" context="On Earth">
-    </outline>
-    <outline text="Let Glue Dry" context="On Earth">
-    </outline>
-    <outline text="Aim at Mars" context="On Earth">
-    </outline>
-    <outline text="Apply Decals" context="On Earth">
+    <outline text="Buy">
+      <outline text="Buy Engineering For Dummies" context="Buy">
+      </outline>
+      <outline text="Buy Orbital Mechanics For Dummies" context="Buy">
+      </outline>
+      <outline text="Buy Parts" flagged="flagged" context="Buy">
+      </outline>
+      <outline text="Buy Rocket Ship Kit" flagged="flagged" context="Buy">
+      </outline>
+      <outline text="Buy Glue" flagged="flagged" context="Buy">
+      </outline>
+      <outline text="Buy Supplies" context="Buy">
+      </outline>
+      <outline text="Buy Space Suit - 34&quot; Waist (eBay?, Amazon?)" context="Buy">
+      </outline>
+      <outline text="Buy Pop-Tarts (approx 2000)" context="Buy">
+      </outline>
+      <outline text="Buy Tea - Earl Grey (Hot)" context="Buy">
+      </outline>
     </outline>
   </outline>
   <outline text="In Flight">
@@ -61,13 +61,13 @@
     </outline>
     <outline text="Enter hyper-sleep" context="In Flight">
     </outline>
-    <outline text="Flight" context="In Flight">
-    </outline>
     <outline text="Wake up" context="In Flight">
     </outline>
     <outline text="Check date, location" context="In Flight">
     </outline>
     <outline text="Ignore any distress signals, don&apos;t land on Monkey planets" context="In Flight">
+    </outline>
+    <outline text="Flight" context="In Flight">
     </outline>
   </outline>
   <outline text="OnMars">

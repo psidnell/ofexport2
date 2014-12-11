@@ -34,12 +34,13 @@
      -an <arg>         include items specified by name.
      -m <arg>          modify a node value.
      -p                prune empty folders, projects and contexts.
-     -S                Flatten hierarchies.
-     -F                Simplify hierarchies.
+     -S                Simplify hierarchies.
+     -F                Flatten hierarchies.
      -c                context mode: filter and display context hierarchy instead of project hierarchy.
      -f <arg>          output in this format.
      -o <arg>          write output to the file.
      -O <arg>          write output to the file and open it.
      -D <arg>          set property: name=value.
-     -l <arg>          load data from JSON file instead of database (for testing).
+     -export <arg>     export data to JSON file (for testing).
+     -import <arg>     import data from JSON file instead of database (for testing).
      -loglevel <arg>   set log level [debug,info,warn,error].

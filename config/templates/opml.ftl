@@ -69,8 +69,8 @@ $$$$$$$$$$$$$$$$$$
 -->
 <#macro doContext context depth>
 <@doIndent indent=depth/><outline text="${escape(context.name)}">
-<#list context.contexts as c><@doContext context=c depth=depth+1/></#list>
 <#list context.tasks as t><@doTask task=t depth=depth+1 projectMode=false/></#list>
+<#list context.contexts as c><@doContext context=c depth=depth+1/></#list>
 <@doIndent indent=depth/></outline>
 </#macro>
 <#--
