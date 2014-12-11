@@ -770,5 +770,4 @@ a large export rather than about a second when accessing the database directly. 
 - Task/Project notes are stripped back to ASCII on export because wide characters seem corrupted when I retrieve them. This could be down to the encoding OmniFocus uses or it could be an issue with the SQLite Java driver.
 - Perspective data is something I haven't managed to decode.
 - In  OmniFocus, child Contexts/Tasks are interleaved, as are child Projects/Folders. In ofexport they are not.
-- There is no way to detect if Projects are **stalled** or **pending**.
-- The **modified** and **added** times are missing from the attributes. 
+- There is currently no way to detect if Projects are **stalled** or **pending**.
