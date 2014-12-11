@@ -149,9 +149,52 @@ Simply delete the ofexport2 folder and remove the lines you added to your .bash_
 
 ### Overview ###
 
-To see the [full list of options](doc/Options.md), type:
+Simply typing:
 
-    of2 -h
+    of2
+
+Will dump the entire project hierarchy, for example:
+
+    Get to Mars
+      Build a Rocket Ship
+        Learn Engineering
+          [ ] Buy Engineering For Dummies
+          [ ] Read Engineering For Dummies
+        Learn Orbital Mechanics
+          [ ] Buy Orbital Mechanics For Dummies
+          [ ] Read Orbital Mechanics For Dummies
+        Build Ship
+          [ ] Buy Parts FLAGGED
+            [ ] Buy Rocket Ship Kit FLAGGED
+            [ ] Buy Glue FLAGGED
+          [ ] Assemble Parts
+          [ ] Let Glue Dry
+          [ ] Apply Decals
+      Launch Rocket Ship
+        Prepare For Launch
+          [ ] Buy Supplies
+            [ ] Buy Space Suit - 34" Waist (eBay?, Amazon?)
+            [ ] Buy Pop-Tarts (approx 2000)
+            [ ] Buy Tea - Earl Grey (Hot)
+          [ ] Load Supplies
+          [ ] Aim at Mars
+        Launch due:2025-12-01
+          [ ] Light blue touch-paper due:2025-12-01
+          [ ] Get in due:2025-12-01
+          [ ] Close door due:2025-12-01
+      Flight
+        [ ] Give ships computer a name (Dave? Mother?)
+        [ ] Enter hyper-sleep
+        [ ] Wake up
+        [ ] Check date, location
+        [ ] Ignore any distress signals, don't land on Monkey planets
+      Landing due:2027-12-01
+        [ ] AAAAAAARGH! due:2027-12-01
+        [ ] Say something profound due:2027-12-01
+        [ ] Plant flag due:2027-12-01
+        [ ] See if rocks made of polystyrene due:2027-12-01
+
+The default output format is a simple text list where uncompleted tasks are prefixed with a [ ] and completed tasks are prefixed with a [X]. Items are indented to indicate the original OmniFocus hierarchy.
 
 Basic usage of the tool is fairly straight-forward. If you're familiar with OmniFocus you can probably guess what these commands will show:
 
@@ -161,43 +204,62 @@ Basic usage of the tool is fairly straight-forward. If you're familiar with Omni
     of2 -ti flagged
     of2 -ti completed
 
-The above will show tasks with the selected attributes (**filtering**) in their project hierarchy. To see them in their context hierarchy add the "-c" option, e.g.
+For example, if we ran:
 
-    of2 -c -ti available
+    of2 -ti flagged
 
-The attributes you select on can be combined by chaining filters:
+We'd see:
 
-    of2 -c -ti remaining -ti due.soon
+    Get to Mars
+      Build a Rocket Ship
+        Build Ship
+          [ ] Buy Parts FLAGGED
+            [ ] Buy Rocket Ship Kit FLAGGED
+            [ ] Buy Glue FLAGGED
 
-Or by creating filters with [OGNL](http://commons.apache.org/proper/commons-ognl/) expressions.
+It's possible to isolate specific Folders or Projects etc. For example to print the contents of just one of the Folders in the above example:
 
-    of2 -c -ti 'remaining && due.soon'
-
-It's possible to isolate specific Folders, Projects etc. For example to print the contents of a named project, in this case I have a project called ofexport2:
-
-    of2 -pn 'ofexport2'
+    of2 -fn 'Launch Rocket Ship'
 
 This outputs the following:
 
-    Home
-      ofexport2
-        [ ] Create "installer"
-          [ ] Print version in help
-          [X] Add license, docs etc.
-          [X] Create "release process"
-          [X] Generate README.md from template
-          [ ] maven site generation
-        [X] Filters - finish - test
-        [ ] Code Quality
-          [ ] Coverage
-          [X] Address TODOs
-          [ ] Timing and stats
-          [ ] Add logging
-          [X] basic Javadoc
-          [X] Only integration tests should use real database
-          [X] format code
+     Get to Mars
+      Launch Rocket Ship
+        Prepare For Launch
+          [ ] Buy Supplies
+            [ ] Buy Space Suit - 34" Waist (eBay?, Amazon?)
+            [ ] Buy Pop-Tarts (approx 2000)
+            [ ] Buy Tea - Earl Grey (Hot)
+          [ ] Load Supplies
+          [ ] Aim at Mars
+        Launch due:2025-12-01
+          [ ] Light blue touch-paper due:2025-12-01
+          [ ] Get in due:2025-12-01
+          [ ] Close door due:2025-12-01
+          
+So far we've just seen tasks in their project hierarchy. To see them in their context hierarchy add the "-c" option:
 
-The default output format is a simple text list where uncompleted tasks are prefixed with a [ ] and completed tasks are prefixed with a [X]. Items are indented to indicate the original OmniFocus hierarchy.
+    of2 -c -cn 'Buy'
+
+This isolates the "Buy" Context within the Context hierarchy:
+
+    On Earth
+      Buy
+        [ ] Buy Parts FLAGGED
+        [ ] Buy Space Suit - 34" Waist (eBay?, Amazon?)
+        [ ] Buy Orbital Mechanics For Dummies
+        [ ] Buy Rocket Ship Kit FLAGGED
+        [ ] Buy Engineering For Dummies
+        [ ] Buy Supplies
+        [ ] Buy Glue FLAGGED
+        [ ] Buy Pop-Tarts (approx 2000)
+        [ ] Buy Tea - Earl Grey (Hot)
+
+The options being supplied are called **filters** and they operate on **attributes** of the items in OmniFocus.
+
+The attributes you select on can be combined by combining filters or using expressions. Filters typically take expressions (written in [OGNL](http://commons.apache.org/proper/commons-ognl/) syntax) as arguments, here we're using the remaining and due attributes as very simple expressions:
+
+    of2 -c -ti 'remaining' -ti 'due.soon'
 
 ### Filtering ###
 
@@ -480,51 +542,89 @@ The **-S** option simplifies the nested the hierarchy to just leaf Folder/Projec
 
 All projects and contexts are moved to the root level, and sub tasks moved up to the level of their parent.
 
-For example if you have:
+Simplifying our Mars project example:
 
-    FolderF1
-      FolderF2
-        ProjectP
-          TaskT1
-            TaskT2
-            TaskT3
+    of2 -S
 
-You will get:
+Would give us:
 
-    ProjectP
-      TaskT1
-      TaskT2
-      TaskT3
-
-This can make sorting more useful. If you have a deeply nested hierarchy, compare the following:
-
-    of2 -ti 'remaining && due.soon' -ts r:flagged -ts due
-    of2 -ti 'remaining && due.soon' -ts r:flagged -ts due -S
+    Learn Engineering
+      [ ] Buy Engineering For Dummies
+      [ ] Read Engineering For Dummies
+    Learn Orbital Mechanics
+      [ ] Buy Orbital Mechanics For Dummies
+      [ ] Read Orbital Mechanics For Dummies
+    Build Ship
+      [ ] Buy Parts FLAGGED
+      [ ] Buy Rocket Ship Kit FLAGGED
+      [ ] Buy Glue FLAGGED
+      [ ] Assemble Parts
+      [ ] Let Glue Dry
+      [ ] Apply Decals
+    Prepare For Launch
+      [ ] Buy Supplies
+      [ ] Buy Space Suit - 34" Waist (eBay?, Amazon?)
+      [ ] Buy Pop-Tarts (approx 2000)
+      [ ] Buy Tea - Earl Grey (Hot)
+      [ ] Load Supplies
+      [ ] Aim at Mars
+    Launch due:2025-12-01
+      [ ] Light blue touch-paper due:2025-12-01
+      [ ] Get in due:2025-12-01
+      [ ] Close door due:2025-12-01
+    Flight
+      [ ] Give ships computer a name (Dave? Mother?)
+      [ ] Enter hyper-sleep
+      [ ] Wake up
+      [ ] Check date, location
+      [ ] Ignore any distress signals, don't land on Monkey planets
+    Landing due:2027-12-01
+      [ ] AAAAAAARGH! due:2027-12-01
+      [ ] Say something profound due:2027-12-01
+      [ ] Plant flag due:2027-12-01
+      [ ] See if rocks made of polystyrene due:2027-12-01
 
 ### Flattening
 
 Flattening with **-F** is an extreme form of simplifying. All existing hierachies are erased leaving a flat list of tasks under a new Project/Context called "Tasks".
 
-For example if you have:
+Flattening our Mars project example:
 
-    FolderF1
-      FolderF2
-        ProjectP
-          TaskT1
-            TaskT2
-            TaskT3
-        ProjectP2
-          TaskT4
+    of2 -F
 
-You will get:
+Would give us:
 
     Tasks
-      TaskT1
-      TaskT2
-      TaskT3
-      TaskT4
+      [ ] Buy Engineering For Dummies
+      [ ] Read Engineering For Dummies
+      [ ] Buy Orbital Mechanics For Dummies
+      [ ] Read Orbital Mechanics For Dummies
+      [ ] Buy Parts FLAGGED
+      [ ] Buy Rocket Ship Kit FLAGGED
+      [ ] Buy Glue FLAGGED
+      [ ] Assemble Parts
+      [ ] Let Glue Dry
+      [ ] Apply Decals
+      [ ] Buy Supplies
+      [ ] Buy Space Suit - 34" Waist (eBay?, Amazon?)
+      [ ] Buy Pop-Tarts (approx 2000)
+      [ ] Buy Tea - Earl Grey (Hot)
+      [ ] Load Supplies
+      [ ] Aim at Mars
+      [ ] Light blue touch-paper due:2025-12-01
+      [ ] Get in due:2025-12-01
+      [ ] Close door due:2025-12-01
+      [ ] Give ships computer a name (Dave? Mother?)
+      [ ] Enter hyper-sleep
+      [ ] Wake up
+      [ ] Check date, location
+      [ ] Ignore any distress signals, don't land on Monkey planets
+      [ ] AAAAAAARGH! due:2027-12-01
+      [ ] Say something profound due:2027-12-01
+      [ ] Plant flag due:2027-12-01
+      [ ] See if rocks made of polystyrene due:2027-12-01
 
-The name of the resultant root node can be modified by changing the **flattenedRootName** configuration value.
+The name of the resultant root node ("Tasks") can be modified by changing the **flattenedRootName** configuration value.
 
 ### Inbox and No Context
 

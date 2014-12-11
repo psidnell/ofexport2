@@ -6,15 +6,17 @@
 
 - Buy Engineering For Dummies
 - Read Engineering For Dummies
+
 ### Learn Orbital Mechanics
 
 - Buy Orbital Mechanics For Dummies
 - Read Orbital Mechanics For Dummies
+
 ### Build Ship
 
 - Buy Parts
-  - Buy Rocket Ship Kit
-  - Buy Glue
+    - Buy Rocket Ship Kit
+    - Buy Glue
 - Assemble Parts
 - Let Glue Dry
 - Apply Decals
@@ -24,11 +26,12 @@
 ### Prepare For Launch
 
 - Buy Supplies
-  - Buy Space Suit - 34" Waist (eBay?, Amazon?)
-  - Buy Pop-Tarts (approx 2000)
-  - Buy Tea - Earl Grey (Hot)
+    - Buy Space Suit - 34" Waist (eBay?, Amazon?)
+    - Buy Pop-Tarts (approx 2000)
+    - Buy Tea - Earl Grey (Hot)
 - Load Supplies
 - Aim at Mars
+
 ### Launch
 
 - Light blue touch-paper
@@ -42,6 +45,7 @@
 - Wake up
 - Check date, location
 - Ignore any distress signals, don't land on Monkey planets
+
 ## Landing
 
 - AAAAAAARGH!

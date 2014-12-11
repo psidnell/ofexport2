@@ -3,7 +3,7 @@
     <title>OmniFocus</title>
   </head>
   <body>
-<outline text="Mars">
+<outline text="">
   <outline text="On Earth">
     <outline text="Buy">
       <outline text="Buy Parts" flagged="flagged" context="Buy">

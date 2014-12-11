@@ -22,7 +22,7 @@ import org.psidnell.omnifocus.OFExport;
 import org.psidnell.omnifocus.integrationtest.Diff;
 
 public class MarkdownTest extends FormatTest {
-    
+
     @Test
     public void testProjectMode () throws Exception {
         OFExport ofExport = new OFExport();
@@ -31,7 +31,7 @@ public class MarkdownTest extends FormatTest {
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
-                
+
         Diff.diff (new String[]
             {
                 "# f1",
@@ -49,10 +49,11 @@ public class MarkdownTest extends FormatTest {
                 "> line1",
                 "> line2",
                 "",
-                "  - t4",
+                "    - t4",
                 "",
                 "> > line1",
                 "> > line2",
+                "",
                 "",
                 "## p2",
                 "",
@@ -62,7 +63,7 @@ public class MarkdownTest extends FormatTest {
                 "## p3",
             }, out.toString().split("\n"));
     }
-    
+
     @Test
     public void testContextMode () throws Exception {
         OFExport ofExport = new OFExport();
@@ -72,7 +73,9 @@ public class MarkdownTest extends FormatTest {
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
-                
+
+        System.out.println (out);
+
         Diff.diff (new String[]
             {
                 "# c1",
@@ -88,6 +91,7 @@ public class MarkdownTest extends FormatTest {
                 "",
                 "> line1",
                 "> line2",
+                "",
                 "",
                 "- t2",
                 "",

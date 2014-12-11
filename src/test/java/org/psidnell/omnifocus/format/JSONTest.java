@@ -32,6 +32,8 @@ public class JSONTest extends FormatTest {
         StringWriter out = new StringWriter();
         ofExport.write(out);
 
+        System.out.println(out);
+
         Diff.diff (new String[]
             {
                 "{",
@@ -58,7 +60,7 @@ public class JSONTest extends FormatTest {
                 "      \"name\" : \"p1\",",
                 "      \"note\" : null,",
                 "      \"onHold\" : false,",
-                "      \"rank\" : 0,",
+                "      \"rank\" : 2,",
                 "      \"remaining\" : true,",
                 "      \"sequential\" : false,",
                 "      \"singleActionList\" : false,",
@@ -79,7 +81,7 @@ public class JSONTest extends FormatTest {
                 "        \"note\" : null,",
                 "        \"parentTaskId\" : null,",
                 "        \"projectTask\" : false,",
-                "        \"rank\" : 0,",
+                "        \"rank\" : 3,",
                 "        \"remaining\" : true,",
                 "        \"sequential\" : false,",
                 "        \"tasks\" : [ ]",
@@ -99,7 +101,7 @@ public class JSONTest extends FormatTest {
                 "        \"note\" : \"line1\\nline2\",",
                 "        \"parentTaskId\" : null,",
                 "        \"projectTask\" : false,",
-                "        \"rank\" : 0,",
+                "        \"rank\" : 4,",
                 "        \"remaining\" : true,",
                 "        \"sequential\" : false,",
                 "        \"tasks\" : [ ]",
@@ -119,7 +121,7 @@ public class JSONTest extends FormatTest {
                 "        \"note\" : \"line1\\nline2\",",
                 "        \"parentTaskId\" : null,",
                 "        \"projectTask\" : false,",
-                "        \"rank\" : 0,",
+                "        \"rank\" : 5,",
                 "        \"remaining\" : false,",
                 "        \"sequential\" : false,",
                 "        \"tasks\" : [ {",
@@ -138,7 +140,7 @@ public class JSONTest extends FormatTest {
                 "          \"note\" : \"line1\\nline2\",",
                 "          \"parentTaskId\" : null,",
                 "          \"projectTask\" : false,",
-                "          \"rank\" : 0,",
+                "          \"rank\" : 6,",
                 "          \"remaining\" : false,",
                 "          \"sequential\" : false,",
                 "          \"tasks\" : [ ]",
@@ -158,7 +160,7 @@ public class JSONTest extends FormatTest {
                 "      \"name\" : \"p2\",",
                 "      \"note\" : \"line1\\nline2\",",
                 "      \"onHold\" : false,",
-                "      \"rank\" : 0,",
+                "      \"rank\" : 7,",
                 "      \"remaining\" : true,",
                 "      \"sequential\" : false,",
                 "      \"singleActionList\" : false,",
@@ -178,14 +180,14 @@ public class JSONTest extends FormatTest {
                 "      \"name\" : \"p3\",",
                 "      \"note\" : null,",
                 "      \"onHold\" : false,",
-                "      \"rank\" : 0,",
+                "      \"rank\" : 8,",
                 "      \"remaining\" : true,",
                 "      \"sequential\" : false,",
                 "      \"singleActionList\" : false,",
                 "      \"status\" : \"status\",",
                 "      \"tasks\" : [ ]",
                 "    } ],",
-                "    \"rank\" : 0",
+                "    \"rank\" : 1",
                 "  } ],",
                 "  \"id\" : \"__%%RootFolder\",",
                 "  \"name\" : \"RootFolder\",",
@@ -205,8 +207,6 @@ public class JSONTest extends FormatTest {
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
-
-        System.out.println (out);
 
         Diff.diff (new String[]
             {
@@ -228,7 +228,7 @@ public class JSONTest extends FormatTest {
                 "      \"name\" : \"c2\",",
                 "      \"onHold\" : false,",
                 "      \"parentContextId\" : null,",
-                "      \"rank\" : 0,",
+                "      \"rank\" : 2,",
                 "      \"tasks\" : [ {",
                 "        \"available\" : false,",
                 "        \"blocked\" : false,",
@@ -296,7 +296,7 @@ public class JSONTest extends FormatTest {
                 "    \"name\" : \"c1\",",
                 "    \"onHold\" : false,",
                 "    \"parentContextId\" : null,",
-                "    \"rank\" : 0,",
+                "    \"rank\" : 1,",
                 "    \"tasks\" : [ {",
                 "      \"available\" : false,",
                 "      \"blocked\" : false,",

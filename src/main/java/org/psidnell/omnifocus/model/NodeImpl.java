@@ -66,6 +66,7 @@ public abstract class NodeImpl extends ExpressionFunctions implements Node {
 
     @Override
     @SQLiteProperty
+    @ExprAttribute (help="used to define sort order of items.")
     public int getRank() {
         return rank;
     }

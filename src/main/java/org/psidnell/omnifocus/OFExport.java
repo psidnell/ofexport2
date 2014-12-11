@@ -33,6 +33,7 @@ import org.psidnell.omnifocus.visitor.ClearMarkedVisitor;
 import org.psidnell.omnifocus.visitor.DeleteMarkedFilter;
 import org.psidnell.omnifocus.visitor.KeepMarkedVisitor;
 import org.psidnell.omnifocus.visitor.PruningFilter;
+import org.psidnell.omnifocus.visitor.ReRankingVisitor;
 import org.psidnell.omnifocus.visitor.SortingFilter;
 import org.psidnell.omnifocus.visitor.Traverser;
 import org.psidnell.omnifocus.visitor.Visitor;
@@ -78,6 +79,13 @@ public class OFExport {
     }
 
     public void process() throws Exception {
+
+        // We sort items by their rank and then apply an new monotonically increasing
+        // rank to give a robust sort order after any re-arrangements we make.
+        Traverser.traverse(new SortingFilter(), projectRoot);
+        Traverser.traverse(new SortingFilter(), contextRoot);
+        Traverser.traverse(new ReRankingVisitor(projectMode), projectRoot);
+        Traverser.traverse(new ReRankingVisitor(projectMode), contextRoot);
 
         if (projectMode) {
             for (Visitor filter : filters) {

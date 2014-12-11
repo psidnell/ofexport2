@@ -1,4 +1,4 @@
-# Mars
+# 
 
 ## On Earth
 
@@ -13,6 +13,7 @@
 - Buy Glue
 - Buy Pop-Tarts (approx 2000)
 - Buy Tea - Earl Grey (Hot)
+
 - Learn Engineering
 - Learn Orbital Mechanics
 - Light blue touch-paper
@@ -28,6 +29,7 @@
 - Let Glue Dry
 - Aim at Mars
 - Apply Decals
+
 ## In Flight
 
 - Give ships computer a name (Dave? Mother?)
@@ -36,6 +38,7 @@
 - Wake up
 - Check date, location
 - Ignore any distress signals, don't land on Monkey planets
+
 ## OnMars
 
 - AAAAAAARGH!
@@ -43,3 +46,4 @@
 - Plant flag
 - See if rocks made of polystyrene
 - Landing
+
