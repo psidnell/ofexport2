@@ -22,8 +22,6 @@ These above example files (and more) can be found here:
 - [XML](src/test/data/example-p.xml)
 - [JSON](src/test/data/example-p.json)
 
-
-
 ### Audience ##
 
 To be able to use ofexport2 there are some pre-requisites, you need to:
