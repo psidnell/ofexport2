@@ -22,4 +22,4 @@ echo "version:$NEXT_VERSION" > config/version.properties
 echo "date:$DATE" >> config/version.properties
 
 echo Generating TOC
-python build/toc.py RELEASE-NOTES.md README.md > TOC.md
+bash build/generate-toc.sh
