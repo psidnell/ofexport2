@@ -125,7 +125,7 @@ Simply delete the ofexport2 folder and remove the lines you added to your .bash_
 
 ### Usage ##
 
-#### Overview ###
+#### Usage Overview ###
 
 Simply typing:
 

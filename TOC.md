@@ -10,7 +10,7 @@
         - [Installation](DOCUMENTATION.md#installation)
         - [Uninstallation](DOCUMENTATION.md#uninstallation)
         - [Usage](DOCUMENTATION.md#usage)
-            - [Overview](DOCUMENTATION.md#overview)
+            - [Usage Overview](DOCUMENTATION.md#usage-overview)
             - [Filtering](DOCUMENTATION.md#filtering)
                 - [Project vs Context Mode](DOCUMENTATION.md#project-vs-context-mode)
                 - [Filtering by Text](DOCUMENTATION.md#filtering-by-text)
