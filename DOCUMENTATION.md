@@ -1,8 +1,48 @@
-[Table of Contents](TOC.md) | [Home](README.md) | [Release Notes](RELEASE-NOTES.md) | [Support](SUPPORT.md) | [Documentation](DOCUMENTATION.md)
+[Home](README.md) | [Release Notes](RELEASE-NOTES.md) | [Support](SUPPORT.md) | [Documentation](DOCUMENTATION.md)
 
-## Documentation
+# Documentation
 
-### Overview
+## Table Of Contents
+
+- [ofexport2](README.md#ofexport2)
+- [Release Notes](RELEASE-NOTES.md#release-notes)
+- [Support](SUPPORT.md#support)
+- [Documentation](DOCUMENTATION.md#documentation)
+    - [Overview](DOCUMENTATION.md#overview)
+    - [Audience](DOCUMENTATION.md#audience)
+    - [How it works](DOCUMENTATION.md#how-it-works)
+    - [Installation](DOCUMENTATION.md#installation)
+    - [Uninstallation](DOCUMENTATION.md#uninstallation)
+    - [Usage](DOCUMENTATION.md#usage)
+        - [Usage Overview](DOCUMENTATION.md#usage-overview)
+        - [Filtering](DOCUMENTATION.md#filtering)
+            - [Project vs Context Mode](DOCUMENTATION.md#project-vs-context-mode)
+            - [Filtering by Text](DOCUMENTATION.md#filtering-by-text)
+            - [Include or Exclude](DOCUMENTATION.md#include-or-exclude)
+            - [Cascading](DOCUMENTATION.md#cascading)
+            - [Filtering by Date](DOCUMENTATION.md#filtering-by-date)
+            - [Useful Filtering Attributes](DOCUMENTATION.md#useful-filtering-attributes)
+        - [Output and Formats](DOCUMENTATION.md#output-and-formats)
+        - [Sorting](DOCUMENTATION.md#sorting)
+        - [Pruning](DOCUMENTATION.md#pruning)
+        - [Simplifying](DOCUMENTATION.md#simplifying)
+        - [Flattening](DOCUMENTATION.md#flattening)
+        - [Inbox and No Context](DOCUMENTATION.md#inbox-and-no-context)
+        - [Command Line Options](DOCUMENTATION.md#command-line-options)
+        - [Full Attribute List](DOCUMENTATION.md#full-attribute-list)
+        - [Configuration](DOCUMENTATION.md#configuration)
+        - [Tips](DOCUMENTATION.md#tips)
+            - [Include Projects with Tags](DOCUMENTATION.md#include-projects-with-tags)
+            - [Save Useful Commands as Scripts](DOCUMENTATION.md#save-useful-commands-as-scripts)
+            - [Solving Problems](DOCUMENTATION.md#solving-problems)
+            - [Modifying Node Values](DOCUMENTATION.md#modifying-node-values)
+    - [Writing a Template](DOCUMENTATION.md#writing-a-template)
+    - [Building It Yourself](DOCUMENTATION.md#building-it-yourself)
+    - [ofexport vs ofexport2](DOCUMENTATION.md#ofexport-vs-ofexport2)
+    - [Other Approaches Considered](DOCUMENTATION.md#other-approaches-considered)
+    - [Known Issues](DOCUMENTATION.md#known-issues)
+
+## Overview
 
 **ofexport2** is a command line tool for exporting OmniFocus data to a variety of file formats and is a complete re-write of the original [ofexport](https://github.com/psidnell/ofexport/blob/master/DOCUMENTATION.md).
 
@@ -22,7 +62,7 @@ These above example files (and more) can be found here:
 - [XML](src/test/data/example-p.xml)
 - [JSON](src/test/data/example-p.json)
 
-### Audience ##
+## Audience
 
 To be able to use ofexport2 there are some pre-requisites, you need to:
 
@@ -34,7 +74,7 @@ To be able to use ofexport2 there are some pre-requisites, you need to:
 
 You're going to have to know [where your towel is](http://hitchhikers.wikia.com/wiki/Towel).
 
-### How it works
+## How it works
 
 1. The tool reads the entire OmniFocus SQLite database.
 2. Various command line filters are applied to eliminate unwanted data, sort items, etc.
@@ -59,7 +99,7 @@ The key technologies used for the transformation are:
 2. [OGNL](http://commons.apache.org/proper/commons-ognl/) for specifying filters and sorting.
 3. [FreeMarker](http://http://freemarker.org) for the templates to provide the output.
 
-### Installation
+## Installation
 
 Installation is entirely manual and done from the command line. Essentially you will be downloading/unpacking the zip and adding it's bin directory to your path.
 
@@ -117,13 +157,13 @@ Finally verify everything has worked by typing either:
     ofexport2 -h
     of2 -h
 
-### Uninstallation ###
+## Uninstallation
 
 Simply delete the ofexport2 folder and remove the lines you added to your .bash_profile.
 
-### Usage ##
+## Usage
 
-#### Usage Overview ###
+### Usage Overview
 
 Simply typing:
 
@@ -237,7 +277,7 @@ The attributes you select on can be combined by combining filters or using expre
 
     of2 -c -ti 'remaining' -ti 'due.soon'
 
-#### Filtering
+### Filtering
 
 Advanced queries can be assembled with filters:
 
@@ -250,7 +290,7 @@ Advanced queries can be assembled with filters:
 - Any number of filters can be used.
 - Filters are executed in order, each filter is run on the results of the last, thus filters can only reduce what appears in the output.
 
-##### Project vs Context Mode
+#### Project vs Context Mode
 
 Normally ofexport2 is in project mode, i.e. the project hierachy is used for filterng and output:
 
@@ -262,7 +302,7 @@ By using the "-c" option, the tool operates in context mode:
 
 It's an error to try and use a project filter in context mode and vice versa.
 
-##### Filtering by Text
+#### Filtering by Text
 
 To search for items with a specific exact names:
 
@@ -301,7 +341,7 @@ It's also possible to access the text of a note or project in filters:
 
 (That the **note!=null** check is necessary here because (unlike name) the note may be absent and there would be a Java error applying the **contains** method to the missing value.)
 
-##### Include or Exclude
+#### Include or Exclude
 
 The difference between include and exclude filters is:
 
@@ -316,7 +356,7 @@ To illustrate the difference for a folder:
 
 The first shows "MyFolder", the second shows everything except "MyFolder".
 
-##### Cascading
+#### Cascading
 
 Include filters come in two flavours, cascading and non cascading.
 
@@ -333,7 +373,7 @@ The first two are cascading and equivalent, they show matching folders and every
 
 The third shows only the matching folders and nothing beneath them.
 
-##### Filtering by Date ####
+#### Filtering by Date
 
 Tasks and Projects have several dates:
 
@@ -380,7 +420,7 @@ The strings formats of dates that are accepted in these filters are:
 - **"1y"**,"**+1year"**,**"-2years"**: months in the future/past.
 - **"1st"**,"**2nd"**,**"23rd"**: day of this month.
 
-##### Useful Filtering Attributes ####
+#### Useful Filtering Attributes ####
 
 Filtering **Tasks/Projects** on **status**:
 
@@ -456,7 +496,7 @@ What I do to generate weekly reports. I want a flattened list of work tasks comp
 
     of2 -fn 'Work' -px 'name.contains("Routine")' -ti 'completion.between("mon","today")' -p -F -f report -O ~/Desktop/Report.taskpaper
 
-#### Output and Formats
+### Output and Formats
 
 Output can be written to a file by using the "-o" option, e.g.
 
@@ -484,7 +524,7 @@ The format name being applied is used to find a FreeMarker template file in **co
 
 It's possible to modify these or add your own.
 
-#### Sorting
+### Sorting
 
 The natural sort order of items is based on their position in OmniFocus. It's possible to specify
 any attribute as the one to use for an item type:
@@ -506,13 +546,13 @@ It's possible to sort by any attribute, including flagged status. The following 
 
     of2 -ti 'remaining && due.soon' -ts r:flagged -ts due
 
-#### Pruning
+### Pruning
 
 Sometimes the output is cluttered with empty Contexts, Folders or Projects that you want to keep in OmniFocus but not see in the output.
 
 Using the **-p** option eliminates them.
 
-#### Simplifying
+### Simplifying
 
 Sometimes what is a useful Folder/Context hierarchy in OmniFocus ends up making reports look cluttered.
 
@@ -562,7 +602,7 @@ Would give us:
       [ ] Plant flag due:2027-12-01
       [ ] See if rocks made of polystyrene due:2027-12-01
 
-#### Flattening
+### Flattening
 
 Flattening with **-F** is an extreme form of simplifying. All existing hierachies are erased leaving a flat list of tasks under a new Project/Context called "Tasks".
 
@@ -604,11 +644,11 @@ Would give us:
 
 The name of the resultant root node ("Tasks") can be modified by changing the **flattenedRootName** configuration value.
 
-#### Inbox and No Context
+### Inbox and No Context
 
 OmniFocus has special pseudo items **Inbox** and **No Context**. The ofexport2 tool displays both of these as if they were a normal Project and Context so they can be used in filters and templates.
 
-#### Command Line Options
+### Command Line Options
 
 The full options list be displayed by typing:
 
@@ -616,7 +656,7 @@ The full options list be displayed by typing:
 
 or [here](doc/Options.md).
 
-#### Full Attribute List
+### Full Attribute List
 
 The full list of attributes that can be used in expressions or filters can be displayed by typing:
 
@@ -624,7 +664,7 @@ The full list of attributes that can be used in expressions or filters can be di
 
 or [here](doc/Attributes.md).
 
-#### Configuration
+### Configuration
 
 Configuration files you might need to modify are:
 
@@ -636,15 +676,15 @@ It's possible to override values in config.properties from the command line, for
 
     of2 -D 'dueSoon=2d' -ti dueSoon
 
-#### Tips
+### Tips
 
-##### Include Projects with Tags
+#### Include Projects with Tags
 
 Generate a report containing projects whose note contains "#report#".
 
     of2 -pi 'note!=null && note.contains("#report")'
 
-##### Save Useful Commands as Scripts
+#### Save Useful Commands as Scripts
 
 Keep regularly used commands as scripts to save time.
 
@@ -666,12 +706,12 @@ Here's one of my base scripts as an example.
      -f report \
      -O "$FILE"
 
-##### Solving Problems
+#### Solving Problems
 
 - Add filters one at time until you get the required output.
 - Use the **-f debug** to use the debug format that lists all attributes of an item.
 
-##### Modifying Node Values
+#### Modifying Node Values
 
 Suppose you want a report but don't want to see Task notes:
 
@@ -681,7 +721,7 @@ Note the use of the single '=' in the second part of the expression, this actual
 
     of2 -m 'name.contains("Fight Club") && name=name.replaceAll("Fight", "XXXXX")'
 
-### Writing a Template
+## Writing a Template
 
 - The templates are written in [FreeMarker](http://freemarker.org) syntax.
 - The templates live in **config/templates**.
@@ -690,7 +730,7 @@ Note the use of the single '=' in the second part of the expression, this actual
 
 Copying and experimenting on an existing template is the best way to start.
 
-### Building It Yourself
+## Building It Yourself
 
 The build is a straight forward java [maven 3](http://maven.apache.org) build.
 
@@ -708,7 +748,7 @@ Before releasing can succeed you will need to update the pom file with your own:
 - developerConnection
 - distributionManagement/repository/url
 
-### ofexport vs ofexport2
+## ofexport vs ofexport2
 
 The original ofexport was written in python since python comes supplied with
 OS X.
@@ -717,7 +757,7 @@ However, this version is written in Java. While this is inconvenient in that it
 requires installing java, it does provide access to a lot of useful technologies
 such as FreeMarker, OGNL and Jackson. I also write better Java than Python.
 
-### Other Approaches Considered
+## Other Approaches Considered
 
 I originally wanted to access the OmniFocus data using AppleScript (or JavaScript
 on Yosemite) and did actually get as far as a working prototype that serialised
@@ -725,10 +765,9 @@ JSON data from the osascript command back to the controlling program. While it w
 in the end quite simple to do it was unbelievably slow, taking sometimes minutes for
 a large export rather than about a second when accessing the database directly. While this approach would have been officialy suppotable by Omni it was unfotunately impractical. 
 
-### Known Issues
+## Known Issues
 
 - Task/Project notes are stripped back to ASCII on export because wide characters seem corrupted when I retrieve them. This could be down to the encoding OmniFocus uses or it could be an issue with the SQLite Java driver.
 - Perspective data is something I haven't managed to decode.
 - In  OmniFocus, child Contexts/Tasks are interleaved, as are child Projects/Folders. In ofexport they are not.
 - There is currently no way to detect if Projects are **stalled** or **pending**.
-

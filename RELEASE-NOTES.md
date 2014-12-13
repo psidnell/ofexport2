@@ -1,6 +1,6 @@
-[Table of Contents](TOC.md) | [Home](README.md) | [Release Notes](RELEASE-NOTES.md) | [Support](SUPPORT.md) | [Documentation](DOCUMENTATION.md)
+[Home](README.md) | [Release Notes](RELEASE-NOTES.md) | [Support](SUPPORT.md) | [Documentation](DOCUMENTATION.md)
 
-## Release Notes
+# Release Notes
 
 **[Development Version](https://github.com/psidnell/ofexport2/archive/master.zip)**
 

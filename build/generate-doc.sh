@@ -23,5 +23,5 @@ echo Generating version.properties
 echo "version:$NEXT_VERSION" > config/version.properties
 echo "date:$DATE" >> config/version.properties
 
-echo Generating TOC
+echo Generating TOC and inserting
 bash build/generate-toc.sh

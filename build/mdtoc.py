@@ -1,5 +1,9 @@
 #!/usr/bin/python
 
+#
+# Generate a Table Of Contents from the md files passed on the command line.
+#
+
 import sys
 
 def gen_entry (mdFile, line):
@@ -36,3 +40,4 @@ if __name__ == "__main__":
     for arg in sys.argv:
         if arg.endswith('.md'):
             process (arg)
+    print
