@@ -5,7 +5,7 @@ $$$$$$$$$$$$$$$$$$
 -->
 <#global INDENT="\t">
 <#global TODAY=root.date("today")>
-${config.reportTitle} ${TODAY?string[config.reportDateFormat]}:
+${config.reportTitle}:
 <#--
 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 $ Walk over items in root node

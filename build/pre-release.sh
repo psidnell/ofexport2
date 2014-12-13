@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 bash build/generate-doc.sh
 
 mvn clean package

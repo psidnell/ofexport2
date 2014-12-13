@@ -1,4 +1,4 @@
-[Table of Contents](TOC.md) | [Introduction](README.md) | [Release Notes](RELEASE-NOTES.md)
+[Table of Contents](TOC.md) | [Home](README.md) | [Release Notes](RELEASE-NOTES.md) | [Support](SUPPORT.md) | [Documentation](DOCUMENTATION.md)
 
 ## Documentation
 
@@ -734,8 +734,3 @@ a large export rather than about a second when accessing the database directly. 
 - In  OmniFocus, child Contexts/Tasks are interleaved, as are child Projects/Folders. In ofexport they are not.
 - There is currently no way to detect if Projects are **stalled** or **pending**.
 
-### Support
-
-- [Open a Bug](https://github.com/psidnell/ofexport2/issues)
-- [Blog: Poor Signal](http://poor-signal.blogspot.co.uk)
-- [Twitter: @psidnell](http://twitter.com/psidnell)

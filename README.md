@@ -1,4 +1,4 @@
-[Table of Contents](TOC.md) | [Introduction](README.md) | [Release Notes](RELEASE-NOTES.md)
+[Table of Contents](TOC.md) | [Home](README.md) | [Release Notes](RELEASE-NOTES.md) | [Support](SUPPORT.md) | [Documentation](DOCUMENTATION.md)
 
 # ofexport2
 
@@ -8,6 +8,7 @@ Export from OmniFocus to various other formats:
 
 ![](doc/images/Screen.png)
 
+- [Licence: Apache License Version 2.0](LICENSE)
 - [Blog: Poor Signal](http://poor-signal.blogspot.co.uk)
 - [Twitter: @psidnell](http://twitter.com/psidnell)
 
@@ -15,6 +16,7 @@ Export from OmniFocus to various other formats:
 
 - [ofexport2](README.md#ofexport2)
     - [Release Notes](RELEASE-NOTES.md#release-notes)
+    - [Support](SUPPORT.md#support)
     - [Documentation](DOCUMENTATION.md#documentation)
         - [Overview](DOCUMENTATION.md#overview)
         - [Audience](DOCUMENTATION.md#audience)
@@ -49,4 +51,3 @@ Export from OmniFocus to various other formats:
         - [ofexport vs ofexport2](DOCUMENTATION.md#ofexport-vs-ofexport2)
         - [Other Approaches Considered](DOCUMENTATION.md#other-approaches-considered)
         - [Known Issues](DOCUMENTATION.md#known-issues)
-        - [Support](DOCUMENTATION.md#support)

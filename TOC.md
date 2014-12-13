@@ -2,6 +2,7 @@
 
 - [ofexport2](README.md#ofexport2)
     - [Release Notes](RELEASE-NOTES.md#release-notes)
+    - [Support](SUPPORT.md#support)
     - [Documentation](DOCUMENTATION.md#documentation)
         - [Overview](DOCUMENTATION.md#overview)
         - [Audience](DOCUMENTATION.md#audience)
@@ -36,4 +37,3 @@
         - [ofexport vs ofexport2](DOCUMENTATION.md#ofexport-vs-ofexport2)
         - [Other Approaches Considered](DOCUMENTATION.md#other-approaches-considered)
         - [Known Issues](DOCUMENTATION.md#known-issues)
-        - [Support](DOCUMENTATION.md#support)

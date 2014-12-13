@@ -1,13 +1,16 @@
-[Table of Contents](TOC.md) | [Introduction](README.md) | [Release Notes](RELEASE-NOTES.md)
+[Table of Contents](TOC.md) | [Home](README.md) | [Release Notes](RELEASE-NOTES.md) | [Support](SUPPORT.md) | [Documentation](DOCUMENTATION.md)
 
 ## Release Notes
 
 **[Development Version](https://github.com/psidnell/ofexport2/archive/master.zip)**
 
+**[1.0.13 (2014-12-13)](https://github.com/psidnell/ofexport2/archive/ofexport-v2-1.0.13.zip)**
+
 - Adjusted date sort so items with date appear above those without by default.
 - Considering items complete if folder dropped.
 - Fixed missing colons in debug template.
 - Made naming of config properties consistent.
+- Generated table of contents with python script (build/toc.py).
 
 **[1.0.12 (2014-12-11)](https://github.com/psidnell/ofexport2/archive/ofexport-v2-1.0.12.zip)**
 
