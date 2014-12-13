@@ -20,3 +20,6 @@ ofexport2 -i | sed -E -e 's/^[PFCT]/## &/' -e 's/( +[a-zA-Z]+ )([a-zA-Z]+)/-\1\*
 echo Generating version.properties
 echo "version:$NEXT_VERSION" > config/version.properties
 echo "date:$DATE" >> config/version.properties
+
+echo Generating TOC
+python build/toc.py RELEASE-NOTES.md README.md > TOC.md

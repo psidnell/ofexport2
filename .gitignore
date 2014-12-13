@@ -2,3 +2,5 @@ target
 .settings
 .classpath
 .project
+.pydevproject
+ofexport2.bbprojectd
