@@ -112,7 +112,7 @@ public abstract class CommonProjectAndTaskAttributes extends NodeImpl implements
     }
 
     public void setDeferDate(Date deferDate) {
-        this.deferDate = roundToDay(deferDate);
+        this.deferDate = deferDate;
     }
 
     @SQLiteProperty(name = "effectiveDateDue")
@@ -122,7 +122,7 @@ public abstract class CommonProjectAndTaskAttributes extends NodeImpl implements
     }
 
     public void setDueDate(Date dueDate) {
-        this.dueDate = roundToDay(dueDate);
+        this.dueDate = dueDate;
     }
 
     @SQLiteProperty(name = "dateCompleted")
@@ -134,7 +134,7 @@ public abstract class CommonProjectAndTaskAttributes extends NodeImpl implements
     }
 
     public void setCompletionDate(Date completionDate) {
-        this.completionDate = roundToDay(completionDate);
+        this.completionDate = completionDate;
     }
 
     @SQLiteProperty

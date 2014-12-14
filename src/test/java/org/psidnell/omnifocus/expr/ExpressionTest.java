@@ -73,10 +73,31 @@ public class ExpressionTest {
         t.setCompletionDate(new Date ());
         t.setDueDate(new Date ());
 
-        assertTrue (new Expression("completionDate==date('today')").eval(t, Boolean.class));
-        assertFalse (new Expression("completionDate==date('yesterday')").eval(t, Boolean.class));
-        assertTrue (new Expression("dueDate > date('-1y')").eval(t, Boolean.class));
-        assertTrue (new Expression("within(dueDate,'-1y','7d')").eval(t, Boolean.class));
+        assertFalse (new Expression("completion.is('yesterday')").eval(t, Boolean.class));
+        assertTrue (new Expression("completion.is('today')").eval(t, Boolean.class));
+        assertFalse (new Expression("completion.is('tomorrow')").eval(t, Boolean.class));
+
+        assertTrue (new Expression("due.onOrAfter('yesterday')").eval(t, Boolean.class));
+        assertTrue (new Expression("due.onOrAfter('today')").eval(t, Boolean.class));
+        assertFalse (new Expression("due.onOrAfter('tomorrow')").eval(t, Boolean.class));
+
+        assertTrue (new Expression("due.after('yesterday')").eval(t, Boolean.class));
+        assertFalse (new Expression("due.after('today')").eval(t, Boolean.class));
+        assertFalse (new Expression("due.after('tomorrow')").eval(t, Boolean.class));
+
+        assertFalse (new Expression("due.onOrBefore('yesterday')").eval(t, Boolean.class));
+        assertTrue (new Expression("due.onOrBefore('today')").eval(t, Boolean.class));
+        assertTrue (new Expression("due.onOrBefore('tomorrow')").eval(t, Boolean.class));
+
+
+        assertFalse (new Expression("due.before('yesterday')").eval(t, Boolean.class));
+        assertFalse (new Expression("due.before('today')").eval(t, Boolean.class));
+        assertTrue (new Expression("due.before('tomorrow')").eval(t, Boolean.class));
+
+        assertFalse (new Expression("due.between('-2d', 'yesterday')").eval(t, Boolean.class));
+        assertTrue (new Expression("due.between('today', 'today')").eval(t, Boolean.class));
+        assertTrue (new Expression("due.between('yesterday', 'tomorrow')").eval(t, Boolean.class));
+        assertFalse (new Expression("due.between('tomorrow', '2d')").eval(t, Boolean.class));
     }
 
     @Test

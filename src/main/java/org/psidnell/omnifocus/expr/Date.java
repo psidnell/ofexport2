@@ -28,10 +28,12 @@ public class Date extends ExpressionFunctions implements Comparable<Date> {
     // TODO Merge with Expression Functions
 
     private java.util.Date date;
+    private java.util.Date roundedDate;
     private ConfigParams config;
 
     public Date(java.util.Date date, ConfigParams config) {
         this.date = date;
+        this.roundedDate = roundToDay(date);
         this.config = config;
     }
 
@@ -40,31 +42,33 @@ public class Date extends ExpressionFunctions implements Comparable<Date> {
     }
 
     public boolean is(String dateStr) throws ParseException {
-        return date(dateStr).equals(date);
+        return date(dateStr).equals(roundedDate);
     }
 
     public boolean isSoon() throws ParseException {
-        return date != null && date.getTime() < date(config.getDueSoon()).getTime();
+        return roundedDate != null && roundedDate.getTime() < date(config.getDueSoon()).getTime();
     }
 
     public boolean after(String dateStr) throws ParseException {
-        return date != null && date.getTime() > date(dateStr).getTime();
+        return roundedDate != null && roundedDate.getTime() > date(dateStr).getTime();
     }
 
     public boolean onOrAfter(String dateStr) throws ParseException {
-        return date != null && date.getTime() >= date(dateStr).getTime();
+        return roundedDate != null && roundedDate.getTime() >= date(dateStr).getTime();
     }
 
     public boolean before(String dateStr) throws ParseException {
-        return date != null && date.getTime() < date(dateStr).getTime();
+        return roundedDate != null && roundedDate.getTime() < date(dateStr).getTime();
     }
 
     public boolean onOrBefore(String dateStr) throws ParseException {
-        return date != null && date.getTime() <= date(dateStr).getTime();
+        return roundedDate != null && roundedDate.getTime() <= date(dateStr).getTime();
     }
 
     public boolean between(String fromStr, String toStr) throws ParseException {
-        return date != null && date.getTime() >= date(fromStr).getTime() && date.getTime() <= date(fromStr).getTime();
+        java.util.Date from = date(fromStr);
+        java.util.Date to = date(toStr);
+        return roundedDate != null && roundedDate.getTime() >= from.getTime() && roundedDate.getTime() <= to.getTime();
     }
 
     @Override

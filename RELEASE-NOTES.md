@@ -4,6 +4,8 @@
 
 **[Development Version](https://github.com/psidnell/ofexport2/archive/master.zip)**
 
+- Fixed a date range bug.
+
 **[1.0.13 (2014-12-13)](https://github.com/psidnell/ofexport2/archive/ofexport-v2-1.0.13.zip)**
 
 - Adjusted date sort so items with date appear above those without by default.
