@@ -27,6 +27,7 @@ import org.psidnell.omnifocus.format.Formatter;
 import org.psidnell.omnifocus.format.FreeMarkerFormatter;
 import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.Folder;
+import org.psidnell.omnifocus.model.NodeFactory;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
 import org.psidnell.omnifocus.visitor.ClearMarkedVisitor;
@@ -68,13 +69,17 @@ public class OFExport {
     private Folder projectRoot;
     private Context contextRoot;
 
+    private NodeFactory nodeFactory;
+
     public OFExport() {
-        projectRoot = new Folder();
-        projectRoot.setName("RootFolder");
+
+    }
+
+    public void init() {
+        projectRoot = nodeFactory.createFolder("RootFolder");
         projectRoot.setId("__%%RootFolder"); // to give deterministic JSON/XML output
 
-        contextRoot = new Context();
-        contextRoot.setName("RootContext");
+        contextRoot = nodeFactory.createContext("RootContext");
         contextRoot.setId("__%%RootContext"); // to give deterministic JSON/XML output
     }
 
@@ -234,5 +239,9 @@ public class OFExport {
 
     public void addContextComparator(String expr) {
         sortingFilter.addContextComparator(new ExpressionComparator<>(expr, Context.class));
+    }
+
+    public void setNodeFactory(NodeFactory nodeFactory) {
+        this.nodeFactory = nodeFactory;
     }
 }

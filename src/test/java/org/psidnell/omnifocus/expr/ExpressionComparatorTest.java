@@ -20,62 +20,74 @@ import static org.junit.Assert.*;
 import java.text.ParseException;
 import java.util.Date;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.psidnell.omnifocus.ApplicationContextFactory;
+import org.psidnell.omnifocus.model.NodeFactory;
 import org.psidnell.omnifocus.model.Task;
+import org.springframework.context.ApplicationContext;
 
 public class ExpressionComparatorTest {
 
+    private NodeFactory nodeFactory;
+
+    @Before
+    public void setup () {
+        ApplicationContext appContext = ApplicationContextFactory.getContext();
+        nodeFactory = appContext.getBean("nodefactory", NodeFactory.class);
+    }
+
     @Test
     public void testWithNullFields () {
-        Task t1 = new Task ();
-        Task t2 = new Task ();
-        
+        Task t1 = nodeFactory.createTask("t");
+        Task t2 = nodeFactory.createTask("t");
+
         assertEquals (0, new ExpressionComparator<>("completionDate", Task.class).compare(t1, t2));
     }
-    
+
     @Test
     public void testWithIdenticalNonNullFields () throws ParseException {
         Date date = new Date ();
-        Task t1 = new Task ();
+        Task t1 = nodeFactory.createTask("t");
         t1.setCompletionDate(date);
-        Task t2 = new Task ();
+        Task t2 = nodeFactory.createTask("t");
         t2.setCompletionDate(date);
-        
+
         assertEquals (0, new ExpressionComparator<>("completionDate", Task.class).compare(t1, t2));
     }
-    
+
     @Test
     public void testWithMixedNullFields () throws ParseException {
         Date date = new Date ();
-        Task t1 = new Task ();
+        Task t1 = nodeFactory.createTask("t");
         t1.setCompletionDate(date);
-        Task t2 = new Task ();
-        
+        Task t2 = nodeFactory.createTask("t");
+
         assertEquals (-1, new ExpressionComparator<>("completionDate", Task.class).compare(t1, t2));
-        
+
         t1.setCompletionDate(null);
         t2.setCompletionDate(date);
-        
+
         assertEquals (1, new ExpressionComparator<>("completionDate", Task.class).compare(t1, t2));
     }
-    
+
     @Test
     public void testWithNonIdenticalNonNullFields () throws ParseException {
-        Task t1 = new Task ();
+        Task t1 = nodeFactory.createTask("t");
         t1.setCompletionDate(new Date ());
-        Task t2 = new Task ();
+        Task t2 = nodeFactory.createTask("t");
         t2.setCompletionDate(new Date (0)); // Older
-        
+
         assertEquals (1, new ExpressionComparator<>("completionDate", Task.class).compare(t1, t2));
     }
-    
+
     @Test
     public void testReverseSort () throws ParseException {
-        Task t1 = new Task ();
+        Task t1 = nodeFactory.createTask("t");
         t1.setCompletionDate(new Date ());
-        Task t2 = new Task ();
+        Task t2 = nodeFactory.createTask("t");
         t2.setCompletionDate(new Date (0)); // Older
-        
+
         assertEquals (-1, new ExpressionComparator<>("r:completionDate", Task.class).compare(t1, t2));
     }
 }

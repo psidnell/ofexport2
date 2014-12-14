@@ -5,7 +5,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.psidnell.omnifocus.ApplicationContextFactory;
+import org.springframework.context.ApplicationContext;
 
 /*
 Copyright 2014 Paul Sidnell
@@ -25,10 +28,18 @@ limitations under the License.
 
 public class ProjectTest {
 
+    private NodeFactory nodeFactory;
+
+    @Before
+    public void setup () {
+        ApplicationContext appContext = ApplicationContextFactory.getContext();
+        nodeFactory = appContext.getBean("nodefactory", NodeFactory.class);
+    }
+
     @Test
     public void testAddTask () {
-        Project parent = new Project ();
-        Task child = new Task ();
+        Project parent = nodeFactory.createProject("p");
+        Task child = nodeFactory.createTask("t");
 
         parent.add(child);
         assertEquals (1, parent.getTasks().size());
@@ -38,10 +49,10 @@ public class ProjectTest {
 
     @Test
     public void testAddTaskDisconnectsFromPrevious () {
-        Project parent1 = new Project ();
-        Task child = new Task ();
+        Project parent1 = nodeFactory.createProject("p");
+        Task child = nodeFactory.createTask("t");
 
-        Task root = new Task ();
+        Task root = nodeFactory.createTask("t");
         root.add(child);
 
         parent1.add(child);
@@ -51,7 +62,7 @@ public class ProjectTest {
 
         assertFalse (root.getTasks().contains(child));
 
-        Project parent2 = new Project ();
+        Project parent2 = nodeFactory.createProject("p");
         parent2.add(child);
         assertEquals (1, parent2.getTasks().size());
         assertTrue (parent2.getTasks().contains(child));
@@ -62,8 +73,8 @@ public class ProjectTest {
 
     @Test public void testStatusInheritedFromParentFolder () {
 
-        Folder parent = new Folder ("parent");
-        Project child = new Project ("child");
+        Folder parent = nodeFactory.createFolder("parent");
+        Project child = nodeFactory.createProject("child");
         parent.add(child);
 
         assertEquals ("active", child.getStatus());
@@ -74,8 +85,8 @@ public class ProjectTest {
 
     @Test public void testIsActiveInheritedFromParentFolder () {
 
-        Folder parent = new Folder ("parent");
-        Project child = new Project ("child");
+        Folder parent = nodeFactory.createFolder("parent");
+        Project child = nodeFactory.createProject("child");
         parent.add(child);
 
         assertTrue(child.isActive());
@@ -86,8 +97,8 @@ public class ProjectTest {
 
     @Test public void testIsDroppedInheritedFromParentFolder () {
 
-        Folder parent = new Folder ("parent");
-        Project child = new Project ("child");
+        Folder parent = nodeFactory.createFolder("parent");
+        Project child = nodeFactory.createProject("child");
         parent.add(child);
 
         assertFalse(child.isDropped());
@@ -100,8 +111,8 @@ public class ProjectTest {
 
     @Test public void testIsCompletedInheritedFromParentFolder () {
 
-        Folder parent = new Folder ("parent");
-        Project child = new Project ("child");
+        Folder parent = nodeFactory.createFolder("parent");
+        Project child = nodeFactory.createProject("child");
         parent.add(child);
 
         assertFalse(child.isCompleted());
@@ -114,8 +125,8 @@ public class ProjectTest {
 
     @Test public void testOnHoldInheritedFromParentFolder () {
 
-        Folder parent = new Folder ("parent");
-        Project child = new Project ("child");
+        Folder parent = nodeFactory.createFolder("parent");
+        Project child = nodeFactory.createProject("child");
         parent.add(child);
 
         assertFalse(child.isOnHold());

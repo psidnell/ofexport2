@@ -21,6 +21,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import org.psidnell.omnifocus.ConfigParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,9 +40,11 @@ public class ExpressionFunctions {
 
     private static final int DAYS_IN_WEEK = 7;
 
-    public static final SimpleDateFormat YYYYMMDD = new SimpleDateFormat("yyyy-MM-dd");
+    private SimpleDateFormat dateFormat;
 
     protected static final long DAY = 1000 * 60 * 60 * 24;
+
+    protected ConfigParams config;
 
     public Date date(String dateStr) throws ParseException {
         Calendar today = new GregorianCalendar();
@@ -76,7 +79,7 @@ public class ExpressionFunctions {
         }
 
         if (result == null) {
-            result = roundToDay(YYYYMMDD.parse(dateStr));
+            result = roundToDay(dateFormat.parse(dateStr));
         }
 
         LOGGER.debug("date({}) = {}", dateStr, result);
@@ -289,4 +292,8 @@ public class ExpressionFunctions {
         return d == null ? null : new Date(DAY * (d.getTime() / DAY));
     }
 
+    public void setConfigParams(ConfigParams config) {
+        this.config = config;
+        dateFormat = new SimpleDateFormat(config.getExpressionDateFormat());
+    }
 }

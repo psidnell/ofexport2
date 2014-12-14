@@ -18,7 +18,6 @@ package org.psidnell.omnifocus.model;
 import java.util.Date;
 import java.util.UUID;
 
-import org.psidnell.omnifocus.ConfigParams;
 import org.psidnell.omnifocus.expr.ExprAttribute;
 import org.psidnell.omnifocus.expr.ExpressionFunctions;
 import org.psidnell.omnifocus.sqlite.SQLiteProperty;
@@ -31,8 +30,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  *         The root class for all nodes in the object tree.
  */
 public abstract class NodeImpl extends ExpressionFunctions implements Node {
-
-    protected ConfigParams config;
 
     protected String name;
 
@@ -71,7 +68,7 @@ public abstract class NodeImpl extends ExpressionFunctions implements Node {
 
     @Override
     @SQLiteProperty
-    @ExprAttribute (help="used to define sort order of items.")
+    @ExprAttribute(help = "used to define sort order of items.")
     public int getRank() {
         return rank;
     }
@@ -145,11 +142,6 @@ public abstract class NodeImpl extends ExpressionFunctions implements Node {
     }
 
     @Override
-    public void setConfigParams(ConfigParams config) {
-        this.config = config;
-    }
-
-    @Override
     @SQLiteProperty
     public Date getDateAdded() {
         return dateAdded;
@@ -171,17 +163,17 @@ public abstract class NodeImpl extends ExpressionFunctions implements Node {
         this.dateModified = date;
     }
 
-    @ExprAttribute(help="added date.")
+    @ExprAttribute(help = "added date.")
     @JsonIgnore
     @Override
-    public org.psidnell.omnifocus.expr.Date getAdded () {
+    public org.psidnell.omnifocus.expr.Date getAdded() {
         return new org.psidnell.omnifocus.expr.Date(dateAdded, config);
     }
 
-    @ExprAttribute(help="modified date.")
+    @ExprAttribute(help = "modified date.")
     @JsonIgnore
     @Override
-    public org.psidnell.omnifocus.expr.Date getModified () {
+    public org.psidnell.omnifocus.expr.Date getModified() {
         return new org.psidnell.omnifocus.expr.Date(dateModified, config);
     }
 }

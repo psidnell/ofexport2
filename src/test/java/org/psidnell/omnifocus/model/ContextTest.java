@@ -5,7 +5,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.psidnell.omnifocus.ApplicationContextFactory;
+import org.springframework.context.ApplicationContext;
 
 /*
 Copyright 2014 Paul Sidnell
@@ -25,10 +28,18 @@ limitations under the License.
 
 public class ContextTest {
 
+    private NodeFactory nodeFactory;
+
+    @Before
+    public void setUp () {
+        ApplicationContext appContext = ApplicationContextFactory.getContext();
+        nodeFactory = appContext.getBean("nodefactory", NodeFactory.class);
+    }
+
     @Test
     public void testAddContext () {
-        Context parent = new Context ();
-        Context child = new Context ();
+        Context parent = nodeFactory.createContext("c");
+        Context child = nodeFactory.createContext("c");
 
         parent.add(child);
         assertEquals (1, parent.getContexts().size());
@@ -38,15 +49,15 @@ public class ContextTest {
 
     @Test
     public void testAddContextDisconnectsFromPrevious () {
-        Context parent1 = new Context ();
-        Context child = new Context ();
+        Context parent1 = nodeFactory.createContext("c");
+        Context child = nodeFactory.createContext("c");
 
         parent1.add(child);
         assertEquals (1, parent1.getContexts().size());
         assertTrue (parent1.getContexts().contains(child));
         assertSame (parent1, child.getContextModeParent());
 
-        Context parent2 = new Context ();
+        Context parent2 = nodeFactory.createContext("c");
         parent2.add(child);
         assertEquals (1, parent2.getContexts().size());
         assertTrue (parent2.getContexts().contains(child));
@@ -57,8 +68,8 @@ public class ContextTest {
 
     @Test
     public void testAddTask () {
-        Context parent = new Context ();
-        Task child = new Task ();
+        Context parent = nodeFactory.createContext("c");
+        Task child = nodeFactory.createTask("t");
 
         parent.add(child);
         assertEquals (1, parent.getTasks().size());
@@ -68,15 +79,15 @@ public class ContextTest {
 
     @Test
     public void testAddTaskDisconnectsFromPrevious () {
-        Context parent1 = new Context ();
-        Task child = new Task ();
+        Context parent1 = nodeFactory.createContext("c");
+        Task child = nodeFactory.createTask("t");
 
         parent1.add(child);
         assertEquals (1, parent1.getTasks().size());
         assertTrue (parent1.getTasks().contains(child));
         assertSame (parent1, child.getContextModeParent());
 
-        Context parent2 = new Context ();
+        Context parent2 = nodeFactory.createContext("c");
         parent2.add(child);
         assertEquals (1, parent2.getTasks().size());
         assertTrue (parent2.getTasks().contains(child));
@@ -87,7 +98,7 @@ public class ContextTest {
 
     @Test
     public void testActive () {
-        Context c = new Context ("c");
+        Context c = nodeFactory.createContext("c");
 
         assertTrue (c.isActive());
         c.setActiveFlag(false);
@@ -101,7 +112,7 @@ public class ContextTest {
 
     @Test
     public void testOnHold () {
-        Context c = new Context ("c");
+        Context c = nodeFactory.createContext("c");
 
         assertFalse (c.isOnHold());
         c.setAllowsNextAction(false);
@@ -110,7 +121,7 @@ public class ContextTest {
 
     @Test
     public void testDropped () {
-        Context c = new Context ("c");
+        Context c = nodeFactory.createContext("c");
 
         assertFalse (c.isDropped());
         c.setActiveFlag(false);
@@ -119,9 +130,9 @@ public class ContextTest {
 
     @Test
     public void testDroppedInheritedFromParentContext () {
-        Context parent = new Context ("parent");
+        Context parent = nodeFactory.createContext("parent");
 
-        Context child = new Context ("child");
+        Context child = nodeFactory.createContext("child");
         parent.add(child);
 
         assertFalse (child.isDropped());

@@ -18,14 +18,25 @@ package org.psidnell.omnifocus.model;
 
 import static org.junit.Assert.*;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.psidnell.omnifocus.ApplicationContextFactory;
+import org.springframework.context.ApplicationContext;
 
 public class FolderTest {
 
+    private NodeFactory nodeFactory;
+
+    @Before
+    public void setup () {
+        ApplicationContext appContext = ApplicationContextFactory.getContext();
+        nodeFactory = appContext.getBean("nodefactory", NodeFactory.class);
+    }
+
     @Test
     public void testAddFolder () {
-        Folder parent = new Folder ();
-        Folder child = new Folder ();
+        Folder parent = nodeFactory.createFolder("f");
+        Folder child = nodeFactory.createFolder("f");
 
         parent.add(child);
         assertEquals (1, parent.getFolders().size());
@@ -35,15 +46,15 @@ public class FolderTest {
 
     @Test
     public void testAddFolderDisconnectsFromPrevious () {
-        Folder parent1 = new Folder ();
-        Folder child = new Folder ();
+        Folder parent1 = nodeFactory.createFolder("f");
+        Folder child = nodeFactory.createFolder("f");
 
         parent1.add(child);
         assertEquals (1, parent1.getFolders().size());
         assertTrue (parent1.getFolders().contains(child));
         assertSame (parent1, child.getProjectModeParent());
 
-        Folder parent2 = new Folder ();
+        Folder parent2 = nodeFactory.createFolder("f");
         parent2.add(child);
         assertEquals (1, parent2.getFolders().size());
         assertTrue (parent2.getFolders().contains(child));
@@ -54,8 +65,8 @@ public class FolderTest {
 
     @Test
     public void testAddProject () {
-        Folder parent = new Folder ();
-        Project child = new Project ();
+        Folder parent = nodeFactory.createFolder("f");
+        Project child = nodeFactory.createProject("p");
 
         parent.add(child);
         assertEquals (1, parent.getProjects().size());
@@ -65,15 +76,15 @@ public class FolderTest {
 
     @Test
     public void testAddProjectDisconnectsFromPrevious () {
-        Folder parent1 = new Folder ();
-        Project child = new Project ();
+        Folder parent1 = nodeFactory.createFolder("f");
+        Project child = nodeFactory.createProject("p");
 
         parent1.add(child);
         assertEquals (1, parent1.getProjects().size());
         assertTrue (parent1.getProjects().contains(child));
         assertSame (parent1, child.getProjectModeParent());
 
-        Folder parent2 = new Folder ();
+        Folder parent2 = nodeFactory.createFolder("f");
         parent2.add(child);
         assertEquals (1, parent2.getProjects().size());
         assertTrue (parent2.getProjects().contains(child));
@@ -84,8 +95,8 @@ public class FolderTest {
 
     @Test
     public void testIsActiveInheritsFromParentProject () {
-        Folder parent = new Folder ();
-        Folder child = new Folder ();
+        Folder parent = nodeFactory.createFolder("f");
+        Folder child = nodeFactory.createFolder("f");
         parent.add(child);
 
         assertTrue (parent.isActive());

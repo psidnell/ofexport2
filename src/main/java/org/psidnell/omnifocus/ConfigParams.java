@@ -25,6 +25,7 @@ public class ConfigParams {
 
     private String dueSoon;
     private String flattenedRootName;
+    private String expressionDateFormat;
 
     public void setDueSoon(String dueSoon) {
         this.dueSoon = dueSoon;
@@ -40,5 +41,13 @@ public class ConfigParams {
 
     public String getFlattenedRootName() {
         return flattenedRootName;
+    }
+
+    public void setExpressionDateFormat(String format) {
+        this.expressionDateFormat = format;
+    }
+
+    public String getExpressionDateFormat() {
+        return expressionDateFormat;
     }
 }

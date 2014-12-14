@@ -47,9 +47,11 @@ public class Context extends NodeImpl implements ContextHierarchyNode{
 
     private boolean allowsNextAction = true;
 
+    @Deprecated // Should use NodeFactory
     public Context() {
     }
 
+    @Deprecated // Should use NodeFactory
     public Context(String name) {
         this.name = name;
     }
@@ -190,7 +192,6 @@ public class Context extends NodeImpl implements ContextHierarchyNode{
 
         contexts.add(child);
         child.setContextModeParent(this);
-
     }
 
     public void add(Task child) {

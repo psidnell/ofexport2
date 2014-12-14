@@ -43,13 +43,17 @@ public class Project extends CommonProjectAndTaskAttributes {
     private String status = ACTIVE;
     private boolean singleActionList;
 
+    @Deprecated
     public Project() {
     }
 
+    @Deprecated
     public Project(String name) {
         this.name = name;
     }
 
+    @Deprecated
+    // Should use NodeFactory
     public Project(ProjectInfo projInfo, Task rootTask) {
         setId(rootTask.getId());
         setName(rootTask.getName());
@@ -144,7 +148,7 @@ public class Project extends CommonProjectAndTaskAttributes {
             return true;
         }
 
-        if (parent != null && ((Folder)parent).isDropped()){
+        if (parent != null && ((Folder) parent).isDropped()) {
             return true;
         }
 

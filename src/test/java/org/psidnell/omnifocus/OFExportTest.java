@@ -17,28 +17,42 @@ package org.psidnell.omnifocus;
 
 import java.io.StringWriter;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.psidnell.omnifocus.integrationtest.Diff;
 import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.Folder;
+import org.psidnell.omnifocus.model.NodeFactory;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
 import org.psidnell.omnifocus.visitor.FlattenFilter;
 import org.psidnell.omnifocus.visitor.SimplifyFilter;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.ApplicationContext;
 
 public class OFExportTest {
 
+    private BeanFactory appContext;
+    private ConfigParams config;
+    private NodeFactory nodeFactory;
+
+    @Before
+    public void setup () {
+        appContext = ApplicationContextFactory.getContext();
+        config = appContext.getBean("configparams", ConfigParams.class);
+        nodeFactory = appContext.getBean("nodefactory", NodeFactory.class);
+    }
+
     @Test
     public void testEverythingIncludedByDefault () throws Exception {
-        OFExport ofExport = new OFExport();
+        OFExport ofExport = newOFExport();
 
-        Project p1 = new Project ("p1");
+        Project p1 = nodeFactory.createProject("p1");
 
-        Task t = new Task ("t1");
+        Task t = nodeFactory.createTask("t1");
         p1.add(t);
 
-        Project p2 = new Project ("p2");
+        Project p2 = nodeFactory.createProject("p2");
 
         ofExport.getProjectRoot().add(p1);
         ofExport.getProjectRoot().add(p2);
@@ -57,19 +71,20 @@ public class OFExportTest {
 
     @Test
     public void testImplicitIncludeProjectSubtreeWhenMatch () throws Exception {
-        OFExport ofExport = new OFExport();
+        OFExport ofExport = newOFExport();
 
-        Project p1 = new Project ("p1");
+        Project p1 = nodeFactory.createProject("p1");
 
-        Task t = new Task ("t1");
+        Task t = nodeFactory.createTask("t1");
         p1.add(t);
 
-        Project p2 = new Project ("p2");
+        Project p2 = nodeFactory.createProject("p2");
 
         ofExport.getProjectRoot().add(p1);
         ofExport.getProjectRoot().add(p2);
 
         ofExport.addProjectExpression("name=='p1'", true, true);
+
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
@@ -83,19 +98,20 @@ public class OFExportTest {
 
     @Test
     public void testExplicitIncludeProjectSubtreeWhenMatch () throws Exception {
-        OFExport ofExport = new OFExport();
+        OFExport ofExport = newOFExport();
 
-        Project p1 = new Project ("p1");
+        Project p1 = nodeFactory.createProject("p1");
 
-        Task t = new Task ("t1");
+        Task t = nodeFactory.createTask("t1");
         p1.add(t);
 
-        Project p2 = new Project ("p2");
+        Project p2 = nodeFactory.createProject("p2");
 
         ofExport.getProjectRoot().add(p1);
         ofExport.getProjectRoot().add(p2);
 
         ofExport.addProjectExpression("name=='p1'", true, true);
+
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
@@ -109,19 +125,20 @@ public class OFExportTest {
 
     @Test
     public void testIncludeFolderSubtreeWhenMatch () throws Exception {
-        OFExport ofExport = new OFExport();
+        OFExport ofExport = newOFExport();
 
-        Folder f1 = new Folder ("f1");
+        Folder f1 = nodeFactory.createFolder("f1");
 
-        Project p = new Project ("p");
+        Project p = nodeFactory.createProject("p");
         f1.add(p);
 
-        Folder f2 = new Folder ("f2");
+        Folder f2 = nodeFactory.createFolder("f2");
 
         ofExport.getProjectRoot().add(f1);
         ofExport.getProjectRoot().add(f2);
 
         ofExport.addFolderExpression("name=='f1'", true, true);
+
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
@@ -135,20 +152,21 @@ public class OFExportTest {
 
     @Test
     public void testIncludeContextSubtreeWhenMatch () throws Exception {
-        OFExport ofExport = new OFExport();
+        OFExport ofExport = newOFExport();
         ofExport.setProjectMode(false);
 
-        Context c1 = new Context ("c1");
+        Context c1 = nodeFactory.createContext("c1");
 
-        Task t = new Task ("t1");
+        Task t = nodeFactory.createTask("t1");
         c1.add(t);
 
-        Context c2 = new Context ("c2");
+        Context c2 = nodeFactory.createContext("c2");
 
         ofExport.getContextRoot().add(c1);
         ofExport.getContextRoot().add(c2);
 
         ofExport.addContextExpression("name=='c1'", true, true);
+
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
@@ -162,22 +180,23 @@ public class OFExportTest {
 
     @Test
     public void testIncludeTaskWhenMatch () throws Exception {
-        OFExport ofExport = new OFExport();
+        OFExport ofExport = newOFExport();
 
-        Project p1 = new Project ("p1");
+        Project p1 = nodeFactory.createProject("p1");
 
-        Task t1 = new Task ("t1");
+        Task t1 = nodeFactory.createTask("t1");
         p1.add(t1);
 
-        Task t2 = new Task ("t2");
+        Task t2 = nodeFactory.createTask("t2");
         t1.add (t2);
 
-        Project p2 = new Project ("p2");
+        Project p2 = nodeFactory.createProject("p2");
 
         ofExport.getProjectRoot().add(p1);
         ofExport.getProjectRoot().add(p2);
 
         ofExport.addTaskExpression("name=='t1'", true, true);
+
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
@@ -192,25 +211,26 @@ public class OFExportTest {
 
     @Test
     public void testExcludeTaskWhenMatch () throws Exception {
-        OFExport ofExport = new OFExport();
+        OFExport ofExport = newOFExport();
 
-        Project p1 = new Project ("p1");
+        Project p1 = nodeFactory.createProject("p1");
 
-        Task t1 = new Task ("t1");
+        Task t1 = nodeFactory.createTask("t1");
         p1.add(t1);
 
-        Task t2 = new Task ("t2");
+        Task t2 = nodeFactory.createTask("t2");
         t1.add (t2);
 
-        Task t3 = new Task ("t3");
+        Task t3 = nodeFactory.createTask("t3");
         t2.add (t3);
 
-        Project p2 = new Project ("p2");
+        Project p2 = nodeFactory.createProject("p2");
 
         ofExport.getProjectRoot().add(p1);
         ofExport.getProjectRoot().add(p2);
 
         ofExport.addTaskExpression("name=='t2'", false, true);
+
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
@@ -225,22 +245,23 @@ public class OFExportTest {
 
     @Test
     public void testIncludeTaskSubTreeWhenMatch () throws Exception {
-        OFExport ofExport = new OFExport();
+        OFExport ofExport = newOFExport();
 
-        Project p1 = new Project ("p1");
+        Project p1 = nodeFactory.createProject("p1");
 
-        Task t1 = new Task ("t1");
+        Task t1 = nodeFactory.createTask("t1");
         p1.add(t1);
 
-        Task t2 = new Task ("t2");
+        Task t2 = nodeFactory.createTask("t2");
         t1.add (t2);
 
-        Project p2 = new Project ("p2");
+        Project p2 = nodeFactory.createProject("p2");
 
         ofExport.getProjectRoot().add(p1);
         ofExport.getProjectRoot().add(p2);
 
         ofExport.addTaskExpression("name=='t1'", true, true);
+
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
@@ -255,13 +276,13 @@ public class OFExportTest {
 
     @Test
     public void testSortFoldersDefault () throws Exception {
-        OFExport ofExport = new OFExport();
+        OFExport ofExport = newOFExport();
 
-        Folder f1 = new Folder ("f1");
+        Folder f1 = nodeFactory.createFolder("f1");
         f1.setRank(2);
-        Folder f2 = new Folder ("f2");
+        Folder f2 = nodeFactory.createFolder("f2");
         f2.setRank(1);
-        Folder f3 = new Folder ("f3");
+        Folder f3 = nodeFactory.createFolder("f3");
         f3.setRank(3);
 
         ofExport.getProjectRoot().add(f1);
@@ -282,13 +303,13 @@ public class OFExportTest {
 
     @Test
     public void testSortFoldersByName () throws Exception {
-        OFExport ofExport = new OFExport();
+        OFExport ofExport = newOFExport();
 
-        Folder f1 = new Folder ("f1");
+        Folder f1 = nodeFactory.createFolder("f1");
         f1.setRank(2);
-        Folder f2 = new Folder ("f2");
+        Folder f2 = nodeFactory.createFolder("f2");
         f2.setRank(1);
-        Folder f3 = new Folder ("f3");
+        Folder f3 = nodeFactory.createFolder("f3");
         f3.setRank(3);
 
         ofExport.getProjectRoot().add(f1);
@@ -296,6 +317,7 @@ public class OFExportTest {
         ofExport.getProjectRoot().add(f3);
 
         ofExport.addFolderComparator("name");
+
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
@@ -310,13 +332,13 @@ public class OFExportTest {
 
     @Test
     public void testSortFoldersByNameReversed () throws Exception {
-        OFExport ofExport = new OFExport();
+        OFExport ofExport = newOFExport();
 
-        Folder f1 = new Folder ("f1");
+        Folder f1 = nodeFactory.createFolder("f1");
         f1.setRank(2);
-        Folder f2 = new Folder ("f2");
+        Folder f2 = nodeFactory.createFolder("f2");
         f2.setRank(1);
-        Folder f3 = new Folder ("f3");
+        Folder f3 = nodeFactory.createFolder("f3");
         f3.setRank(3);
 
         ofExport.getProjectRoot().add(f1);
@@ -324,6 +346,7 @@ public class OFExportTest {
         ofExport.getProjectRoot().add(f3);
 
         ofExport.addFolderComparator("r:name");
+
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
@@ -338,13 +361,13 @@ public class OFExportTest {
 
     @Test
     public void testSortProjectsDefault () throws Exception {
-        OFExport ofExport = new OFExport();
+        OFExport ofExport = newOFExport();
 
-        Project p1 = new Project ("p1");
+        Project p1 = nodeFactory.createProject("p1");
         p1.setRank(2);
-        Project p2 = new Project ("p2");
+        Project p2 = nodeFactory.createProject("p2");
         p2.setRank(1);
-        Project p3 = new Project ("p3");
+        Project p3 = nodeFactory.createProject("p3");
         p3.setRank(3);
 
         ofExport.getProjectRoot().add(p1);
@@ -365,13 +388,13 @@ public class OFExportTest {
 
     @Test
     public void testSortProjectsByName () throws Exception {
-        OFExport ofExport = new OFExport();
+        OFExport ofExport = newOFExport();
 
-        Project p1 = new Project ("p1");
+        Project p1 = nodeFactory.createProject("p1");
         p1.setRank(2);
-        Project p2 = new Project ("p2");
+        Project p2 = nodeFactory.createProject("p2");
         p2.setRank(1);
-        Project p3 = new Project ("p3");
+        Project p3 = nodeFactory.createProject("p3");
         p3.setRank(3);
 
         ofExport.getProjectRoot().add(p1);
@@ -379,6 +402,7 @@ public class OFExportTest {
         ofExport.getProjectRoot().add(p3);
 
         ofExport.addProjectComparator("name");
+
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
@@ -393,13 +417,13 @@ public class OFExportTest {
 
     @Test
     public void testSortProjectsByNameReversed () throws Exception {
-        OFExport ofExport = new OFExport();
+        OFExport ofExport = newOFExport();
 
-        Project p1 = new Project ("p1");
+        Project p1 = nodeFactory.createProject("p1");
         p1.setRank(2);
-        Project p2 = new Project ("p2");
+        Project p2 = nodeFactory.createProject("p2");
         p2.setRank(1);
-        Project p3 = new Project ("p3");
+        Project p3 = nodeFactory.createProject("p3");
         p3.setRank(3);
 
         ofExport.getProjectRoot().add(p1);
@@ -407,6 +431,7 @@ public class OFExportTest {
         ofExport.getProjectRoot().add(p3);
 
         ofExport.addProjectComparator("r:name");
+
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
@@ -421,16 +446,16 @@ public class OFExportTest {
 
     @Test
     public void testSortTasksDefault () throws Exception {
-        OFExport ofExport = new OFExport();
+        OFExport ofExport = newOFExport();
 
-        Task t1 = new Task ("t1");
+        Task t1 = nodeFactory.createTask("t1");
         t1.setRank(2);
-        Task t2 = new Task ("t2");
+        Task t2 = nodeFactory.createTask("t2");
         t2.setRank(1);
-        Task t3 = new Task ("t3");
+        Task t3 = nodeFactory.createTask("t3");
         t3.setRank(3);
 
-        Project p = new Project ("p");
+        Project p = nodeFactory.createProject("p");
         p.add(t1);
         p.add(t2);
         p.add(t3);
@@ -452,22 +477,23 @@ public class OFExportTest {
 
     @Test
     public void testSortTasksByName () throws Exception {
-        OFExport ofExport = new OFExport();
+        OFExport ofExport = newOFExport();
 
-        Task t1 = new Task ("t1");
+        Task t1 = nodeFactory.createTask("t1");
         t1.setRank(2);
-        Task t2 = new Task ("t2");
+        Task t2 = nodeFactory.createTask("t2");
         t2.setRank(1);
-        Task t3 = new Task ("t3");
+        Task t3 = nodeFactory.createTask("t3");
         t3.setRank(3);
 
-        Project p = new Project ("p");
+        Project p = nodeFactory.createProject("p");
         p.add(t1);
         p.add(t2);
         p.add(t3);
 
         ofExport.getProjectRoot().add(p);
         ofExport.addTaskComparator("name");
+
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
@@ -483,16 +509,16 @@ public class OFExportTest {
 
     @Test
     public void testSortTasksByNameReversed () throws Exception {
-        OFExport ofExport = new OFExport();
+        OFExport ofExport = newOFExport();
 
-        Task t1 = new Task ("t1");
+        Task t1 = nodeFactory.createTask("t1");
         t1.setRank(2);
-        Task t2 = new Task ("t2");
+        Task t2 = nodeFactory.createTask("t2");
         t2.setRank(1);
-        Task t3 = new Task ("t3");
+        Task t3 = nodeFactory.createTask("t3");
         t3.setRank(3);
 
-        Project p = new Project ("p");
+        Project p = nodeFactory.createProject("p");
         p.add(t1);
         p.add(t2);
         p.add(t3);
@@ -500,6 +526,7 @@ public class OFExportTest {
         ofExport.getProjectRoot().add(p);
 
         ofExport.addTaskComparator("r:name");
+
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
@@ -515,17 +542,17 @@ public class OFExportTest {
 
     @Test
     public void testSortContextsDefault () throws Exception {
-        OFExport ofExport = new OFExport();
+        OFExport ofExport = newOFExport();
         ofExport.setProjectMode(false);
 
-        Context c1 = new Context ("c1");
+        Context c1 = nodeFactory.createContext("c1");
         c1.setRank(2);
-        Context c2 = new Context ("c2");
+        Context c2 = nodeFactory.createContext("c2");
         c2.setRank(1);
-        Context c3 = new Context ("c3");
+        Context c3 = nodeFactory.createContext("c3");
         c3.setRank(3);
 
-        Context c = new Context ("c");
+        Context c = nodeFactory.createContext("c");
         c.add(c1);
         c.add(c2);
         c.add(c3);
@@ -547,23 +574,24 @@ public class OFExportTest {
 
     @Test
     public void testSortContetsByName () throws Exception {
-        OFExport ofExport = new OFExport();
+        OFExport ofExport = newOFExport();
         ofExport.setProjectMode(false);
 
-        Context c1 = new Context ("c1");
+        Context c1 = nodeFactory.createContext("c1");
         c1.setRank(2);
-        Context c2 = new Context ("c2");
+        Context c2 = nodeFactory.createContext("c2");
         c2.setRank(1);
-        Context c3 = new Context ("c3");
+        Context c3 = nodeFactory.createContext("c3");
         c3.setRank(3);
 
-        Context c = new Context ("c");
+        Context c = nodeFactory.createContext("c");
         c.add(c1);
         c.add(c2);
         c.add(c3);
 
         ofExport.getContextRoot().add(c);
         ofExport.addContextComparator("name");
+
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
@@ -579,17 +607,17 @@ public class OFExportTest {
 
     @Test
     public void testSortContextsByNameReversed () throws Exception {
-        OFExport ofExport = new OFExport();
+        OFExport ofExport = newOFExport();
         ofExport.setProjectMode(false);
 
-        Context c1 = new Context ("c1");
+        Context c1 = nodeFactory.createContext("c1");
         c1.setRank(2);
-        Context c2 = new Context ("c2");
+        Context c2 = nodeFactory.createContext("c2");
         c2.setRank(1);
-        Context c3 = new Context ("c3");
+        Context c3 = nodeFactory.createContext("c3");
         c3.setRank(3);
 
-        Context c = new Context ("c");
+        Context c = nodeFactory.createContext("c");
         c.add(c1);
         c.add(c2);
         c.add(c3);
@@ -597,6 +625,7 @@ public class OFExportTest {
         ofExport.getContextRoot().add(c);
 
         ofExport.addContextComparator("r:name");
+
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
@@ -612,20 +641,21 @@ public class OFExportTest {
 
     @Test
     public void testModifyNode () throws Exception {
-        OFExport ofExport = new OFExport();
+        OFExport ofExport = newOFExport();
 
-        Project p1 = new Project ("p1");
+        Project p1 = nodeFactory.createProject("p1");
 
-        Task t = new Task ("t1");
+        Task t = nodeFactory.createTask("t1");
         p1.add(t);
 
-        Project p2 = new Project ("p2");
+        Project p2 = nodeFactory.createProject("p2");
 
         ofExport.getProjectRoot().add(p1);
         ofExport.getProjectRoot().add(p2);
 
         ofExport.addProjectExpression("name=='p1'", true, true);
         ofExport.addModifyExpression("type=='Project' && name='foo'+type");
+
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
@@ -639,20 +669,20 @@ public class OFExportTest {
 
     @Test
     public void testSimplifyFolders () throws Exception {
-        OFExport ofExport = new OFExport();
+        OFExport ofExport = newOFExport();
 
-        Folder f1 = new Folder ("f1");
+        Folder f1 = nodeFactory.createFolder("f1");
 
-        Project p1 = new Project ("p1");
+        Project p1 = nodeFactory.createProject("p1");
         f1.add(p1);
 
-        Task t1 = new Task ("t1");
+        Task t1 = nodeFactory.createTask("t1");
         p1.add(t1);
 
-        Task t2 = new Task ("t2");
+        Task t2 = nodeFactory.createTask("t2");
         t1.add (t2);
 
-        Project p2 = new Project ("p2");
+        Project p2 = nodeFactory.createProject("p2");
 
         ofExport.getProjectRoot().add(f1);
         ofExport.getProjectRoot().add(p2);
@@ -660,6 +690,7 @@ public class OFExportTest {
         ofExport.addFilter(new SimplifyFilter());
         ofExport.addProjectComparator("name");
         ofExport.addTaskComparator("name");
+
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
@@ -675,24 +706,24 @@ public class OFExportTest {
 
     @Test
     public void testSimplifyContexts () throws Exception {
-        OFExport ofExport = new OFExport();
+        OFExport ofExport = newOFExport();
         ofExport.setProjectMode(false);
 
-        Context c1 = new Context ("c1");
+        Context c1 = nodeFactory.createContext("c1");
         c1.setRank(2);
-        Context c2 = new Context ("c2");
+        Context c2 = nodeFactory.createContext("c2");
         c2.setRank(1);
-        Context c3 = new Context ("c3");
+        Context c3 = nodeFactory.createContext("c3");
         c3.setRank(3);
 
-        Context c = new Context ("c");
+        Context c = nodeFactory.createContext("c");
         c.add(c1);
         c.add(c2);
         c.add(c3);
 
-        Task t1 = new Task ("t1");
+        Task t1 = nodeFactory.createTask("t1");
         c2.add(t1);
-        Task t2 = new Task ("t2");
+        Task t2 = nodeFactory.createTask("t2");
         c2.add(t2);
 
 
@@ -700,6 +731,7 @@ public class OFExportTest {
         ofExport.addContextComparator("name");
         ofExport.addTaskComparator("name");
         ofExport.addFilter(new SimplifyFilter());
+
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
@@ -717,28 +749,28 @@ public class OFExportTest {
 
     @Test
     public void testPruneFolders () throws Exception {
-        OFExport ofExport = new OFExport();
+        OFExport ofExport = newOFExport();
 
-        Folder f1 = new Folder ("f1");
+        Folder f1 = nodeFactory.createFolder("f1");
 
-        Folder f2 = new Folder ("f2");
+        Folder f2 = nodeFactory.createFolder("f2");
 
-        Folder f3 = new Folder ("f3");
+        Folder f3 = nodeFactory.createFolder("f3");
 
-        Folder f4 = new Folder ("f4");
+        Folder f4 = nodeFactory.createFolder("f4");
 
-        Project p1 = new Project ("p1");
+        Project p1 = nodeFactory.createProject("p1");
         f1.add(p1);
 
-        Task t1 = new Task ("t1");
+        Task t1 = nodeFactory.createTask("t1");
         p1.add(t1);
 
-        Task t2 = new Task ("t2");
+        Task t2 = nodeFactory.createTask("t2");
         t1.add (t2);
 
-        Project p2 = new Project ("p2");
+        Project p2 = nodeFactory.createProject("p2");
 
-        Project p3 = new Project ("p3");
+        Project p3 = nodeFactory.createProject("p3");
         f3.add(p3);
         f3.add(f4);
 
@@ -750,6 +782,7 @@ public class OFExportTest {
         ofExport.addPruneFilter();
         ofExport.addProjectComparator("name");
         ofExport.addTaskComparator("name");
+
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
@@ -765,24 +798,24 @@ public class OFExportTest {
 
     @Test
     public void testPruneContexts () throws Exception {
-        OFExport ofExport = new OFExport();
+        OFExport ofExport = newOFExport();
         ofExport.setProjectMode(false);
 
-        Context c1 = new Context ("c1");
+        Context c1 = nodeFactory.createContext("c1");
         c1.setRank(2);
-        Context c2 = new Context ("c2");
+        Context c2 = nodeFactory.createContext("c2");
         c2.setRank(1);
-        Context c3 = new Context ("c3");
+        Context c3 = nodeFactory.createContext("c3");
         c3.setRank(3);
 
-        Context c = new Context ("c");
+        Context c = nodeFactory.createContext("c");
         c.add(c1);
         c.add(c2);
         c.add(c3);
 
-        Task t1 = new Task ("t1");
+        Task t1 = nodeFactory.createTask("t1");
         c2.add(t1);
-        Task t2 = new Task ("t2");
+        Task t2 = nodeFactory.createTask("t2");
         c2.add(t2);
 
 
@@ -790,6 +823,7 @@ public class OFExportTest {
         ofExport.addContextComparator("name");
         ofExport.addTaskComparator("name");
         ofExport.addPruneFilter();
+
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
@@ -805,30 +839,29 @@ public class OFExportTest {
 
     @Test
     public void testFlattenFolders () throws Exception {
-        ApplicationContext appContext = ApplicationContextFactory.getContext();
-        ConfigParams config = appContext.getBean("configparams", ConfigParams.class);
 
-        OFExport ofExport = new OFExport();
+        OFExport ofExport = newOFExport();
 
-        Folder f1 = new Folder ("f1");
+        Folder f1 = nodeFactory.createFolder("f1");
 
-        Project p1 = new Project ("p1");
+        Project p1 = nodeFactory.createProject("p1");
         f1.add(p1);
 
-        Task t1 = new Task ("t1");
+        Task t1 = nodeFactory.createTask("t1");
         p1.add(t1);
 
-        Task t2 = new Task ("t2");
+        Task t2 = nodeFactory.createTask("t2");
         t1.add (t2);
 
-        Project p2 = new Project ("p2");
+        Project p2 = nodeFactory.createProject("p2");
 
         ofExport.getProjectRoot().add(f1);
         ofExport.getProjectRoot().add(p2);
 
-        ofExport.addFilter(new FlattenFilter(config));
+        ofExport.addFilter(new FlattenFilter(nodeFactory, config));
         ofExport.addProjectComparator("name");
         ofExport.addTaskComparator("name");
+
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
@@ -843,33 +876,32 @@ public class OFExportTest {
 
     @Test
     public void testFlattenContexts () throws Exception {
-        ApplicationContext appContext = ApplicationContextFactory.getContext();
-        ConfigParams config = appContext.getBean("configparams", ConfigParams.class);
 
-        OFExport ofExport = new OFExport();
+        OFExport ofExport = newOFExport();
         ofExport.setProjectMode(false);
 
-        Context c1 = new Context ("c1");
+        Context c1 = nodeFactory.createContext("c1");
         c1.setRank(2);
-        Context c2 = new Context ("c2");
+        Context c2 = nodeFactory.createContext("c2");
         c2.setRank(1);
-        Context c3 = new Context ("c3");
+        Context c3 = nodeFactory.createContext("c3");
         c3.setRank(3);
 
-        Context c = new Context ("c");
+        Context c = nodeFactory.createContext("c");
         c.add(c1);
         c.add(c2);
         c.add(c3);
 
-        Task t1 = new Task ("t1");
+        Task t1 = nodeFactory.createTask("t1");
         c2.add(t1);
-        Task t2 = new Task ("t2");
+        Task t2 = nodeFactory.createTask("t2");
         c2.add(t2);
 
         ofExport.getContextRoot().add(c);
         ofExport.addContextComparator("name");
         ofExport.addTaskComparator("name");
-        ofExport.addFilter(new FlattenFilter(config));
+        ofExport.addFilter(new FlattenFilter(nodeFactory, config));
+
         ofExport.process();
         StringWriter out = new StringWriter();
         ofExport.write(out);
@@ -882,5 +914,12 @@ public class OFExportTest {
                 }, out.toString().split("\n"));
     }
 
-
+    private OFExport newOFExport() {
+        OFExport ofExport = new OFExport();
+        ApplicationContext appContext = ApplicationContextFactory.getContext();
+        NodeFactory nodeFactory = appContext.getBean("nodefactory", NodeFactory.class);
+        ofExport.setNodeFactory(nodeFactory);
+        ofExport.init();
+        return ofExport;
+    }
 }

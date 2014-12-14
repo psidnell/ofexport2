@@ -23,14 +23,25 @@ import static org.junit.Assert.assertTrue;
 import java.text.ParseException;
 import java.util.Date;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.psidnell.omnifocus.ApplicationContextFactory;
+import org.springframework.context.ApplicationContext;
 
 public class TaskTest {
 
+    private NodeFactory nodeFactory;
+
+    @Before
+    public void setup () {
+        ApplicationContext appContext = ApplicationContextFactory.getContext();
+        nodeFactory = appContext.getBean("nodefactory", NodeFactory.class);
+    }
+
     @Test
     public void testAddTask () {
-        Task parent = new Task ();
-        Task child = new Task ();
+        Task parent = nodeFactory.createTask("t");
+        Task child = nodeFactory.createTask("t");
 
         parent.add(child);
         assertEquals (1, parent.getTasks().size());
@@ -40,15 +51,15 @@ public class TaskTest {
 
     @Test
     public void testAddTaskDisconnectsFromPrevious () {
-        Task parent1 = new Task ();
-        Task child = new Task ();
+        Task parent1 = nodeFactory.createTask("t");
+        Task child = nodeFactory.createTask("t");
 
         parent1.add(child);
         assertEquals (1, parent1.getTasks().size());
         assertTrue (parent1.getTasks().contains(child));
         assertSame (parent1, child.getProjectModeParent());
 
-        Task parent2 = new Task ();
+        Task parent2 = nodeFactory.createTask("t");
         parent2.add(child);
         assertEquals (1, parent2.getTasks().size());
         assertTrue (parent2.getTasks().contains(child));
@@ -59,7 +70,7 @@ public class TaskTest {
 
     @Test public void testAvailability () {
 
-        Task t = new Task ("t");
+        Task t = nodeFactory.createTask("t");
         assertTrue (t.isAvailable());
 
         t.setBlocked(true);
@@ -76,8 +87,8 @@ public class TaskTest {
 
     @Test public void testAvailabilityInheritedFromParentTask () {
 
-        Task parent = new Task ("parent");
-        Task child = new Task ("child");
+        Task parent = nodeFactory.createTask("parent");
+        Task child = nodeFactory.createTask("child");
         parent.add(child);
 
         assertTrue (child.isAvailable());
@@ -97,8 +108,8 @@ public class TaskTest {
 
     @Test public void testAvailabilityInheritedFromParentProject () {
 
-        Project parent = new Project ("parent");
-        Task child = new Task ("child");
+        Project parent = nodeFactory.createProject("parent");
+        Task child = nodeFactory.createTask("child");
         parent.add(child);
 
         assertTrue (child.isAvailable());
@@ -109,8 +120,8 @@ public class TaskTest {
 
     @Test public void testAvailabilityInheritedFromParentContext () {
 
-        Context parent = new Context ("parent");
-        Task child = new Task ("child");
+        Context parent = nodeFactory.createContext("parent");
+        Task child = nodeFactory.createTask("child");
         parent.add(child);
 
         assertTrue (child.isAvailable());
@@ -121,17 +132,17 @@ public class TaskTest {
 
     @Test public void testRootTaskAvailabilityAsSequentialProject () {
 
-        Task rootTask = new Task ("root");
+        Task rootTask = nodeFactory.createTask("root");
         rootTask.setSequential(true);
         ProjectInfo pi = new ProjectInfo();
         pi.setSingleActionList(false);
         pi.setStatus("active");
 
-        Project parent = new Project (pi, rootTask);
+        Project parent = nodeFactory.createProject(pi, rootTask);
 
         assertTrue (rootTask.isAvailable());
 
-        Task child = new Task ("x");
+        Task child = nodeFactory.createTask("x");
         parent.add(child);
 
         assertFalse (rootTask.isAvailable());
@@ -143,17 +154,17 @@ public class TaskTest {
 
     @Test public void testRootTaskAvailabilityAsSingleActionListProject () {
 
-        Task rootTask = new Task ("root");
+        Task rootTask = nodeFactory.createTask("root");
         rootTask.setSequential(true);
         ProjectInfo pi = new ProjectInfo();
         pi.setSingleActionList(true);
         pi.setStatus("active");
 
-        Project parent = new Project (pi, rootTask);
+        Project parent = nodeFactory.createProject(pi, rootTask);
 
         assertFalse (rootTask.isAvailable());
 
-        Task child = new Task ("x");
+        Task child = nodeFactory.createTask("x");
         parent.add(child);
 
         assertFalse (rootTask.isAvailable());
@@ -165,11 +176,11 @@ public class TaskTest {
 
     @Test
     public void testUncompletedTaskCount () {
-        Task parent = new Task ("parent");
+        Task parent = nodeFactory.createTask("parent");
 
         assertEquals (0, parent.getUncompletedTaskCount());
 
-        Task child = new Task ("child");
+        Task child = nodeFactory.createTask("child");
         parent.add(child);
 
         assertEquals (1, parent.getUncompletedTaskCount());
@@ -182,15 +193,15 @@ public class TaskTest {
     @Test
     public void testIsComplete () {
 
-        Folder f = new Folder ("f");
+        Folder f = nodeFactory.createFolder("f");
 
-        Project p = new Project ("p");
+        Project p = nodeFactory.createProject("p");
         f.add(p);
 
-        Task t1 = new Task ("t1");
+        Task t1 = nodeFactory.createTask("t1");
         p.add(t1);
 
-        Task t2 = new Task ("t2");
+        Task t2 = nodeFactory.createTask("t2");
         t1.add(t2);
 
         assertFalse (t2.isCompleted());
@@ -221,12 +232,12 @@ public class TaskTest {
     @Test
     public void testIsAvailable () throws ParseException {
 
-        Folder f = new Folder ("f");
+        Folder f = nodeFactory.createFolder("f");
 
-        Project p = new Project ("p");
+        Project p = nodeFactory.createProject("p");
         f.add(p);
 
-        Task t = new Task ("t");
+        Task t = nodeFactory.createTask("t");
         p.add(t);
 
         assertTrue (t.isAvailable());

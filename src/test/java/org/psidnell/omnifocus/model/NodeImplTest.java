@@ -15,19 +15,31 @@ limitations under the License.
 */
 package org.psidnell.omnifocus.model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.psidnell.omnifocus.ApplicationContextFactory;
+import org.springframework.context.ApplicationContext;
 
 public class NodeImplTest {
+
+    private NodeFactory nodeFactory;
+
+    @Before
+    public void setup () {
+        ApplicationContext appContext = ApplicationContextFactory.getContext();
+        nodeFactory = appContext.getBean("nodefactory", NodeFactory.class);
+    }
 
     @Test
     public void testIsRootFolder () {
 
-        Folder f1 = new Folder ("f1");
+        Folder f1 = nodeFactory.createFolder("f1");
         assertTrue (f1.isRoot());
 
-        Folder f2 = new Folder ("f2");
+        Folder f2 = nodeFactory.createFolder("f2");
         assertTrue (f2.isRoot());
         f1.add(f2);
         assertFalse (f2.isRoot());
@@ -36,10 +48,10 @@ public class NodeImplTest {
     @Test
     public void testIsRootContext () {
 
-        Context c1 = new Context ("c1");
+        Context c1 = nodeFactory.createContext("c1");
         assertTrue (c1.isRoot());
 
-        Context c2 = new Context ("c2");
+        Context c2 = nodeFactory.createContext("c2");
         assertTrue (c2.isRoot());
         c1.add(c2);
         assertFalse (c2.isRoot());

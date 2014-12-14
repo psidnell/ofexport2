@@ -24,6 +24,7 @@ import org.psidnell.omnifocus.cli.ActiveOptionProcessor;
 import org.psidnell.omnifocus.expr.ExprAttributePrinter;
 import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.Folder;
+import org.psidnell.omnifocus.model.NodeFactory;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
 import org.psidnell.omnifocus.visitor.SimplifyFilter;
@@ -64,6 +65,7 @@ public class CommandLine implements BeanFactoryAware {
     protected boolean open = false;
     private ConfigParams config; // NOPMD it can't see into lambdas
     protected String exportFile;
+    private NodeFactory nodeFactory;  // NOPMD it can't see into lambdas
 
     static {
 
@@ -231,7 +233,7 @@ public class CommandLine implements BeanFactoryAware {
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "F", false, "Flatten hierarchies.",
-                (m,o)->m.ofexport.addFilter (new FlattenFilter(m.config)),
+                (m,o)->m.ofexport.addFilter (new FlattenFilter(m.nodeFactory, m.config)),
                 AFTER_LOAD));
 
         OPTIONS.addOption(new ActiveOption<CommandLine> (
@@ -333,5 +335,6 @@ public class CommandLine implements BeanFactoryAware {
     public void setBeanFactory(BeanFactory beanFactory) {
         this.beanFactory = beanFactory;
         config = beanFactory.getBean("configparams", ConfigParams.class);
+        nodeFactory = beanFactory.getBean("nodefactory", NodeFactory.class);
     }
 }

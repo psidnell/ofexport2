@@ -21,19 +21,31 @@ import static org.junit.Assert.fail;
 import java.util.LinkedList;
 
 import org.easymock.EasyMock;
+import org.junit.Before;
 import org.junit.Test;
+import org.psidnell.omnifocus.ApplicationContextFactory;
 import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.Folder;
+import org.psidnell.omnifocus.model.NodeFactory;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
+import org.springframework.context.ApplicationContext;
 
 public class TraverserTest {
+
+    private NodeFactory nodeFactory;
+
+    @Before
+    public void setUp () {
+        ApplicationContext appContext = ApplicationContextFactory.getContext();
+        nodeFactory = appContext.getBean("nodefactory", NodeFactory.class);
+    }
 
     @Test
     public void testTraverseTask_whenDisabled() {
 
-        Task parent = new Task();
-        Task child = new Task();
+        Task parent = nodeFactory.createTask("t");
+        Task child = nodeFactory.createTask("t");
         parent.add(child);
 
         // Create Mocks
@@ -57,8 +69,8 @@ public class TraverserTest {
     @Test
     public void testTraverseTask_whenEnabled() throws Exception {
 
-        Task parent = new Task();
-        Task child = new Task();
+        Task parent = nodeFactory.createTask("t");
+        Task child = nodeFactory.createTask("t");
         parent.add(child);
 
         // Create Mocks
@@ -87,8 +99,8 @@ public class TraverserTest {
     @Test
     public void testTraverseProject_whenDisabled() {
 
-        Project parent = new Project();
-        Task child = new Task();
+        Project parent = nodeFactory.createProject("t");
+        Task child = nodeFactory.createTask("t");
         parent.add(child);
 
         // Create Mocks
@@ -112,8 +124,8 @@ public class TraverserTest {
     @Test
     public void testTraverseProject_whenEnabled() throws Exception {
 
-        Project parent = new Project();
-        Task child = new Task();
+        Project parent = nodeFactory.createProject("t");
+        Task child = nodeFactory.createTask("t");
         parent.add(child);
 
         // Create Mocks
@@ -141,8 +153,8 @@ public class TraverserTest {
     @Test
     public void testTraverseProjectAndTask_whenEnabled() throws Exception {
 
-        Project parent = new Project();
-        Task child = new Task();
+        Project parent = nodeFactory.createProject("t");
+        Task child = nodeFactory.createTask("t");
         parent.add(child);
 
         // Create Mocks
@@ -172,10 +184,10 @@ public class TraverserTest {
     @Test
     public void testTraverseFolder_whenDisabled() {
 
-        Folder parent = new Folder();
-        Project childProject = new Project();
+        Folder parent = nodeFactory.createFolder("t");
+        Project childProject = nodeFactory.createProject("t");
         parent.add(childProject);
-        Folder childFolder = new Folder();
+        Folder childFolder = nodeFactory.createFolder("t");
         parent.add(childFolder);
 
         // Create Mocks
@@ -195,14 +207,14 @@ public class TraverserTest {
         // Verify
         EasyMock.verify(mocks);
     }
-    
+
     @Test
     public void testTraverseFolder_whenEnabled() throws Exception {
 
-        Folder parent = new Folder();
-        Project childProject = new Project();
+        Folder parent = nodeFactory.createFolder("t");
+        Project childProject = nodeFactory.createProject("t");
         parent.add(childProject);
-        Folder childFolder = new Folder();
+        Folder childFolder = nodeFactory.createFolder("t");
         parent.add(childFolder);
 
         // Create Mocks
@@ -220,7 +232,7 @@ public class TraverserTest {
         v.enter(childFolder);
         v.exit(childFolder);
         v.exit(parent);
-        
+
         // Replay
         EasyMock.replay(mocks);
 
@@ -229,14 +241,14 @@ public class TraverserTest {
         // Verify
         EasyMock.verify(mocks);
     }
-    
+
     @Test
     public void testTraverseFolderAndProject_whenEnabled() throws Exception {
 
-        Folder parent = new Folder();
-        Project childProject = new Project();
+        Folder parent = nodeFactory.createFolder("t");
+        Project childProject = nodeFactory.createProject("t");
         parent.add(childProject);
-        Folder childFolder = new Folder();
+        Folder childFolder = nodeFactory.createFolder("t");
         parent.add(childFolder);
 
         // Create Mocks
@@ -258,7 +270,7 @@ public class TraverserTest {
         v.enter(childProject);
         v.exit(childProject);
         v.exit(parent);
-        
+
         // Replay
         EasyMock.replay(mocks);
 
@@ -267,14 +279,14 @@ public class TraverserTest {
         // Verify
         EasyMock.verify(mocks);
     }
-    
+
     @Test
     public void testTraverseContext_whenDisabled() {
 
-        Context parent = new Context();
-        Context childContext = new Context();
+        Context parent = nodeFactory.createContext("c");
+        Context childContext = nodeFactory.createContext("c");
         parent.add(childContext);
-        Task childTask = new Task();
+        Task childTask = nodeFactory.createTask("t");
         parent.add(childTask);
 
         // Create Mocks
@@ -294,14 +306,14 @@ public class TraverserTest {
         // Verify
         EasyMock.verify(mocks);
     }
-    
+
     @Test
     public void testTraverseContext_whenEnabled() throws Exception {
 
-        Context parent = new Context();
-        Context childContext = new Context();
+        Context parent = nodeFactory.createContext("c");
+        Context childContext = nodeFactory.createContext("c");
         parent.add(childContext);
-        Task childTask = new Task();
+        Task childTask = nodeFactory.createTask("t");
         parent.add(childTask);
 
         // Create Mocks
@@ -328,14 +340,14 @@ public class TraverserTest {
         // Verify
         EasyMock.verify(mocks);
     }
-    
+
     @Test
     public void testTraverseContextAndTask_whenEnabled() throws Exception {
 
-        Context parent = new Context();
-        Context childContext = new Context();
+        Context parent = nodeFactory.createContext("c");
+        Context childContext = nodeFactory.createContext("c");
         parent.add(childContext);
-        Task childTask = new Task();
+        Task childTask = nodeFactory.createTask("t");
         parent.add(childTask);
 
         // Create Mocks
@@ -364,16 +376,16 @@ public class TraverserTest {
         // Verify
         EasyMock.verify(mocks);
     }
-    
+
     @Test
     public void testTraverseContextAndTaskTree_whenEnabled() throws Exception {
 
-        Context parent = new Context();
-        Context childContext = new Context();
+        Context parent = nodeFactory.createContext("c");
+        Context childContext = nodeFactory.createContext("c");
         parent.add(childContext);
-        Task childTask = new Task();
+        Task childTask = nodeFactory.createTask("t");
         parent.add(childTask);
-        Task grandChildTask = new Task();
+        Task grandChildTask = nodeFactory.createTask("t");
         childTask.add(grandChildTask);
 
         // Create Mocks
@@ -403,12 +415,12 @@ public class TraverserTest {
         // Verify
         EasyMock.verify(mocks);
     }
-    
+
     @Test
     public void testFilterTaskInTask () throws Exception {
 
-        Task parent = new Task();
-        Task child = new Task();
+        Task parent = nodeFactory.createTask("t");
+        Task child = nodeFactory.createTask("t");
         parent.add(child);
 
         // Create Mocks
@@ -437,12 +449,12 @@ public class TraverserTest {
         // Verify
         EasyMock.verify(mocks);
     }
-    
+
     @Test
     public void testFilterTaskInProject () throws Exception {
 
-        Project parent = new Project();
-        Task child = new Task();
+        Project parent = nodeFactory.createProject("t");
+        Task child = nodeFactory.createTask("t");
         parent.add(child);
 
         // Create Mocks
@@ -472,12 +484,12 @@ public class TraverserTest {
         // Verify
         EasyMock.verify(mocks);
     }
-    
+
     @Test
     public void testFilterTaskInContext () throws Exception {
 
-        Context parent = new Context();
-        Task child = new Task();
+        Context parent = nodeFactory.createContext("c");
+        Task child = nodeFactory.createTask("t");
         parent.add(child);
 
         // Create Mocks
@@ -508,12 +520,12 @@ public class TraverserTest {
         // Verify
         EasyMock.verify(mocks);
     }
-    
+
     @Test
     public void testFilterProjectInFolder () throws Exception {
 
-        Folder parent = new Folder();
-        Project child = new Project();
+        Folder parent = nodeFactory.createFolder("t");
+        Project child = nodeFactory.createProject("t");
         parent.add(child);
 
         // Create Mocks
@@ -544,12 +556,12 @@ public class TraverserTest {
         // Verify
         EasyMock.verify(mocks);
     }
-    
+
     @Test
     public void testFilterFolderInFolder () throws Exception {
 
-        Folder parent = new Folder();
-        Folder child = new Folder();
+        Folder parent = nodeFactory.createFolder("t");
+        Folder child = nodeFactory.createFolder("t");
         parent.add(child);
 
         // Create Mocks
@@ -580,12 +592,12 @@ public class TraverserTest {
         // Verify
         EasyMock.verify(mocks);
     }
-    
+
     @Test
     public void testFilterContextInContext () throws Exception {
 
-        Context parent = new Context();
-        Context child = new Context();
+        Context parent = nodeFactory.createContext("c");
+        Context child = nodeFactory.createContext("c");
         parent.add(child);
 
         // Create Mocks
@@ -616,13 +628,13 @@ public class TraverserTest {
         // Verify
         EasyMock.verify(mocks);
     }
-    
+
     @Test
     public void testTraversalException() throws Exception {
         final Exception exception = new Exception ();
-        
-        Task parent = new Task();
-        Task child = new Task();
+
+        Task parent = nodeFactory.createTask("t");
+        Task child = nodeFactory.createTask("t");
         parent.add(child);
 
         // Create Mocks
@@ -646,7 +658,7 @@ public class TraverserTest {
         catch (TraversalException e) {
             assertSame (exception, e.getCause());
         }
-            
+
         // Verify
         EasyMock.verify(mocks);
     }

@@ -21,9 +21,12 @@
 				<value>${HOME}/Library/Caches/com.omnigroup.OmniFocus.MacAppStore/OmniFocusDatabase2</value>
 			</list>
 		</property>
+		<property name="nodeFactory" ref="nodefactory"/>
 	</bean>
 
-	<bean name="ofexport" class="org.psidnell.omnifocus.OFExport" />
+	<bean name="ofexport" class="org.psidnell.omnifocus.OFExport" init-method="init">
+		<property name="nodeFactory" ref="nodefactory"/>
+	</bean>
 
 	<bean name="main" class="org.psidnell.omnifocus.Main">
 		<property name="ofexport" ref="ofexport" />
@@ -34,27 +37,10 @@
 	    <!-- Copy values we need from property file into the bean -->
 		<property name="dueSoon" value="${dueSoon}"/>
 		<property name="flattenedRootName" value="${flattenedRootName}"/>
+		<property name="expressionDateFormat" value="${expressionDateFormat}"/>
 	</bean>
 	
-	<!-- Node Types -->
-	
-	<bean name="folder" class="org.psidnell.omnifocus.model.Folder" scope="prototype">
-		<property name="configParams" ref="configparams"/>
-	</bean>
-	
-	<bean name="project" class="org.psidnell.omnifocus.model.Project" scope="prototype">
-		<property name="configParams" ref="configparams"/>
-	</bean>
-	
-	<bean name="projectinfo" class="org.psidnell.omnifocus.model.ProjectInfo" scope="prototype">
-		<property name="configParams" ref="configparams"/>
-	</bean>
-	
-	<bean name="task" class="org.psidnell.omnifocus.model.Task" scope="prototype">
-		<property name="configParams" ref="configparams"/>
-	</bean>
-	
-	<bean name="context" class="org.psidnell.omnifocus.model.Context" scope="prototype">
+	<bean name="nodefactory" class="org.psidnell.omnifocus.model.NodeFactory">
 		<property name="configParams" ref="configparams"/>
 	</bean>
 

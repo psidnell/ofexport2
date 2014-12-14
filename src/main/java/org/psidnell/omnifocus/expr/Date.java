@@ -29,12 +29,11 @@ public class Date extends ExpressionFunctions implements Comparable<Date> {
 
     private java.util.Date date;
     private java.util.Date roundedDate;
-    private ConfigParams config;
 
     public Date(java.util.Date date, ConfigParams config) {
         this.date = date;
         this.roundedDate = roundToDay(date);
-        this.config = config;
+        setConfigParams(config);
     }
 
     public boolean isSet() {

@@ -23,9 +23,13 @@ import java.util.Date;
 
 import ognl.OgnlException;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.psidnell.omnifocus.ApplicationContextFactory;
 import org.psidnell.omnifocus.expr.Expression;
+import org.psidnell.omnifocus.model.NodeFactory;
 import org.psidnell.omnifocus.model.Task;
+import org.springframework.context.ApplicationContext;
 
 public class ExpressionTest {
 
@@ -33,10 +37,18 @@ public class ExpressionTest {
 
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
+    private NodeFactory nodeFactory;
+
+    @Before
+    public void setup () {
+        ApplicationContext appContext = ApplicationContextFactory.getContext();
+        nodeFactory = appContext.getBean("nodefactory", NodeFactory.class);
+    }
+
     @Test
     public void testBasicEvaluation() throws OgnlException {
 
-        Task t = new Task();
+        Task t = nodeFactory.createTask("t");
         t.setName("foo");
         t.setCompletionDate(new Date ());
 
@@ -49,9 +61,10 @@ public class ExpressionTest {
     @Test
     public void testArrayAccess() throws OgnlException {
 
-        Task t = new Task();
+        Task t = nodeFactory.createTask("t");
         t.setName("foo");
-        Task t2 = new Task();
+
+        Task t2 = nodeFactory.createTask("t");
         t2.setName("bar");
         t.add(t2);
 
@@ -60,7 +73,7 @@ public class ExpressionTest {
 
     @Test
     public void testRegularExpressions () {
-        Task t = new Task();
+        Task t = nodeFactory.createTask("t");
         t.setName("fooXXX");
 
         assertTrue(new Expression("name.matches('foo.*')").eval(t, Boolean.class));
@@ -69,7 +82,7 @@ public class ExpressionTest {
 
     @Test
     public void testDateExpressions () throws ParseException {
-        Task t = new Task();
+        Task t = nodeFactory.createTask("t");
         t.setCompletionDate(new Date ());
         t.setDueDate(new Date ());
 
@@ -103,7 +116,7 @@ public class ExpressionTest {
     @Test
     public void testQuotes() throws OgnlException {
 
-        Task t = new Task();
+        Task t = nodeFactory.createTask("t");
         t.setName("foo");
         t.setCompletionDate(new Date ());
 
@@ -115,7 +128,7 @@ public class ExpressionTest {
     @Test
     public void testNumberFormatExceptionBug() throws OgnlException {
 
-        Task t = new Task();
+        Task t = nodeFactory.createTask("t");
         t.setName("foo");
         t.setCompletionDate(new Date ());
 

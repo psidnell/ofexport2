@@ -20,6 +20,7 @@ import java.util.Set;
 import org.psidnell.omnifocus.ConfigParams;
 import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.Folder;
+import org.psidnell.omnifocus.model.NodeFactory;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
 
@@ -33,8 +34,10 @@ public class FlattenFilter implements Visitor {
     private static final VisitorDescriptor WHAT = new VisitorDescriptor().visit(Folder.class, Project.class, Context.class);
 
     private ConfigParams config;
+    private NodeFactory nodeFactory;
 
-    public FlattenFilter(ConfigParams config) {
+    public FlattenFilter(NodeFactory nodeFactory, ConfigParams config) {
+        this.nodeFactory = nodeFactory;
         this.config = config;
     }
 
@@ -53,7 +56,7 @@ public class FlattenFilter implements Visitor {
             node.getProjects().clear();
             node.getFolders().clear();
             Set<Task> projects = collector.getTasks();
-            Project newParent = new Project(config.getFlattenedRootName());
+            Project newParent = nodeFactory.createProject(config.getFlattenedRootName());
             node.add(newParent);
             for (Task child : projects) {
                 newParent.add(child);
@@ -71,7 +74,7 @@ public class FlattenFilter implements Visitor {
             Set<Task> tasks = collector.getTasks();
             node.getContexts().clear();
             node.getTasks().clear();
-            Context newParent = new Context(config.getFlattenedRootName());
+            Context newParent = nodeFactory.createContext(config.getFlattenedRootName());
             node.add(newParent);
             for (Task child : tasks) {
                 newParent.add(child);

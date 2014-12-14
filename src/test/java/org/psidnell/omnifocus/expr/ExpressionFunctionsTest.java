@@ -3,13 +3,16 @@ package org.psidnell.omnifocus.expr;
 import static org.junit.Assert.*;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import static org.psidnell.omnifocus.expr.ExpressionFunctions.YYYYMMDD;
-
+import org.junit.Before;
 import org.junit.Test;
+import org.psidnell.omnifocus.ApplicationContextFactory;
+import org.psidnell.omnifocus.ConfigParams;
+import org.springframework.context.ApplicationContext;
 
 /*
 Copyright 2014 Paul Sidnell
@@ -28,6 +31,20 @@ limitations under the License.
  */
 
 public class ExpressionFunctionsTest {
+
+
+    private SimpleDateFormat dateFormat;
+    private ConfigParams config;
+    private ExpressionFunctions fn;
+
+    @Before
+    public void setUp () {
+        ApplicationContext appContext = ApplicationContextFactory.getContext();
+        config = appContext.getBean("configparams", ConfigParams.class);
+        dateFormat = new SimpleDateFormat(config.getExpressionDateFormat());
+        fn = new ExpressionFunctions();
+        fn.setConfigParams(config);
+    }
 
     @Test
     public void testDateRoundToDay () throws ParseException {
@@ -60,7 +77,6 @@ public class ExpressionFunctionsTest {
 
     @Test
     public void testDays () {
-        ExpressionFunctions fn = new ExpressionFunctions();
 
         Calendar today = new GregorianCalendar();
         ExpressionFunctions.roundToDay(today);
@@ -81,7 +97,6 @@ public class ExpressionFunctionsTest {
 
     @Test
     public void testDayThisWeek () throws ParseException {
-        ExpressionFunctions fn = new ExpressionFunctions();
 
         Date date = fn.date("2014-11-19"); // A Wednesday
         Calendar cal = new GregorianCalendar();
@@ -106,7 +121,6 @@ public class ExpressionFunctionsTest {
 
     @Test
     public void testDayNextWeek () throws ParseException {
-        ExpressionFunctions fn = new ExpressionFunctions();
 
         Date date = fn.date("2014-11-26"); // A Wednesday
         Calendar cal = new GregorianCalendar();
@@ -123,7 +137,6 @@ public class ExpressionFunctionsTest {
 
     @Test
     public void testDayLastWeek () throws ParseException {
-        ExpressionFunctions fn = new ExpressionFunctions();
 
         Date date = fn.date("2014-11-26"); // A Wednesday
         Calendar cal = new GregorianCalendar();
@@ -140,7 +153,6 @@ public class ExpressionFunctionsTest {
 
     @Test
     public void testMonthThisYear () throws ParseException {
-        ExpressionFunctions fn = new ExpressionFunctions();
 
         Date date = fn.date("2014-11-19"); // A Wednesday
         Calendar cal = new GregorianCalendar();
@@ -175,7 +187,6 @@ public class ExpressionFunctionsTest {
 
     @Test
     public void testMonthNextYear () throws ParseException {
-        ExpressionFunctions fn = new ExpressionFunctions();
 
         Date date = fn.date("2014-11-19"); // A Wednesday
         Calendar cal = new GregorianCalendar();
@@ -197,7 +208,6 @@ public class ExpressionFunctionsTest {
 
     @Test
     public void testMonthLastYear () throws ParseException {
-        ExpressionFunctions fn = new ExpressionFunctions();
 
         Date date = fn.date("2014-11-19"); // A Wednesday
         Calendar cal = new GregorianCalendar();
@@ -219,7 +229,6 @@ public class ExpressionFunctionsTest {
 
     @Test
     public void testRelativeDay () throws ParseException {
-        ExpressionFunctions fn = new ExpressionFunctions();
 
         Date date = fn.date("2014-11-19"); // A Wednesday
         Calendar cal = new GregorianCalendar();
@@ -237,7 +246,6 @@ public class ExpressionFunctionsTest {
 
     @Test
     public void testRelativeWeek () throws ParseException {
-        ExpressionFunctions fn = new ExpressionFunctions();
 
         Date date = fn.date("2014-11-07");
         Calendar cal = new GregorianCalendar();
@@ -255,7 +263,6 @@ public class ExpressionFunctionsTest {
 
     @Test
     public void testRelativeMonth () throws ParseException {
-        ExpressionFunctions fn = new ExpressionFunctions();
         Date date = fn.date("2014-11-07");
         Calendar cal = new GregorianCalendar();
         cal.setTime(date);
@@ -282,7 +289,6 @@ public class ExpressionFunctionsTest {
 
     @Test
     public void testRelativeYear () throws ParseException {
-        ExpressionFunctions fn = new ExpressionFunctions();
 
         Date date = fn.date("2014-11-07");
         Calendar cal = new GregorianCalendar();
@@ -311,7 +317,6 @@ public class ExpressionFunctionsTest {
     @Test
     public void testDayOfMonth () throws ParseException {
 
-        ExpressionFunctions fn = new ExpressionFunctions();
         Date date = fn.date("2014-11-07");
         Calendar cal = new GregorianCalendar();
         cal.setTime(date);
@@ -323,15 +328,15 @@ public class ExpressionFunctionsTest {
 
     @Test
     public void testWithin () throws ParseException {
-        Date date = new ExpressionFunctions().date("2014-11-07");
+        Date date = fn.date("2014-11-07");
 
-        assertTrue (new ExpressionFunctions().within(date, "2014-11-05", "2014-11-09"));
-        assertTrue (new ExpressionFunctions().within(date, "2014-11-06", "2014-11-08"));
-        assertTrue (new ExpressionFunctions().within(date, "2014-11-07", "2014-11-07"));
-        assertFalse (new ExpressionFunctions().within(date, "2014-11-08", "2014-11-09"));
-        assertFalse (new ExpressionFunctions().within(date, "2014-11-05", "2014-11-06"));
+        assertTrue (fn.within(date, "2014-11-05", "2014-11-09"));
+        assertTrue (fn.within(date, "2014-11-06", "2014-11-08"));
+        assertTrue (fn.within(date, "2014-11-07", "2014-11-07"));
+        assertFalse (fn.within(date, "2014-11-08", "2014-11-09"));
+        assertFalse (fn.within(date, "2014-11-05", "2014-11-06"));
 
-        assertTrue (new ExpressionFunctions().within(new Date(), "-1y", "7d"));
+        assertTrue (fn.within(new Date(), "-1y", "7d"));
     }
 
     private Calendar clone(Calendar cal) {
@@ -339,6 +344,6 @@ public class ExpressionFunctionsTest {
     }
 
     private String date(String x, Calendar cal) throws ParseException {
-        return YYYYMMDD.format(new ExpressionFunctions().date (x,clone(cal)).getTime());
+        return dateFormat.format(fn.date (x,clone(cal)).getTime());
     }
 }

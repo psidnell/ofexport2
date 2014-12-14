@@ -33,6 +33,7 @@ import java.util.Map;
 import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.DataCache;
 import org.psidnell.omnifocus.model.Folder;
+import org.psidnell.omnifocus.model.NodeFactory;
 import org.psidnell.omnifocus.model.ProjectInfo;
 import org.psidnell.omnifocus.model.Task;
 import org.slf4j.Logger;
@@ -51,6 +52,8 @@ public class SQLiteDAO implements BeanFactoryAware {
 
     private static final int THREE = 3;
     private String[] possibleDBLocations;
+
+    private NodeFactory nodeFactory;
 
     private BeanFactory beanFactory;
 
@@ -119,7 +122,7 @@ public class SQLiteDAO implements BeanFactoryAware {
             PreparedStatement stmt = c.prepareStatement("select " + desc.getColumnsForSelect() + " from " + desc.getTableName())) {
             try (
                 ResultSet rs = stmt.executeQuery()) {
-                return desc.load(rs, beanFactory);
+                return desc.load(rs, nodeFactory);
             }
         }
     }
@@ -169,6 +172,10 @@ public class SQLiteDAO implements BeanFactoryAware {
 
     public void setPossibleDBLocations(String[] possibleDBLocations) {
         this.possibleDBLocations = possibleDBLocations;
+    }
+
+    public void setNodeFactory(NodeFactory nodeFactory) {
+        this.nodeFactory = nodeFactory;
     }
 
     @Override

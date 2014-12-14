@@ -22,10 +22,20 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.stream.Collectors;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.psidnell.omnifocus.ApplicationContextFactory;
+import org.springframework.context.ApplicationContext;
 
 public class DataCacheTest {
+
+    private NodeFactory nodeFactory;
+
+    @Before
+    public void setUp () {
+        ApplicationContext appContext = ApplicationContextFactory.getContext();
+        nodeFactory = appContext.getBean("nodefactory", NodeFactory.class);
+    }
 
     @Test
     public void testConstruction() {
@@ -43,11 +53,11 @@ public class DataCacheTest {
 
         DataCache dataCache = new DataCache(ApplicationContextFactory.getContext());
 
-        Task child = new Task();
+        Task child = nodeFactory.createTask("t");
         child.setName("child");
         child.setParentTaskId(parentId);
 
-        Task parent = new Task();
+        Task parent = nodeFactory.createTask("t");
         parent.setName("parent");
         parent.setId(parentId);
 
@@ -79,11 +89,11 @@ public class DataCacheTest {
 
         DataCache dataCache = new DataCache(ApplicationContextFactory.getContext());
 
-        Folder child = new Folder();
+        Folder child = nodeFactory.createFolder("f1");
         child.setName("child");
         child.setParentFolderId(parentId);
 
-        Folder parent = new Folder();
+        Folder parent = nodeFactory.createFolder("f1");
         parent.setName("parent");
         parent.setId(parentId);
 
@@ -111,11 +121,11 @@ public class DataCacheTest {
 
         DataCache dataCache = new DataCache(ApplicationContextFactory.getContext());
 
-        Context child = new Context();
+        Context child = nodeFactory.createContext("c");
         child.setName("child");
         child.setParentContextId(parentId);
 
-        Context parent = new Context();
+        Context parent = nodeFactory.createContext("c");
         parent.setName("parent");
         parent.setId(parentId);
 
@@ -143,11 +153,11 @@ public class DataCacheTest {
 
         DataCache dataCache = new DataCache(ApplicationContextFactory.getContext());
 
-        Task child = new Task();
+        Task child = nodeFactory.createTask("t");
         child.setName("child");
         child.setContextId(parentId);
 
-        Context parent = new Context();
+        Context parent = nodeFactory.createContext("c");
         parent.setName("parent");
         parent.setId(parentId);
 
@@ -176,7 +186,7 @@ public class DataCacheTest {
 
         DataCache dataCache = new DataCache(ApplicationContextFactory.getContext());
 
-        Task rootTask = new Task();
+        Task rootTask = nodeFactory.createTask("t");
         rootTask.setName("rootTask");
         rootTask.setId(id);
 
@@ -212,11 +222,11 @@ public class DataCacheTest {
 
         DataCache dataCache = new DataCache(ApplicationContextFactory.getContext());
 
-        Task rootTask = new Task();
+        Task rootTask = nodeFactory.createTask("t");
         rootTask.setName("rootTask");
         rootTask.setId(rootId);
 
-        Task child = new Task();
+        Task child = nodeFactory.createTask("t");
         child.setId(id);
         child.setName("child");
         child.setParentTaskId(rootId);
@@ -256,7 +266,7 @@ public class DataCacheTest {
 
         DataCache dataCache = new DataCache(ApplicationContextFactory.getContext());
 
-        Task rootTask = new Task();
+        Task rootTask = nodeFactory.createTask("t");
         rootTask.setName("rootTask");
         rootTask.setId(id);
 
@@ -264,7 +274,7 @@ public class DataCacheTest {
         projInfo.setRootTaskId(id);
         projInfo.setFolderId(folderId);
 
-        Folder parent = new Folder();
+        Folder parent = nodeFactory.createFolder("f");
         parent.setName("parent");
         parent.setId(folderId);
 
@@ -297,7 +307,7 @@ public class DataCacheTest {
 
         DataCache dataCache = new DataCache(ApplicationContextFactory.getContext());
 
-        Task child = new Task();
+        Task child = nodeFactory.createTask("t");
         child.setName("child");
         child.setInInbox(true);
 
@@ -329,7 +339,7 @@ public class DataCacheTest {
 
         DataCache dataCache = new DataCache(ApplicationContextFactory.getContext());
 
-        Task child = new Task();
+        Task child = nodeFactory.createTask("t");
         child.setName("child");
 
         dataCache.add(child);

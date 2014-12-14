@@ -31,13 +31,10 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import org.psidnell.omnifocus.ConfigParams;
 import org.psidnell.omnifocus.sqlite.SQLiteDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.BeanFactoryAware;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.core.JsonGenerationException;
@@ -56,7 +53,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  *
  */
 @JsonPropertyOrder(alphabetic=true)
-public class DataCache implements BeanFactoryAware {
+public class DataCache {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DataCache.class);
 
@@ -66,7 +63,7 @@ public class DataCache implements BeanFactoryAware {
     private HashMap<String, Context> contexts = new HashMap<>();
     private HashMap<String, Project> projects = new HashMap<>();
 
-    private BeanFactory beanFactory;
+    private NodeFactory nodeFactory;
 
     public DataCache() {
         // Jackson constructor
@@ -78,11 +75,12 @@ public class DataCache implements BeanFactoryAware {
         // Testing constructor
         this.folders = new HashMap<>();
         this.projInfos = new HashMap<>();
-        this.beanFactory = beanFactory;
+        this.nodeFactory = beanFactory.getBean("nodefactory", NodeFactory.class);
     }
 
     public DataCache(Collection<Folder> folders, Collection<ProjectInfo> projInfos, Collection<Task> tasks, Collection<Context> contexts, BeanFactory beanFactory) {
-        this. beanFactory = beanFactory;
+        // SQLiteDAO constructor
+        this.nodeFactory = beanFactory.getBean("nodefactory", NodeFactory.class);
         folders.stream().forEach((n) -> add(n));
         projInfos.stream().forEach((n) -> add(n));
         tasks.stream().forEach((n) -> add(n));
@@ -92,15 +90,12 @@ public class DataCache implements BeanFactoryAware {
     public final void build() {
         LOGGER.info("Starting tree reconstruction");
 
-        Project inbox = beanFactory.getBean("project", Project.class);
-        inbox.setName("Inbox");
+        Project inbox = nodeFactory.createProject("Inbox");
         inbox.setId("__%%Inbox"); // to give deterministic JSON/XML output
 
-        Context noContext = beanFactory.getBean("context", Context.class);
+        Context noContext = nodeFactory.createContext("Inbox");
         noContext.setName("No Context");
         noContext.setId("__%%NoContext"); // to give deterministic JSON/XML output
-
-        ConfigParams configParams = beanFactory.getBean("configparams", ConfigParams.class);
 
         // Build Folder Hierarchy
         for (Folder folder : folders.values()) {
@@ -152,8 +147,7 @@ public class DataCache implements BeanFactoryAware {
         // since a copy of the root tasks subtasks is taken
         for (ProjectInfo projInfo : projInfos.values()) {
             Task rootTask = tasks.get(projInfo.getRootTaskId());
-            Project project = new Project(projInfo, rootTask);
-            project.setConfigParams(configParams);
+            Project project = nodeFactory.createProject(projInfo, rootTask);
 
             // Set containing Folder for project
             String folderId = projInfo.getFolderId();
@@ -230,14 +224,14 @@ public class DataCache implements BeanFactoryAware {
             Reader in = new FileReader(file)) {
             ObjectMapper mapper = new ObjectMapper();
             DataCache result = mapper.readValue(in, DataCache.class);
+            NodeFactory nodeFactory = beanFactory.getBean("nodefactory", NodeFactory.class);
+            result.setNodeFactory(nodeFactory);
+
             // Nodes didn't come from spring, must wire them manually
-            ConfigParams config = beanFactory.getBean("configparams", ConfigParams.class);
-            result.contexts.values().forEach((n)->n.setConfigParams(config));
-            result.folders.values().forEach((n)->n.setConfigParams(config));
-            result.projects.values().forEach((n)->n.setConfigParams(config));
-            result.tasks.values().forEach((n)->n.setConfigParams(config));
-            result.projInfos.values().forEach((n)->n.setConfigParams(config));
-            result.setBeanFactory (beanFactory);
+            result.contexts.values().forEach((n)->nodeFactory.initialise(n));
+            result.folders.values().forEach((n)->nodeFactory.initialise(n));
+            result.projects.values().forEach((n)->nodeFactory.initialise(n));
+            result.tasks.values().forEach((n)->nodeFactory.initialise(n));
             return result;
         }
     }
@@ -281,8 +275,8 @@ public class DataCache implements BeanFactoryAware {
         }
     }
 
-    @Override
-    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-        this.beanFactory = beanFactory;
+    private void setNodeFactory(NodeFactory nodeFactory) {
+        this.nodeFactory = nodeFactory;
     }
+
 }

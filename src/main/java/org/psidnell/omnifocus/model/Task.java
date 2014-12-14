@@ -45,9 +45,11 @@ public class Task extends CommonProjectAndTaskAttributes {
     private boolean inInbox;
     private boolean isProject;
 
+    @Deprecated // Should use NodeFactory
     public Task() {
     }
 
+    @Deprecated // Should use NodeFactory
     public Task(String name) {
         this.name = name;
     }

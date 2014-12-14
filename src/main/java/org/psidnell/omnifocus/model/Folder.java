@@ -44,9 +44,11 @@ public class Folder extends NodeImpl implements ProjectHierarchyNode {
 
     private boolean active = true;
 
+    @Deprecated // Should use NodeFactory
     public Folder() {
     }
 
+    @Deprecated // Should use NodeFactory
     public Folder(String name) {
         this.name = name;
     }
