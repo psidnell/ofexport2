@@ -4,6 +4,11 @@
 
 Export from OmniFocus to various other formats:
 
+    of2 -o mindmap.opml
+    of2 -duesoon -o todo.txt
+    of2 -remaining -o whatsleft.taskpaper
+    of2 -flagged -duesoon -o important.csv
+
 ![](doc/images/Diagram.png)
 
 ![](doc/images/Screen.png)
@@ -23,8 +28,8 @@ Export from OmniFocus to various other formats:
     - [How it works](DOCUMENTATION.md#how-it-works)
     - [Installation](DOCUMENTATION.md#installation)
     - [Uninstallation](DOCUMENTATION.md#uninstallation)
-    - [Usage](DOCUMENTATION.md#usage)
-        - [Usage Overview](DOCUMENTATION.md#usage-overview)
+    - [Quick Start](DOCUMENTATION.md#quick-start)
+    - [Advanced Usage](DOCUMENTATION.md#advanced-usage)
         - [Filtering](DOCUMENTATION.md#filtering)
             - [Project vs Context Mode](DOCUMENTATION.md#project-vs-context-mode)
             - [Filtering by Text](DOCUMENTATION.md#filtering-by-text)
@@ -46,8 +51,8 @@ Export from OmniFocus to various other formats:
             - [Save Useful Commands as Scripts](DOCUMENTATION.md#save-useful-commands-as-scripts)
             - [Solving Problems](DOCUMENTATION.md#solving-problems)
             - [Modifying Node Values](DOCUMENTATION.md#modifying-node-values)
-    - [Writing a Template](DOCUMENTATION.md#writing-a-template)
-    - [Building It Yourself](DOCUMENTATION.md#building-it-yourself)
+        - [Writing a Template](DOCUMENTATION.md#writing-a-template)
+        - [Building It Yourself](DOCUMENTATION.md#building-it-yourself)
     - [ofexport vs ofexport2](DOCUMENTATION.md#ofexport-vs-ofexport2)
     - [Other Approaches Considered](DOCUMENTATION.md#other-approaches-considered)
     - [Known Issues](DOCUMENTATION.md#known-issues)

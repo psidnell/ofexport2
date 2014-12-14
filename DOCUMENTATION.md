@@ -13,8 +13,8 @@
     - [How it works](DOCUMENTATION.md#how-it-works)
     - [Installation](DOCUMENTATION.md#installation)
     - [Uninstallation](DOCUMENTATION.md#uninstallation)
-    - [Usage](DOCUMENTATION.md#usage)
-        - [Usage Overview](DOCUMENTATION.md#usage-overview)
+    - [Quick Start](DOCUMENTATION.md#quick-start)
+    - [Advanced Usage](DOCUMENTATION.md#advanced-usage)
         - [Filtering](DOCUMENTATION.md#filtering)
             - [Project vs Context Mode](DOCUMENTATION.md#project-vs-context-mode)
             - [Filtering by Text](DOCUMENTATION.md#filtering-by-text)
@@ -36,8 +36,8 @@
             - [Save Useful Commands as Scripts](DOCUMENTATION.md#save-useful-commands-as-scripts)
             - [Solving Problems](DOCUMENTATION.md#solving-problems)
             - [Modifying Node Values](DOCUMENTATION.md#modifying-node-values)
-    - [Writing a Template](DOCUMENTATION.md#writing-a-template)
-    - [Building It Yourself](DOCUMENTATION.md#building-it-yourself)
+        - [Writing a Template](DOCUMENTATION.md#writing-a-template)
+        - [Building It Yourself](DOCUMENTATION.md#building-it-yourself)
     - [ofexport vs ofexport2](DOCUMENTATION.md#ofexport-vs-ofexport2)
     - [Other Approaches Considered](DOCUMENTATION.md#other-approaches-considered)
     - [Known Issues](DOCUMENTATION.md#known-issues)
@@ -127,49 +127,43 @@ If you downloaded a zip, unzip it and move/rename the root folder as you wish.
 
 For now I'm going to assume you moved and renamed it to **~/Applications/ofexport2**.
 
-**3. Set Execute Permission on the ofexport2 Shell Script:**
+**3. Set Execute Permission on the of2 Shell Script:**
 
 On the command line type:
 
-    chmod +x ~/Applications/ofexport2/bin/ofexport2
+    chmod +x ~/Applications/ofexport2/bin/of2
 
 Make sure it's working by running:
 
-    ~/Applications/ofexport2/bin/ofexport2 -h
+    ~/Applications/ofexport2/bin/of2 -h
 
-It should print it's command line options.
+It should print it's version and command line options.
 
-**4. Add ofexport2 to your path:**
+**4. Add ofexport2 bin to your path:**
 
 Create/Edit your **~/.bash_profile** and **add** the following lines:
 
     export PATH=$PATH:~/Applications/ofexport2/bin
-    alias of2=ofexport2
-
-The second line above isn't necessary but creates a convenient alias for the program and makes the examples in this document more concise.
 
 When done reload your environment by typing:
 
     . ~/.bash_profile
 
-Finally verify everything has worked by typing either:
+Finally verify everything has worked by typing:
 
-    ofexport2 -h
     of2 -h
 
 ## Uninstallation
 
 Simply delete the ofexport2 folder and remove the lines you added to your .bash_profile.
 
-## Usage
-
-### Usage Overview
+## Quick Start
 
 Simply typing:
 
     of2
 
-Will dump the entire project hierarchy, for example:
+Will print the entire project hierarchy, for example:
 
     Get to Mars
       Build a Rocket Ship
@@ -214,15 +208,16 @@ The default output format is a simple text list where uncompleted tasks are pref
 
 Basic usage of the tool is fairly straight-forward. If you're familiar with OmniFocus you can probably guess what these commands will show:
 
-    of2 -ti all
-    of2 -ti available
-    of2 -ti remaining
-    of2 -ti flagged
-    of2 -ti completed
+    of2 -available
+    of2 -remaining
+    of2 -flagged
+    of2 -unflagged
+    of2 -duesoon
+    of2 -completed
 
 For example, if we ran:
 
-    of2 -ti flagged
+    of2 -flagged
 
 We'd see:
 
@@ -271,20 +266,75 @@ This isolates the "Buy" Context within the Context hierarchy:
         [ ] Buy Pop-Tarts (approx 2000)
         [ ] Buy Tea - Earl Grey (Hot)
 
-The options being supplied are called **filters** and they operate on **attributes** of the items in OmniFocus.
 
-The attributes you select on can be combined by combining filters or using expressions. Filters typically take expressions (written in [OGNL](http://commons.apache.org/proper/commons-ognl/) syntax) as arguments, here we're using the remaining and due attributes as very simple expressions:
+These options can be combined, for example:
 
-    of2 -c -ti 'remaining' -ti 'due.soon'
+    of2 -flagged -duesoon -fn 'Launch Rocket Ship'
+
+To send the output to a specific file, in this case a text file:
+
+    of2 -flagged -duesoon -fn 'Launch Rocket Ship' -o rocket.txt
+
+You can have the tool open the text file for you in your default text editor with:
+
+    of2 -flagged -duesoon -fn 'Launch Rocket Ship' -O rocket.txt
+
+Changing the file name suffix changes the format of the file, other alternatives include:
+
+- ".opml"
+- ".csv"
+- ".taskpaper"
+- ".html"
+- ".md"
+- ".json"
+- ".xml"
+
+## Advanced Usage
+
+The basic options we've seen so far (like -flagged) are called **filters** and they operate on **attributes** of the items in the OmniFocus database.
+
+All the basic options are shorthand for more complex filters. For example the -flagged option is actually equivalent to:
+
+    of2 -ti flagged
+
+The '-ti' option means include tasks and 'flagged' is an attribute of a tasks.
+
+Filters can be used in combination:
+
+    of2 -ti 'flagged' -ti 'available'
+
+Filter arguments are expressions (written in [OGNL](http://commons.apache.org/proper/commons-ognl/) syntax), here we're using one filter with an expression that uses the flagged and available attributes:
+
+    of2 -ti 'flagged && available'
+
+The following show the basic options and their equivalent specific filters with expressions:
+
+    of2 -available
+    of2 -ti available
+
+    of2 -remaining
+    of2 -ti available
+
+    of2 -flagged
+    of2 -ti flagged
+
+    of2 -unflagged
+    of2 -ti unflagged
+
+    of2 -duesoon
+    of2 -ti 'available && due.soon'
+    
+    of2 -completed
+    of2 -ti completed
 
 ### Filtering
 
 Advanced queries can be assembled with filters:
 
-- Filters are expressions used to limit what Folders, Projects, Tasks or Contexts appear in the output.
-- Filters can be applied to specific note types (Folders, Projects etc.)
+- Filters are used to limit what Folders, Projects, Tasks or Contexts appear in the output.
+- Filters can be applied to specific node types (Folders, Projects etc.)
 - Filters can be simple like a text search.
-- Filters can be complex expressions that make use of various attributes of an item.
+- Filters can take complex expressions that make use of various attributes of an item.
 - Filters can either include items of interest or exclude unwanted items.
 - Filters can select a just a node, or a node and all those beneath it.
 - Any number of filters can be used.
@@ -294,13 +344,13 @@ Advanced queries can be assembled with filters:
 
 Normally ofexport2 is in project mode, i.e. the project hierachy is used for filterng and output:
 
-    of2 -ti available
+    of2 -available
 
 By using the "-c" option, the tool operates in context mode:
 
-    of2 -c -ti available
+    of2 -c -available
 
-It's an error to try and use a project filter in context mode and vice versa.
+It's an error to try and use a project mode filter (like -pn that specifies project name) in context mode and vice versa.
 
 #### Filtering by Text
 
@@ -312,7 +362,7 @@ To search for items with a specific exact names:
     of2 -c -cn "My Context"
     of2 -an "Anything Called This"
 
-These name filters are actually a convienient shorthand for an expression that uses the name attribute of items, for example:
+These name filters are shorthand for an expression that uses the name attribute of items, for example:
 
     of2 -fc 'name=="My Folder"'
 
@@ -322,7 +372,6 @@ To search for a task that contains text:
 
     of2 -tc 'name.contains("X")'
     of2 -tc 'name.equalsIgnoreCase("X")'
-    of2 -tc 'name.equalsIgnoreCase("ofexpoRt2")'
     of2 -tc 'name.toLowerCase().contains("x")'
 
 (The functions/methods available in these expressions are from the [Java String class](https://docs.oracle.com/javase/8/docs/api/java/lang/String.html)).
@@ -339,7 +388,7 @@ It's also possible to access the text of a note or project in filters:
 
     of2 -ti 'note!=null && note.contains("x")'
 
-(That the **note!=null** check is necessary here because (unlike name) the note may be absent and there would be a Java error applying the **contains** method to the missing value.)
+(The **note!=null** check is necessary here because (unlike name) the note may be absent and there would be a Java error applying the **contains** method to the missing value.)
 
 #### Include or Exclude
 
@@ -400,11 +449,17 @@ Some of the above filters also include a check that the item is not completed (*
 
 Not all "completed" items have a completion date - this is the way OmniFocus works. For example if a Folder is dropped then the the Projects/Tasks within it can reasonably be said to be completed (i.e. neither available or remaining), but OmniFocus does not give them a completion date or delete them. The reason is probably so that the Folder status can be later changed back to active and the sub items will return from the dead.
 
-When using '**.soon**', the value is set in the dueSoon configuration variable see [Configuration](#configuration). This can be applied to any of the dates but clearly makes no sense for the completion attribute!.
+When using '**.soon**', the time value (e.g. "7d") is set in the dueSoon configuration variable see [Configuration](#configuration).
 
-The '**.set**' is a way of determining if the item has the date set at all.
+'**.soon**' can be applied to any of the dates but clearly only makes sense for the defer and completion attributes.
 
-The strings formats of dates that are accepted in these filters are:
+'**.set**' is a way of determining if the item has the date set at all, e.g:
+
+    of2 -ti 'completed.set'
+
+will only show items that have a completed date.
+
+The formats of dates that are accepted in these filters are:
 
 - **"yesterday"**,**"today"**,**"tomorrow"**
 - **"2014-11-19"**: specific date (yyyy-mm-dd).
@@ -529,14 +584,14 @@ It's possible to modify these or add your own.
 The natural sort order of items is based on their position in OmniFocus. It's possible to specify
 any attribute as the one to use for an item type:
 
-    of2 -ti available -ts name
-    of2 -ti available -ts r:name
+    of2 -available -ts name
+    of2 -available -ts r:name
 
 The above sorts tasks by their name, with the second being a reverse sort.
 
 It's possible to have chain the sorts much like filters:
 
-    of2 -ts completion -ts name
+    of2 -completed -ts completion -ts name
 
 This sorts items by their completion date, and for those with the same date it then sorts by name.
 
@@ -544,7 +599,7 @@ Items are sorted at a particular level. If a task has subtasks then the subtasks
 
 It's possible to sort by any attribute, including flagged status. The following displays flagged items above unflagged ones, and within that sorts by due:
 
-    of2 -ti 'remaining && due.soon' -ts r:flagged -ts due
+    of2 -duesoon -ts r:flagged -ts due
 
 ### Pruning
 
@@ -650,19 +705,15 @@ OmniFocus has special pseudo items **Inbox** and **No Context**. The ofexport2 t
 
 ### Command Line Options
 
-The full options list be displayed by typing:
+The [full options](doc/Options.md) list be displayed by typing:
 
     of2 -h
 
-or [here](doc/Options.md).
-
 ### Full Attribute List
 
-The full list of attributes that can be used in expressions or filters can be displayed by typing:
+The [full list of attributes](doc/Attributes.md) that can be used in expressions or filters can be displayed by typing:
 
     of2 -i
-
-or [here](doc/Attributes.md).
 
 ### Configuration
 
@@ -697,7 +748,7 @@ Here's one of my base scripts as an example.
     
     FILE="$HOME/Desktop/REPORT-$FOLDER-`date +"%Y-W%V-%h-%d"`.taskpaper"
     
-    ofexport2 \
+    of2 \
      -ac "(type==\"Folder\" && name.matches(\"$FOLDER|Anywhere\")) || (type==\"Project\" && name==\"Inbox\")" \
      -fx 'name.contains("Routine Maint")' \
      -F \
@@ -709,7 +760,7 @@ Here's one of my base scripts as an example.
 #### Solving Problems
 
 - Add filters one at time until you get the required output.
-- Use the **-f debug** to use the debug format that lists all attributes of an item.
+- Use **-f debug** to use the debug format that lists all attributes of an items.
 
 #### Modifying Node Values
 
@@ -721,27 +772,36 @@ Note the use of the single '=' in the second part of the expression, this actual
 
     of2 -m 'name.contains("Fight Club") && name=name.replaceAll("Fight", "XXXXX")'
 
-## Writing a Template
+### Writing a Template
 
 - The templates are written in [FreeMarker](http://freemarker.org) syntax.
 - The templates live in **config/templates**.
 - Using the options "-f xxx" or "-o file.xxx" will cause ofexport to look for a template ***config/templates/xxx.ftl***.
 - The object model available in the templates can be printed using **of2 -i**.
 
-Copying and experimenting on an existing template is the best way to start.
+Copying and experimenting on an existing template that's closest to what you need is the best way to start.
 
-## Building It Yourself
+For reference the **debug.ftl** template displays all attributes of all node types.
 
-The build is a straight forward java [maven 3](http://maven.apache.org) build.
+### Building It Yourself
+
+The code is a straight forward java [maven 3](http://maven.apache.org) build.
 
 After installing maven, cd into the ofexport folder and run:
 
-    mvn clean package 
+    mvn clean package
 
-The build folder contains two utility scripts:
+or
 
-- **pre-release.sh** recreates several files with versions/dates updated.
-- **release.sh** runs the maven release goals.
+    mvn clean package site
+
+to get the site reports. 
+
+The build folder contains some utility scripts:
+
+- **generate-doc.sh** updates the table of contents and inserts it into the documentation.
+- **pre-release.sh** copies the jars out of target into the root.
+- **release.sh** runs the maven release process.
 
 Before releasing can succeed you will need to update the pom file with your own:
 

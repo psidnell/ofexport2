@@ -12,12 +12,12 @@ echo \$NEXT_VERSION=$NEXT_VERSION
 echo Generating Options.md
 echo '# Options' > doc/Options.md
 echo >> doc/Options.md
-ofexport2 -h | sed -e 's/^/    /' >> doc/Options.md
+of2 -h | sed -e 's/^/    /' >> doc/Options.md
 
 echo Generating Attributes.md
 echo '# Attributes.md' > doc/Attributes.md
 echo >> doc/Attributes.md
-ofexport2 -i | sed -E -e 's/^[PFCT]/## &/' -e 's/( +[a-zA-Z]+ )([a-zA-Z]+)/-\1\*\*\2\*\*/' -e 's/ +/ /g' >> doc/Attributes.md
+of2 -i | sed -E -e 's/^[PFCT]/## &/' -e 's/( +[a-zA-Z]+ )([a-zA-Z]+)/-\1\*\*\2\*\*/' -e 's/ +/ /g' >> doc/Attributes.md
 
 echo Generating version.properties
 echo "version:$NEXT_VERSION" > config/version.properties

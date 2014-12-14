@@ -76,10 +76,37 @@ public class CommandLine implements BeanFactoryAware {
                 (m,o)->System.setProperty(PRINT_HELP, "true"),
                 STARTUP));
 
-        OPTIONS.addOption(new ActiveOption<CommandLine> (
-                "i", false, "print additional help information.",
-                (m,o)->System.setProperty(PRINT_INFO, "true"),
-                STARTUP));
+        // EASY OPTIONS
+
+        OPTIONS.addOption(new ActiveOption<CommandLine>(
+                "available", false, "show available tasks.",
+                (m,o)->m.ofexport.addTaskExpression("available", true, false),
+                AFTER_LOAD));
+
+        OPTIONS.addOption(new ActiveOption<CommandLine>(
+                "remaining", false, "show remaining tasks.",
+                (m,o)->m.ofexport.addTaskExpression("remaining", true, false),
+                AFTER_LOAD));
+
+        OPTIONS.addOption(new ActiveOption<CommandLine>(
+                "flagged", false, "show flagged tasks.",
+                (m,o)->m.ofexport.addTaskExpression("flagged", true, false),
+                AFTER_LOAD));
+
+        OPTIONS.addOption(new ActiveOption<CommandLine>(
+                "unflagged", false, "show flagged tasks.",
+                (m,o)->m.ofexport.addTaskExpression("unflagged", true, false),
+                AFTER_LOAD));
+
+        OPTIONS.addOption(new ActiveOption<CommandLine>(
+                "duesoon", false, "show remaining tasks.",
+                (m,o)->m.ofexport.addTaskExpression("remaining && due.soon", true, false),
+                AFTER_LOAD));
+
+        OPTIONS.addOption(new ActiveOption<CommandLine>(
+                "completed", false, "show remaining tasks.",
+                (m,o)->m.ofexport.addTaskExpression("completed", true, false),
+                AFTER_LOAD));
 
         // PROJECT
 
@@ -259,6 +286,11 @@ public class CommandLine implements BeanFactoryAware {
                 BEFORE_LOAD));
 
         // DEBUG/DEV/CONFIG
+
+        OPTIONS.addOption(new ActiveOption<CommandLine> (
+                "i", false, "print additional help information.",
+                (m,o)->System.setProperty(PRINT_INFO, "true"),
+                STARTUP));
 
         OPTIONS.addOption(new ActiveOption<CommandLine> (
                 "D", true, "set property: name=value.",

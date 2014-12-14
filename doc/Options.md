@@ -2,12 +2,17 @@
 
     OFEXPORT2
     
-    Version: 1.0.14
+    Version: 1.0.15
     Build Date: 2014-12-14
     
     usage: ofexport2
      -h                print help.
-     -i                print additional help information.
+     -available        show available tasks.
+     -remaining        show remaining tasks.
+     -flagged          show flagged tasks.
+     -unflagged        show flagged tasks.
+     -duesoon          show remaining tasks.
+     -completed        show remaining tasks.
      -pc <arg>         include and cascade: projects and all beneath where expression is true.
      -pi <arg>         include: projects where expression is true.
      -px <arg>         exclude: projects where expression is true.
@@ -40,6 +45,7 @@
      -f <arg>          output in this format.
      -o <arg>          write output to the file.
      -O <arg>          write output to the file and open it.
+     -i                print additional help information.
      -D <arg>          set property: name=value.
      -export <arg>     export data to JSON file (for testing).
      -import <arg>     import data from JSON file instead of database (for testing).

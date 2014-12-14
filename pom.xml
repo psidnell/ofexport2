@@ -137,7 +137,7 @@
 					<programs>
 						<program>
 							<mainClass>org.psidnell.omnifocus.Main</mainClass>
-							<id>ofexport2</id>
+							<id>of2</id>
 						</program>
 					</programs>
 					<platforms>
