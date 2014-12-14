@@ -16,30 +16,24 @@ limitations under the License.
 package org.psidnell.omnifocus.model;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Reader;
 import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import org.psidnell.omnifocus.sqlite.SQLiteDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.BeanFactory;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * @author psidnell
@@ -62,29 +56,22 @@ public class DataCache {
     private HashMap<String, Task> tasks = new HashMap<>();
     private HashMap<String, Context> contexts = new HashMap<>();
     private HashMap<String, Project> projects = new HashMap<>();
-
     private NodeFactory nodeFactory;
+    private RawData rawData;
 
     public DataCache() {
-        // Jackson constructor
         this.folders = new HashMap<>();
         this.projInfos = new HashMap<>();
     }
 
-    public DataCache(BeanFactory beanFactory) {
-        // Testing constructor
-        this.folders = new HashMap<>();
-        this.projInfos = new HashMap<>();
-        this.nodeFactory = beanFactory.getBean("nodefactory", NodeFactory.class);
-    }
+    public void setRawData (RawData rawData) {
+        this.rawData = rawData;
 
-    public DataCache(Collection<Folder> folders, Collection<ProjectInfo> projInfos, Collection<Task> tasks, Collection<Context> contexts, BeanFactory beanFactory) {
-        // SQLiteDAO constructor
-        this.nodeFactory = beanFactory.getBean("nodefactory", NodeFactory.class);
-        folders.stream().forEach((n) -> add(n));
-        projInfos.stream().forEach((n) -> add(n));
-        tasks.stream().forEach((n) -> add(n));
-        contexts.stream().forEach((n) -> add(n));
+        // Add and wire the nodes, they didn't come from spring, must wire them manually
+        rawData.getFolders().stream().forEach((n) -> {nodeFactory.initialise(n);add(n);});
+        rawData.getProjects().stream().forEach((n) -> {add(n);}); // Not a node
+        rawData.getTasks().stream().forEach((n) -> {nodeFactory.initialise(n);add(n);});
+        rawData.getContexts().stream().forEach((n) -> {nodeFactory.initialise(n);add(n);});
     }
 
     public final void build() {
@@ -211,72 +198,33 @@ public class DataCache {
         this.folders.put(folder.getId(), folder);
     }
 
-    /**
-     * Load raw data from a json file. Currently used for testing to avoid using live DB data.
-     *
-     * @param file
-     * @return
-     * @throws FileNotFoundException
-     * @throws IOException
-     */
-    public static DataCache importData(File file, BeanFactory beanFactory) throws FileNotFoundException, IOException {
-        try (
-            Reader in = new FileReader(file)) {
-            ObjectMapper mapper = new ObjectMapper();
-            DataCache result = mapper.readValue(in, DataCache.class);
-            NodeFactory nodeFactory = beanFactory.getBean("nodefactory", NodeFactory.class);
-            result.setNodeFactory(nodeFactory);
-
-            // Nodes didn't come from spring, must wire them manually
-            result.contexts.values().forEach((n)->nodeFactory.initialise(n));
-            result.folders.values().forEach((n)->nodeFactory.initialise(n));
-            result.projects.values().forEach((n)->nodeFactory.initialise(n));
-            result.tasks.values().forEach((n)->nodeFactory.initialise(n));
-            return result;
-        }
-    }
-
-    /**
-     * Exports data from the DB to a json file. Currently used for testing.
-     *
-     * @param file
-     * @param filterFn allows data to be filtered to reduce volume e.g. items whose name starts with "%Test".
-     * @param sqliteDAO
-     * @throws IllegalAccessException
-     * @throws IllegalArgumentException
-     * @throws InvocationTargetException
-     * @throws InstantiationException
-     * @throws SQLException
-     * @throws JsonGenerationException
-     * @throws JsonMappingException
-     * @throws IOException
-     */
-    public static void exportData(File file, Predicate<NodeImpl> filterFn, SQLiteDAO sqliteDAO, BeanFactory beanFactory) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+    public void exportData(File file, Predicate<NodeImpl> filterFn) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
             InstantiationException, SQLException, JsonGenerationException, JsonMappingException, IOException {
 
         try (
-            Connection c = sqliteDAO.getConnection();
             Writer out = new FileWriter(file)) {
 
-            Collection<Folder> folders = sqliteDAO.load(c, SQLiteDAO.FOLDER_DAO).stream().filter(filterFn).collect(Collectors.toList());
-            Collection<Task> tasks = sqliteDAO.load(c, SQLiteDAO.TASK_DAO).stream().filter(filterFn).collect(Collectors.toList());
-            Collection<Context> contexts = sqliteDAO.load(c, SQLiteDAO.CONTEXT_DAO).stream().filter(filterFn).collect(Collectors.toList());
+            Collection<Folder> folders = rawData.getFolders().stream().filter(filterFn).collect(Collectors.toList());
+            Collection<Task> tasks = rawData.getTasks().stream().filter(filterFn).collect(Collectors.toList());
+            Collection<Context> contexts = rawData.getContexts().stream().filter(filterFn).collect(Collectors.toList());
 
             // ProjInfos don't have a name, have to use their associated root task names
             Set<String> taskIds = tasks.stream().map((t) -> t.getId()).collect(Collectors.toSet());
 
-            Collection<ProjectInfo> projInfos = sqliteDAO.load(c, SQLiteDAO.PROJECT_INFO_DAO).stream().filter((pi) -> taskIds.contains(pi.getRootTaskId()))
+            Collection<ProjectInfo> projInfos = rawData.getProjects().stream().filter((pi) -> taskIds.contains(pi.getRootTaskId()))
                     .collect(Collectors.toList());
 
-            DataCache dataCache = new DataCache(folders, projInfos, tasks, contexts, beanFactory);
+            RawData filteredData = new RawData ();
+            filteredData.setProjects(new LinkedList<>(projInfos));
+            filteredData.setContexts(new LinkedList<>(contexts));
+            filteredData.setTasks(new LinkedList<>(tasks));
+            filteredData.setFolders(new LinkedList<>(folders));
 
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.writerWithDefaultPrettyPrinter().writeValue(out, dataCache);
+            RawData.exportRawData(filteredData, file);
         }
     }
 
-    private void setNodeFactory(NodeFactory nodeFactory) {
+    public void setNodeFactory (NodeFactory nodeFactory) {
         this.nodeFactory = nodeFactory;
     }
-
 }

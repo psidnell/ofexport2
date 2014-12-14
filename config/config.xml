@@ -31,6 +31,8 @@
 	<bean name="main" class="org.psidnell.omnifocus.Main">
 		<property name="ofexport" ref="ofexport" />
 		<property name="sqliteDAO" ref="sqlitedao" />
+		<property name="nodeFactory" ref="nodefactory" />
+		<property name="configParams" ref="configparams"/>
 	</bean>
 	
 	<bean name="configparams" class="org.psidnell.omnifocus.ConfigParams">
@@ -38,6 +40,10 @@
 		<property name="dueSoon" value="${dueSoon}"/>
 		<property name="flattenedRootName" value="${flattenedRootName}"/>
 		<property name="expressionDateFormat" value="${expressionDateFormat}"/>
+	</bean>
+	
+	<bean name="datacache" class="org.psidnell.omnifocus.model.DataCache" scope="prototype">
+		<property name="nodeFactory" ref="nodefactory"/>
 	</bean>
 	
 	<bean name="nodefactory" class="org.psidnell.omnifocus.model.NodeFactory">

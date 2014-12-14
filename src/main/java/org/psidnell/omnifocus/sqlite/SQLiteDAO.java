@@ -25,28 +25,25 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
 import org.psidnell.omnifocus.model.Context;
-import org.psidnell.omnifocus.model.DataCache;
 import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.NodeFactory;
 import org.psidnell.omnifocus.model.ProjectInfo;
+import org.psidnell.omnifocus.model.RawData;
 import org.psidnell.omnifocus.model.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.BeanFactoryAware;
 
 /**
  * @author psidnell
  *
  * The main SQLite data access object.
  */
-public class SQLiteDAO implements BeanFactoryAware {
+public class SQLiteDAO {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SQLiteDAO.class);
 
@@ -54,8 +51,6 @@ public class SQLiteDAO implements BeanFactoryAware {
     private String[] possibleDBLocations;
 
     private NodeFactory nodeFactory;
-
-    private BeanFactory beanFactory;
 
     public String getDriverURL() throws SQLException {
         for (String location : possibleDBLocations) {
@@ -96,27 +91,32 @@ public class SQLiteDAO implements BeanFactoryAware {
         return DriverManager.getConnection(getDriverURL());
     }
 
-    public DataCache load() throws SQLException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    public RawData load() throws SQLException, IllegalAccessException, InvocationTargetException, InstantiationException {
 
         LOGGER.info("Starting DB load");
 
         try (
             Connection c = getConnection()) {
-            Collection<ProjectInfo> projInfos = load(c, PROJECT_INFO_DAO);
-            Collection<Folder> folders = load(c, FOLDER_DAO);
-            Collection<Task> tasks = load(c, TASK_DAO);
-            Collection<Context> contexts = load(c, CONTEXT_DAO);
+            LinkedList<ProjectInfo> projInfos = load(c, PROJECT_INFO_DAO);
+            LinkedList<Folder> folders = load(c, FOLDER_DAO);
+            LinkedList<Task> tasks = load(c, TASK_DAO);
+            LinkedList<Context> contexts = load(c, CONTEXT_DAO);
 
             LOGGER.info("Loaded {} folders", folders.size());
             LOGGER.info("Loaded {} projects", projInfos.size());
             LOGGER.info("Loaded {} contexts", contexts.size());
             LOGGER.info("Loaded {} tasks", tasks.size());
 
-            return new DataCache(folders, projInfos, tasks, contexts, beanFactory);
+            RawData rawData = new RawData();
+            rawData.setContexts(contexts);
+            rawData.setProjects(projInfos);
+            rawData.setFolders(folders);
+            rawData.setTasks(tasks);
+            return rawData;
         }
     }
 
-    public <T> Collection<T> load(Connection c, SQLiteClassDescriptor<T> desc) throws SQLException, IllegalAccessException,
+    public <T> LinkedList<T> load(Connection c, SQLiteClassDescriptor<T> desc) throws SQLException, IllegalAccessException,
             InvocationTargetException, InstantiationException {
         try (
             PreparedStatement stmt = c.prepareStatement("select " + desc.getColumnsForSelect() + " from " + desc.getTableName())) {
@@ -176,10 +176,5 @@ public class SQLiteDAO implements BeanFactoryAware {
 
     public void setNodeFactory(NodeFactory nodeFactory) {
         this.nodeFactory = nodeFactory;
-    }
-
-    @Override
-    public void setBeanFactory(BeanFactory beanFactory) {
-        this.beanFactory = beanFactory;
     }
 }

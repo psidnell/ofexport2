@@ -39,7 +39,7 @@ public class DataCacheTest {
 
     @Test
     public void testConstruction() {
-        DataCache dataCache = new DataCache(ApplicationContextFactory.getContext());
+        DataCache dataCache = newDataCache();
 
         assertTrue(dataCache.getContexts().isEmpty());
         assertTrue(dataCache.getProjects().isEmpty());
@@ -51,7 +51,7 @@ public class DataCacheTest {
     public void testTaskHierarchy() {
         final String parentId = "zzz";
 
-        DataCache dataCache = new DataCache(ApplicationContextFactory.getContext());
+        DataCache dataCache = newDataCache();
 
         Task child = nodeFactory.createTask("t");
         child.setName("child");
@@ -87,7 +87,7 @@ public class DataCacheTest {
     public void testFolderHierarchy() {
         final String parentId = "zzz";
 
-        DataCache dataCache = new DataCache(ApplicationContextFactory.getContext());
+        DataCache dataCache = newDataCache();
 
         Folder child = nodeFactory.createFolder("f1");
         child.setName("child");
@@ -119,7 +119,7 @@ public class DataCacheTest {
     public void testContextHierarchy() {
         final String parentId = "zzz";
 
-        DataCache dataCache = new DataCache(ApplicationContextFactory.getContext());
+        DataCache dataCache = newDataCache();
 
         Context child = nodeFactory.createContext("c");
         child.setName("child");
@@ -151,7 +151,7 @@ public class DataCacheTest {
     public void testContextTaskHierarchy() {
         final String parentId = "zzz";
 
-        DataCache dataCache = new DataCache(ApplicationContextFactory.getContext());
+        DataCache dataCache = newDataCache();
 
         Task child = nodeFactory.createTask("t");
         child.setName("child");
@@ -184,7 +184,7 @@ public class DataCacheTest {
     public void testProjectCreatedFromRootTask() {
         final String id = "zzz";
 
-        DataCache dataCache = new DataCache(ApplicationContextFactory.getContext());
+        DataCache dataCache = newDataCache();
 
         Task rootTask = nodeFactory.createTask("t");
         rootTask.setName("rootTask");
@@ -220,7 +220,7 @@ public class DataCacheTest {
         final String rootId = "zzz";
         final String id = "xxx";
 
-        DataCache dataCache = new DataCache(ApplicationContextFactory.getContext());
+        DataCache dataCache = newDataCache();
 
         Task rootTask = nodeFactory.createTask("t");
         rootTask.setName("rootTask");
@@ -264,7 +264,7 @@ public class DataCacheTest {
         final String id = "zzz";
         final String folderId = "xxx";
 
-        DataCache dataCache = new DataCache(ApplicationContextFactory.getContext());
+        DataCache dataCache = newDataCache();
 
         Task rootTask = nodeFactory.createTask("t");
         rootTask.setName("rootTask");
@@ -305,7 +305,7 @@ public class DataCacheTest {
     @Test
     public void testInbox () {
 
-        DataCache dataCache = new DataCache(ApplicationContextFactory.getContext());
+        DataCache dataCache = newDataCache();
 
         Task child = nodeFactory.createTask("t");
         child.setName("child");
@@ -337,7 +337,7 @@ public class DataCacheTest {
     @Test
     public void testNoContext() {
 
-        DataCache dataCache = new DataCache(ApplicationContextFactory.getContext());
+        DataCache dataCache = newDataCache();
 
         Task child = nodeFactory.createTask("t");
         child.setName("child");
@@ -361,4 +361,8 @@ public class DataCacheTest {
         assertTrue(dataCache.getProjects().isEmpty());
     }
 
+    private DataCache newDataCache() {
+        ApplicationContext appContext = ApplicationContextFactory.getContext();
+        return appContext.getBean("datacache", DataCache.class);
+    }
 }

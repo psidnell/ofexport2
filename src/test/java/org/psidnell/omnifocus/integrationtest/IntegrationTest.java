@@ -29,6 +29,7 @@ import org.psidnell.omnifocus.ApplicationContextFactory;
 import org.psidnell.omnifocus.Main;
 import org.psidnell.omnifocus.model.DataCache;
 import org.psidnell.omnifocus.model.NodeImpl;
+import org.psidnell.omnifocus.model.RawData;
 import org.psidnell.omnifocus.sqlite.SQLiteDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,6 +50,7 @@ public class IntegrationTest {
         tmpDataDir.mkdirs();
         ApplicationContext appContext = ApplicationContextFactory.getContext();
         SQLiteDAO dao = appContext.getBean("sqlitedao", SQLiteDAO.class);
+        DataCache dataCache = appContext.getBean("datacache", DataCache.class);
         // Export nodes that start with '##' and remove the '##'
         Predicate<NodeImpl> filterFn = (n)->{
             boolean isTestData = n.getName().startsWith("##");
@@ -57,14 +59,16 @@ public class IntegrationTest {
             }
             return isTestData;
         };
-        DataCache.exportData(EXPORTED_DATA_FILE, filterFn, dao, appContext);
+        RawData rawData = dao.load();
+        dataCache.setRawData(rawData);
+        dataCache.exportData(EXPORTED_DATA_FILE, filterFn);
     }
 
-    // THESE PROJECTS ARE NOT ACTIVE
-    //@Test
-    //public void testExportedData () throws IOException {
-    //    Diff.diff(PREVIOUSLY_EXPORTED_DATA_FILE, EXPORTED_DATA_FILE);
-    //}
+    // THESE PROJECTS ARE IN A DROPPED ROOT FOLDER
+//    @Test
+//    public void testExportedData () throws IOException {
+//        Diff.diff(PREVIOUSLY_EXPORTED_DATA_FILE, EXPORTED_DATA_FILE);
+//    }
 
     @Test
     public void testFormats () throws Exception {

@@ -25,7 +25,6 @@ import org.psidnell.omnifocus.ConfigParams;
  *         A wrapper for dates that makes the OGNL expressions more convenient.
  */
 public class Date extends ExpressionFunctions implements Comparable<Date> {
-    // TODO Merge with Expression Functions
 
     private java.util.Date date;
     private java.util.Date roundedDate;

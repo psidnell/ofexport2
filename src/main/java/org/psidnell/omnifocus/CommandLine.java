@@ -334,7 +334,13 @@ public class CommandLine implements BeanFactoryAware {
     @Override
     public void setBeanFactory(BeanFactory beanFactory) {
         this.beanFactory = beanFactory;
-        config = beanFactory.getBean("configparams", ConfigParams.class);
-        nodeFactory = beanFactory.getBean("nodefactory", NodeFactory.class);
+    }
+
+    public void setNodeFactory (NodeFactory nodeFactory) {
+        this.nodeFactory = nodeFactory;
+    }
+
+    public void setConfigParams (ConfigParams config) {
+        this.config = config;
     }
 }

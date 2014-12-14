@@ -30,6 +30,7 @@ import org.psidnell.omnifocus.model.Context;
 import org.psidnell.omnifocus.model.DataCache;
 import org.psidnell.omnifocus.model.Folder;
 import org.psidnell.omnifocus.model.Project;
+import org.psidnell.omnifocus.model.RawData;
 import org.psidnell.omnifocus.sqlite.SQLiteDAO;
 import org.psidnell.omnifocus.util.IOUtils;
 import org.springframework.context.ApplicationContext;
@@ -46,10 +47,13 @@ public class Main extends CommandLine {
     private SQLiteDAO sqliteDAO;
 
     private void loadData() throws IllegalAccessException, InvocationTargetException, InstantiationException, SQLException, IOException {
+        data = beanFactory.getBean("datacache", DataCache.class);
         if (jsonInputFile != null) {
-            data = DataCache.importData(new File(jsonInputFile), beanFactory);
+            RawData rawData = RawData.importRawData(new File(jsonInputFile));
+            data.setRawData(rawData);
         } else {
-            data = sqliteDAO.load();
+            RawData rawData = sqliteDAO.load();
+            data.setRawData(rawData);
         }
 
         data.build();
@@ -141,8 +145,7 @@ public class Main extends CommandLine {
         main.procesPreLoadOptions(args);
 
         if (main.exportFile != null) {
-            SQLiteDAO dao = appContext.getBean("sqlitedao", SQLiteDAO.class);
-            DataCache.exportData(new File(main.exportFile), (f) -> true, dao, appContext);
+            main.data.exportData(new File(main.exportFile), (f) -> true);
             return;
         }
 

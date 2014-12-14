@@ -84,7 +84,7 @@ public class SQLiteClassDescriptor<T> {
         return Character.toLowerCase(methodName.charAt(prefixLen)) + methodName.substring(prefixLen + 1);
     }
 
-    public Collection<T> load(ResultSet rs, NodeFactory nodeFactory) throws SQLException, InvocationTargetException, InstantiationException,
+    public LinkedList<T> load(ResultSet rs, NodeFactory nodeFactory) throws SQLException, InvocationTargetException, InstantiationException,
             IllegalAccessException {
         LinkedList<T> tasks = new LinkedList<>();
         while (rs.next()) {

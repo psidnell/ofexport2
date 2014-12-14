@@ -30,13 +30,13 @@ Task id:__%%RootContext depth:0
 . . . -onHold:false
 . . . -taskCount:15
 . . . -type:Context
-. . . -uncompletedTaskCount:0
+. . . -uncompletedTaskCount:15
 . . . Task id:oRdaIkmRUJH depth:3
 . . . . -name:Learn Engineering
 . . . . -added:2014-12-10 19:27:22
 . . . . -available:false
-. . . . -blocked:false
-. . . . -completed:true
+. . . . -blocked:true
+. . . . -completed:false
 . . . . -completion:null
 . . . . -contextName:On Earth
 . . . . -deferDate:2010-12-01 00:00:00
@@ -45,7 +45,7 @@ Task id:__%%RootContext depth:0
 . . . . -flagged:false
 . . . . -modified:2014-12-11 15:54:15
 . . . . -projectTask:true
-. . . . -remaining:false
+. . . . -remaining:true
 . . . . -sequential:true
 . . . . -taskCount:0
 . . . . -type:Task
@@ -55,8 +55,8 @@ Task id:__%%RootContext depth:0
 . . . . -name:Learn Orbital Mechanics
 . . . . -added:2014-12-10 19:28:34
 . . . . -available:false
-. . . . -blocked:false
-. . . . -completed:true
+. . . . -blocked:true
+. . . . -completed:false
 . . . . -completion:null
 . . . . -contextName:On Earth
 . . . . -deferDate:null
@@ -65,7 +65,7 @@ Task id:__%%RootContext depth:0
 . . . . -flagged:false
 . . . . -modified:2014-12-11 15:54:15
 . . . . -projectTask:true
-. . . . -remaining:false
+. . . . -remaining:true
 . . . . -sequential:false
 . . . . -taskCount:0
 . . . . -type:Task
@@ -75,8 +75,8 @@ Task id:__%%RootContext depth:0
 . . . . -name:Prepare For Launch
 . . . . -added:2014-12-10 19:32:21
 . . . . -available:false
-. . . . -blocked:false
-. . . . -completed:true
+. . . . -blocked:true
+. . . . -completed:false
 . . . . -completion:null
 . . . . -contextName:On Earth
 . . . . -deferDate:null
@@ -85,7 +85,7 @@ Task id:__%%RootContext depth:0
 . . . . -flagged:false
 . . . . -modified:2014-12-11 15:54:15
 . . . . -projectTask:true
-. . . . -remaining:false
+. . . . -remaining:true
 . . . . -sequential:true
 . . . . -taskCount:0
 . . . . -type:Task
@@ -96,7 +96,7 @@ Task id:__%%RootContext depth:0
 . . . . -added:2014-12-10 20:42:42
 . . . . -available:false
 . . . . -blocked:true
-. . . . -completed:true
+. . . . -completed:false
 . . . . -completion:null
 . . . . -contextName:On Earth
 . . . . -deferDate:2010-12-01 00:00:00
@@ -105,7 +105,7 @@ Task id:__%%RootContext depth:0
 . . . . -flagged:false
 . . . . -modified:2014-12-10 21:05:22
 . . . . -projectTask:false
-. . . . -remaining:false
+. . . . -remaining:true
 . . . . -sequential:false
 . . . . -taskCount:0
 . . . . -type:Task
@@ -114,9 +114,9 @@ Task id:__%%RootContext depth:0
 . . . Task id:p8QFrZltWq7 depth:3
 . . . . -name:Read Orbital Mechanics For Dummies
 . . . . -added:2014-12-10 20:43:34
-. . . . -available:false
-. . . . -blocked:true
-. . . . -completed:true
+. . . . -available:true
+. . . . -blocked:false
+. . . . -completed:false
 . . . . -completion:null
 . . . . -contextName:On Earth
 . . . . -deferDate:null
@@ -125,7 +125,7 @@ Task id:__%%RootContext depth:0
 . . . . -flagged:false
 . . . . -modified:2014-12-10 21:05:40
 . . . . -projectTask:false
-. . . . -remaining:false
+. . . . -remaining:true
 . . . . -sequential:false
 . . . . -taskCount:0
 . . . . -type:Task
@@ -136,7 +136,7 @@ Task id:__%%RootContext depth:0
 . . . . -added:2014-12-10 20:45:02
 . . . . -available:false
 . . . . -blocked:true
-. . . . -completed:true
+. . . . -completed:false
 . . . . -completion:null
 . . . . -contextName:On Earth
 . . . . -deferDate:null
@@ -145,7 +145,7 @@ Task id:__%%RootContext depth:0
 . . . . -flagged:false
 . . . . -modified:2014-12-10 21:06:42
 . . . . -projectTask:false
-. . . . -remaining:false
+. . . . -remaining:true
 . . . . -sequential:false
 . . . . -taskCount:0
 . . . . -type:Task
@@ -156,7 +156,7 @@ Task id:__%%RootContext depth:0
 . . . . -added:2014-12-10 20:45:10
 . . . . -available:false
 . . . . -blocked:true
-. . . . -completed:true
+. . . . -completed:false
 . . . . -completion:null
 . . . . -contextName:On Earth
 . . . . -deferDate:null
@@ -165,7 +165,7 @@ Task id:__%%RootContext depth:0
 . . . . -flagged:false
 . . . . -modified:2014-12-10 21:06:47
 . . . . -projectTask:false
-. . . . -remaining:false
+. . . . -remaining:true
 . . . . -sequential:false
 . . . . -taskCount:0
 . . . . -type:Task
@@ -176,7 +176,7 @@ Task id:__%%RootContext depth:0
 . . . . -added:2014-12-10 20:45:43
 . . . . -available:false
 . . . . -blocked:true
-. . . . -completed:true
+. . . . -completed:false
 . . . . -completion:null
 . . . . -contextName:On Earth
 . . . . -deferDate:null
@@ -185,7 +185,7 @@ Task id:__%%RootContext depth:0
 . . . . -flagged:false
 . . . . -modified:2014-12-10 21:06:51
 . . . . -projectTask:false
-. . . . -remaining:false
+. . . . -remaining:true
 . . . . -sequential:false
 . . . . -taskCount:0
 . . . . -type:Task
@@ -196,7 +196,7 @@ Task id:__%%RootContext depth:0
 . . . . -added:2014-12-10 20:49:24
 . . . . -available:false
 . . . . -blocked:true
-. . . . -completed:true
+. . . . -completed:false
 . . . . -completion:null
 . . . . -contextName:On Earth
 . . . . -deferDate:null
@@ -205,7 +205,7 @@ Task id:__%%RootContext depth:0
 . . . . -flagged:false
 . . . . -modified:2014-12-10 21:07:20
 . . . . -projectTask:false
-. . . . -remaining:false
+. . . . -remaining:true
 . . . . -sequential:false
 . . . . -taskCount:0
 . . . . -type:Task
@@ -216,7 +216,7 @@ Task id:__%%RootContext depth:0
 . . . . -added:2014-12-10 20:51:38
 . . . . -available:false
 . . . . -blocked:true
-. . . . -completed:true
+. . . . -completed:false
 . . . . -completion:null
 . . . . -contextName:On Earth
 . . . . -deferDate:null
@@ -225,7 +225,7 @@ Task id:__%%RootContext depth:0
 . . . . -flagged:false
 . . . . -modified:2014-12-10 21:07:20
 . . . . -projectTask:false
-. . . . -remaining:false
+. . . . -remaining:true
 . . . . -sequential:false
 . . . . -taskCount:0
 . . . . -type:Task
@@ -234,9 +234,9 @@ Task id:__%%RootContext depth:0
 . . . Task id:iRQNsA4IjhV depth:3
 . . . . -name:Light blue touch-paper
 . . . . -added:2014-12-10 20:49:59
-. . . . -available:false
-. . . . -blocked:true
-. . . . -completed:true
+. . . . -available:true
+. . . . -blocked:false
+. . . . -completed:false
 . . . . -completion:null
 . . . . -contextName:On Earth
 . . . . -deferDate:null
@@ -245,7 +245,7 @@ Task id:__%%RootContext depth:0
 . . . . -flagged:false
 . . . . -modified:2014-12-10 21:07:29
 . . . . -projectTask:false
-. . . . -remaining:false
+. . . . -remaining:true
 . . . . -sequential:false
 . . . . -taskCount:0
 . . . . -type:Task
@@ -256,7 +256,7 @@ Task id:__%%RootContext depth:0
 . . . . -added:2014-12-10 20:50:20
 . . . . -available:false
 . . . . -blocked:true
-. . . . -completed:true
+. . . . -completed:false
 . . . . -completion:null
 . . . . -contextName:On Earth
 . . . . -deferDate:null
@@ -265,7 +265,7 @@ Task id:__%%RootContext depth:0
 . . . . -flagged:false
 . . . . -modified:2014-12-10 21:07:29
 . . . . -projectTask:false
-. . . . -remaining:false
+. . . . -remaining:true
 . . . . -sequential:false
 . . . . -taskCount:0
 . . . . -type:Task
@@ -276,7 +276,7 @@ Task id:__%%RootContext depth:0
 . . . . -added:2014-12-10 20:50:42
 . . . . -available:false
 . . . . -blocked:true
-. . . . -completed:true
+. . . . -completed:false
 . . . . -completion:null
 . . . . -contextName:On Earth
 . . . . -deferDate:null
@@ -285,7 +285,7 @@ Task id:__%%RootContext depth:0
 . . . . -flagged:false
 . . . . -modified:2014-12-10 21:07:29
 . . . . -projectTask:false
-. . . . -remaining:false
+. . . . -remaining:true
 . . . . -sequential:false
 . . . . -taskCount:0
 . . . . -type:Task
@@ -295,8 +295,8 @@ Task id:__%%RootContext depth:0
 . . . . -name:Launch
 . . . . -added:2014-12-10 19:33:07
 . . . . -available:false
-. . . . -blocked:false
-. . . . -completed:true
+. . . . -blocked:true
+. . . . -completed:false
 . . . . -completion:null
 . . . . -contextName:On Earth
 . . . . -deferDate:null
@@ -305,7 +305,7 @@ Task id:__%%RootContext depth:0
 . . . . -flagged:false
 . . . . -modified:2014-12-11 15:54:15
 . . . . -projectTask:true
-. . . . -remaining:false
+. . . . -remaining:true
 . . . . -sequential:true
 . . . . -taskCount:0
 . . . . -type:Task
@@ -315,8 +315,8 @@ Task id:__%%RootContext depth:0
 . . . . -name:Build Ship
 . . . . -added:2014-12-10 19:29:06
 . . . . -available:false
-. . . . -blocked:false
-. . . . -completed:true
+. . . . -blocked:true
+. . . . -completed:false
 . . . . -completion:null
 . . . . -contextName:On Earth
 . . . . -deferDate:null
@@ -325,7 +325,7 @@ Task id:__%%RootContext depth:0
 . . . . -flagged:false
 . . . . -modified:2014-12-11 15:54:15
 . . . . -projectTask:true
-. . . . -remaining:false
+. . . . -remaining:true
 . . . . -sequential:true
 . . . . -taskCount:0
 . . . . -type:Task
@@ -341,13 +341,13 @@ Task id:__%%RootContext depth:0
 . . . . -onHold:false
 . . . . -taskCount:9
 . . . . -type:Context
-. . . . -uncompletedTaskCount:0
+. . . . -uncompletedTaskCount:9
 . . . . Task id:bVfu4eyfBhr depth:4
 . . . . . -name:Buy Engineering For Dummies
 . . . . . -added:2014-12-10 20:41:59
-. . . . . -available:false
-. . . . . -blocked:true
-. . . . . -completed:true
+. . . . . -available:true
+. . . . . -blocked:false
+. . . . . -completed:false
 . . . . . -completion:null
 . . . . . -contextName:Buy
 . . . . . -deferDate:2010-12-01 00:00:00
@@ -356,7 +356,7 @@ Task id:__%%RootContext depth:0
 . . . . . -flagged:false
 . . . . . -modified:2014-12-10 21:05:16
 . . . . . -projectTask:false
-. . . . . -remaining:false
+. . . . . -remaining:true
 . . . . . -sequential:false
 . . . . . -taskCount:0
 . . . . . -type:Task
@@ -365,9 +365,9 @@ Task id:__%%RootContext depth:0
 . . . . Task id:bKbN026PfHS depth:4
 . . . . . -name:Buy Orbital Mechanics For Dummies
 . . . . . -added:2014-12-10 20:43:11
-. . . . . -available:false
-. . . . . -blocked:true
-. . . . . -completed:true
+. . . . . -available:true
+. . . . . -blocked:false
+. . . . . -completed:false
 . . . . . -completion:null
 . . . . . -contextName:Buy
 . . . . . -deferDate:null
@@ -376,7 +376,7 @@ Task id:__%%RootContext depth:0
 . . . . . -flagged:false
 . . . . . -modified:2014-12-10 21:05:27
 . . . . . -projectTask:false
-. . . . . -remaining:false
+. . . . . -remaining:true
 . . . . . -sequential:false
 . . . . . -taskCount:0
 . . . . . -type:Task
@@ -387,7 +387,7 @@ Task id:__%%RootContext depth:0
 . . . . . -added:2014-12-10 21:05:59
 . . . . . -available:false
 . . . . . -blocked:true
-. . . . . -completed:true
+. . . . . -completed:false
 . . . . . -completion:null
 . . . . . -contextName:Buy
 . . . . . -deferDate:2024-12-01 00:00:00
@@ -396,18 +396,18 @@ Task id:__%%RootContext depth:0
 . . . . . -flagged:true
 . . . . . -modified:2014-12-10 22:58:07
 . . . . . -projectTask:false
-. . . . . -remaining:false
+. . . . . -remaining:true
 . . . . . -sequential:false
 . . . . . -taskCount:2
 . . . . . -type:Task
-. . . . . -uncompletedTaskCount:0
+. . . . . -uncompletedTaskCount:2
 . . . . . -note:null
 . . . . Task id:f3K2ksOMIew depth:4
 . . . . . -name:Buy Rocket Ship Kit
 . . . . . -added:2014-12-10 20:43:51
 . . . . . -available:false
 . . . . . -blocked:true
-. . . . . -completed:true
+. . . . . -completed:false
 . . . . . -completion:null
 . . . . . -contextName:Buy
 . . . . . -deferDate:2024-12-01 00:00:00
@@ -416,7 +416,7 @@ Task id:__%%RootContext depth:0
 . . . . . -flagged:true
 . . . . . -modified:2014-12-10 21:05:53
 . . . . . -projectTask:false
-. . . . . -remaining:false
+. . . . . -remaining:true
 . . . . . -sequential:false
 . . . . . -taskCount:0
 . . . . . -type:Task
@@ -427,7 +427,7 @@ Task id:__%%RootContext depth:0
 . . . . . -added:2014-12-10 20:44:20
 . . . . . -available:false
 . . . . . -blocked:true
-. . . . . -completed:true
+. . . . . -completed:false
 . . . . . -completion:null
 . . . . . -contextName:Buy
 . . . . . -deferDate:2024-12-01 00:00:00
@@ -436,7 +436,7 @@ Task id:__%%RootContext depth:0
 . . . . . -flagged:true
 . . . . . -modified:2014-12-10 21:06:36
 . . . . . -projectTask:false
-. . . . . -remaining:false
+. . . . . -remaining:true
 . . . . . -sequential:false
 . . . . . -taskCount:0
 . . . . . -type:Task
@@ -447,7 +447,7 @@ Task id:__%%RootContext depth:0
 . . . . . -added:2014-12-10 20:49:34
 . . . . . -available:false
 . . . . . -blocked:true
-. . . . . -completed:true
+. . . . . -completed:false
 . . . . . -completion:null
 . . . . . -contextName:Buy
 . . . . . -deferDate:null
@@ -456,18 +456,18 @@ Task id:__%%RootContext depth:0
 . . . . . -flagged:false
 . . . . . -modified:2014-12-10 21:07:13
 . . . . . -projectTask:false
-. . . . . -remaining:false
+. . . . . -remaining:true
 . . . . . -sequential:false
 . . . . . -taskCount:3
 . . . . . -type:Task
-. . . . . -uncompletedTaskCount:0
+. . . . . -uncompletedTaskCount:3
 . . . . . -note:null
 . . . . Task id:o3gAKpDzVl_ depth:4
 . . . . . -name:Buy Space Suit - 34" Waist (eBay?, Amazon?)
 . . . . . -added:2014-12-10 20:46:01
-. . . . . -available:false
-. . . . . -blocked:true
-. . . . . -completed:true
+. . . . . -available:true
+. . . . . -blocked:false
+. . . . . -completed:false
 . . . . . -completion:null
 . . . . . -contextName:Buy
 . . . . . -deferDate:null
@@ -476,7 +476,7 @@ Task id:__%%RootContext depth:0
 . . . . . -flagged:false
 . . . . . -modified:2014-12-10 22:32:06
 . . . . . -projectTask:false
-. . . . . -remaining:false
+. . . . . -remaining:true
 . . . . . -sequential:false
 . . . . . -taskCount:0
 . . . . . -type:Task
@@ -485,9 +485,9 @@ Task id:__%%RootContext depth:0
 . . . . Task id:aKfI5xfBuvP depth:4
 . . . . . -name:Buy Pop-Tarts (approx 2000)
 . . . . . -added:2014-12-10 20:47:32
-. . . . . -available:false
-. . . . . -blocked:true
-. . . . . -completed:true
+. . . . . -available:true
+. . . . . -blocked:false
+. . . . . -completed:false
 . . . . . -completion:null
 . . . . . -contextName:Buy
 . . . . . -deferDate:null
@@ -496,7 +496,7 @@ Task id:__%%RootContext depth:0
 . . . . . -flagged:false
 . . . . . -modified:2014-12-10 22:32:06
 . . . . . -projectTask:false
-. . . . . -remaining:false
+. . . . . -remaining:true
 . . . . . -sequential:false
 . . . . . -taskCount:0
 . . . . . -type:Task
@@ -505,9 +505,9 @@ Task id:__%%RootContext depth:0
 . . . . Task id:keJVgAldMJM depth:4
 . . . . . -name:Buy Tea - Earl Grey (Hot)
 . . . . . -added:2014-12-10 20:48:13
-. . . . . -available:false
-. . . . . -blocked:true
-. . . . . -completed:true
+. . . . . -available:true
+. . . . . -blocked:false
+. . . . . -completed:false
 . . . . . -completion:null
 . . . . . -contextName:Buy
 . . . . . -deferDate:null
@@ -516,7 +516,7 @@ Task id:__%%RootContext depth:0
 . . . . . -flagged:false
 . . . . . -modified:2014-12-10 22:32:06
 . . . . . -projectTask:false
-. . . . . -remaining:false
+. . . . . -remaining:true
 . . . . . -sequential:false
 . . . . . -taskCount:0
 . . . . . -type:Task
@@ -532,13 +532,13 @@ Task id:__%%RootContext depth:0
 . . . -onHold:false
 . . . -taskCount:6
 . . . -type:Context
-. . . -uncompletedTaskCount:0
+. . . -uncompletedTaskCount:6
 . . . Task id:ihgPCuXPmJw depth:3
 . . . . -name:Give ships computer a name (Dave? Mother?)
 . . . . -added:2014-12-10 20:52:02
-. . . . -available:false
-. . . . -blocked:true
-. . . . -completed:true
+. . . . -available:true
+. . . . -blocked:false
+. . . . -completed:false
 . . . . -completion:null
 . . . . -contextName:In Flight
 . . . . -deferDate:null
@@ -547,7 +547,7 @@ Task id:__%%RootContext depth:0
 . . . . -flagged:false
 . . . . -modified:2014-12-10 22:41:36
 . . . . -projectTask:false
-. . . . -remaining:false
+. . . . -remaining:true
 . . . . -sequential:false
 . . . . -taskCount:0
 . . . . -type:Task
@@ -558,7 +558,7 @@ Task id:__%%RootContext depth:0
 . . . . -added:2014-12-10 20:52:46
 . . . . -available:false
 . . . . -blocked:true
-. . . . -completed:true
+. . . . -completed:false
 . . . . -completion:null
 . . . . -contextName:In Flight
 . . . . -deferDate:null
@@ -567,7 +567,7 @@ Task id:__%%RootContext depth:0
 . . . . -flagged:false
 . . . . -modified:2014-12-10 21:08:49
 . . . . -projectTask:false
-. . . . -remaining:false
+. . . . -remaining:true
 . . . . -sequential:false
 . . . . -taskCount:0
 . . . . -type:Task
@@ -578,7 +578,7 @@ Task id:__%%RootContext depth:0
 . . . . -added:2014-12-10 20:54:54
 . . . . -available:false
 . . . . -blocked:true
-. . . . -completed:true
+. . . . -completed:false
 . . . . -completion:null
 . . . . -contextName:In Flight
 . . . . -deferDate:null
@@ -587,7 +587,7 @@ Task id:__%%RootContext depth:0
 . . . . -flagged:false
 . . . . -modified:2014-12-10 21:08:49
 . . . . -projectTask:false
-. . . . -remaining:false
+. . . . -remaining:true
 . . . . -sequential:false
 . . . . -taskCount:0
 . . . . -type:Task
@@ -598,7 +598,7 @@ Task id:__%%RootContext depth:0
 . . . . -added:2014-12-10 20:56:51
 . . . . -available:false
 . . . . -blocked:true
-. . . . -completed:true
+. . . . -completed:false
 . . . . -completion:null
 . . . . -contextName:In Flight
 . . . . -deferDate:null
@@ -607,7 +607,7 @@ Task id:__%%RootContext depth:0
 . . . . -flagged:false
 . . . . -modified:2014-12-10 21:08:49
 . . . . -projectTask:false
-. . . . -remaining:false
+. . . . -remaining:true
 . . . . -sequential:false
 . . . . -taskCount:0
 . . . . -type:Task
@@ -618,7 +618,7 @@ Task id:__%%RootContext depth:0
 . . . . -added:2014-12-10 20:56:19
 . . . . -available:false
 . . . . -blocked:true
-. . . . -completed:true
+. . . . -completed:false
 . . . . -completion:null
 . . . . -contextName:In Flight
 . . . . -deferDate:null
@@ -627,7 +627,7 @@ Task id:__%%RootContext depth:0
 . . . . -flagged:false
 . . . . -modified:2014-12-10 21:08:49
 . . . . -projectTask:false
-. . . . -remaining:false
+. . . . -remaining:true
 . . . . -sequential:false
 . . . . -taskCount:0
 . . . . -type:Task
@@ -637,8 +637,8 @@ Task id:__%%RootContext depth:0
 . . . . -name:Flight
 . . . . -added:2014-12-10 19:34:53
 . . . . -available:false
-. . . . -blocked:false
-. . . . -completed:true
+. . . . -blocked:true
+. . . . -completed:false
 . . . . -completion:null
 . . . . -contextName:In Flight
 . . . . -deferDate:null
@@ -647,7 +647,7 @@ Task id:__%%RootContext depth:0
 . . . . -flagged:false
 . . . . -modified:2014-12-11 15:54:15
 . . . . -projectTask:true
-. . . . -remaining:false
+. . . . -remaining:true
 . . . . -sequential:true
 . . . . -taskCount:0
 . . . . -type:Task
@@ -663,13 +663,13 @@ Task id:__%%RootContext depth:0
 . . . -onHold:false
 . . . -taskCount:5
 . . . -type:Context
-. . . -uncompletedTaskCount:0
+. . . -uncompletedTaskCount:5
 . . . Task id:gViYTFGgIkF depth:3
 . . . . -name:AAAAAAARGH!
 . . . . -added:2014-12-10 20:55:19
-. . . . -available:false
-. . . . -blocked:true
-. . . . -completed:true
+. . . . -available:true
+. . . . -blocked:false
+. . . . -completed:false
 . . . . -completion:null
 . . . . -contextName:OnMars
 . . . . -deferDate:null
@@ -678,7 +678,7 @@ Task id:__%%RootContext depth:0
 . . . . -flagged:false
 . . . . -modified:2014-12-10 21:09:11
 . . . . -projectTask:false
-. . . . -remaining:false
+. . . . -remaining:true
 . . . . -sequential:false
 . . . . -taskCount:0
 . . . . -type:Task
@@ -689,7 +689,7 @@ Task id:__%%RootContext depth:0
 . . . . -added:2014-12-10 20:55:48
 . . . . -available:false
 . . . . -blocked:true
-. . . . -completed:true
+. . . . -completed:false
 . . . . -completion:null
 . . . . -contextName:OnMars
 . . . . -deferDate:null
@@ -698,7 +698,7 @@ Task id:__%%RootContext depth:0
 . . . . -flagged:false
 . . . . -modified:2014-12-10 21:09:11
 . . . . -projectTask:false
-. . . . -remaining:false
+. . . . -remaining:true
 . . . . -sequential:false
 . . . . -taskCount:0
 . . . . -type:Task
@@ -709,7 +709,7 @@ Task id:__%%RootContext depth:0
 . . . . -added:2014-12-10 20:55:35
 . . . . -available:false
 . . . . -blocked:true
-. . . . -completed:true
+. . . . -completed:false
 . . . . -completion:null
 . . . . -contextName:OnMars
 . . . . -deferDate:null
@@ -718,7 +718,7 @@ Task id:__%%RootContext depth:0
 . . . . -flagged:false
 . . . . -modified:2014-12-10 21:09:11
 . . . . -projectTask:false
-. . . . -remaining:false
+. . . . -remaining:true
 . . . . -sequential:false
 . . . . -taskCount:0
 . . . . -type:Task
@@ -729,7 +729,7 @@ Task id:__%%RootContext depth:0
 . . . . -added:2014-12-10 20:59:43
 . . . . -available:false
 . . . . -blocked:true
-. . . . -completed:true
+. . . . -completed:false
 . . . . -completion:null
 . . . . -contextName:OnMars
 . . . . -deferDate:null
@@ -738,7 +738,7 @@ Task id:__%%RootContext depth:0
 . . . . -flagged:false
 . . . . -modified:2014-12-10 21:09:11
 . . . . -projectTask:false
-. . . . -remaining:false
+. . . . -remaining:true
 . . . . -sequential:false
 . . . . -taskCount:0
 . . . . -type:Task
@@ -748,8 +748,8 @@ Task id:__%%RootContext depth:0
 . . . . -name:Landing
 . . . . -added:2014-12-10 19:35:53
 . . . . -available:false
-. . . . -blocked:false
-. . . . -completed:true
+. . . . -blocked:true
+. . . . -completed:false
 . . . . -completion:null
 . . . . -contextName:OnMars
 . . . . -deferDate:null
@@ -758,7 +758,7 @@ Task id:__%%RootContext depth:0
 . . . . -flagged:false
 . . . . -modified:2014-12-11 15:54:15
 . . . . -projectTask:true
-. . . . -remaining:false
+. . . . -remaining:true
 . . . . -sequential:true
 . . . . -taskCount:0
 . . . . -type:Task

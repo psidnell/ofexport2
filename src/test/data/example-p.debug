@@ -9,51 +9,51 @@ Folder id:__%%RootFolder depth:0
 . -type:Folder
 . Folder id:hgN2j19gJZp depth:1
 . . -name:Get to Mars
-. . -active:false
+. . -active:true
 . . -added:2014-12-10 19:20:35
-. . -dropped:true
+. . -dropped:false
 . . -folderCount:2
-. . -modified:2014-12-11 15:54:22
+. . -modified:2014-12-14 13:57:40
 . . -projectCount:2
 . . -type:Folder
 . . Folder id:eQ6NcVeCPWs depth:2
 . . . -name:Build a Rocket Ship
-. . . -active:false
+. . . -active:true
 . . . -added:2014-12-10 19:26:14
-. . . -dropped:true
+. . . -dropped:false
 . . . -folderCount:0
 . . . -modified:2014-12-10 19:31:38
 . . . -projectCount:3
 . . . -type:Folder
 . . . Project id:oRdaIkmRUJH depth:3
 . . . . -name:Learn Engineering
-. . . . -active:false
+. . . . -active:true
 . . . . -added:null
-. . . . -completed:true
+. . . . -completed:false
 . . . . -completion:null
 . . . . -contextName:null>
 . . . . -deferDate:2010-12-01 00:00:00
-. . . . -dropped:true
+. . . . -dropped:false
 . . . . -dueDate:null
 . . . . -estimatedMinutes:-1
 . . . . -flagged:false
 . . . . -modified:null
 . . . . -onHold:false
-. . . . -remaining:false
+. . . . -remaining:true
 . . . . -sequential:true
 . . . . -singleActionList:false
-. . . . -status:dropped
+. . . . -status:active
 . . . . -taskCount:2
 . . . . -type:Project
-. . . . -uncompletedTaskCount:0
+. . . . -uncompletedTaskCount:2
 . . . . -unflagged:true
 . . . . -note:null
 . . . . Task id:bVfu4eyfBhr depth:4
 . . . . . -name:Buy Engineering For Dummies
 . . . . . -added:2014-12-10 20:41:59
-. . . . . -available:false
-. . . . . -blocked:true
-. . . . . -completed:true
+. . . . . -available:true
+. . . . . -blocked:false
+. . . . . -completed:false
 . . . . . -completion:null
 . . . . . -contextName:Buy
 . . . . . -deferDate:2010-12-01 00:00:00
@@ -62,7 +62,7 @@ Folder id:__%%RootFolder depth:0
 . . . . . -flagged:false
 . . . . . -modified:2014-12-10 21:05:16
 . . . . . -projectTask:false
-. . . . . -remaining:false
+. . . . . -remaining:true
 . . . . . -sequential:false
 . . . . . -taskCount:0
 . . . . . -type:Task
@@ -73,7 +73,7 @@ Folder id:__%%RootFolder depth:0
 . . . . . -added:2014-12-10 20:42:42
 . . . . . -available:false
 . . . . . -blocked:true
-. . . . . -completed:true
+. . . . . -completed:false
 . . . . . -completion:null
 . . . . . -contextName:On Earth
 . . . . . -deferDate:2010-12-01 00:00:00
@@ -82,7 +82,7 @@ Folder id:__%%RootFolder depth:0
 . . . . . -flagged:false
 . . . . . -modified:2014-12-10 21:05:22
 . . . . . -projectTask:false
-. . . . . -remaining:false
+. . . . . -remaining:true
 . . . . . -sequential:false
 . . . . . -taskCount:0
 . . . . . -type:Task
@@ -90,33 +90,33 @@ Folder id:__%%RootFolder depth:0
 . . . . . -note:null
 . . . Project id:iZIlrSr9bIp depth:3
 . . . . -name:Learn Orbital Mechanics
-. . . . -active:false
+. . . . -active:true
 . . . . -added:null
-. . . . -completed:true
+. . . . -completed:false
 . . . . -completion:null
 . . . . -contextName:null>
 . . . . -deferDate:null
-. . . . -dropped:true
+. . . . -dropped:false
 . . . . -dueDate:null
 . . . . -estimatedMinutes:-1
 . . . . -flagged:false
 . . . . -modified:null
 . . . . -onHold:false
-. . . . -remaining:false
+. . . . -remaining:true
 . . . . -sequential:false
 . . . . -singleActionList:false
-. . . . -status:dropped
+. . . . -status:active
 . . . . -taskCount:2
 . . . . -type:Project
-. . . . -uncompletedTaskCount:0
+. . . . -uncompletedTaskCount:2
 . . . . -unflagged:true
 . . . . -note:null
 . . . . Task id:bKbN026PfHS depth:4
 . . . . . -name:Buy Orbital Mechanics For Dummies
 . . . . . -added:2014-12-10 20:43:11
-. . . . . -available:false
-. . . . . -blocked:true
-. . . . . -completed:true
+. . . . . -available:true
+. . . . . -blocked:false
+. . . . . -completed:false
 . . . . . -completion:null
 . . . . . -contextName:Buy
 . . . . . -deferDate:null
@@ -125,7 +125,7 @@ Folder id:__%%RootFolder depth:0
 . . . . . -flagged:false
 . . . . . -modified:2014-12-10 21:05:27
 . . . . . -projectTask:false
-. . . . . -remaining:false
+. . . . . -remaining:true
 . . . . . -sequential:false
 . . . . . -taskCount:0
 . . . . . -type:Task
@@ -134,9 +134,9 @@ Folder id:__%%RootFolder depth:0
 . . . . Task id:p8QFrZltWq7 depth:4
 . . . . . -name:Read Orbital Mechanics For Dummies
 . . . . . -added:2014-12-10 20:43:34
-. . . . . -available:false
-. . . . . -blocked:true
-. . . . . -completed:true
+. . . . . -available:true
+. . . . . -blocked:false
+. . . . . -completed:false
 . . . . . -completion:null
 . . . . . -contextName:On Earth
 . . . . . -deferDate:null
@@ -145,7 +145,7 @@ Folder id:__%%RootFolder depth:0
 . . . . . -flagged:false
 . . . . . -modified:2014-12-10 21:05:40
 . . . . . -projectTask:false
-. . . . . -remaining:false
+. . . . . -remaining:true
 . . . . . -sequential:false
 . . . . . -taskCount:0
 . . . . . -type:Task
@@ -153,25 +153,25 @@ Folder id:__%%RootFolder depth:0
 . . . . . -note:null
 . . . Project id:eNm12pdvUr3 depth:3
 . . . . -name:Build Ship
-. . . . -active:false
+. . . . -active:true
 . . . . -added:null
-. . . . -completed:true
+. . . . -completed:false
 . . . . -completion:null
 . . . . -contextName:null>
 . . . . -deferDate:null
-. . . . -dropped:true
+. . . . -dropped:false
 . . . . -dueDate:null
 . . . . -estimatedMinutes:-1
 . . . . -flagged:false
 . . . . -modified:null
 . . . . -onHold:false
-. . . . -remaining:false
+. . . . -remaining:true
 . . . . -sequential:true
 . . . . -singleActionList:false
-. . . . -status:dropped
+. . . . -status:active
 . . . . -taskCount:4
 . . . . -type:Project
-. . . . -uncompletedTaskCount:0
+. . . . -uncompletedTaskCount:4
 . . . . -unflagged:true
 . . . . -note:null
 . . . . Task id:naH_W8m2-wo depth:4
@@ -179,7 +179,7 @@ Folder id:__%%RootFolder depth:0
 . . . . . -added:2014-12-10 21:05:59
 . . . . . -available:false
 . . . . . -blocked:true
-. . . . . -completed:true
+. . . . . -completed:false
 . . . . . -completion:null
 . . . . . -contextName:Buy
 . . . . . -deferDate:2024-12-01 00:00:00
@@ -188,18 +188,18 @@ Folder id:__%%RootFolder depth:0
 . . . . . -flagged:true
 . . . . . -modified:2014-12-10 22:58:07
 . . . . . -projectTask:false
-. . . . . -remaining:false
+. . . . . -remaining:true
 . . . . . -sequential:false
 . . . . . -taskCount:2
 . . . . . -type:Task
-. . . . . -uncompletedTaskCount:0
+. . . . . -uncompletedTaskCount:2
 . . . . . -note:null
 . . . . . Task id:f3K2ksOMIew depth:5
 . . . . . . -name:Buy Rocket Ship Kit
 . . . . . . -added:2014-12-10 20:43:51
 . . . . . . -available:false
 . . . . . . -blocked:true
-. . . . . . -completed:true
+. . . . . . -completed:false
 . . . . . . -completion:null
 . . . . . . -contextName:Buy
 . . . . . . -deferDate:2024-12-01 00:00:00
@@ -208,7 +208,7 @@ Folder id:__%%RootFolder depth:0
 . . . . . . -flagged:true
 . . . . . . -modified:2014-12-10 21:05:53
 . . . . . . -projectTask:false
-. . . . . . -remaining:false
+. . . . . . -remaining:true
 . . . . . . -sequential:false
 . . . . . . -taskCount:0
 . . . . . . -type:Task
@@ -219,7 +219,7 @@ Folder id:__%%RootFolder depth:0
 . . . . . . -added:2014-12-10 20:44:20
 . . . . . . -available:false
 . . . . . . -blocked:true
-. . . . . . -completed:true
+. . . . . . -completed:false
 . . . . . . -completion:null
 . . . . . . -contextName:Buy
 . . . . . . -deferDate:2024-12-01 00:00:00
@@ -228,7 +228,7 @@ Folder id:__%%RootFolder depth:0
 . . . . . . -flagged:true
 . . . . . . -modified:2014-12-10 21:06:36
 . . . . . . -projectTask:false
-. . . . . . -remaining:false
+. . . . . . -remaining:true
 . . . . . . -sequential:false
 . . . . . . -taskCount:0
 . . . . . . -type:Task
@@ -239,7 +239,7 @@ Folder id:__%%RootFolder depth:0
 . . . . . -added:2014-12-10 20:45:02
 . . . . . -available:false
 . . . . . -blocked:true
-. . . . . -completed:true
+. . . . . -completed:false
 . . . . . -completion:null
 . . . . . -contextName:On Earth
 . . . . . -deferDate:null
@@ -248,7 +248,7 @@ Folder id:__%%RootFolder depth:0
 . . . . . -flagged:false
 . . . . . -modified:2014-12-10 21:06:42
 . . . . . -projectTask:false
-. . . . . -remaining:false
+. . . . . -remaining:true
 . . . . . -sequential:false
 . . . . . -taskCount:0
 . . . . . -type:Task
@@ -259,7 +259,7 @@ Folder id:__%%RootFolder depth:0
 . . . . . -added:2014-12-10 20:45:10
 . . . . . -available:false
 . . . . . -blocked:true
-. . . . . -completed:true
+. . . . . -completed:false
 . . . . . -completion:null
 . . . . . -contextName:On Earth
 . . . . . -deferDate:null
@@ -268,7 +268,7 @@ Folder id:__%%RootFolder depth:0
 . . . . . -flagged:false
 . . . . . -modified:2014-12-10 21:06:47
 . . . . . -projectTask:false
-. . . . . -remaining:false
+. . . . . -remaining:true
 . . . . . -sequential:false
 . . . . . -taskCount:0
 . . . . . -type:Task
@@ -279,7 +279,7 @@ Folder id:__%%RootFolder depth:0
 . . . . . -added:2014-12-10 20:45:43
 . . . . . -available:false
 . . . . . -blocked:true
-. . . . . -completed:true
+. . . . . -completed:false
 . . . . . -completion:null
 . . . . . -contextName:On Earth
 . . . . . -deferDate:null
@@ -288,7 +288,7 @@ Folder id:__%%RootFolder depth:0
 . . . . . -flagged:false
 . . . . . -modified:2014-12-10 21:06:51
 . . . . . -projectTask:false
-. . . . . -remaining:false
+. . . . . -remaining:true
 . . . . . -sequential:false
 . . . . . -taskCount:0
 . . . . . -type:Task
@@ -296,34 +296,34 @@ Folder id:__%%RootFolder depth:0
 . . . . . -note:null
 . . Folder id:aCsVUSRu7ib depth:2
 . . . -name:Launch Rocket Ship
-. . . -active:false
+. . . -active:true
 . . . -added:2014-12-10 19:31:23
-. . . -dropped:true
+. . . -dropped:false
 . . . -folderCount:0
 . . . -modified:2014-12-10 19:33:07
 . . . -projectCount:2
 . . . -type:Folder
 . . . Project id:bRsFIjNwZbJ depth:3
 . . . . -name:Prepare For Launch
-. . . . -active:false
+. . . . -active:true
 . . . . -added:null
-. . . . -completed:true
+. . . . -completed:false
 . . . . -completion:null
 . . . . -contextName:null>
 . . . . -deferDate:null
-. . . . -dropped:true
+. . . . -dropped:false
 . . . . -dueDate:null
 . . . . -estimatedMinutes:-1
 . . . . -flagged:false
 . . . . -modified:null
 . . . . -onHold:false
-. . . . -remaining:false
+. . . . -remaining:true
 . . . . -sequential:true
 . . . . -singleActionList:false
-. . . . -status:dropped
+. . . . -status:active
 . . . . -taskCount:3
 . . . . -type:Project
-. . . . -uncompletedTaskCount:0
+. . . . -uncompletedTaskCount:3
 . . . . -unflagged:true
 . . . . -note:null
 . . . . Task id:nS1r64c-vc1 depth:4
@@ -331,7 +331,7 @@ Folder id:__%%RootFolder depth:0
 . . . . . -added:2014-12-10 20:49:34
 . . . . . -available:false
 . . . . . -blocked:true
-. . . . . -completed:true
+. . . . . -completed:false
 . . . . . -completion:null
 . . . . . -contextName:Buy
 . . . . . -deferDate:null
@@ -340,18 +340,18 @@ Folder id:__%%RootFolder depth:0
 . . . . . -flagged:false
 . . . . . -modified:2014-12-10 21:07:13
 . . . . . -projectTask:false
-. . . . . -remaining:false
+. . . . . -remaining:true
 . . . . . -sequential:false
 . . . . . -taskCount:3
 . . . . . -type:Task
-. . . . . -uncompletedTaskCount:0
+. . . . . -uncompletedTaskCount:3
 . . . . . -note:null
 . . . . . Task id:o3gAKpDzVl_ depth:5
 . . . . . . -name:Buy Space Suit - 34" Waist (eBay?, Amazon?)
 . . . . . . -added:2014-12-10 20:46:01
-. . . . . . -available:false
-. . . . . . -blocked:true
-. . . . . . -completed:true
+. . . . . . -available:true
+. . . . . . -blocked:false
+. . . . . . -completed:false
 . . . . . . -completion:null
 . . . . . . -contextName:Buy
 . . . . . . -deferDate:null
@@ -360,7 +360,7 @@ Folder id:__%%RootFolder depth:0
 . . . . . . -flagged:false
 . . . . . . -modified:2014-12-10 22:32:06
 . . . . . . -projectTask:false
-. . . . . . -remaining:false
+. . . . . . -remaining:true
 . . . . . . -sequential:false
 . . . . . . -taskCount:0
 . . . . . . -type:Task
@@ -369,9 +369,9 @@ Folder id:__%%RootFolder depth:0
 . . . . . Task id:aKfI5xfBuvP depth:5
 . . . . . . -name:Buy Pop-Tarts (approx 2000)
 . . . . . . -added:2014-12-10 20:47:32
-. . . . . . -available:false
-. . . . . . -blocked:true
-. . . . . . -completed:true
+. . . . . . -available:true
+. . . . . . -blocked:false
+. . . . . . -completed:false
 . . . . . . -completion:null
 . . . . . . -contextName:Buy
 . . . . . . -deferDate:null
@@ -380,7 +380,7 @@ Folder id:__%%RootFolder depth:0
 . . . . . . -flagged:false
 . . . . . . -modified:2014-12-10 22:32:06
 . . . . . . -projectTask:false
-. . . . . . -remaining:false
+. . . . . . -remaining:true
 . . . . . . -sequential:false
 . . . . . . -taskCount:0
 . . . . . . -type:Task
@@ -389,9 +389,9 @@ Folder id:__%%RootFolder depth:0
 . . . . . Task id:keJVgAldMJM depth:5
 . . . . . . -name:Buy Tea - Earl Grey (Hot)
 . . . . . . -added:2014-12-10 20:48:13
-. . . . . . -available:false
-. . . . . . -blocked:true
-. . . . . . -completed:true
+. . . . . . -available:true
+. . . . . . -blocked:false
+. . . . . . -completed:false
 . . . . . . -completion:null
 . . . . . . -contextName:Buy
 . . . . . . -deferDate:null
@@ -400,7 +400,7 @@ Folder id:__%%RootFolder depth:0
 . . . . . . -flagged:false
 . . . . . . -modified:2014-12-10 22:32:06
 . . . . . . -projectTask:false
-. . . . . . -remaining:false
+. . . . . . -remaining:true
 . . . . . . -sequential:false
 . . . . . . -taskCount:0
 . . . . . . -type:Task
@@ -411,7 +411,7 @@ Folder id:__%%RootFolder depth:0
 . . . . . -added:2014-12-10 20:49:24
 . . . . . -available:false
 . . . . . -blocked:true
-. . . . . -completed:true
+. . . . . -completed:false
 . . . . . -completion:null
 . . . . . -contextName:On Earth
 . . . . . -deferDate:null
@@ -420,7 +420,7 @@ Folder id:__%%RootFolder depth:0
 . . . . . -flagged:false
 . . . . . -modified:2014-12-10 21:07:20
 . . . . . -projectTask:false
-. . . . . -remaining:false
+. . . . . -remaining:true
 . . . . . -sequential:false
 . . . . . -taskCount:0
 . . . . . -type:Task
@@ -431,7 +431,7 @@ Folder id:__%%RootFolder depth:0
 . . . . . -added:2014-12-10 20:51:38
 . . . . . -available:false
 . . . . . -blocked:true
-. . . . . -completed:true
+. . . . . -completed:false
 . . . . . -completion:null
 . . . . . -contextName:On Earth
 . . . . . -deferDate:null
@@ -440,7 +440,7 @@ Folder id:__%%RootFolder depth:0
 . . . . . -flagged:false
 . . . . . -modified:2014-12-10 21:07:20
 . . . . . -projectTask:false
-. . . . . -remaining:false
+. . . . . -remaining:true
 . . . . . -sequential:false
 . . . . . -taskCount:0
 . . . . . -type:Task
@@ -448,33 +448,33 @@ Folder id:__%%RootFolder depth:0
 . . . . . -note:null
 . . . Project id:cjyoX1RTVjv depth:3
 . . . . -name:Launch
-. . . . -active:false
+. . . . -active:true
 . . . . -added:null
-. . . . -completed:true
+. . . . -completed:false
 . . . . -completion:null
 . . . . -contextName:null>
 . . . . -deferDate:null
-. . . . -dropped:true
+. . . . -dropped:false
 . . . . -dueDate:2025-12-01 09:00:00
 . . . . -estimatedMinutes:-1
 . . . . -flagged:false
 . . . . -modified:null
 . . . . -onHold:false
-. . . . -remaining:false
+. . . . -remaining:true
 . . . . -sequential:true
 . . . . -singleActionList:false
-. . . . -status:dropped
+. . . . -status:active
 . . . . -taskCount:3
 . . . . -type:Project
-. . . . -uncompletedTaskCount:0
+. . . . -uncompletedTaskCount:3
 . . . . -unflagged:true
 . . . . -note:null
 . . . . Task id:iRQNsA4IjhV depth:4
 . . . . . -name:Light blue touch-paper
 . . . . . -added:2014-12-10 20:49:59
-. . . . . -available:false
-. . . . . -blocked:true
-. . . . . -completed:true
+. . . . . -available:true
+. . . . . -blocked:false
+. . . . . -completed:false
 . . . . . -completion:null
 . . . . . -contextName:On Earth
 . . . . . -deferDate:null
@@ -483,7 +483,7 @@ Folder id:__%%RootFolder depth:0
 . . . . . -flagged:false
 . . . . . -modified:2014-12-10 21:07:29
 . . . . . -projectTask:false
-. . . . . -remaining:false
+. . . . . -remaining:true
 . . . . . -sequential:false
 . . . . . -taskCount:0
 . . . . . -type:Task
@@ -494,7 +494,7 @@ Folder id:__%%RootFolder depth:0
 . . . . . -added:2014-12-10 20:50:20
 . . . . . -available:false
 . . . . . -blocked:true
-. . . . . -completed:true
+. . . . . -completed:false
 . . . . . -completion:null
 . . . . . -contextName:On Earth
 . . . . . -deferDate:null
@@ -503,7 +503,7 @@ Folder id:__%%RootFolder depth:0
 . . . . . -flagged:false
 . . . . . -modified:2014-12-10 21:07:29
 . . . . . -projectTask:false
-. . . . . -remaining:false
+. . . . . -remaining:true
 . . . . . -sequential:false
 . . . . . -taskCount:0
 . . . . . -type:Task
@@ -514,7 +514,7 @@ Folder id:__%%RootFolder depth:0
 . . . . . -added:2014-12-10 20:50:42
 . . . . . -available:false
 . . . . . -blocked:true
-. . . . . -completed:true
+. . . . . -completed:false
 . . . . . -completion:null
 . . . . . -contextName:On Earth
 . . . . . -deferDate:null
@@ -523,7 +523,7 @@ Folder id:__%%RootFolder depth:0
 . . . . . -flagged:false
 . . . . . -modified:2014-12-10 21:07:29
 . . . . . -projectTask:false
-. . . . . -remaining:false
+. . . . . -remaining:true
 . . . . . -sequential:false
 . . . . . -taskCount:0
 . . . . . -type:Task
@@ -531,33 +531,33 @@ Folder id:__%%RootFolder depth:0
 . . . . . -note:null
 . . Project id:hyftpdomj2t depth:2
 . . . -name:Flight
-. . . -active:false
+. . . -active:true
 . . . -added:null
-. . . -completed:true
+. . . -completed:false
 . . . -completion:null
 . . . -contextName:null>
 . . . -deferDate:null
-. . . -dropped:true
+. . . -dropped:false
 . . . -dueDate:null
 . . . -estimatedMinutes:-1
 . . . -flagged:false
 . . . -modified:null
 . . . -onHold:false
-. . . -remaining:false
+. . . -remaining:true
 . . . -sequential:true
 . . . -singleActionList:false
-. . . -status:dropped
+. . . -status:active
 . . . -taskCount:5
 . . . -type:Project
-. . . -uncompletedTaskCount:0
+. . . -uncompletedTaskCount:5
 . . . -unflagged:true
 . . . -note:null
 . . . Task id:ihgPCuXPmJw depth:3
 . . . . -name:Give ships computer a name (Dave? Mother?)
 . . . . -added:2014-12-10 20:52:02
-. . . . -available:false
-. . . . -blocked:true
-. . . . -completed:true
+. . . . -available:true
+. . . . -blocked:false
+. . . . -completed:false
 . . . . -completion:null
 . . . . -contextName:In Flight
 . . . . -deferDate:null
@@ -566,7 +566,7 @@ Folder id:__%%RootFolder depth:0
 . . . . -flagged:false
 . . . . -modified:2014-12-10 22:41:36
 . . . . -projectTask:false
-. . . . -remaining:false
+. . . . -remaining:true
 . . . . -sequential:false
 . . . . -taskCount:0
 . . . . -type:Task
@@ -577,7 +577,7 @@ Folder id:__%%RootFolder depth:0
 . . . . -added:2014-12-10 20:52:46
 . . . . -available:false
 . . . . -blocked:true
-. . . . -completed:true
+. . . . -completed:false
 . . . . -completion:null
 . . . . -contextName:In Flight
 . . . . -deferDate:null
@@ -586,7 +586,7 @@ Folder id:__%%RootFolder depth:0
 . . . . -flagged:false
 . . . . -modified:2014-12-10 21:08:49
 . . . . -projectTask:false
-. . . . -remaining:false
+. . . . -remaining:true
 . . . . -sequential:false
 . . . . -taskCount:0
 . . . . -type:Task
@@ -597,7 +597,7 @@ Folder id:__%%RootFolder depth:0
 . . . . -added:2014-12-10 20:54:54
 . . . . -available:false
 . . . . -blocked:true
-. . . . -completed:true
+. . . . -completed:false
 . . . . -completion:null
 . . . . -contextName:In Flight
 . . . . -deferDate:null
@@ -606,7 +606,7 @@ Folder id:__%%RootFolder depth:0
 . . . . -flagged:false
 . . . . -modified:2014-12-10 21:08:49
 . . . . -projectTask:false
-. . . . -remaining:false
+. . . . -remaining:true
 . . . . -sequential:false
 . . . . -taskCount:0
 . . . . -type:Task
@@ -617,7 +617,7 @@ Folder id:__%%RootFolder depth:0
 . . . . -added:2014-12-10 20:56:51
 . . . . -available:false
 . . . . -blocked:true
-. . . . -completed:true
+. . . . -completed:false
 . . . . -completion:null
 . . . . -contextName:In Flight
 . . . . -deferDate:null
@@ -626,7 +626,7 @@ Folder id:__%%RootFolder depth:0
 . . . . -flagged:false
 . . . . -modified:2014-12-10 21:08:49
 . . . . -projectTask:false
-. . . . -remaining:false
+. . . . -remaining:true
 . . . . -sequential:false
 . . . . -taskCount:0
 . . . . -type:Task
@@ -637,7 +637,7 @@ Folder id:__%%RootFolder depth:0
 . . . . -added:2014-12-10 20:56:19
 . . . . -available:false
 . . . . -blocked:true
-. . . . -completed:true
+. . . . -completed:false
 . . . . -completion:null
 . . . . -contextName:In Flight
 . . . . -deferDate:null
@@ -646,7 +646,7 @@ Folder id:__%%RootFolder depth:0
 . . . . -flagged:false
 . . . . -modified:2014-12-10 21:08:49
 . . . . -projectTask:false
-. . . . -remaining:false
+. . . . -remaining:true
 . . . . -sequential:false
 . . . . -taskCount:0
 . . . . -type:Task
@@ -654,33 +654,33 @@ Folder id:__%%RootFolder depth:0
 . . . . -note:null
 . . Project id:cIoTLyW40r0 depth:2
 . . . -name:Landing
-. . . -active:false
+. . . -active:true
 . . . -added:null
-. . . -completed:true
+. . . -completed:false
 . . . -completion:null
 . . . -contextName:null>
 . . . -deferDate:null
-. . . -dropped:true
+. . . -dropped:false
 . . . -dueDate:2027-12-01 09:00:00
 . . . -estimatedMinutes:-1
 . . . -flagged:false
 . . . -modified:null
 . . . -onHold:false
-. . . -remaining:false
+. . . -remaining:true
 . . . -sequential:true
 . . . -singleActionList:false
-. . . -status:dropped
+. . . -status:active
 . . . -taskCount:4
 . . . -type:Project
-. . . -uncompletedTaskCount:0
+. . . -uncompletedTaskCount:4
 . . . -unflagged:true
 . . . -note:null
 . . . Task id:gViYTFGgIkF depth:3
 . . . . -name:AAAAAAARGH!
 . . . . -added:2014-12-10 20:55:19
-. . . . -available:false
-. . . . -blocked:true
-. . . . -completed:true
+. . . . -available:true
+. . . . -blocked:false
+. . . . -completed:false
 . . . . -completion:null
 . . . . -contextName:OnMars
 . . . . -deferDate:null
@@ -689,7 +689,7 @@ Folder id:__%%RootFolder depth:0
 . . . . -flagged:false
 . . . . -modified:2014-12-10 21:09:11
 . . . . -projectTask:false
-. . . . -remaining:false
+. . . . -remaining:true
 . . . . -sequential:false
 . . . . -taskCount:0
 . . . . -type:Task
@@ -700,7 +700,7 @@ Folder id:__%%RootFolder depth:0
 . . . . -added:2014-12-10 20:55:48
 . . . . -available:false
 . . . . -blocked:true
-. . . . -completed:true
+. . . . -completed:false
 . . . . -completion:null
 . . . . -contextName:OnMars
 . . . . -deferDate:null
@@ -709,7 +709,7 @@ Folder id:__%%RootFolder depth:0
 . . . . -flagged:false
 . . . . -modified:2014-12-10 21:09:11
 . . . . -projectTask:false
-. . . . -remaining:false
+. . . . -remaining:true
 . . . . -sequential:false
 . . . . -taskCount:0
 . . . . -type:Task
@@ -720,7 +720,7 @@ Folder id:__%%RootFolder depth:0
 . . . . -added:2014-12-10 20:55:35
 . . . . -available:false
 . . . . -blocked:true
-. . . . -completed:true
+. . . . -completed:false
 . . . . -completion:null
 . . . . -contextName:OnMars
 . . . . -deferDate:null
@@ -729,7 +729,7 @@ Folder id:__%%RootFolder depth:0
 . . . . -flagged:false
 . . . . -modified:2014-12-10 21:09:11
 . . . . -projectTask:false
-. . . . -remaining:false
+. . . . -remaining:true
 . . . . -sequential:false
 . . . . -taskCount:0
 . . . . -type:Task
@@ -740,7 +740,7 @@ Folder id:__%%RootFolder depth:0
 . . . . -added:2014-12-10 20:59:43
 . . . . -available:false
 . . . . -blocked:true
-. . . . -completed:true
+. . . . -completed:false
 . . . . -completion:null
 . . . . -contextName:OnMars
 . . . . -deferDate:null
@@ -749,7 +749,7 @@ Folder id:__%%RootFolder depth:0
 . . . . -flagged:false
 . . . . -modified:2014-12-10 21:09:11
 . . . . -projectTask:false
-. . . . -remaining:false
+. . . . -remaining:true
 . . . . -sequential:false
 . . . . -taskCount:0
 . . . . -type:Task
