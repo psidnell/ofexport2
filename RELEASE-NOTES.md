@@ -4,6 +4,8 @@
 
 **[Development Version](https://github.com/psidnell/ofexport2/archive/master.zip)**
 
+**[1.0.14 (2014-12-14)](https://github.com/psidnell/ofexport2/archive/ofexport-v2-1.0.14.zip)**
+
 - Fixed a date range bug.
 - Made expression date format configurable.
 - Internal tidying.
