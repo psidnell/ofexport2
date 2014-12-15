@@ -24,9 +24,10 @@
             - [Useful Filtering Attributes](DOCUMENTATION.md#useful-filtering-attributes)
         - [Output and Formats](DOCUMENTATION.md#output-and-formats)
         - [Sorting](DOCUMENTATION.md#sorting)
-        - [Pruning](DOCUMENTATION.md#pruning)
-        - [Simplifying](DOCUMENTATION.md#simplifying)
-        - [Flattening](DOCUMENTATION.md#flattening)
+        - [Restructuring the Output](DOCUMENTATION.md#restructuring-the-output)
+            - [Pruning](DOCUMENTATION.md#pruning)
+            - [Simplifying](DOCUMENTATION.md#simplifying)
+            - [Flattening](DOCUMENTATION.md#flattening)
         - [Inbox and No Context](DOCUMENTATION.md#inbox-and-no-context)
         - [Command Line Options](DOCUMENTATION.md#command-line-options)
         - [Full Attribute List](DOCUMENTATION.md#full-attribute-list)
@@ -121,7 +122,7 @@ To get the required files, either:
 
 - Download a stable version from a link in the [Release Notes](RELEASE-NOTES.md).
 - Download the current development version: [master.zip](https://github.com/psidnell/ofexport2/archive/master.zip)
-- Check out the current development so you can take updates with git.
+- Check out the current development branch so you can take updates with git.
 
 If you downloaded a zip, unzip it and move/rename the root folder as you wish.
 
@@ -159,11 +160,11 @@ Simply delete the ofexport2 folder and remove the lines you added to your .bash_
 
 ## Quick Start
 
-Simply typing:
+Typing:
 
     of2
 
-Will print the entire project hierarchy, for example:
+will print the entire project hierarchy, for example:
 
     Get to Mars
       Build a Rocket Ship
@@ -250,7 +251,7 @@ This outputs the following:
           
 So far we've just seen tasks in their project hierarchy. To see them in their context hierarchy add the "-c" option:
 
-    of2 -c -cn 'Buy'
+    of2 -c -cn Buy
 
 This isolates the "Buy" Context within the Context hierarchy:
 
@@ -291,9 +292,39 @@ Changing the file name suffix changes the format of the file, other alternatives
 
 ## Advanced Usage
 
+### Filtering
+
 The basic options we've seen so far (like -flagged) are called **filters** and they operate on **attributes** of the items in the OmniFocus database.
 
-All the basic options are shorthand for more complex filters. For example the -flagged option is actually equivalent to:
+Advanced queries can be assembled with filters:
+
+- Filters are used to limit what Folders, Projects, Tasks or Contexts appear in the output.
+- Filters can be applied to specific node types (Folders, Projects etc.)
+- Filters can be simple like a text search.
+- Filters can take complex expressions that make use of various attributes of an item.
+- Filters can either include items of interest or exclude unwanted items.
+- Filters can select a just a node, or a node and all those beneath it.
+- Any number of filters can be used.
+- Filters are executed in order, each filter is run on the results of the last, thus filters can only reduce what appears in the output.
+
+There is a pattern to the filter options. Each has two letters with the first indicating what node type the filter operates on:
+
+- **-pi**: A Project filter.
+- **-ti**: A Task filter.
+- **-fi**: A Folder filter.
+- **-ci**: A Context filter.
+- **-ai**: Filter for all node types.
+
+The second letter of the filter indicates it's behaviour:
+
+- **-ti**: An include Task filter.
+- **-tx**: An exclude Task filter.
+- **-tn**: A Task name filter.
+- **-tc**: A cascading Task filter.
+
+All filter types are available for all node types. Their meaning is described in the following sections.
+
+The basic options we saw earlier are shorthand for more complex filters. For example the -flagged option is actually equivalent to:
 
     of2 -ti flagged
 
@@ -301,7 +332,7 @@ The '-ti' option means include tasks and 'flagged' is an attribute of a tasks.
 
 Filters can be used in combination:
 
-    of2 -ti 'flagged' -ti 'available'
+    of2 -ti flagged -ti available
 
 Filter arguments are expressions (written in [OGNL](http://commons.apache.org/proper/commons-ognl/) syntax), here we're using one filter with an expression that uses the flagged and available attributes:
 
@@ -327,26 +358,13 @@ The following show the basic options and their equivalent specific filters with 
     of2 -completed
     of2 -ti completed
 
-### Filtering
-
-Advanced queries can be assembled with filters:
-
-- Filters are used to limit what Folders, Projects, Tasks or Contexts appear in the output.
-- Filters can be applied to specific node types (Folders, Projects etc.)
-- Filters can be simple like a text search.
-- Filters can take complex expressions that make use of various attributes of an item.
-- Filters can either include items of interest or exclude unwanted items.
-- Filters can select a just a node, or a node and all those beneath it.
-- Any number of filters can be used.
-- Filters are executed in order, each filter is run on the results of the last, thus filters can only reduce what appears in the output.
-
 #### Project vs Context Mode
 
 Normally ofexport2 is in project mode, i.e. the project hierachy is used for filterng and output:
 
     of2 -available
 
-By using the "-c" option, the tool operates in context mode:
+By using the "-c" option, the tool operates in context mode and shows only the context hierarchy:
 
     of2 -c -available
 
@@ -477,46 +495,43 @@ The formats of dates that are accepted in these filters are:
 
 #### Useful Filtering Attributes ####
 
-Filtering **Tasks/Projects** on **status**:
+Filtering **Tasks/Projects** on **status**, use the Task or Project filtering options:
 
     of2 -ti flagged
-    of2 -ti unflagged
-    of2 -ti '!flagged
-    of2 -tx flagged
-    of2 -pi flagged
     of2 -pi unflagged
-    of2 -pc flagged
 
-Filtering **Tasks/Projects** on **availability**:
+Filtering **Tasks/Projects** on **availability**, use the Task or Project filtering options:
 
     of2 -ti all
     of2 -ti available
-    of2 -ti remaining
-    of2 -ti completed
-    of2 -pi remaining
-    of2 -pc available
+    of2 -pc remaining
+    of2 -pc completed
 
-Filtering **Tasks/Projects** on **duration**:
+Filtering **Tasks/Projects** on **duration**, use the Task or Project filtering options:
 
     of2 -ti 'estimatedMinutes > 20'
-    of2 -ti 'estimatedMinutes==-1' (unestimated)
-    of2 -pi 'estimatedMinutes > 5 && estimatedMinutes < 10'
+    of2 -ti 'estimatedMinutes==-1'
+    of2 -pc 'estimatedMinutes > 5 && estimatedMinutes < 10'
 
-Filtering **Projects** on their **status**:
+*Note: the special -1 value means unestimated.*
 
-    of2 -pi active
+Filtering **Projects** on their **status**, use the Project filtering options:
+
+    of2 -pc active
     of2 -pc onHold
-    of2 -px completed
-    of2 -pi dropped
+    of2 -pc completed
+    of2 -pc dropped
 
-*Note: stalled and pending are not yet supported*
+*Note: stalled and pending are not yet supported.*
 
 Filtering items by their **text**/**note**:
 
-    of2 -c -cn 'exact name of context'
+    of2 -c -cn "exact name of context"
     of2 -pc 'name.contains("text in folder name")'
     of2 -fc 'name.matches(".*regularExpressionOnFolderName.*")'
     of2 -ti 'note!=null && note.contains("stuff")'
+
+*Note: only Projects and Tasks have notes, all nodes have a name.*
 
 Filtering **Tasks**/**Projects** by **dates**:
 
@@ -529,10 +544,12 @@ Filtering **Tasks**/**Projects** by **dates**:
     of2 -ti '!completed && due.onOrBefore("2015-01-01")'
     of2 -ti '!completed && due.soon'
 
-Filtering **Folders** by **status**:
+*Note: all nodes have an added and modified date, only Projects and Tasks have due, defer and completion/completed.* 
 
-     of2 -fi active
-     of2 -fx dropped
+Filtering **Folders** by **status**, use the Folder filtering options:
+
+     of2 -fc active
+     of2 -fc dropped
 
 Filtering **Contexts** by **status**:
 
@@ -547,9 +564,9 @@ Useful **Combinations**:
     of2 -ti 'completion.between("mon","today")'
     of2 -ti 'due.set && remaining' -F -ts due
 
-What I do to generate weekly reports. I want a flattened list of work tasks completed this week:
+This is how I generate weekly reports. I want a simplified list of work tasks (excluding routine ones) completed this week and sorted by completion date:
 
-    of2 -fn 'Work' -px 'name.contains("Routine")' -ti 'completion.between("mon","today")' -p -F -f report -O ~/Desktop/Report.taskpaper
+    of2 -fn 'Work' -px 'name.contains("Routine")' -ti 'completion.between("mon","today")' -p -S -f report -O ~/Desktop/Report.taskpaper
 
 ### Output and Formats
 
@@ -581,6 +598,8 @@ It's possible to modify these or add your own.
 
 ### Sorting
 
+The output is always sorted after the filters are executed.
+
 The natural sort order of items is based on their position in OmniFocus. It's possible to specify
 any attribute as the one to use for an item type:
 
@@ -589,7 +608,7 @@ any attribute as the one to use for an item type:
 
 The above sorts tasks by their name, with the second being a reverse sort.
 
-It's possible to have chain the sorts much like filters:
+It's possible to specify several attributes for sorting:
 
     of2 -completed -ts completion -ts name
 
@@ -601,17 +620,42 @@ It's possible to sort by any attribute, including flagged status. The following 
 
     of2 -duesoon -ts r:flagged -ts due
 
-### Pruning
+### Restructuring the Output
+
+There are several special filters that restructure the output to make it simpler or more readable.
+
+It's worth remembering that filters are executed in order and that if a FilterA matches on a node and FilterB eliminates it, you will get very different output if you reverse them.
+
+#### Pruning
 
 Sometimes the output is cluttered with empty Contexts, Folders or Projects that you want to keep in OmniFocus but not see in the output.
 
 Using the **-p** option eliminates them.
 
-### Simplifying
+If you had:
+
+    Folder 1
+      Project
+	    Task 1
+	    Task 2
+	      Sub Task
+    Folder 2
+      Empty Project
+      Empty Folder
+	  
+You would be left with:
+
+    Folder 1
+      Project
+	    Task 1
+	    Task 2
+	      Sub Task
+
+#### Simplifying
 
 Sometimes what is a useful Folder/Context hierarchy in OmniFocus ends up making reports look cluttered.
 
-The **-S** option simplifies the nested the hierarchy to just leaf Folder/Projects/Contexts and lifts sub tasks up to the level of their parent.
+The **-S** option simplifies the nested hierarchy to just leaf Folder/Projects/Contexts and lifts sub tasks up to the level of their parent.
 
 All projects and contexts are moved to the root level, and sub tasks moved up to the level of their parent.
 
@@ -657,7 +701,7 @@ Would give us:
       [ ] Plant flag due:2027-12-01
       [ ] See if rocks made of polystyrene due:2027-12-01
 
-### Flattening
+#### Flattening
 
 Flattening with **-F** is an extreme form of simplifying. All existing hierachies are erased leaving a flat list of tasks under a new Project/Context called "Tasks".
 
@@ -727,7 +771,7 @@ It's possible to override values in config.properties from the command line, for
 
     of2 -D 'dueSoon=2d' -ti dueSoon
 
-### Tips
+### Tips 
 
 #### Include Projects with Tags
 
@@ -760,7 +804,8 @@ Here's one of my base scripts as an example.
 #### Solving Problems
 
 - Add filters one at time until you get the required output.
-- Use **-f debug** to use the debug format that lists all attributes of an items.
+- Start simple.
+- Use **-f debug** to use the debug format that lists all attributes of an items to help understand why an expression might not be working. 
 
 #### Modifying Node Values
 
