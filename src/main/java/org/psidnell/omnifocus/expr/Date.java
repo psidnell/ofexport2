@@ -129,15 +129,15 @@ public class Date extends ExpressionFunctions implements Comparable<Date> {
         return date.compareTo(o.date);
     }
 
-    public String getIcs () {
+    public String getIcs() {
         return ICS_LONG.format(date);
     }
 
-    public String getIcsAllDayStart () {
+    public String getIcsAllDayStart() {
         return ICS_SHORT.format(date);
     }
 
-    public String getIcsAllDayEnd () {
+    public String getIcsAllDayEnd() {
         GregorianCalendar cal = new GregorianCalendar();
         cal.setTime(date);
         cal.set(Calendar.DAY_OF_YEAR, cal.get(Calendar.DAY_OF_YEAR) + 1);

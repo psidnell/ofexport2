@@ -4,7 +4,9 @@
 
 **[Development Version](https://github.com/psidnell/ofexport2/archive/master.zip)**
 
-- Adding calendar output.
+**[1.0.16 (2014-12-18)](https://github.com/psidnell/ofexport2/archive/ofexport-v2-1.0.18.zip)**
+
+- Adding calendar (ICS) output.
 
 **[1.0.15 (2014-12-15)](https://github.com/psidnell/ofexport2/archive/ofexport-v2-1.0.15.zip)**
 

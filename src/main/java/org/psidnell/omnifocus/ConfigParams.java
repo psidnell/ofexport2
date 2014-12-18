@@ -56,7 +56,7 @@ public class ConfigParams {
         return alarmMinutes;
     }
 
-    public void setAlarmMinutes (int alarmMinutes) {
+    public void setAlarmMinutes(int alarmMinutes) {
         this.alarmMinutes = alarmMinutes;
     }
 }
