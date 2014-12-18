@@ -631,7 +631,13 @@ This behaviour can be configured on a per item basis by adding additional direct
 - **%of2 alarm X**: there will be a Calendar alarm X mins before the start.
 - **%of2 start HH:MM**: the Calendar start time will be HH:MM (24 hr clock) on the defer day.
 - **%of2 end HH:MM**: the Calendar start time will be HH:MM (24 hr clock) on the due day.
-  
+
+You may want to restrict the items that get exported to only those you explicitly intend to export, for example this will only export due soon items that use one of the directives above:
+
+    of2 -duesoon -ti 'note != null && note.contains("%of2")' -o cal.ics
+
+You can also run the tool several times exporting different projects to different calendar files so that in the Calender app you can enable/disable different projects.
+
 ### Sorting
 
 The output is always sorted after the filters are executed.
