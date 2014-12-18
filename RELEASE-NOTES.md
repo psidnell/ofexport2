@@ -4,6 +4,8 @@
 
 **[Development Version](https://github.com/psidnell/ofexport2/archive/master.zip)**
 
+- Adding calendar output.
+
 **[1.0.15 (2014-12-15)](https://github.com/psidnell/ofexport2/archive/ofexport-v2-1.0.15.zip)**
 
 - Changed executable name to of2, you need to delete the "of2" alias if you have one.
