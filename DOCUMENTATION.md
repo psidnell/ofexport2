@@ -619,18 +619,18 @@ There are some points to note about Calendar export:
 - Only Tasks with either a defer or due date will appear.
 - Tasks with only a due will appear at their due date/time.
 - Tasks with only a defer date will appear at their defer date/time.
-- Tasks with a defer and due date will appear from their defer to their due date/time.
-- Tasks will have an alarm on their start time (this is [configured](#configuration) with **alarmMinutes**).
+- Tasks with a defer and due date will appear at their due date/time.
+- Tasks will have an alarm on their start time.
 
-This behaviour can be configured on a per item basis by adding additional directives to the Tasks notes, each of which must be on it's own line:
+This behaviour can be configured globally in the [configuration](#configuration) or on a per item basis by adding additional directives to the Tasks notes.
 
-- **%of2 ondefer**: the Calendar item start and end time will be the OmniFocus defer time.
-- **%of2 ondue**: the Calendar item start and end time will be the OmniFocus due time.
-- **%of2 allday**: the Calendar item will be an all day event.
-- **%of2 noalarm**: there will be no Calendar alarm for the item.
-- **%of2 alarm X**: there will be a Calendar alarm X mins before the start.
-- **%of2 start HH:MM**: the Calendar start time will be HH:MM (24 hr clock) on the defer day.
-- **%of2 end HH:MM**: the Calendar start time will be HH:MM (24 hr clock) on the due day.
+Each directive must be on it's own line:
+
+- **%of2 start X** where **X** may be **due**, **defer** or a time **HH:MM**. Overrides the start time.
+- **%of2 end X** where **X** may be **due**, **defer** or a time **HH:MM**. Overrides the end time.
+- **%of2 alarm X** where **X** may be **true** or **false**. Turns alarm on/off.
+- **%of2 alarmMinutes X** where **X** is the number of minutes before the start time.
+- **%of2 allday X** where **X** may be **true** or **false**. Makes item an all day event.
 
 You may want to restrict the items that get exported to only those you explicitly intend to export, for example this will only export due soon items that use one of the directives above:
 

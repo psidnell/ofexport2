@@ -21,6 +21,7 @@ import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.psidnell.omnifocus.ConfigParams;
 import org.psidnell.omnifocus.expr.ExprAttribute;
 import org.psidnell.omnifocus.sqlite.SQLiteProperty;
 import org.psidnell.omnifocus.util.StringUtils;
@@ -32,10 +33,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 /**
  * @author psidnell
  *
- * Represents the attributes shared between a Project and a Task.
+ *         Represents the attributes shared between a Project and a Task.
  *
  */
-public abstract class CommonProjectAndTaskAttributes extends NodeImpl implements ProjectHierarchyNode, ContextHierarchyNode{
+public abstract class CommonProjectAndTaskAttributes extends NodeImpl implements ProjectHierarchyNode, ContextHierarchyNode {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CommonProjectAndTaskAttributes.class);
 
@@ -49,13 +50,12 @@ public abstract class CommonProjectAndTaskAttributes extends NodeImpl implements
     protected int estimatedMinutes = -1;
     protected ProjectHierarchyNode parent;
     protected List<Task> tasks = new LinkedList<>();
-    protected boolean onDefer = false;
-    protected boolean onDue = false;
-    protected boolean allDay = false;
-    protected boolean noAlarm = false;
-    protected String start;
-    protected String end;
-    protected String alarm;
+    protected int icsAlarmMinutes = 0;
+    protected boolean icsAlarm = false;
+    protected String icsStart;
+    protected String icsEnd;
+    protected boolean icsAllDay = false;
+    private boolean icsAttribsSet = false;
 
     @ExprAttribute(help = "number of tasks.")
     @JsonIgnore
@@ -93,7 +93,7 @@ public abstract class CommonProjectAndTaskAttributes extends NodeImpl implements
         return context == null ? null : context.getName();
     }
 
-    public void setContextName (String dummy) {
+    public void setContextName(String dummy) {
         // Keep Jackson happy.
     }
 
@@ -117,51 +117,48 @@ public abstract class CommonProjectAndTaskAttributes extends NodeImpl implements
     public void setNote(String note) {
         if (note != null) {
             this.note = toASCII(note);
-            extractAttributes(note);
         }
     }
 
-    private void extractAttributes(String text) {
-        String[] lines = text.split("\n");
-        for (String line : lines) {
-            line = line.trim();
-            if (line.startsWith("%of2")) {
-                line = line.substring(4, line.length()).trim();
-                String bits[] = line.split(" ");
-                if (bits.length >= 1){
-                    String command = bits[0];
-                    switch (command) {
-                        case "ondefer":
-                            onDefer = true;
-                            break;
-                        case "ondue":
-                            onDue = true;
-                            break;
-                        case "allday":
-                            allDay = true;
-                            break;
-                        case "noalarm":
-                            noAlarm = true;
-                            break;
-                        case "alarm":
-                            if (bits.length >= 2){
-                                alarm = bits[1];
+    private void extractIcsAttributes(String text) {
+
+        // The config and the note may be set in any order, must do this lazily
+
+        if (text != null && !icsAttribsSet) {
+            String[] lines = text.split("\n");
+            for (String line : lines) {
+                line = line.trim();
+                if (line.startsWith("%of2")) {
+                    line = line.substring(4, line.length()).trim();
+                    String bits[] = line.split(" ");
+                    if (bits.length == 2) {
+                        String command = bits[0];
+                        try {
+                            switch (command.toLowerCase()) {
+                                case "start":
+                                    icsStart = bits[1].trim();
+                                    break;
+                                case "end":
+                                    icsEnd = bits[1].trim();
+                                    break;
+                                case "alarm":
+                                    icsAlarm = Boolean.parseBoolean(bits[1].trim());
+                                    break;
+                                case "allday":
+                                    icsAllDay = Boolean.parseBoolean(bits[1].trim());
+                                    break;
+                                case "alarmminutes":
+                                    icsAlarmMinutes = Integer.parseInt(bits[1].trim());
+                                    break;
                             }
-                            break;
-                        case "start":
-                            if (bits.length >= 2){
-                                start=bits[1];
-                            }
-                            break;
-                        case "end":
-                            if (bits.length >= 2){
-                                end=bits[1];
-                            }
-                            break;
+                        } catch (NumberFormatException e) {
+                            LOGGER.error(e.getMessage());
+                        }
                     }
                 }
             }
         }
+        icsAttribsSet = true;
     }
 
     @SQLiteProperty(name = "effectiveDateToStart")
@@ -206,7 +203,7 @@ public abstract class CommonProjectAndTaskAttributes extends NodeImpl implements
         this.sequential = sequential;
     }
 
-    @SQLiteProperty (name="effectiveFlagged")
+    @SQLiteProperty(name = "effectiveFlagged")
     @ExprAttribute(help = "item is flagged.")
     public boolean isFlagged() {
         return flagged;
@@ -218,17 +215,17 @@ public abstract class CommonProjectAndTaskAttributes extends NodeImpl implements
 
     @JsonIgnore
     @ExprAttribute(help = "item is not flagged.")
-    public boolean isUnflagged () {
+    public boolean isUnflagged() {
         return !flagged;
     }
 
     @SQLiteProperty
-    @ExprAttribute(help="estimated minutes.")
-    public Integer getEstimatedMinutes () {
+    @ExprAttribute(help = "estimated minutes.")
+    public Integer getEstimatedMinutes() {
         return estimatedMinutes;
     }
 
-    public void setEstimatedMinutes (Integer estimatedMinutes) {
+    public void setEstimatedMinutes(Integer estimatedMinutes) {
         this.estimatedMinutes = estimatedMinutes == null ? -1 : estimatedMinutes;
     }
 
@@ -265,14 +262,13 @@ public abstract class CommonProjectAndTaskAttributes extends NodeImpl implements
         return ascii.toString();
     }
 
-
     @Override
     public void cascadeMarked() {
         setMarked(true);
         tasks.stream().forEach((t) -> t.cascadeMarked());
     }
 
-    public void setDueSoon (boolean dummy) {
+    public void setDueSoon(boolean dummy) {
         // To satisfy Jackson
     }
 
@@ -287,80 +283,84 @@ public abstract class CommonProjectAndTaskAttributes extends NodeImpl implements
         this.parent = node;
     }
 
-    public abstract boolean isCompleted ();
+    public abstract boolean isCompleted();
 
-    @ExprAttribute(help="completion date.")
+    @ExprAttribute(help = "completion date.")
     @JsonIgnore
-    public org.psidnell.omnifocus.expr.Date getCompletion () {
+    public org.psidnell.omnifocus.expr.Date getCompletion() {
         return new org.psidnell.omnifocus.expr.Date(completionDate, config);
     }
 
-    @ExprAttribute(help="defer date.")
+    @ExprAttribute(help = "defer date.")
     @JsonIgnore
-    public org.psidnell.omnifocus.expr.Date getDefer () {
+    public org.psidnell.omnifocus.expr.Date getDefer() {
         return new org.psidnell.omnifocus.expr.Date(deferDate, config);
     }
 
-    @ExprAttribute(help="due date.")
+    @ExprAttribute(help = "due date.")
     @JsonIgnore
-    public org.psidnell.omnifocus.expr.Date getDue () {
+    public org.psidnell.omnifocus.expr.Date getDue() {
         return new org.psidnell.omnifocus.expr.Date(dueDate, config);
     }
 
     @JsonIgnore
     public String getIcsStart() {
-        org.psidnell.omnifocus.expr.Date date;
+        extractIcsAttributes(note);
 
-        if (onDue && dueDate != null) {
-            date = getDue();
-        } else if (deferDate != null) {
-            date = getDefer();
-        } else if (dueDate != null) {
-            date = getDue();
+        org.psidnell.omnifocus.expr.Date date = null;
+
+        if ("due".equals(icsStart)) {
+            date = new org.psidnell.omnifocus.expr.Date(getPreferred (dueDate, deferDate), config);
+        } else if ("defer".equals(icsStart)) {
+            date = new org.psidnell.omnifocus.expr.Date(getPreferred (deferDate, dueDate), config);
         } else {
-            return null;
+            date = new org.psidnell.omnifocus.expr.Date(adjustTime(getPreferred (deferDate, dueDate), icsStart), config);
         }
 
-        if (start != null) {
-            date = adjust (date, start);
-        }
-
-        return allDay ? date.getIcsAllDayStart() : date.getIcs();
+        return icsAllDay ? date.getIcsAllDayStart() : date.getIcs();
     }
 
     @JsonIgnore
     public String getIcsEnd() {
-        org.psidnell.omnifocus.expr.Date date;
+        extractIcsAttributes(note);
 
-        if (onDefer && deferDate != null) {
-            date = getDefer();
-        } else if (dueDate != null) {
-            date = getDue();
-        } else if (deferDate != null) {
-            date = getDefer();
+        org.psidnell.omnifocus.expr.Date date = null;
+
+        if ("due".equals(icsEnd)) {
+            date = new org.psidnell.omnifocus.expr.Date(getPreferred (dueDate, deferDate), config);
+        } else if ("defer".equals(icsEnd)) {
+            date = new org.psidnell.omnifocus.expr.Date(getPreferred (deferDate, dueDate), config);
         } else {
-            return null;
+            date = new org.psidnell.omnifocus.expr.Date(adjustTime(getPreferred (dueDate, deferDate), icsEnd), config);
         }
 
-        if (end != null) {
-            date = adjust (date, end);
-        }
-
-        return allDay ? date.getIcsAllDayStart() : date.getIcs();
+        return icsAllDay ? date.getIcsAllDayStart() : date.getIcs();
     }
 
-    private org.psidnell.omnifocus.expr.Date adjust(org.psidnell.omnifocus.expr.Date date, String time) {
+    private Date getPreferred (Date preferred, Date secondary) {
+        Date date = null;
+        if (preferred != null) {
+            date = preferred;
+        }
+        else if (secondary != null) {
+            date = secondary;
+        }
+
+        return date;
+    }
+
+    private Date adjustTime(Date date, String time) {
 
         String bits[] = time.split(":");
         if (bits.length == 2) {
             try {
                 Calendar cal = new GregorianCalendar();
-                cal.setTime(date.getDate());
+                cal.setTime(date);
                 int hours = Integer.parseInt(bits[0]);
                 int mins = Integer.parseInt(bits[1]);
                 cal.set(Calendar.HOUR_OF_DAY, hours);
                 cal.set(Calendar.MINUTE, mins);
-                return new org.psidnell.omnifocus.expr.Date (cal.getTime(), config);
+                return cal.getTime();
             } catch (NumberFormatException e) {
                 LOGGER.warn(e.getMessage());
             }
@@ -376,23 +376,27 @@ public abstract class CommonProjectAndTaskAttributes extends NodeImpl implements
 
     @JsonIgnore
     public boolean getIcsHasAlarm() {
-        return !noAlarm;
+        return icsAlarm;
     }
 
     @JsonIgnore
-    public int getIcsAlarmMinutes () {
-        if (alarm != null) {
-            try {
-                return Integer.parseInt(alarm.trim());
-            } catch (NumberFormatException e) {
-                LOGGER.warn(e.getMessage());
-            }
-        }
-        return config.getAlarmMinutes ();
+    public int getIcsAlarmMinutes() {
+        return icsAlarmMinutes;
     }
 
     @JsonIgnore
-    public boolean getIcsHasCalendarData () {
+    public boolean getIcsHasCalendarData() {
         return dueDate != null || deferDate != null;
+    }
+
+    @Override
+    public void setConfigParams(ConfigParams config) {
+        super.setConfigParams(config);
+
+        icsAlarm = config.getIcsAlarm();
+        icsAlarmMinutes = config.getIcsAlarmMinutes();
+        icsAllDay = config.getIcsAllDay();
+        icsStart = config.getIcsStart();
+        icsEnd = config.getIcsEnd();
     }
 }

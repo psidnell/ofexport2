@@ -26,7 +26,11 @@ public class ConfigParams {
     private String dueSoon;
     private String flattenedRootName;
     private String expressionDateFormat;
-    private int alarmMinutes;
+    private int icsAlarmMinutes;
+    private boolean icsAlarm;
+    private String icsStart;
+    private String icsEnd;
+    private boolean icsAllDay;
 
     public void setDueSoon(String dueSoon) {
         this.dueSoon = dueSoon;
@@ -52,11 +56,44 @@ public class ConfigParams {
         return expressionDateFormat;
     }
 
-    public int getAlarmMinutes() {
-        return alarmMinutes;
+    public int getIcsAlarmMinutes() {
+        return icsAlarmMinutes;
     }
 
-    public void setAlarmMinutes(int alarmMinutes) {
-        this.alarmMinutes = alarmMinutes;
+    public void setIcsAlarmMinutes(int icsAlarmMinutes) {
+        this.icsAlarmMinutes = icsAlarmMinutes;
     }
+
+    public boolean getIcsAlarm() {
+        return icsAlarm;
+    }
+
+    public void setIcsAlarm(boolean icsAlarm) {
+        this.icsAlarm = icsAlarm;
+    }
+
+    public String getIcsStart() {
+        return icsStart;
+    }
+
+    public void setIcsStart(String icsStart) {
+        this.icsStart = icsStart;
+    }
+
+    public String getIcsEnd() {
+        return icsEnd;
+    }
+
+    public void setIcsEnd(String icsEnd) {
+        this.icsEnd = icsEnd;
+    }
+
+    public boolean getIcsAllDay() {
+        return icsAllDay;
+    }
+
+    public void setIcsAllDay(boolean icsAllDay) {
+        this.icsAllDay = icsAllDay;
+    }
+
 }

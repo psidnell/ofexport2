@@ -58,24 +58,24 @@ public class NodeFactory {
     public Task createTask(String name) {
         @SuppressWarnings("deprecation")
         Task node = new Task();
-        initialise(node);
         node.setName(name);
+        initialise(node);
         return node;
     }
 
     public Folder createFolder(String name) {
         @SuppressWarnings("deprecation")
         Folder node = new Folder();
-        initialise(node);
         node.setName(name);
+        initialise(node);
         return node;
     }
 
     public Project createProject(String name) {
         @SuppressWarnings("deprecation")
         Project node = new Project();
-        initialise(node);
         node.setName(name);
+        initialise(node);
         return node;
     }
 
@@ -89,8 +89,8 @@ public class NodeFactory {
     public Context createContext(String name) {
         @SuppressWarnings("deprecation")
         Context node = new Context();
-        initialise(node);
         node.setName(name);
+        initialise(node);
         return node;
     }
 

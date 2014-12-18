@@ -40,7 +40,11 @@
 		<property name="dueSoon" value="${dueSoon}"/>
 		<property name="flattenedRootName" value="${flattenedRootName}"/>
 		<property name="expressionDateFormat" value="${expressionDateFormat}"/>
-		<property name="alarmMinutes" value="${alarmMinutes}"/>
+		<property name="icsAlarmMinutes" value="${icsAlarmMinutes}"/>
+		<property name="icsAlarm" value="${icsAlarm}"/>
+		<property name="icsStart" value="${icsStart}"/>
+		<property name="icsEnd" value="${icsEnd}"/>
+		<property name="icsAllDay" value="${icsAllDay}"/>
 	</bean>
 	
 	<bean name="datacache" class="org.psidnell.omnifocus.model.DataCache" scope="prototype">

@@ -4,7 +4,11 @@
 
 **[Development Version](https://github.com/psidnell/ofexport2/archive/master.zip)**
 
-**[1.0.16 (2014-12-18)](https://github.com/psidnell/ofexport2/archive/ofexport-v2-1.0.18.zip)**
+**[1.0.17 (2014-12-18)](https://github.com/psidnell/ofexport2/archive/ofexport-v2-1.0.17.zip)**
+
+- Added control of calendar item export in task notes and global config.
+
+**[1.0.16 (2014-12-18)](https://github.com/psidnell/ofexport2/archive/ofexport-v2-1.0.16.zip)**
 
 - Adding calendar (ICS) output.
 
