@@ -40,6 +40,7 @@
 		<property name="dueSoon" value="${dueSoon}"/>
 		<property name="flattenedRootName" value="${flattenedRootName}"/>
 		<property name="expressionDateFormat" value="${expressionDateFormat}"/>
+		<property name="alarmMinutes" value="${alarmMinutes}"/>
 	</bean>
 	
 	<bean name="datacache" class="org.psidnell.omnifocus.model.DataCache" scope="prototype">

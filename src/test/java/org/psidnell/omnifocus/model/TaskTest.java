@@ -254,4 +254,39 @@ public class TaskTest {
         f.setActive(false);
         assertFalse (t.isAvailable());
     }
+
+    @Test
+    public void testNoteAttributes () {
+        Task t = nodeFactory.createTask("t");
+        assertFalse (t.allDay);
+        t.setNote("%of2 allday");
+        assertTrue (t.allDay);
+
+        t = nodeFactory.createTask("t");
+        assertFalse (t.noAlarm);
+        t.setNote("%of2 noalarm");
+        assertTrue (t.noAlarm);
+
+        t = nodeFactory.createTask("t");
+        assertFalse (t.onDefer);
+        t.setNote("%of2 ondefer");
+        assertTrue (t.onDefer);
+
+        t = nodeFactory.createTask("t");
+        assertFalse (t.onDue);
+        t.setNote("%of2 ondue");
+        assertTrue (t.onDue);
+
+        t = nodeFactory.createTask("t");
+        t.setNote("%of2 start 12:50");
+        assertEquals ("12:50", t.start);
+
+        t = nodeFactory.createTask("t");
+        t.setNote("%of2 end 12:50");
+        assertEquals ("12:50", t.end);
+
+        t = nodeFactory.createTask("t");
+        t.setNote("%of2 alarm 23");
+        assertEquals (23, t.getIcsAlarmMinutes());
+    }
 }

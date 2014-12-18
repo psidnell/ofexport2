@@ -83,6 +83,7 @@ public class IntegrationTest {
             "html",
             "md",
             "opml",
+            "ics",
             "report",
             "taskpaper",
             "txt",

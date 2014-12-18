@@ -23,6 +23,7 @@
             - [Filtering by Date](DOCUMENTATION.md#filtering-by-date)
             - [Useful Filtering Attributes](DOCUMENTATION.md#useful-filtering-attributes)
         - [Output and Formats](DOCUMENTATION.md#output-and-formats)
+            - [Calendar Format](DOCUMENTATION.md#calendar-format)
         - [Sorting](DOCUMENTATION.md#sorting)
         - [Restructuring the Output](DOCUMENTATION.md#restructuring-the-output)
             - [Pruning](DOCUMENTATION.md#pruning)
@@ -60,6 +61,7 @@ These above example files (and more) can be found here:
 - [TaskPaper](src/test/data/example-p.taskpaper)
 - [Report (a compact variant of Taskpaper)](src/test/data/example-p.report)
 - [Text](src/test/data/example-p.txt)
+- [Calendar](src/test/data/example-p.ics)
 - [XML](src/test/data/example-p.xml)
 - [JSON](src/test/data/example-p.json)
 
@@ -91,8 +93,9 @@ Currently supported export formats are:
 4. HTML
 5. CSV
 6. OPML
-7. XML
-8. JSON
+7. ICS
+8. XML
+9. JSON
 
 The key technologies used for the transformation are:
 
@@ -286,6 +289,7 @@ Changing the file name suffix changes the format of the file, other alternatives
 - ".csv"
 - ".taskpaper"
 - ".html"
+- ".ics"
 - ".md"
 - ".json"
 - ".xml"
@@ -585,6 +589,7 @@ The supported suffixes are:
 - opml: OPML format.
 - csv: CSV format.
 - html: HTML format.
+- ics: Calendar format.
 - debug: A text format that contains all attributes of nodes.
 
 If you want to specify a format different from the one derived from the output file (or are printing to the console) you can override it:
@@ -596,6 +601,37 @@ The format name being applied is used to find a FreeMarker template file in **co
 
 It's possible to modify these or add your own.
 
+#### Calendar Format
+
+To export a calendar, you must export to an ics file:
+
+    of2 -duesoon -o cal.ics
+
+To use this file you can either:
+
+1. Import it into Calendar.
+2. Publish it somewhere (e.g. Dropbox) and subscribe to it via it's URL.
+
+You may want to use a tool like [Hazel](http://www.noodlesoft.com/hazel.php) to automate this so it's run regularly.
+
+There are some points to note about Calendar export:
+
+- Only Tasks with either a defer or due date will appear.
+- Tasks with only a due will appear at their due date/time.
+- Tasks with only a defer date will appear at their defer date/time.
+- Tasks with a defer and due date will appear from their defer to their due date/time.
+- Tasks will have an alarm on their start time (this is [configured](#configuration) with **alarmMinutes**).
+
+This behaviour can be configured on a per item basis by adding additional directives to the Tasks notes, each of which must be on it's own line:
+
+- **%of2 ondefer**: the Calendar item start and end time will be the OmniFocus defer time.
+- **%of2 ondue**: the Calendar item start and end time will be the OmniFocus due time.
+  - **%of2 allday**: the Calendar item will be an all day event.
+- **%of2 noalarm**: there will be no Calendar alarm for the item.
+- **%of2 alarm X**": there will be a Calendar alarm X mins before the start.
+  - **%of2 start HH:MM**: the Calendar start time will be HH:MM (24 hr clock) on the defer day.
+  - **%of2 end HH:MM**: the Calendar start time will be HH:MM (24 hr clock) on the due day.
+  
 ### Sorting
 
 The output is always sorted after the filters are executed.

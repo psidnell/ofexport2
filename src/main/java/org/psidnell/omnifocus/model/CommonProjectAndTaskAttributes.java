@@ -15,13 +15,17 @@ limitations under the License.
  */
 package org.psidnell.omnifocus.model;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.psidnell.omnifocus.expr.ExprAttribute;
 import org.psidnell.omnifocus.sqlite.SQLiteProperty;
 import org.psidnell.omnifocus.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -33,6 +37,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 public abstract class CommonProjectAndTaskAttributes extends NodeImpl implements ProjectHierarchyNode, ContextHierarchyNode{
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(CommonProjectAndTaskAttributes.class);
+
     protected Context context;
     private String note;
     private Date deferDate;
@@ -43,6 +49,13 @@ public abstract class CommonProjectAndTaskAttributes extends NodeImpl implements
     protected int estimatedMinutes = -1;
     protected ProjectHierarchyNode parent;
     protected List<Task> tasks = new LinkedList<>();
+    protected boolean onDefer = false;
+    protected boolean onDue = false;
+    protected boolean allDay = false;
+    protected boolean noAlarm = false;
+    protected String start;
+    protected String end;
+    protected String alarm;
 
     @ExprAttribute(help = "number of tasks.")
     @JsonIgnore
@@ -102,7 +115,53 @@ public abstract class CommonProjectAndTaskAttributes extends NodeImpl implements
     }
 
     public void setNote(String note) {
-        this.note = note;
+        if (note != null) {
+            this.note = toASCII(note);
+            extractAttributes(note);
+        }
+    }
+
+    private void extractAttributes(String text) {
+        String[] lines = text.split("\n");
+        for (String line : lines) {
+            line = line.trim();
+            if (line.startsWith("%of2")) {
+                line = line.substring(4, line.length()).trim();
+                String bits[] = line.split(" ");
+                if (bits.length >= 1){
+                    String command = bits[0];
+                    switch (command) {
+                        case "ondefer":
+                            onDefer = true;
+                            break;
+                        case "ondue":
+                            onDue = true;
+                            break;
+                        case "allday":
+                            allDay = true;
+                            break;
+                        case "noalarm":
+                            noAlarm = true;
+                            break;
+                        case "alarm":
+                            if (bits.length >= 2){
+                                alarm = bits[1];
+                            }
+                            break;
+                        case "start":
+                            if (bits.length >= 2){
+                                start=bits[1];
+                            }
+                            break;
+                        case "end":
+                            if (bits.length >= 2){
+                                end=bits[1];
+                            }
+                            break;
+                    }
+                }
+            }
+        }
     }
 
     @SQLiteProperty(name = "effectiveDateToStart")
@@ -184,24 +243,26 @@ public abstract class CommonProjectAndTaskAttributes extends NodeImpl implements
     }
 
     public String formatNote(int depth, String indent, String lineSuffix) {
+        String[] lines = note.replaceAll("\r", "").split("\n");
+        String eol = lineSuffix + "\n";
+        String indentChars = StringUtils.times(indent, depth);
+        String delimiter = eol + indentChars;
+        return StringUtils.join(lines, delimiter, indentChars, eol);
+    }
+
+    private String toASCII(String text) {
         // TODO This isn't ideal, don't know what encoding is coming in from
         // SQLite, but email attachments in particular seem full of accented
         // chars that arn't really there. This is clearly not going to support
         // wide characters as is.
-
         StringBuilder ascii = new StringBuilder();
-        for (byte byt : note.getBytes()) {
+        for (byte byt : text.getBytes()) {
             int c = 0xFF & byt;
             if (c >= '\t' && c <= '~') {
                 ascii.append((char) c);
             }
         }
-
-        String[] lines = ascii.toString().replaceAll("\r", "").split("\n");
-        String eol = lineSuffix + "\n";
-        String indentChars = StringUtils.times(indent, depth);
-        String delimiter = eol + indentChars;
-        return StringUtils.join(lines, delimiter, indentChars, eol);
+        return ascii.toString();
     }
 
 
@@ -248,24 +309,64 @@ public abstract class CommonProjectAndTaskAttributes extends NodeImpl implements
 
     @JsonIgnore
     public String getIcsStart() {
-        if (deferDate != null) {
-            return getDefer().getIcsAllDayStart();
+        org.psidnell.omnifocus.expr.Date date;
+
+        if (onDue && dueDate != null) {
+            date = getDue();
+        } else if (deferDate != null) {
+            date = getDefer();
+        } else if (dueDate != null) {
+            date = getDue();
+        } else {
+            return null;
         }
-        else if (dueDate != null) {
-            return getDefer().getIcsAllDayStart();
+
+        if (start != null) {
+            date = adjust (date, start);
         }
-        return null;
+
+        return allDay ? date.getIcsAllDayStart() : date.getIcs();
     }
 
     @JsonIgnore
     public String getIcsEnd() {
-        if (dueDate != null) {
-            return getDue().getIcsAllDayStart();
+        org.psidnell.omnifocus.expr.Date date;
+
+        if (onDefer && deferDate != null) {
+            date = getDefer();
+        } else if (dueDate != null) {
+            date = getDue();
+        } else if (deferDate != null) {
+            date = getDefer();
+        } else {
+            return null;
         }
-        if (deferDate != null) {
-            return getDefer().getIcsAllDayStart();
+
+        if (end != null) {
+            date = adjust (date, end);
         }
-        return null;
+
+        return allDay ? date.getIcsAllDayStart() : date.getIcs();
+    }
+
+    private org.psidnell.omnifocus.expr.Date adjust(org.psidnell.omnifocus.expr.Date date, String time) {
+
+        String bits[] = time.split(":");
+        if (bits.length == 2) {
+            try {
+                Calendar cal = new GregorianCalendar();
+                cal.setTime(date.getDate());
+                int hours = Integer.parseInt(bits[0]);
+                int mins = Integer.parseInt(bits[1]);
+                cal.set(Calendar.HOUR_OF_DAY, hours);
+                cal.set(Calendar.MINUTE, mins);
+                return new org.psidnell.omnifocus.expr.Date (cal.getTime(), config);
+            } catch (NumberFormatException e) {
+                LOGGER.warn(e.getMessage());
+            }
+        }
+
+        return date;
     }
 
     @JsonIgnore
@@ -275,12 +376,19 @@ public abstract class CommonProjectAndTaskAttributes extends NodeImpl implements
 
     @JsonIgnore
     public boolean getIcsHasAlarm() {
-        return true;
+        return !noAlarm;
     }
 
     @JsonIgnore
     public int getIcsAlarmMinutes () {
-        return 0;
+        if (alarm != null) {
+            try {
+                return Integer.parseInt(alarm.trim());
+            } catch (NumberFormatException e) {
+                LOGGER.warn(e.getMessage());
+            }
+        }
+        return config.getAlarmMinutes ();
     }
 
     @JsonIgnore

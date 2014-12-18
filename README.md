@@ -38,6 +38,7 @@ Export from OmniFocus to various other formats:
             - [Filtering by Date](DOCUMENTATION.md#filtering-by-date)
             - [Useful Filtering Attributes](DOCUMENTATION.md#useful-filtering-attributes)
         - [Output and Formats](DOCUMENTATION.md#output-and-formats)
+            - [Calendar Format](DOCUMENTATION.md#calendar-format)
         - [Sorting](DOCUMENTATION.md#sorting)
         - [Restructuring the Output](DOCUMENTATION.md#restructuring-the-output)
             - [Pruning](DOCUMENTATION.md#pruning)
