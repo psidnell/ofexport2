@@ -16,6 +16,9 @@ limitations under the License.
 package org.psidnell.omnifocus.expr;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import org.psidnell.omnifocus.ConfigParams;
 
@@ -25,6 +28,9 @@ import org.psidnell.omnifocus.ConfigParams;
  *         A wrapper for dates that makes the OGNL expressions more convenient.
  */
 public class Date extends ExpressionFunctions implements Comparable<Date> {
+
+    private static final SimpleDateFormat ICS_LONG = new SimpleDateFormat("yyyyMMdd'T'HHmm'00Z'");
+    private static final SimpleDateFormat ICS_SHORT = new SimpleDateFormat("yyyyMMdd");
 
     private java.util.Date date;
     private java.util.Date roundedDate;
@@ -121,5 +127,20 @@ public class Date extends ExpressionFunctions implements Comparable<Date> {
             return -1;
         }
         return date.compareTo(o.date);
+    }
+
+    public String getIcs () {
+        return ICS_LONG.format(date);
+    }
+
+    public String getIcsAllDayStart () {
+        return ICS_SHORT.format(date);
+    }
+
+    public String getIcsAllDayEnd () {
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTime(date);
+        cal.set(Calendar.DAY_OF_YEAR, cal.get(Calendar.DAY_OF_YEAR) + 1);
+        return ICS_SHORT.format(cal.getTime());
     }
 }

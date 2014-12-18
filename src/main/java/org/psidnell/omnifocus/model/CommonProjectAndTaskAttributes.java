@@ -245,4 +245,46 @@ public abstract class CommonProjectAndTaskAttributes extends NodeImpl implements
     public org.psidnell.omnifocus.expr.Date getDue () {
         return new org.psidnell.omnifocus.expr.Date(dueDate, config);
     }
+
+    @JsonIgnore
+    public String getIcsStart() {
+        if (deferDate != null) {
+            return getDefer().getIcsAllDayStart();
+        }
+        else if (dueDate != null) {
+            return getDefer().getIcsAllDayStart();
+        }
+        return null;
+    }
+
+    @JsonIgnore
+    public String getIcsEnd() {
+        if (dueDate != null) {
+            return getDue().getIcsAllDayStart();
+        }
+        if (deferDate != null) {
+            return getDefer().getIcsAllDayStart();
+        }
+        return null;
+    }
+
+    @JsonIgnore
+    public String getIcsModified() {
+        return getModified().getIcs();
+    }
+
+    @JsonIgnore
+    public boolean getIcsHasAlarm() {
+        return true;
+    }
+
+    @JsonIgnore
+    public int getIcsAlarmMinutes () {
+        return 0;
+    }
+
+    @JsonIgnore
+    public boolean getIcsHasCalendarData () {
+        return dueDate != null || deferDate != null;
+    }
 }

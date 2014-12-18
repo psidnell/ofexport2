@@ -47,20 +47,24 @@ $ MACRO: doTask
 $$$$$$$$$$$$$$$
 -->
 <#macro doTask task projectMode>
+<#if task.icsHasCalendarData>
 BEGIN:VEVENT
-DTSTART:<#if (task.due.getDate())??>${task.due.getDate()?string["yyyyMMdd'T'HHmm'00Z'"]}<#else>null</#if>
-DTEND:<#if (task.due.getDate())??>${task.due.getDate()?string["yyyyMMdd'T'HHmm'00Z'"]}<#else>null</#if>
-DTSTAMP:<#if (task.due.getDate())??>${task.due.getDate()?string["yyyyMMdd'T'HHmm'00Z'"]}<#else>null</#if>
+DTSTART:${task.icsStart}
+DTEND:${task.icsEnd}
+DTSTAMP:${task.icsModified}
 SUMMARY:${task.name}
 URL:omnifocus:///task/${task.id}
 UID:omnifocus${task.id}
 DESCRIPTION:
+<#if task.icsHasAlarm>
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:OmniFocus Reminder
-TRIGGER:-PT0M
+TRIGGER:-PT${task.icsAlarmMinutes}M
 END:VALARM
+</#if>
 END:VEVENT
+</#if>
 <#if projectMode><#list task.tasks as t><@doTask task=t projectMode=projectMode/></#list></#if>
 </#macro>
 
