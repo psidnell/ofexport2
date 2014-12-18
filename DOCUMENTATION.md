@@ -626,11 +626,11 @@ This behaviour can be configured on a per item basis by adding additional direct
 
 - **%of2 ondefer**: the Calendar item start and end time will be the OmniFocus defer time.
 - **%of2 ondue**: the Calendar item start and end time will be the OmniFocus due time.
-  - **%of2 allday**: the Calendar item will be an all day event.
+- **%of2 allday**: the Calendar item will be an all day event.
 - **%of2 noalarm**: there will be no Calendar alarm for the item.
-- **%of2 alarm X**": there will be a Calendar alarm X mins before the start.
-  - **%of2 start HH:MM**: the Calendar start time will be HH:MM (24 hr clock) on the defer day.
-  - **%of2 end HH:MM**: the Calendar start time will be HH:MM (24 hr clock) on the due day.
+- **%of2 alarm X**: there will be a Calendar alarm X mins before the start.
+- **%of2 start HH:MM**: the Calendar start time will be HH:MM (24 hr clock) on the defer day.
+- **%of2 end HH:MM**: the Calendar start time will be HH:MM (24 hr clock) on the due day.
   
 ### Sorting
 
