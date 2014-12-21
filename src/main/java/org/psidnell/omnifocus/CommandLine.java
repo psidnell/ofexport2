@@ -66,6 +66,7 @@ public class CommandLine implements BeanFactoryAware {
     private ConfigParams config; // NOPMD it can't see into lambdas
     protected String exportFile;
     private NodeFactory nodeFactory;  // NOPMD it can't see into lambdas
+    protected boolean verbose = false;
 
     static {
 
@@ -246,26 +247,31 @@ public class CommandLine implements BeanFactoryAware {
                 (m,o)->m.ofexport.addModifyExpression(o.nextValue()),
                 AFTER_LOAD));
 
-        // MODES
-
         OPTIONS.addOption(new ActiveOption<CommandLine>(
                 "p", false, "prune empty folders, projects and contexts.",
                 (m,o)->m.ofexport.addPruneFilter (),
                 AFTER_LOAD));
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
-                "S", false, "Simplify hierarchies.",
+                "S", false, "simplify hierarchies.",
                 (m,o)->m.ofexport.addFilter (new SimplifyFilter()),
                 AFTER_LOAD));
 
         OPTIONS.addOption(new ActiveOption<CommandLine>(
-                "F", false, "Flatten hierarchies.",
+                "F", false, "flatten hierarchies.",
                 (m,o)->m.ofexport.addFilter (new FlattenFilter(m.nodeFactory, m.config)),
                 AFTER_LOAD));
+
+        // MODES
 
         OPTIONS.addOption(new ActiveOption<CommandLine> (
                 "c", false, "context mode: filter and display context hierarchy instead of project hierarchy.",
                 (m,o)->m.ofexport.setProjectMode(false),
+                BEFORE_LOAD));
+
+        OPTIONS.addOption(new ActiveOption<CommandLine> (
+                "v", false, "verbose mode: display processing steps.",
+                (m,o)->m.verbose = true,
                 BEFORE_LOAD));
 
         // OUTPUT

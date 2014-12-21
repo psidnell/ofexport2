@@ -31,6 +31,7 @@ import org.psidnell.omnifocus.model.NodeFactory;
 import org.psidnell.omnifocus.model.Project;
 import org.psidnell.omnifocus.model.Task;
 import org.psidnell.omnifocus.visitor.ClearMarkedVisitor;
+import org.psidnell.omnifocus.visitor.CountingVisitor;
 import org.psidnell.omnifocus.visitor.DeleteMarkedFilter;
 import org.psidnell.omnifocus.visitor.KeepMarkedVisitor;
 import org.psidnell.omnifocus.visitor.PruningFilter;
@@ -68,6 +69,7 @@ public class OFExport {
     protected SortingFilter sortingFilter = new SortingFilter();
     private Folder projectRoot;
     private Context contextRoot;
+    private boolean verbose = false;
 
     private NodeFactory nodeFactory;
 
@@ -85,6 +87,12 @@ public class OFExport {
 
     public void process() throws Exception {
 
+        if (verbose) {
+            System.out.println("Processing...");
+        }
+
+        CountingVisitor counter = new CountingVisitor();
+
         // We sort items by their rank and then apply an new monotonically increasing
         // rank to give a robust sort order after any re-arrangements we make.
         Traverser.traverse(new SortingFilter(), projectRoot);
@@ -93,27 +101,54 @@ public class OFExport {
         Traverser.traverse(new ReRankingVisitor(false), contextRoot);
 
         if (projectMode) {
+            Traverser.traverse(counter, projectRoot);
             for (Visitor filter : filters) {
                 Traverser.traverse(filter, projectRoot);
             }
             Traverser.traverse(sortingFilter, projectRoot);
         } else {
+            Traverser.traverse(counter, contextRoot);
             for (Visitor filter : filters) {
                 Traverser.traverse(filter, contextRoot);
             }
             Traverser.traverse(sortingFilter, contextRoot);
         }
+
+        if (verbose) {
+            printCounts("Processed:", counter);
+        }
     }
 
     public void write(Writer out) throws InstantiationException, IllegalAccessException, ClassNotFoundException, IOException, TemplateException {
+
+        if (verbose) {
+            System.out.println("Writing...");
+        }
+
         Formatter formatter = loadFormatter();
 
+        CountingVisitor counter = new CountingVisitor();
+
         if (projectMode) {
+            Traverser.traverse(counter, projectRoot);
             formatter.format(projectRoot, out);
         } else {
+            Traverser.traverse(counter, contextRoot);
             formatter.format(contextRoot, out);
         }
         out.flush();
+
+        if (verbose) {
+            printCounts("Written:", counter);
+        }
+    }
+
+    private void printCounts(String title, CountingVisitor counter) {
+        System.out.println(title);
+        System.out.println("  Folders: " + counter.getFolderCount());
+        System.out.println("  Projects: " + counter.getProjectCount());
+        System.out.println("  Contexts: " + counter.getContextCount());
+        System.out.println("  Tasks: " + counter.getTaskCount());
     }
 
     public void setFormat(String format) {
@@ -243,5 +278,9 @@ public class OFExport {
 
     public void setNodeFactory(NodeFactory nodeFactory) {
         this.nodeFactory = nodeFactory;
+    }
+
+    public void setVerbose(boolean printInfo) {
+        this.verbose = printInfo;
     }
 }

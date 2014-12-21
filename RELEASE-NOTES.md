@@ -4,6 +4,11 @@
 
 **[Development Version](https://github.com/psidnell/ofexport2/archive/master.zip)**
 
+**[1.0.18 (2014-12-21)](https://github.com/psidnell/ofexport2/archive/ofexport-v2-1.0.18.zip)**
+
+- Fix so that allday calendar events never have alarm (at midnight the night before? it makes no sense).
+- Added -v option to print activity summary during processing. 
+
 **[1.0.17 (2014-12-18)](https://github.com/psidnell/ofexport2/archive/ofexport-v2-1.0.17.zip)**
 
 - Added control of calendar item export in task notes and global config.

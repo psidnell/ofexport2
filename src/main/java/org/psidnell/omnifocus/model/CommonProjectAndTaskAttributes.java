@@ -376,7 +376,7 @@ public abstract class CommonProjectAndTaskAttributes extends NodeImpl implements
 
     @JsonIgnore
     public boolean getIcsHasAlarm() {
-        return icsAlarm;
+        return icsAlarm && !icsAllDay;
     }
 
     @JsonIgnore

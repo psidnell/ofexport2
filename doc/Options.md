@@ -2,8 +2,8 @@
 
     OFEXPORT2
     
-    Version: 1.0.17
-    Build Date: 2014-12-18
+    Version: 1.0.18
+    Build Date: 2014-12-21
     
     usage: ofexport2
      -h                print help.
@@ -39,9 +39,10 @@
      -an <arg>         include items specified by name.
      -m <arg>          modify a node value.
      -p                prune empty folders, projects and contexts.
-     -S                Simplify hierarchies.
-     -F                Flatten hierarchies.
+     -S                simplify hierarchies.
+     -F                flatten hierarchies.
      -c                context mode: filter and display context hierarchy instead of project hierarchy.
+     -v                verbose mode: display processing steps.
      -f <arg>          output in this format.
      -o <arg>          write output to the file.
      -O <arg>          write output to the file and open it.

@@ -47,6 +47,10 @@ public class Main extends CommandLine {
     private SQLiteDAO sqliteDAO;
 
     private void loadData() throws IllegalAccessException, InvocationTargetException, InstantiationException, SQLException, IOException {
+        if (verbose) {
+            System.out.println ("Loading...");
+        }
+
         data = beanFactory.getBean("datacache", DataCache.class);
         if (jsonInputFile != null) {
             RawData rawData = RawData.importRawData(new File(jsonInputFile));
@@ -56,6 +60,9 @@ public class Main extends CommandLine {
             data.setRawData(rawData);
         }
 
+        if (verbose) {
+            System.out.println ("Building Model...");
+        }
         data.build();
 
         Folder projectRoot = ofexport.getProjectRoot();
@@ -114,6 +121,7 @@ public class Main extends CommandLine {
     private void procesPreLoadOptions(String[] args) throws Exception {
         // Load initial switches, help etc
         processor.processOptions(this, args, BEFORE_LOAD);
+        ofexport.setVerbose(verbose);
     }
 
     private void processPostLoadOptions(String[] args) throws Exception {
