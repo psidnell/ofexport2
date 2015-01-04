@@ -43,6 +43,8 @@
     - [ofexport vs ofexport2](DOCUMENTATION.md#ofexport-vs-ofexport2)
     - [Other Approaches Considered](DOCUMENTATION.md#other-approaches-considered)
     - [Known Issues](DOCUMENTATION.md#known-issues)
+- [FAQ](FAQ.md#faq)
+    - [Exception in thread "main" java.lang.UnsupportedClassVersionError](FAQ.md#exception-in-thread-"main"-java.lang.unsupportedclassversionerror)
 
 ## Overview
 
@@ -99,7 +101,7 @@ Currently supported export formats are:
 
 The key technologies used for the transformation are:
 
-1. [Java 8](https://java.com/en/download/index.jsp) for the main command line program.
+1. [Java SE 8 JDK](http://www.oracle.com/technetwork/java/javase/downloads/index.html) for the main command line program.
 2. [OGNL](http://commons.apache.org/proper/commons-ognl/) for specifying filters and sorting.
 3. [FreeMarker](http://http://freemarker.org) for the templates to provide the output.
 
@@ -107,9 +109,11 @@ The key technologies used for the transformation are:
 
 Installation is entirely manual and done from the command line. Essentially you will be downloading/unpacking the zip and adding it's bin directory to your path.
 
-**1. You should have Java 8 already installed:**
+**1. You should have the Java 8 SDK already installed:**
 
-You can verify this by typing:
+The Java SE 8 JDK can be found [here](http://www.oracle.com/technetwork/java/javase/downloads/index.html).
+
+You can verify it is installed by typing:
 
     java -version
 
@@ -118,6 +122,8 @@ You should see output similar to:
     java version "1.8.0_25"  
     Java(TM) SE Runtime Environment (build 1.8.0_25-b17)  
     Java HotSpot(TM) 64-Bit Server VM (build 25.25-b02, mixed mode)  
+
+If after installing the Java 8 JDK you still see a different version, you may have multiple versions of java installed.
 
 **2. Download:**
 

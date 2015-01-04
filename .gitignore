@@ -4,3 +4,5 @@ target
 .project
 .pydevproject
 ofexport2.bbprojectd
+.idea
+*.iml

@@ -39,4 +39,6 @@
     - [ofexport vs ofexport2](DOCUMENTATION.md#ofexport-vs-ofexport2)
     - [Other Approaches Considered](DOCUMENTATION.md#other-approaches-considered)
     - [Known Issues](DOCUMENTATION.md#known-issues)
+- [FAQ](FAQ.md#faq)
+    - [Exception in thread "main" java.lang.UnsupportedClassVersionError](FAQ.md#exception-in-thread-"main"-java.lang.unsupportedclassversionerror)
 
