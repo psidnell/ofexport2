@@ -60,4 +60,5 @@ Export from OmniFocus to various other formats:
     - [Known Issues](DOCUMENTATION.md#known-issues)
 - [FAQ](FAQ.md#faq)
     - [Exception in thread "main" java.lang.UnsupportedClassVersionError](FAQ.md#exception-in-thread-"main"-java.lang.unsupportedclassversionerror)
+    - [java -version shows an older version of java](FAQ.md#java--version-shows-an-older-version-of-java)
 
