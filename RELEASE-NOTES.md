@@ -4,6 +4,10 @@
 
 **[Development Version](https://github.com/psidnell/ofexport2/archive/master.zip)**
 
+**[1.0.19 (2015-01-07)](https://github.com/psidnell/ofexport2/archive/ofexport-v2-1.0.19.zip)** 
+
+- Added missing path to database for app store version of OmniFocus ([issue#5](https://github.com/psidnell/ofexport2/issues/5)).
+
 **[1.0.18 (2014-12-21)](https://github.com/psidnell/ofexport2/archive/ofexport-v2-1.0.18.zip)**
 
 - Fix so that allday calendar events never have alarm (at midnight the night before? it makes no sense).

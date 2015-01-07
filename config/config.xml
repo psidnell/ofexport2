@@ -16,8 +16,13 @@
 			<list>
 				<!-- These are the various locations the omnifocus DB might be depending 
 					on version and how it was purchased -->
+				<!-- V2 non MAS -->
 				<value>${HOME}/Library/Containers/com.omnigroup.OmniFocus2/Data/Library/Caches/com.omnigroup.OmniFocus2/OmniFocusDatabase2</value>
+				<!-- V2 MAS -->
+				<value>${HOME}/Library/Containers/com.omnigroup.OmniFocus2.MacAppStore/Data/Library/Caches/com.omnigroup.OmniFocus2.MacAppStore/OmniFocusDatabase2</value>
+				<!-- V1 non MAS -->
 				<value>${HOME}/Library/Caches/com.omnigroup.OmniFocus/OmniFocusDatabase2</value>
+				<!-- V1 MAS -->
 				<value>${HOME}/Library/Caches/com.omnigroup.OmniFocus.MacAppStore/OmniFocusDatabase2</value>
 			</list>
 		</property>
