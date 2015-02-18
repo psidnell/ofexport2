@@ -131,6 +131,8 @@ public class SQLiteClassDescriptor<T> {
                     int secondsSince2001;
                     if (rawValue instanceof Integer) {
                         secondsSince2001 = (Integer) rawValue;
+                    } else if (rawValue instanceof Long) {
+                        secondsSince2001 = ((Long) rawValue).intValue();
                     } else {
                         secondsSince2001 = ((Double) rawValue).intValue();
                     }
