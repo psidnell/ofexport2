@@ -2,8 +2,8 @@
 
     OFEXPORT2
     
-    Version: 1.0.18
-    Build Date: 2014-12-21
+    Version: 1.0.19
+    Build Date: 2015-01-07
     
     usage: ofexport2
      -h                print help.
