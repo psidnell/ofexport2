@@ -4,6 +4,11 @@
 
 **[Development Version](https://github.com/psidnell/ofexport2/archive/master.zip)**
 
+**[1.0.20 (2015-04-05)](https://github.com/psidnell/ofexport2/archive/ofexport-v2-1.0.20.zip)**
+
+- Added Wambld's class cast exception fix.
+- Hopefully fixed an esoteric time zone issue.
+
 **[1.0.19 (2015-01-07)](https://github.com/psidnell/ofexport2/archive/ofexport-v2-1.0.19.zip)** 
 
 - Added missing path to database for app store version of OmniFocus ([issue#5](https://github.com/psidnell/ofexport2/issues/5)).

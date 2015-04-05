@@ -42,8 +42,6 @@ public class ExpressionFunctions {
 
     private SimpleDateFormat dateFormat;
 
-    protected static final long DAY = 1000 * 60 * 60 * 24;
-
     protected ConfigParams config;
 
     public Date date(String dateStr) throws ParseException {
@@ -289,7 +287,13 @@ public class ExpressionFunctions {
     }
 
     public static Date roundToDay(Date d) {
-        return d == null ? null : new Date(DAY * (d.getTime() / DAY));
+        if (d == null) {
+            return null;
+        }
+        Calendar cal = new GregorianCalendar();
+        cal.setTime(d);
+        roundToDay(cal);
+        return cal.getTime();
     }
 
     public void setConfigParams(ConfigParams config) {

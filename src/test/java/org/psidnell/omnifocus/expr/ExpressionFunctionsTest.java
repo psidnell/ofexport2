@@ -23,6 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -279,12 +280,12 @@ public class ExpressionFunctionsTest {
         // When this months date doesn't exist next month
         date = fn.date("2014-08-31");
         cal.setTime(date);
-        assertEquals ("2014-09-30", date("+1m", cal));
+        assertEquals ("2014-10-01", date("+1m", cal));
 
         // When this months date doesn't exist last month
         date = fn.date("2014-04-31");
         cal.setTime(date);
-        assertEquals ("2014-03-30", date("-1m", cal));
+        assertEquals ("2014-04-01", date("-1m", cal));
     }
 
     @Test
@@ -344,6 +345,8 @@ public class ExpressionFunctionsTest {
     }
 
     private String date(String x, Calendar cal) throws ParseException {
-        return dateFormat.format(fn.date (x,clone(cal)).getTime());
+        Calendar calCopy = clone(cal);
+        Date date = fn.date (x, calCopy);
+        return dateFormat.format (date);
     }
 }
