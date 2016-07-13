@@ -20,6 +20,7 @@ import java.lang.reflect.Method;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
+import java.util.TimeZone;
 import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
@@ -137,7 +138,8 @@ public class SQLiteClassDescriptor<T> {
                         secondsSince2001 = ((Double) rawValue).intValue();
                     }
 
-                    Calendar cal = new GregorianCalendar();
+                    // time zone is GMT
+                    Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
                     cal.set(Calendar.YEAR, TWO_THOUSAND_AND_ONE);
                     cal.set(Calendar.MONTH, Calendar.JANUARY);
                     cal.set(Calendar.DAY_OF_MONTH, 1);
