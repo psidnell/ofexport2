@@ -186,7 +186,6 @@
 				</goals> </execution> <execution> <id>instrument</id> <phase>site</phase> 
 				<goals> <goal>instrument</goal> <goal>cobertura</goal> </goals> </execution> 
 				</executions> </plugin> -->
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
@@ -270,7 +269,7 @@
 					</configuration>
 				</plugin>
 
-				<!--This plugin's configuration is used to store Eclipse m2e settings 
+				<!--This plugin's configuration is used to store Eclipse m2e settings
 					only. It has no influence on the Maven build itself. -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
