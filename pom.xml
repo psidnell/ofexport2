@@ -144,7 +144,7 @@
 						<phase>process-resources</phase>
 						<configuration>
 							<target>
-								<mkdir dir="${project.build.directory}/ofexport/config" />
+								<mkdir dir="${project.build.directory}/ofexport" />
 								<symlink link="${project.build.directory}/ofexport/config" resource="${basedir}/config" overwrite="true"/>
 							</target>
 						</configuration>
