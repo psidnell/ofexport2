@@ -6,6 +6,8 @@
 
 	<properties>
 		<jacksonVersion>2.4.3</jacksonVersion>
+		<slf4jVersion>1.7.7</slf4jVersion>
+		<springVersion>4.1.2.RELEASE</springVersion>
 	</properties>
 
 	<scm>
@@ -56,12 +58,12 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>1.7.7</version>
+			<version>${slf4jVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.7.7</version>
+			<version>${slf4jVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
@@ -71,7 +73,7 @@
 		<dependency>
 			<groupId>org.xerial</groupId>
 			<artifactId>sqlite-jdbc</artifactId>
-			<version>3.8.7</version>
+			<version>3.20.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.freemarker</groupId>
@@ -81,12 +83,17 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>4.1.2.RELEASE</version>
+			<version>${springVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-beans</artifactId>
-			<version>4.1.2.RELEASE</version>
+			<version>${springVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${springVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.easymock</groupId>
@@ -100,10 +107,19 @@
 			<version>4.11</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${springVersion}</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
 		<testResources>
+			<testResource>
+				<directory>${project.basedir}/src/test/resources</directory>
+			</testResource>
 			<testResource>
 				<directory>${basedir}/config</directory>
 			</testResource>

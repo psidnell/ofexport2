@@ -38,6 +38,8 @@ import org.psidnell.omnifocus.model.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.sql.DataSource;
+
 /**
  * @author psidnell
  *
@@ -48,21 +50,9 @@ public class SQLiteDAO {
     private static final Logger LOGGER = LoggerFactory.getLogger(SQLiteDAO.class);
 
     private static final int THREE = 3;
-    private String[] possibleDBLocations;
 
+    private DataSource dataSource;
     private NodeFactory nodeFactory;
-
-    public String getDriverURL() throws SQLException {
-        for (String location : possibleDBLocations) {
-            File file = new File(location);
-            LOGGER.info("Checking database file: {}", file);
-            if (file.exists() && file.isFile()) {
-                LOGGER.info("Found database file: {}", file);
-                return "jdbc:sqlite:" + location;
-            }
-        }
-        throw new SQLException("Unable to find the OmniFocus SQLite database in any configured locations");
-    }
 
     public static final SQLiteClassDescriptor<Task> TASK_DAO;
     public static final SQLiteClassDescriptor<ProjectInfo> PROJECT_INFO_DAO;
@@ -71,24 +61,14 @@ public class SQLiteDAO {
 
     static {
         try {
-            Class.forName("org.sqlite.JDBC");
-
             TASK_DAO = new SQLiteClassDescriptor<Task>(Task.class, "Task");
             PROJECT_INFO_DAO = new SQLiteClassDescriptor<ProjectInfo>(ProjectInfo.class, "ProjectInfo");
             FOLDER_DAO = new SQLiteClassDescriptor<Folder>(Folder.class, "Folder");
             CONTEXT_DAO = new SQLiteClassDescriptor<Context>(Context.class, "Context");
 
-        } catch (NoSuchMethodException | SecurityException | ClassNotFoundException e) {
+        } catch (NoSuchMethodException | SecurityException e) {
             throw new IllegalStateException(e);
         }
-    }
-
-    public Connection getConnection() throws SQLException {
-        // Failed attempts at specifying charset so non-ascii notes load correctly
-        // Properties props = new Properties();
-        // props.put("characterEncoding", "UTF-8");
-        // props.put("useUnicode", "true");
-        return DriverManager.getConnection(getDriverURL());
     }
 
     public RawData load() throws SQLException, IllegalAccessException, InvocationTargetException, InstantiationException {
@@ -96,7 +76,7 @@ public class SQLiteDAO {
         LOGGER.info("Starting DB load");
 
         try (
-            Connection c = getConnection()) {
+            Connection c = dataSource.getConnection()) {
             LinkedList<ProjectInfo> projInfos = load(c, PROJECT_INFO_DAO);
             LinkedList<Folder> folders = load(c, FOLDER_DAO);
             LinkedList<Task> tasks = load(c, TASK_DAO);
@@ -170,11 +150,10 @@ public class SQLiteDAO {
         return tableNames;
     }
 
-    public void setPossibleDBLocations(String[] possibleDBLocations) {
-        this.possibleDBLocations = possibleDBLocations;
-    }
+    public void setDataSource(DataSource dataSource) { this.dataSource = dataSource; }
 
     public void setNodeFactory(NodeFactory nodeFactory) {
         this.nodeFactory = nodeFactory;
     }
+
 }

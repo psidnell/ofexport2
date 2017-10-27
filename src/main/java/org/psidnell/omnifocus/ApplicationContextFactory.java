@@ -29,7 +29,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public class ApplicationContextFactory {
 
-    private static final String CONFIG_XML = "/config.xml";
+    public static final String CONFIG_XML = "/config.xml";
     private static final String CONFIG_PROPERTIES = "/config.properties";
 
     public static ApplicationContext getContext() {

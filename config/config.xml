@@ -11,10 +11,10 @@
     	<property name="locations" value="classpath:config.properties"/>
 	</bean>
 
-	<bean name="sqlitedao" class="org.psidnell.omnifocus.sqlite.SQLiteDAO">
+	<bean name="sqLiteDS" class="org.psidnell.omnifocus.sqlite.SQLiteDataSource">
 		<property name="possibleDBLocations">
 			<list>
-				<!-- These are the various locations the omnifocus DB might be depending 
+				<!-- These are the various locations the omnifocus DB might be depending
 					on version and how it was purchased -->
 				<!-- V2 non MAS -->
 				<value>${HOME}/Library/Containers/com.omnigroup.OmniFocus2/Data/Library/Caches/com.omnigroup.OmniFocus2/OmniFocusDatabase2</value>
@@ -26,6 +26,10 @@
 				<value>${HOME}/Library/Caches/com.omnigroup.OmniFocus.MacAppStore/OmniFocusDatabase2</value>
 			</list>
 		</property>
+	</bean>
+
+	<bean name="sqlitedao" class="org.psidnell.omnifocus.sqlite.SQLiteDAO">
+		<property name="dataSource" ref="sqLiteDS"/>
 		<property name="nodeFactory" ref="nodefactory"/>
 	</bean>
 

@@ -116,7 +116,7 @@ public abstract class CommonProjectAndTaskAttributes extends NodeImpl implements
 
     public void setNote(String note) {
         if (note != null) {
-            this.note = toASCII(note);
+            this.note = note;
         }
     }
 
@@ -245,21 +245,6 @@ public abstract class CommonProjectAndTaskAttributes extends NodeImpl implements
         String indentChars = StringUtils.times(indent, depth);
         String delimiter = eol + indentChars;
         return StringUtils.join(lines, delimiter, indentChars, eol);
-    }
-
-    private String toASCII(String text) {
-        // TODO This isn't ideal, don't know what encoding is coming in from
-        // SQLite, but email attachments in particular seem full of accented
-        // chars that arn't really there. This is clearly not going to support
-        // wide characters as is.
-        StringBuilder ascii = new StringBuilder();
-        for (byte byt : text.getBytes()) {
-            int c = 0xFF & byt;
-            if (c >= '\t' && c <= '~') {
-                ascii.append((char) c);
-            }
-        }
-        return ascii.toString();
     }
 
     @Override
