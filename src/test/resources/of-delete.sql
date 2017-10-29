@@ -1,0 +1,4 @@
+DELETE FROM Folder;
+DELETE FROM Task;
+DELETE FROM ProjectInfo;
+DELETE FROM Context;

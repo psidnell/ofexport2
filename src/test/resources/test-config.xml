@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd">
+
+
+    <bean name="sqLiteDS" class="org.psidnell.omnifocus.sqlite.SQLiteDataSource">
+        <property name="possibleDBLocations">
+            <list>
+                <value>#{T(java.io.File).createTempFile("ofexport", ".sqlite")}</value>
+            </list>
+        </property>
+        <property name="readOnly" value="false"/>
+    </bean>
+
+    <jdbc:initialize-database data-source="sqLiteDS">
+        <jdbc:script location="classpath:of-schema.sql"/>
+    </jdbc:initialize-database>
+
+</beans>
