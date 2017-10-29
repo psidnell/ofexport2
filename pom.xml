@@ -118,6 +118,26 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
+			<!-- Create a symlink from the root config directory in the install directory, so that you can more easily
+			update the configuration. -->
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.7</version>
+				<executions>
+					<execution>
+						<phase>process-resources</phase>
+						<configuration>
+							<target>
+								<mkdir dir="${project.build.directory}/ofexport" />
+								<symlink link="${project.build.directory}/ofexport/config" resource="${basedir}/config" overwrite="true"/>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>appassembler-maven-plugin</artifactId>
@@ -131,7 +151,6 @@
 					</execution>
 				</executions>
 				<configuration>
-					<copyConfigurationDirectory>true</copyConfigurationDirectory>
 					<configurationDirectory>config</configurationDirectory>
 					<assembleDirectory>${project.build.directory}/ofexport</assembleDirectory>
 					<programs>
@@ -151,24 +170,6 @@
 				</goals> </execution> <execution> <id>instrument</id> <phase>site</phase> 
 				<goals> <goal>instrument</goal> <goal>cobertura</goal> </goals> </execution> 
 				</executions> </plugin> -->
-			<plugin>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.7</version>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<configuration>
-							<target>
-							    <delete dir="${project.build.directory}/ofexport/config" />
-							    <symlink link="${project.build.directory}/ofexport/config" resource="${basedir}/config" />
-							</target>
-						</configuration>
-						<goals>
-							<goal>run</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
@@ -237,6 +238,21 @@
 					<artifactId>maven-resources-plugin</artifactId>
 					<version>2.7</version>
 				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<!--
+					Specify UTC timezone for tests plugin. The Integration tests compare
+					committed baseline exports versus generated exports to validate
+					functionality. The  exports contain date & times in the host computer's
+					timezone. To ensure the results match between the committed baseline and
+					the test-time generated exports, the timezone must be specified.
+					-->
+					<configuration>
+						<argLine>-Duser.timezone=UTC</argLine>
+					</configuration>
+				</plugin>
+
 				<!--This plugin's configuration is used to store Eclipse m2e settings 
 					only. It has no influence on the Maven build itself. -->
 				<plugin>
